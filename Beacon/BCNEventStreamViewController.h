@@ -1,0 +1,19 @@
+//
+//  BCNEventStreamViewController.h
+//  Beacon
+//
+//  Created by Andrew Sweet on 3/7/14.
+//  Copyright (c) 2014 Beacon. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "BCNMapViewController.h"
+
+@interface BCNEventStreamViewController : UICollectionViewController
+        <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+- (void)updateEvents:(NSMutableArray *)incomingEvents;
+
+@property BCNMapViewController *mvc;
+
+@end
