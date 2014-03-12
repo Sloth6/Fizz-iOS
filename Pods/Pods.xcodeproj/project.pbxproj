@@ -1,0 +1,1949 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		010C0FBE06134C398B415C5F /* RMOpenSeaMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ACF9B21F03B47C5AF88D253 /* RMOpenSeaMapSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		013FD06279944C41B94CD831 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */; };
+		01DB3200A1A54675BC4D7521 /* RMTileSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FDCAAEA600E487C84BD756C /* RMTileSource.h */; };
+		04DC8C915AF84BD2808E8CF9 /* RMPointAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EDC8535417746DCB8DCCF3E /* RMPointAnnotation.h */; };
+		05F5A6BE7C704F6590D60F1B /* GRMustacheTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = AF260910E6AB4108A3472BF2 /* GRMustacheTemplate.h */; };
+		0675E922C5184507AC93148B /* NSValueTransformer+GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 5283F0C4EFA848A4ACEB7FC5 /* NSValueTransformer+GRMustache.h */; };
+		079497C9807B4CBBAAABAE12 /* GRMustacheScopedExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = C63F84AB17BB44EF9A85F1D9 /* GRMustacheScopedExpression_private.h */; };
+		08E215A0FCDA42FF965CD9D1 /* Pods-JRSwizzle-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE6A823828C418D972ACB30 /* Pods-JRSwizzle-dummy.m */; };
+		0A7BA5E604D2482DB5DAE5A3 /* GRMustacheExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = AC460BE2E6D049F290F86F1F /* GRMustacheExpression.m */; };
+		0B71F0FC6A9542DEB7646295 /* GRMustacheContext.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C322D7B3714F92BA79E1CA /* GRMustacheContext.m */; };
+		0DEC325EB21F4969BA93AEDC /* GRMustacheVariableTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D456F67F662431D8C278260 /* GRMustacheVariableTag.m */; };
+		0E3C3286C2D64428AA684FA8 /* RMMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B22DE31E4B6473F8794EDF5 /* RMMapLayer.h */; };
+		0EC23903A402456DA8B4D4B2 /* RMTileSourcesContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = D33D9B6F00E748CF8AD11241 /* RMTileSourcesContainer.h */; };
+		0EC2854AEA474B4389186395 /* RMCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C505EBFBC3411C904AA7A1 /* RMCircle.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		105E094E8E104542B95C92DC /* RMLoadingTileView.h in Headers */ = {isa = PBXBuildFile; fileRef = 044FBF3309EF46488ED0CAF7 /* RMLoadingTileView.h */; };
+		10E7448512C24F57A183532D /* RMMapViewDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 7ABCC44E435A489498E55296 /* RMMapViewDelegate.h */; };
+		12FAE6F0843E41F49010372D /* libPods-FMDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6443E1986B964C4194A679AA /* libPods-FMDB.a */; };
+		1307FBEEE1A34E5CB1B813C4 /* FMDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F70A42375A94AA992FDF880 /* FMDatabase.h */; };
+		17B77D0A4A1E49E8ACF6ED5C /* GRMustacheTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = DF39F27899B24E7AA8DAEA16 /* GRMustacheTemplate.m */; };
+		17E265BCDADF409694218B90 /* GRMustacheToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 918B95B0C9C74357BAF0AB31 /* GRMustacheToken.m */; };
+		1A5E8EEA1EC24DCC9EC1C76B /* RMMapQuestOSMSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA8F9EA029C4A0C89B647A2 /* RMMapQuestOSMSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		1AFEA0CFC6BF4690A50F3B7B /* RMCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1A1F06BC64C7CAB5BAD77 /* RMCacheObject.h */; };
+		1D209D68531E4F5F91C43C71 /* GRMustacheTemplate_private.h in Headers */ = {isa = PBXBuildFile; fileRef = E42FAD02981A4DBC83961A74 /* GRMustacheTemplate_private.h */; };
+		1D9B8FAC74964F4BA06FAE3B /* RMTileMillSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A61B3882B984CB98C86E55C /* RMTileMillSource.h */; };
+		1E5FB2D6C3494F5E817B6E22 /* RMUserLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 804253F15D994848BB87B45A /* RMUserLocation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		1F0CF52B75CF4D4C8904F637 /* libPods-JRSwizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A895D56CCF42FEBFFE459F /* libPods-JRSwizzle.a */; };
+		21E2A6B8190342F2ACAEC800 /* RMPolygonAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 69F21E93BB9748C487F8952F /* RMPolygonAnnotation.h */; };
+		24F74F2DE1334FB38F05044D /* GRMustacheImplicitIteratorExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = C30BB425B3B84348BA321D7B /* GRMustacheImplicitIteratorExpression_private.h */; };
+		265F362E1FB14F25A7535CC8 /* RMUserLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B27BA07F9643C89B098D39 /* RMUserLocation.h */; };
+		26CEB1FDE96240238AAC6C4D /* RMAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDA03668702467684D620D9 /* RMAnnotation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		27AA94414C7A4C9D9CB78946 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */; };
+		28D5AC290119430A8FBD4AC6 /* GRMustacheHTMLLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A27C89D97E4A48A3FDDAC1 /* GRMustacheHTMLLibrary.m */; };
+		2D81DD3C5DFB496B89CA1E9F /* RMQuadTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C8CF08F09379401A96263ABA /* RMQuadTree.h */; };
+		2E285C4E8560411898F36955 /* RMMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F32101917FBD49768D68EEC7 /* RMMapLayer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		2FE692E1428C4BF7A59E2577 /* RMPixel.c in Sources */ = {isa = PBXBuildFile; fileRef = 1A12877C11054A8180A2527E /* RMPixel.c */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		3067EBDD5FD4439D90A733E1 /* RMProjection.m in Sources */ = {isa = PBXBuildFile; fileRef = C502295C3B114B3FBE1534C9 /* RMProjection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		36473B7F13EB4BFD8B58E9DF /* RMMBTilesSource.h in Headers */ = {isa = PBXBuildFile; fileRef = F639D48FFE574AFC9AAD7B18 /* RMMBTilesSource.h */; };
+		3875E4EFDFAA4C8BAA164D8D /* emess.h in Headers */ = {isa = PBXBuildFile; fileRef = 733FD9B25629474ABB2FC01D /* emess.h */; };
+		38F64789D7B44E2A902BBACC /* Pods-MapBox-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C61903F6CD44F29B903A844 /* Pods-MapBox-dummy.m */; };
+		3980371EE9C4480FA058D5D0 /* GRMustacheTemplateRepository_private.h in Headers */ = {isa = PBXBuildFile; fileRef = AC14A13DF0F54462B5E4816F /* GRMustacheTemplateRepository_private.h */; };
+		3AD9230E771E4D7EB1D02854 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6338D1373F9D4441A40D1A08 /* QuartzCore.framework */; };
+		3D3709E56F494673B8068BDA /* GRMustacheStandardLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CECC766A6D344619A3DB273 /* GRMustacheStandardLibrary.m */; };
+		3D8EB968F34A43728F41D71C /* libPods-SMCalloutView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D5271B84C64C518F8E540D /* libPods-SMCalloutView.a */; };
+		3D950D5728DF4040A650C0FC /* geodesic.h in Headers */ = {isa = PBXBuildFile; fileRef = 04AFFDEC944D4EE78935E8E0 /* geodesic.h */; };
+		40808E7511304F65802FCE2F /* GRMustacheURLLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = F880AAAD28724DBEBEFCB47F /* GRMustacheURLLibrary.m */; };
+		40A8193A36E2418EAF542F67 /* GRMustacheTag.h in Headers */ = {isa = PBXBuildFile; fileRef = E01EEA455F4848468C5F42BC /* GRMustacheTag.h */; };
+		4112A91DEC90444DA03AA619 /* GRMustacheIdentifierExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 7830E20D28EA4D31B6B2AE40 /* GRMustacheIdentifierExpression.m */; };
+		41312CCC47164A2289203400 /* RMStaticMapView.h in Headers */ = {isa = PBXBuildFile; fileRef = 043952C7609745B4A942B4C7 /* RMStaticMapView.h */; };
+		41368941A57E437B8D50FBC5 /* GRMustacheParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E818FF5AF6C479983E2D614 /* GRMustacheParser_private.h */; };
+		4151DC5D572B4B318A8A21E6 /* GRMustacheAccumulatorTag_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 074C7EF6588E4A8F8D198D40 /* GRMustacheAccumulatorTag_private.h */; };
+		4197C38787F94D98A911973F /* RMMemoryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2F0491132343358C5B9B28 /* RMMemoryCache.h */; };
+		43A2F6810F624A0FB43568DA /* RMMapTiledLayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E0E832BEF8A4B6FB5D30F0C /* RMMapTiledLayerView.h */; };
+		45DF85AEA23244E094F41E66 /* RMOpenStreetMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3083A4BE47F64C7B9114FD99 /* RMOpenStreetMapSource.h */; };
+		46B6E8B5E8C644C097771AA5 /* GRMustacheTemplateOverride_private.h in Headers */ = {isa = PBXBuildFile; fileRef = C442D6331E894603927B0DCC /* GRMustacheTemplateOverride_private.h */; };
+		4770FACFF8C14C59A20B640C /* RMInteractiveSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A0EDF54A190046068008AC58 /* RMInteractiveSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		48D28EF2777C48A1AF8B4BBB /* GRMustacheHTMLLibrary_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 671A553C82424D6DB73A7282 /* GRMustacheHTMLLibrary_private.h */; };
+		48D7CBBF50F041C78DB99C7F /* RMCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 13488AEC6CF8456FAF8AC82E /* RMCacheObject.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		4C2898F9247D40F2A68C07C5 /* Mapbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FA99954569D4A57851EB154 /* Mapbox.h */; };
+		4C62E518F9AB478F993A6F68 /* GRMustacheStandardLibrary_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 116F8EA0E6EA4050A98BCD26 /* GRMustacheStandardLibrary_private.h */; };
+		4C72B77914B44C46B2EB01CE /* RMMapQuestOSMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = CF59B884474441CCABA87119 /* RMMapQuestOSMSource.h */; };
+		4CD46EE1A86D422B81E82848 /* FMDatabaseQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E220B52EAB64BE5945690B5 /* FMDatabaseQueue.h */; };
+		4D0D6CFD0D594189B138C8AC /* pj_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 848031ECDA894D84A4A608EC /* pj_list.h */; };
+		4D0D8C3551BA45E6B0330907 /* libPods-MapBox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29336B0461A2449EAC94D18E /* libPods-MapBox.a */; };
+		4D10BB1E9E804BCBAAEF80F6 /* RMCircleAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA7915075CC42F2ACAAEB14 /* RMCircleAnnotation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		4F517BE8EB5C463B8FEB5CF1 /* GRMustacheExpressionParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FFDCCFFE1D4470DAFD45501 /* GRMustacheExpressionParser_private.h */; };
+		523B3CBB89244B2584F6638D /* RMCompositeSource.h in Headers */ = {isa = PBXBuildFile; fileRef = D16DFB232BE74D87B64E83C3 /* RMCompositeSource.h */; };
+		52BDDA3357D04DF79B336C06 /* GRMustacheError.h in Headers */ = {isa = PBXBuildFile; fileRef = 32077279DF8245F99CDB91AB /* GRMustacheError.h */; };
+		56DEEED3414E46AC8917B420 /* GRMustacheContext.h in Headers */ = {isa = PBXBuildFile; fileRef = B61B5372D78F4FC390E83811 /* GRMustacheContext.h */; };
+		57C38DA023AB45719DC91104 /* RMMarker.h in Headers */ = {isa = PBXBuildFile; fileRef = 5461BEF5DDB842CCA9699472 /* RMMarker.h */; };
+		5871B4B9D763471991E3691F /* projects.h in Headers */ = {isa = PBXBuildFile; fileRef = C0F28A05E2BC43E2A86E2CDF /* projects.h */; };
+		597874AC096842ABA41ABDB4 /* GRMustacheTagDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 0B6F6E610E564B3F82DED79B /* GRMustacheTagDelegate.h */; };
+		5ACCE4E7F08C480CB3003972 /* RMMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F22FA3880F4BB293B91151 /* RMMemoryCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		5C15B0B7348F436FA479B100 /* RMInteractiveSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 30E5299945354461A735A4AC /* RMInteractiveSource.h */; };
+		5DFA5D37CC1B480EA5D39533 /* RMMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D14960B9A384F8DA0830D28 /* RMMapView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		5F3EFF8815374EFB895381CF /* RMMapOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1061EA41734E8EA32B94D2 /* RMMapOverlayView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		5FA09FF16C8044AA8CF62EA9 /* RMTileCacheDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3172BA6DAC4F40AF7216B3 /* RMTileCacheDownloadOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		60B13CE07C75472D8E92BCFE /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFFC50AF1C44DC9B6A27FEF /* GRMustache.m */; };
+		60F6C36D0AA24C1ABC1F34A0 /* RMFoundation.c in Sources */ = {isa = PBXBuildFile; fileRef = 9AD995FEB59D49A7A5620DA0 /* RMFoundation.c */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		6195A8E684474357A2B9C6C8 /* GRMustacheFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 11530C4DD07C48C9BE7AFE2A /* GRMustacheFilter.m */; };
+		624738E5AECB4C4BADD535B2 /* RMPixel.h in Headers */ = {isa = PBXBuildFile; fileRef = 970BFCAE2FBB4377A234402B /* RMPixel.h */; };
+		63BF01FABE7847DF87F9F135 /* GRMustacheTextComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = DEBCDA9CD395459A80CE33E4 /* GRMustacheTextComponent.m */; };
+		641250242AA1446C83D7702C /* RMLoadingTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3100884EFFA344EF8DF75AA8 /* RMLoadingTileView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		643917D45C624FEAAA972002 /* RMFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3E62221DCF47CA968E4169 /* RMFoundation.h */; };
+		654BD1413D4D4251B87C1F66 /* RMTileCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 51072CD5B99E4AB2807DC94F /* RMTileCache.h */; };
+		65D6494AB1A04A7583FD6B2C /* RMOpenStreetMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E04AB02BF8324B849ECD192D /* RMOpenStreetMapSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		666633392F894B3DB908062E /* GRMustacheParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3842D59FE7D8407A82371E8F /* GRMustacheParser.m */; };
+		6737F808AB7F454693F68BFA /* RMOpenSeaMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC8E5F6692947A0BC4CA11F /* RMOpenSeaMapLayer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		681422FAB0884243B1E0F33C /* RMGenericMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DC252C431AD544B8B8ECCEFD /* RMGenericMapSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		69C8B974E5664E3A979C6766 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */; };
+		69CAAC2544C745608DD52C7F /* GRMustacheTag_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 62388239A7BD4EB5AFD50890 /* GRMustacheTag_private.h */; };
+		6AE541A04C36419693D8081E /* RMTileCacheDownloadOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = EF5CB625FB634DD6B87A3B25 /* RMTileCacheDownloadOperation.h */; };
+		6BA9F42EEA474F90857C6A1B /* RMShape.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3B5C9CCE794CE595944433 /* RMShape.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		6C8C8848FB9341EF8E93B0AA /* geocent.h in Headers */ = {isa = PBXBuildFile; fileRef = 972CA043CB224BF092D05A19 /* geocent.h */; };
+		6C92550C6B10492F8C4BAF20 /* RMDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CDBAE87D91649689E88E17B /* RMDatabaseCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		6DC8BEED89BF4870AEC52A17 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FBAC00FD0E9A43E784C78B7E /* FMDatabaseQueue.m */; };
+		6E40462A51204091A5B098DE /* GRMustacheVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = E015DF33A0234F9380265A6D /* GRMustacheVersion.h */; };
+		6F0B15A947F74FEB8DCD7CF9 /* RMConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 117BECEFAF7744CE8FD85851 /* RMConfiguration.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		6F3686261C03482688959544 /* GRMustacheScopedExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 56307580993D4EE08458C832 /* GRMustacheScopedExpression.m */; };
+		6F66A82798CF40EF8BADDDFA /* RMAbstractMercatorTileSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CF28FFD56624B4293DC2516 /* RMAbstractMercatorTileSource.h */; };
+		74EB38672381491999279E3B /* RMConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = BCB66B08968A4C5F8D25A369 /* RMConfiguration.h */; };
+		75163FCC5B2B4D2BA151B3F0 /* GRMustacheFilteredExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = F2E7191B00984A75AD335C2F /* GRMustacheFilteredExpression_private.h */; };
+		751C6DD01CBD4E2A88BECCA1 /* RMFractalTileProjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2B08E46144D75AEA61D9C /* RMFractalTileProjection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		75C07D5A6B2D4E2D902072B8 /* proj_api.h in Headers */ = {isa = PBXBuildFile; fileRef = 773B88DE14664446984D9DF0 /* proj_api.h */; };
+		7857194809E343DCB7DE4C0E /* RMOpenSeaMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = AF77CEECDBDB426F8F08238A /* RMOpenSeaMapSource.h */; };
+		78FCA096CC7E4055A6B5B92D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */; };
+		7AFEF195D3FD441D987A30B2 /* GRMustache_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 53A64726FD2E429B923FA543 /* GRMustache_private.h */; };
+		7B1A49075EC846818C06F452 /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = E6C6FAF68DD84F23AA917BED /* GRMustacheConfiguration.h */; };
+		7B7F69D518C643A080A1B991 /* RMTileCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 326AFEB890A64B1299A23DC8 /* RMTileCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		7CD0CBFA3631493BA36CAE49 /* RMBingSource.h in Headers */ = {isa = PBXBuildFile; fileRef = AD401430AB88452A8A611ACD /* RMBingSource.h */; };
+		7D400D94CE8548DE8320DA3F /* RMAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B993176DB0A4442A5EB81FB /* RMAnnotation.h */; };
+		7E93B89291094E80B458E389 /* RMCircleAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F3676A4275B4191B90CAA6F /* RMCircleAnnotation.h */; };
+		8062A2505F1C4E45B19C0B86 /* RMCoordinateGridSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C64EDD53AC4CA68014372C /* RMCoordinateGridSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		80A1AC78FA694FC6BFD33244 /* RMAttributionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 551B2CB16B7A4FDAA4BA1E81 /* RMAttributionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		827A8CEF4E454FC8AA44F46C /* GRMustacheSectionTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 26D48A32B0444A0F90343224 /* GRMustacheSectionTag.m */; };
+		84B9C061F0A2431AADB8B48D /* RMMapTiledLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAB2FE2629C4C3EACB611E6 /* RMMapTiledLayerView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		84F5E53418804864BD75F558 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A970F1646E3487281C8276A /* FMDatabaseAdditions.m */; };
+		87C9B7A0B7AB49978CB10E04 /* RMGlobalConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 9EEB5E0982C3447A9A93B3F1 /* RMGlobalConstants.h */; };
+		88492507E9FE4DC687B70522 /* GRMustacheAvailabilityMacros_private.h in Headers */ = {isa = PBXBuildFile; fileRef = E9E524D3C6A64E9A87330B21 /* GRMustacheAvailabilityMacros_private.h */; };
+		8BFDD2B126AA46E088C27ED4 /* GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 3533918C290040F9AB1389F2 /* GRMustache.h */; };
+		8CC4861AD0DA48109AA4D80A /* RMShapeAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E9CF9AE81924ECDA2D5790B /* RMShapeAnnotation.h */; };
+		8D99EB3B10C446A08ED72246 /* GRMustacheJavascriptLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = EBE87451DB134A4EAF31B436 /* GRMustacheJavascriptLibrary.m */; };
+		904004E5B5A54C408100FBDA /* RMPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EFDA12F3F74F4DBC680AF8 /* RMPointAnnotation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		9138B76E0167443581E2D2F7 /* RMMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BEB4D7C5AE4C948875D7B5 /* RMMapScrollView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		916DF7C2C9684CAE9B09EB81 /* Pods-GRMustache-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 91D364FF224949BFA01F2AB6 /* Pods-GRMustache-dummy.m */; };
+		91973A1B16204FD0AB04F5A2 /* RMOpenCycleMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 01236B5A62874C69B3D90E68 /* RMOpenCycleMapSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		91FD865290D444B7A3ABA194 /* RMMapboxSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BFE1C9FAD4EE4111BA287E2B /* RMMapboxSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		9296024C688747D19F0EE385 /* libPods-GRMustache.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 75B0BF96FE0F4013B3385F4B /* libPods-GRMustache.a */; };
+		94E57443D0344CE5A0FFD71D /* RMAbstractWebMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = F1B5DD7426DF4840A8E5FC9A /* RMAbstractWebMapSource.h */; };
+		958C35E141A048FCAD1BBC1D /* GRMustacheTemplateRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A9B95ED81074BD4B2E10B6C /* GRMustacheTemplateRepository.h */; };
+		9ACFABF28C1243D18FCA5141 /* GRMustacheLocalizer.h in Headers */ = {isa = PBXBuildFile; fileRef = A1E2BBB28A1743A0A21029D4 /* GRMustacheLocalizer.h */; };
+		9CCEC5F3B76E429ABF6663F0 /* RMDBMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = DDEA46CE0FD4455B935F13CE /* RMDBMapSource.h */; };
+		9D07D05E19894B2581D5CFEF /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2D25F5A8E74662A4973766 /* FMDatabasePool.m */; };
+		A27170C54AA5415EA4C72C6C /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 64533BE39D0047A583FAAD07 /* GRMustacheConfiguration.m */; };
+		A29413BCDD11434388A63F5D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7537E5B02AE948D3B74FD29D /* CoreGraphics.framework */; };
+		A2CD935CE0B34FC086B2ECC9 /* GRMustacheAccumulatorTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8CA56B42934EC8825E2C96 /* GRMustacheAccumulatorTag.m */; };
+		A3622710C7374675B25FCEBD /* RMShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF747F5F06B469A8193F131 /* RMShape.h */; };
+		A3B6C282E7B542819941F072 /* FMDatabasePool.h in Headers */ = {isa = PBXBuildFile; fileRef = E03FAE353FFE4B3EB8D6D66B /* FMDatabasePool.h */; };
+		A7DBE4B3451F4C99B63E1220 /* RMProjection.h in Headers */ = {isa = PBXBuildFile; fileRef = E64F237BC55A4DE68764A042 /* RMProjection.h */; };
+		A90075720C624E1D8E275099 /* RMDatabaseCache.h in Headers */ = {isa = PBXBuildFile; fileRef = D85C8788FD624E85A72593F0 /* RMDatabaseCache.h */; };
+		A93ADB355C434A45B636F4FC /* SMCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = FA76D9226E164BE787A8B92D /* SMCalloutView.h */; };
+		AC2125F3DF1346F58A7A05E1 /* NSFormatter+GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = F661D188D838476AB7BADEC1 /* NSFormatter+GRMustache.h */; };
+		ACA3839C9C6A49B29CC03A80 /* GRMustacheLocalizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 82902EB802B846E9B9ECDE82 /* GRMustacheLocalizer.m */; };
+		ACBB38AEFE604261A9877C40 /* FMResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 455057B1BE20452EB3CC4497 /* FMResultSet.h */; };
+		AD340A98AEB140D7BEED2BC5 /* GRMustacheConfiguration_private.h in Headers */ = {isa = PBXBuildFile; fileRef = CAEDF922A2F64B4689F801B5 /* GRMustacheConfiguration_private.h */; };
+		AEEFD800FDCB469088AD6751 /* RMAbstractMercatorTileSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 0249A03D9812407B932DD49E /* RMAbstractMercatorTileSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		B0707B21E84846DEB19A6796 /* RMTile.c in Sources */ = {isa = PBXBuildFile; fileRef = BC562DA97B0842E3B319C150 /* RMTile.c */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		B4A9ABAAC64D44A180AEE8DC /* RMMapOverlayView.h in Headers */ = {isa = PBXBuildFile; fileRef = C57929A48FC34646AFD71567 /* RMMapOverlayView.h */; };
+		B6E9ABF2EC4C4A5991C68302 /* org_proj4_Projections.h in Headers */ = {isa = PBXBuildFile; fileRef = 9745116369864C7A96C53D6E /* org_proj4_Projections.h */; };
+		B788868CDC1440EA8C4F23E4 /* RMBingSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C95380A997104862B0FE76B9 /* RMBingSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		B84701D38827434A9194A551 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */; };
+		BBF0B495F67741F382E27AA1 /* proj_config.h in Headers */ = {isa = PBXBuildFile; fileRef = A78735482C7C4F7B9B920BF6 /* proj_config.h */; };
+		BC3BBF1B9F4143A5B19519D1 /* Pods-SMCalloutView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F8812A85D5B47E8850A846C /* Pods-SMCalloutView-dummy.m */; };
+		BD6E012627D34627BB0683FB /* GRMustacheVariableTag_private.h in Headers */ = {isa = PBXBuildFile; fileRef = CA5E18BF015F471990387D3B /* GRMustacheVariableTag_private.h */; };
+		BE786D2C08014CA6A6A297A3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */; };
+		C0D22C47EA5C4F828F3A056E /* RMTileMillSource.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0D0CFED233410786D22D64 /* RMTileMillSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		C17EB7603D7543DEA7098E63 /* RMMBTilesSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FDD030803C94E83994C2858 /* RMMBTilesSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		C3331FD6408A4149B6A287D0 /* RMTile.h in Headers */ = {isa = PBXBuildFile; fileRef = E4E2BEC49EF54A9BB7C4E2E4 /* RMTile.h */; };
+		C4778D2A15434D80ADBD5088 /* RMTileSourcesContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A4387E166A4FBD926310F5 /* RMTileSourcesContainer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		C5FDEA55EFAA4B289973C1F6 /* GRMustacheFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = AA0166ACD542401D86C3472E /* GRMustacheFilter.h */; };
+		C777EC302D1C4A9D97F74972 /* RMMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5FF25FE5334A2586499D95 /* RMMarker.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		C79800A48C68433A95D6C266 /* RMFractalTileProjection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ED46780310A483F99FD0D2C /* RMFractalTileProjection.h */; };
+		C7C38B8F2DAC4018889A0811 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6BADD3828D4AFFB3DDF60D /* SMCalloutView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		C845A020A4BD4B2E875C5FEC /* RMMapboxSource.h in Headers */ = {isa = PBXBuildFile; fileRef = CD132F0923EA4F2292194A48 /* RMMapboxSource.h */; };
+		C88B6910AB8649329EE09D70 /* GRMustacheURLLibrary_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 38DFB9025E6646C08F01D707 /* GRMustacheURLLibrary_private.h */; };
+		C93B77AB97C4402BAC78BD82 /* NSFormatter+GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0366600662234D95A07966BE /* NSFormatter+GRMustache.m */; };
+		C93C60593C0C4CA69A98DDC4 /* RMDBMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E85FC1E83E44CBFA67EAEF3 /* RMDBMapSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		CB6EBE98ADB04C3B871FFE4C /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B47A7F871B431AA830FC36 /* FMResultSet.m */; };
+		CC984CE4A7F846E1A107A947 /* GRMustacheTextComponent_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 1812F023675E4FAEB061825D /* GRMustacheTextComponent_private.h */; };
+		CEE578EDBAD947E09BFB2A90 /* GRMustacheTemplateComponent_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A6664875A7F4DABB425F5AC /* GRMustacheTemplateComponent_private.h */; };
+		CFC61CF126CE4B518D365147 /* RMPolygonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDED73B70D14E78BDEA53A4 /* RMPolygonAnnotation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		D04657C0EF6748B0BF36F3C7 /* RMPolylineAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = E42915E25FAB47FE8CF81930 /* RMPolylineAnnotation.h */; };
+		D0E77596DC444EFDA91199C3 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 98E86776F9EF46108A87D677 /* JRSwizzle.h */; };
+		D168B8161FD74EBAB6B7041F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C646A4E62FB7486DA1914A8F /* UIKit.framework */; };
+		D1CE98CFE0264498A5038539 /* GRMustacheContext_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 66BF8361B7234E5EA34465A5 /* GRMustacheContext_private.h */; };
+		D1F2DB8182A54FF7B91BE5FC /* GRMustacheFilter_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 73FB6F5EF2D5466E8906F639 /* GRMustacheFilter_private.h */; };
+		D3B320CE531D4250906105D0 /* Pods-FMDB-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 73748E5C15E0477787E0E345 /* Pods-FMDB-dummy.m */; };
+		D3D611FD73E449CA88D40697 /* RMNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 924A004D5972447D896CC6DA /* RMNotifications.h */; };
+		D54CC5AFAC86420C876B45FB /* GRMustacheTag.m in Sources */ = {isa = PBXBuildFile; fileRef = B1FA7C9E5483495F809D10B3 /* GRMustacheTag.m */; };
+		D69F6C999152415BB4CB45C6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DE186588A254544A2585270 /* CoreLocation.framework */; };
+		D7CCD902D3584400A8B5182E /* GRMustacheJavascriptLibrary_private.h in Headers */ = {isa = PBXBuildFile; fileRef = AC03EC51760A4046AEAC9BC3 /* GRMustacheJavascriptLibrary_private.h */; };
+		D7FA66A886C1495BBAC5FD59 /* RMOpenCycleMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FB415CEA0B41219274EDBA /* RMOpenCycleMapSource.h */; };
+		D9FB0EB5D7464D6F9C7C2319 /* nad_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F8FB65ACA66440D9CB7C114 /* nad_list.h */; };
+		DAD94C3D1AF94C42A49AF6ED /* GRMustacheTemplateRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F4D124B02E04D2B8701AB1A /* GRMustacheTemplateRepository.m */; };
+		DB3C5022A85443B49B028A42 /* RMCoordinateGridSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E1598CCD9DF643D99B847F79 /* RMCoordinateGridSource.h */; };
+		DC228CB0A26E4F7992E919A2 /* RMTileImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 165F7A341D09470BA37CE3B1 /* RMTileImage.h */; };
+		DD2221BB32D846FB86B1C558 /* RMOpenSeaMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = EBEA36F6E0F34359A7866829 /* RMOpenSeaMapLayer.h */; };
+		DD35900B2AB743A791ACCE38 /* RMTileImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B52342EBF12A4D17BD2EC67B /* RMTileImage.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		DF3D4E2DAF5744B1A3398966 /* GRMustacheExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C241E4B3B6469681586FCE /* GRMustacheExpression_private.h */; };
+		E04D4AE3C2324B009E9594BB /* RMAttributionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 24104F31DE5F4254BA63B84A /* RMAttributionViewController.h */; };
+		E1343CB46A57444BB3E02B0A /* RMMapScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 994F7F8B6834480F9DFD6770 /* RMMapScrollView.h */; };
+		E1B1F6882F4747F786D48BC5 /* GRMustacheTemplateOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DCC43B578C8481192043A5B /* GRMustacheTemplateOverride.m */; };
+		E3932FB1387F4C8DA32BE9D0 /* RMCompositeSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C15F50D4144341D5B7A886F1 /* RMCompositeSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		E4EE8B8F44584E4E9A000C67 /* FMDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 15ABB0061C7D45708E2AA9FF /* FMDatabaseAdditions.h */; };
+		E5914328EFB44136AE6FA47B /* GRMustacheIdentifierExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B6AB4350937428CADF4E831 /* GRMustacheIdentifierExpression_private.h */; };
+		E8E5554D372B4DE581C7B945 /* GRMustacheError.m in Sources */ = {isa = PBXBuildFile; fileRef = 6390836874804ACDB86E4443 /* GRMustacheError.m */; };
+		E919E7270CDC472999C6A946 /* GRMustacheAvailabilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 44E351FF553844808935B772 /* GRMustacheAvailabilityMacros.h */; };
+		E983F13FA4EE48FA9EFB8826 /* GRMustacheCompiler_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 346D0E99A9A9483DA18DE306 /* GRMustacheCompiler_private.h */; };
+		E98D97319E024B2F8EFEDF2E /* GRMustacheSectionTag_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B85E5C5CE9FD4EF184973443 /* GRMustacheSectionTag_private.h */; };
+		EAA6C252ACCE48A6B8D45C94 /* RMMapQuestOpenAerialSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B4D1EC59244E87882BD58E /* RMMapQuestOpenAerialSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		EBE67C0E80B44A2A86DE7B5A /* RMAbstractWebMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C87026A2A7424481B43DFC /* RMAbstractWebMapSource.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		ED0C1A6FBD2846B6AF671116 /* GRMustacheCompiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 480A504687ED431EB902D7CC /* GRMustacheCompiler.m */; };
+		EE93ECE5C7C04938A1FDFB06 /* RMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 12BE3AB2E3AC4D2AA02B6537 /* RMCircle.h */; };
+		EEF25308499A49BDA13B75F1 /* NSValueTransformer+GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5A470FE26E45A9B2EB5593 /* NSValueTransformer+GRMustache.m */; };
+		EF8227136F2742DC8FFD8971 /* GRMustacheToken_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FC932128AF947229D559448 /* GRMustacheToken_private.h */; };
+		F03B0387B23748929AADE697 /* RMShapeAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = DF97FF94074A459693D59BCA /* RMShapeAnnotation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		F076FE1CCC634CA68A63FC66 /* GRMustacheFilteredExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = C39CE666CD47415F9F3DE86B /* GRMustacheFilteredExpression.m */; };
+		F17D5BE71A85453CB5636671 /* RMUserTrackingBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 872EFC7AF91D4334B5724BBE /* RMUserTrackingBarButtonItem.h */; };
+		F2F3E3808F454E05A4FA6814 /* GRMustacheImplicitIteratorExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DE94A54205467896FAAC70 /* GRMustacheImplicitIteratorExpression.m */; };
+		F3F2316E47A448FDB86E29F7 /* RMGenericMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 45B9BF7B8A664DA78CCD2885 /* RMGenericMapSource.h */; };
+		F4D57577A6F340469284258A /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF486B1FFD4BFE89FF603B /* JRSwizzle.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		F70D771DC25E49F1948280E1 /* RMQuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E959ED0A96848F793F40A1F /* RMQuadTree.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		F74CF69B743B4A12A303C01E /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C000F19EEAB459F94FC4756 /* FMDatabase.m */; };
+		F7CBE6EE3A1B491AAB0D2610 /* Pods-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A6FA0588774E11A3B200E2 /* Pods-dummy.m */; };
+		F84DC863888F4A96B0DDBFD5 /* GRMustacheRendering.h in Headers */ = {isa = PBXBuildFile; fileRef = DC06AE11FC2840ABB905B7CA /* GRMustacheRendering.h */; };
+		F9D8A6EBAF3F4C91BD371DCB /* GRMustacheExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2EEDF724EE4A0C8E77C283 /* GRMustacheExpressionParser.m */; };
+		FD2FE7A4E1E14C1BBEE6A16A /* RMPolylineAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = D358AE39CB9143A083AF2D15 /* RMPolylineAnnotation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		FEC08996750A4E62A4EF347F /* RMStaticMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = B43E506A4A9E4FA684B9442A /* RMStaticMapView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		FEE164674C604E58A68A9BE0 /* RMMapQuestOpenAerialSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 62DCC872605E47C99F4D4819 /* RMMapQuestOpenAerialSource.h */; };
+		FEE9D55F82A24F45AC9F5F7E /* RMUserTrackingBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D7DF3236DD4C4E769F5CEF1F /* RMUserTrackingBarButtonItem.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
+		FF2846EB732F4EAC98ADA484 /* RMMapView.h in Headers */ = {isa = PBXBuildFile; fileRef = A77F9DA3864E47098235D083 /* RMMapView.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0C498D61CD684BD8A32ADA75 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F035A63171C43C282E86039;
+			remoteInfo = "Pods-SMCalloutView";
+		};
+		0EB0563ABAAB422A861304FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F035A63171C43C282E86039;
+			remoteInfo = "Pods-SMCalloutView";
+		};
+		830D71F85F7A4FCC9425C9A2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4931AB0F471846FDBF4269A9;
+			remoteInfo = "Pods-FMDB";
+		};
+		91F9C7E37286424285842BCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3BAFD94ADA28485BB86E41CC;
+			remoteInfo = "Pods-JRSwizzle";
+		};
+		9D80F601F9154968840A83D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E82B5BEAD0E4C3C8220EB3F;
+			remoteInfo = "Pods-GRMustache";
+		};
+		A7258F962F7C4F35A082408F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E82B5BEAD0E4C3C8220EB3F;
+			remoteInfo = "Pods-GRMustache";
+		};
+		AA945706274E4F4BA26EAB6E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E6DE5B46E2F4CFFA75C1898;
+			remoteInfo = "Pods-MapBox";
+		};
+		C9520E23B2A24AAB9A91F37D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4931AB0F471846FDBF4269A9;
+			remoteInfo = "Pods-FMDB";
+		};
+		FCE95F6E3D134AD4ACF99AB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6F003EB75FE4BA99466E533 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3BAFD94ADA28485BB86E41CC;
+			remoteInfo = "Pods-JRSwizzle";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0092A0CEB36543518797F479 /* Pods-MapBox-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MapBox-prefix.pch"; sourceTree = "<group>"; };
+		01236B5A62874C69B3D90E68 /* RMOpenCycleMapSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMOpenCycleMapSource.m; path = MapView/Map/RMOpenCycleMapSource.m; sourceTree = "<group>"; };
+		0249A03D9812407B932DD49E /* RMAbstractMercatorTileSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMAbstractMercatorTileSource.m; path = MapView/Map/RMAbstractMercatorTileSource.m; sourceTree = "<group>"; };
+		0366600662234D95A07966BE /* NSFormatter+GRMustache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSFormatter+GRMustache.m"; path = "src/classes/NSFormatter+GRMustache.m"; sourceTree = "<group>"; };
+		043952C7609745B4A942B4C7 /* RMStaticMapView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMStaticMapView.h; path = MapView/Map/RMStaticMapView.h; sourceTree = "<group>"; };
+		044FBF3309EF46488ED0CAF7 /* RMLoadingTileView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMLoadingTileView.h; path = MapView/Map/RMLoadingTileView.h; sourceTree = "<group>"; };
+		04AFFDEC944D4EE78935E8E0 /* geodesic.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = geodesic.h; path = Proj4/geodesic.h; sourceTree = "<group>"; };
+		05A27C89D97E4A48A3FDDAC1 /* GRMustacheHTMLLibrary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheHTMLLibrary.m; path = src/classes/GRMustacheHTMLLibrary.m; sourceTree = "<group>"; };
+		06DE94A54205467896FAAC70 /* GRMustacheImplicitIteratorExpression.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheImplicitIteratorExpression.m; path = src/classes/GRMustacheImplicitIteratorExpression.m; sourceTree = "<group>"; };
+		074C7EF6588E4A8F8D198D40 /* GRMustacheAccumulatorTag_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheAccumulatorTag_private.h; path = src/classes/GRMustacheAccumulatorTag_private.h; sourceTree = "<group>"; };
+		0B6F6E610E564B3F82DED79B /* GRMustacheTagDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTagDelegate.h; path = src/classes/GRMustacheTagDelegate.h; sourceTree = "<group>"; };
+		0C1061EA41734E8EA32B94D2 /* RMMapOverlayView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapOverlayView.m; path = MapView/Map/RMMapOverlayView.m; sourceTree = "<group>"; };
+		0DE6A823828C418D972ACB30 /* Pods-JRSwizzle-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-JRSwizzle-dummy.m"; sourceTree = "<group>"; };
+		0EAB2FE2629C4C3EACB611E6 /* RMMapTiledLayerView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapTiledLayerView.m; path = MapView/Map/RMMapTiledLayerView.m; sourceTree = "<group>"; };
+		0F8FB65ACA66440D9CB7C114 /* nad_list.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = nad_list.h; path = Proj4/nad_list.h; sourceTree = "<group>"; };
+		1000DFBF39414641842E7FFF /* Pods-JRSwizzle-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-JRSwizzle-Private.xcconfig"; sourceTree = "<group>"; };
+		11530C4DD07C48C9BE7AFE2A /* GRMustacheFilter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheFilter.m; path = src/classes/GRMustacheFilter.m; sourceTree = "<group>"; };
+		116F8EA0E6EA4050A98BCD26 /* GRMustacheStandardLibrary_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheStandardLibrary_private.h; path = src/classes/GRMustacheStandardLibrary_private.h; sourceTree = "<group>"; };
+		117BECEFAF7744CE8FD85851 /* RMConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMConfiguration.m; path = MapView/Map/RMConfiguration.m; sourceTree = "<group>"; };
+		11AD6087113E4E5BAFF76AC0 /* Pods-MapBox-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MapBox-Private.xcconfig"; sourceTree = "<group>"; };
+		12BE3AB2E3AC4D2AA02B6537 /* RMCircle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMCircle.h; path = MapView/Map/RMCircle.h; sourceTree = "<group>"; };
+		13488AEC6CF8456FAF8AC82E /* RMCacheObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMCacheObject.m; path = MapView/Map/RMCacheObject.m; sourceTree = "<group>"; };
+		15ABB0061C7D45708E2AA9FF /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		165F7A341D09470BA37CE3B1 /* RMTileImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMTileImage.h; path = MapView/Map/RMTileImage.h; sourceTree = "<group>"; };
+		17B72C2BF3EF44BFB3368B3F /* Pods-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-resources.sh"; sourceTree = "<group>"; };
+		1812F023675E4FAEB061825D /* GRMustacheTextComponent_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTextComponent_private.h; path = src/classes/GRMustacheTextComponent_private.h; sourceTree = "<group>"; };
+		1883F070C51F4B3DB2CCD2A6 /* Pods-GRMustache-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-GRMustache-prefix.pch"; sourceTree = "<group>"; };
+		1A12877C11054A8180A2527E /* RMPixel.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = RMPixel.c; path = MapView/Map/RMPixel.c; sourceTree = "<group>"; };
+		1A970F1646E3487281C8276A /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = src/FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		1AEE01CFFA274691935E4DFD /* Pods-SMCalloutView-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SMCalloutView-Private.xcconfig"; sourceTree = "<group>"; };
+		1B8CA56B42934EC8825E2C96 /* GRMustacheAccumulatorTag.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheAccumulatorTag.m; path = src/classes/GRMustacheAccumulatorTag.m; sourceTree = "<group>"; };
+		1BDA03668702467684D620D9 /* RMAnnotation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMAnnotation.m; path = MapView/Map/RMAnnotation.m; sourceTree = "<group>"; };
+		1CECC766A6D344619A3DB273 /* GRMustacheStandardLibrary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheStandardLibrary.m; path = src/classes/GRMustacheStandardLibrary.m; sourceTree = "<group>"; };
+		1E85FC1E83E44CBFA67EAEF3 /* RMDBMapSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMDBMapSource.m; path = MapView/Map/RMDBMapSource.m; sourceTree = "<group>"; };
+		1FDCAAEA600E487C84BD756C /* RMTileSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMTileSource.h; path = MapView/Map/RMTileSource.h; sourceTree = "<group>"; };
+		23E1A1F06BC64C7CAB5BAD77 /* RMCacheObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMCacheObject.h; path = MapView/Map/RMCacheObject.h; sourceTree = "<group>"; };
+		24104F31DE5F4254BA63B84A /* RMAttributionViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMAttributionViewController.h; path = MapView/Map/RMAttributionViewController.h; sourceTree = "<group>"; };
+		26D48A32B0444A0F90343224 /* GRMustacheSectionTag.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheSectionTag.m; path = src/classes/GRMustacheSectionTag.m; sourceTree = "<group>"; };
+		29336B0461A2449EAC94D18E /* libPods-MapBox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapBox.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		29D8E2DAA28F4604B69BD6F6 /* Pods-JRSwizzle-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-JRSwizzle-prefix.pch"; sourceTree = "<group>"; };
+		2A6664875A7F4DABB425F5AC /* GRMustacheTemplateComponent_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTemplateComponent_private.h; path = src/classes/GRMustacheTemplateComponent_private.h; sourceTree = "<group>"; };
+		2D14960B9A384F8DA0830D28 /* RMMapView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapView.m; path = MapView/Map/RMMapView.m; sourceTree = "<group>"; };
+		2E220B52EAB64BE5945690B5 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = src/FMDatabaseQueue.h; sourceTree = "<group>"; };
+		2E818FF5AF6C479983E2D614 /* GRMustacheParser_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheParser_private.h; path = src/classes/GRMustacheParser_private.h; sourceTree = "<group>"; };
+		3083A4BE47F64C7B9114FD99 /* RMOpenStreetMapSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMOpenStreetMapSource.h; path = MapView/Map/RMOpenStreetMapSource.h; sourceTree = "<group>"; };
+		30E5299945354461A735A4AC /* RMInteractiveSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMInteractiveSource.h; path = MapView/Map/RMInteractiveSource.h; sourceTree = "<group>"; };
+		3100884EFFA344EF8DF75AA8 /* RMLoadingTileView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMLoadingTileView.m; path = MapView/Map/RMLoadingTileView.m; sourceTree = "<group>"; };
+		32077279DF8245F99CDB91AB /* GRMustacheError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheError.h; path = src/classes/GRMustacheError.h; sourceTree = "<group>"; };
+		326AFEB890A64B1299A23DC8 /* RMTileCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMTileCache.m; path = MapView/Map/RMTileCache.m; sourceTree = "<group>"; };
+		346D0E99A9A9483DA18DE306 /* GRMustacheCompiler_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheCompiler_private.h; path = src/classes/GRMustacheCompiler_private.h; sourceTree = "<group>"; };
+		3533918C290040F9AB1389F2 /* GRMustache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustache.h; path = src/classes/GRMustache.h; sourceTree = "<group>"; };
+		3842D59FE7D8407A82371E8F /* GRMustacheParser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheParser.m; path = src/classes/GRMustacheParser.m; sourceTree = "<group>"; };
+		38DFB9025E6646C08F01D707 /* GRMustacheURLLibrary_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheURLLibrary_private.h; path = src/classes/GRMustacheURLLibrary_private.h; sourceTree = "<group>"; };
+		3A3E824FFECF41CDBD3FC78C /* Pods-MapBox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MapBox.xcconfig"; sourceTree = "<group>"; };
+		3B993176DB0A4442A5EB81FB /* RMAnnotation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMAnnotation.h; path = MapView/Map/RMAnnotation.h; sourceTree = "<group>"; };
+		3C2F0491132343358C5B9B28 /* RMMemoryCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMemoryCache.h; path = MapView/Map/RMMemoryCache.h; sourceTree = "<group>"; };
+		3C61903F6CD44F29B903A844 /* Pods-MapBox-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MapBox-dummy.m"; sourceTree = "<group>"; };
+		3E2D25F5A8E74662A4973766 /* FMDatabasePool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabasePool.m; path = src/FMDatabasePool.m; sourceTree = "<group>"; };
+		3ED46780310A483F99FD0D2C /* RMFractalTileProjection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMFractalTileProjection.h; path = MapView/Map/RMFractalTileProjection.h; sourceTree = "<group>"; };
+		40C241E4B3B6469681586FCE /* GRMustacheExpression_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheExpression_private.h; path = src/classes/GRMustacheExpression_private.h; sourceTree = "<group>"; };
+		44E351FF553844808935B772 /* GRMustacheAvailabilityMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheAvailabilityMacros.h; path = src/classes/GRMustacheAvailabilityMacros.h; sourceTree = "<group>"; };
+		455057B1BE20452EB3CC4497 /* FMResultSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = src/FMResultSet.h; sourceTree = "<group>"; };
+		45B9BF7B8A664DA78CCD2885 /* RMGenericMapSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMGenericMapSource.h; path = MapView/Map/RMGenericMapSource.h; sourceTree = "<group>"; };
+		47A895D56CCF42FEBFFE459F /* libPods-JRSwizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JRSwizzle.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		480A504687ED431EB902D7CC /* GRMustacheCompiler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheCompiler.m; path = src/classes/GRMustacheCompiler.m; sourceTree = "<group>"; };
+		4B3172BA6DAC4F40AF7216B3 /* RMTileCacheDownloadOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMTileCacheDownloadOperation.m; path = MapView/Map/RMTileCacheDownloadOperation.m; sourceTree = "<group>"; };
+		4DE186588A254544A2585270 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
+		4FA99954569D4A57851EB154 /* Mapbox.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Mapbox.h; path = MapView/Map/Mapbox.h; sourceTree = "<group>"; };
+		4FC932128AF947229D559448 /* GRMustacheToken_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheToken_private.h; path = src/classes/GRMustacheToken_private.h; sourceTree = "<group>"; };
+		50F22FA3880F4BB293B91151 /* RMMemoryCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMemoryCache.m; path = MapView/Map/RMMemoryCache.m; sourceTree = "<group>"; };
+		51072CD5B99E4AB2807DC94F /* RMTileCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMTileCache.h; path = MapView/Map/RMTileCache.h; sourceTree = "<group>"; };
+		5283F0C4EFA848A4ACEB7FC5 /* NSValueTransformer+GRMustache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValueTransformer+GRMustache.h"; path = "src/classes/NSValueTransformer+GRMustache.h"; sourceTree = "<group>"; };
+		53A64726FD2E429B923FA543 /* GRMustache_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustache_private.h; path = src/classes/GRMustache_private.h; sourceTree = "<group>"; };
+		5461BEF5DDB842CCA9699472 /* RMMarker.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMarker.h; path = MapView/Map/RMMarker.h; sourceTree = "<group>"; };
+		54D355EE24F24FC7A5CB9B24 /* Pods-SMCalloutView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SMCalloutView-prefix.pch"; sourceTree = "<group>"; };
+		551B2CB16B7A4FDAA4BA1E81 /* RMAttributionViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMAttributionViewController.m; path = MapView/Map/RMAttributionViewController.m; sourceTree = "<group>"; };
+		56307580993D4EE08458C832 /* GRMustacheScopedExpression.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheScopedExpression.m; path = src/classes/GRMustacheScopedExpression.m; sourceTree = "<group>"; };
+		57F14091199940E5923E9A9F /* Pods-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-environment.h"; sourceTree = "<group>"; };
+		581286AD87124C04A9390DE5 /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		5915C35E7DD34189A4B26141 /* Pods-GRMustache.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GRMustache.xcconfig"; sourceTree = "<group>"; };
+		59166692861144AAA752F625 /* Pods-FMDB-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FMDB-Private.xcconfig"; sourceTree = "<group>"; };
+		5B22DE31E4B6473F8794EDF5 /* RMMapLayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapLayer.h; path = MapView/Map/RMMapLayer.h; sourceTree = "<group>"; };
+		5B3E62221DCF47CA968E4169 /* RMFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMFoundation.h; path = MapView/Map/RMFoundation.h; sourceTree = "<group>"; };
+		5BF747F5F06B469A8193F131 /* RMShape.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMShape.h; path = MapView/Map/RMShape.h; sourceTree = "<group>"; };
+		5C5FF25FE5334A2586499D95 /* RMMarker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMarker.m; path = MapView/Map/RMMarker.m; sourceTree = "<group>"; };
+		5CF28FFD56624B4293DC2516 /* RMAbstractMercatorTileSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMAbstractMercatorTileSource.h; path = MapView/Map/RMAbstractMercatorTileSource.h; sourceTree = "<group>"; };
+		5DCC43B578C8481192043A5B /* GRMustacheTemplateOverride.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheTemplateOverride.m; path = src/classes/GRMustacheTemplateOverride.m; sourceTree = "<group>"; };
+		5E9CF9AE81924ECDA2D5790B /* RMShapeAnnotation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMShapeAnnotation.h; path = MapView/Map/RMShapeAnnotation.h; sourceTree = "<group>"; };
+		5F3676A4275B4191B90CAA6F /* RMCircleAnnotation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMCircleAnnotation.h; path = MapView/Map/RMCircleAnnotation.h; sourceTree = "<group>"; };
+		5FDD030803C94E83994C2858 /* RMMBTilesSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMBTilesSource.m; path = MapView/Map/RMMBTilesSource.m; sourceTree = "<group>"; };
+		62388239A7BD4EB5AFD50890 /* GRMustacheTag_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTag_private.h; path = src/classes/GRMustacheTag_private.h; sourceTree = "<group>"; };
+		62DCC872605E47C99F4D4819 /* RMMapQuestOpenAerialSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapQuestOpenAerialSource.h; path = MapView/Map/RMMapQuestOpenAerialSource.h; sourceTree = "<group>"; };
+		6338D1373F9D4441A40D1A08 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		6390836874804ACDB86E4443 /* GRMustacheError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheError.m; path = src/classes/GRMustacheError.m; sourceTree = "<group>"; };
+		6443E1986B964C4194A679AA /* libPods-FMDB.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FMDB.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		64533BE39D0047A583FAAD07 /* GRMustacheConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheConfiguration.m; path = src/classes/GRMustacheConfiguration.m; sourceTree = "<group>"; };
+		65FB415CEA0B41219274EDBA /* RMOpenCycleMapSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMOpenCycleMapSource.h; path = MapView/Map/RMOpenCycleMapSource.h; sourceTree = "<group>"; };
+		66BF8361B7234E5EA34465A5 /* GRMustacheContext_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheContext_private.h; path = src/classes/GRMustacheContext_private.h; sourceTree = "<group>"; };
+		671A553C82424D6DB73A7282 /* GRMustacheHTMLLibrary_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheHTMLLibrary_private.h; path = src/classes/GRMustacheHTMLLibrary_private.h; sourceTree = "<group>"; };
+		69F21E93BB9748C487F8952F /* RMPolygonAnnotation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMPolygonAnnotation.h; path = MapView/Map/RMPolygonAnnotation.h; sourceTree = "<group>"; };
+		6A61B3882B984CB98C86E55C /* RMTileMillSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMTileMillSource.h; path = MapView/Map/RMTileMillSource.h; sourceTree = "<group>"; };
+		6C000F19EEAB459F94FC4756 /* FMDatabase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = src/FMDatabase.m; sourceTree = "<group>"; };
+		733FD9B25629474ABB2FC01D /* emess.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = emess.h; path = Proj4/emess.h; sourceTree = "<group>"; };
+		73748E5C15E0477787E0E345 /* Pods-FMDB-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-FMDB-dummy.m"; sourceTree = "<group>"; };
+		73FB6F5EF2D5466E8906F639 /* GRMustacheFilter_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheFilter_private.h; path = src/classes/GRMustacheFilter_private.h; sourceTree = "<group>"; };
+		7537E5B02AE948D3B74FD29D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		75B0BF96FE0F4013B3385F4B /* libPods-GRMustache.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GRMustache.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		75C64EDD53AC4CA68014372C /* RMCoordinateGridSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMCoordinateGridSource.m; path = MapView/Map/RMCoordinateGridSource.m; sourceTree = "<group>"; };
+		773B88DE14664446984D9DF0 /* proj_api.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = proj_api.h; path = Proj4/proj_api.h; sourceTree = "<group>"; };
+		7830E20D28EA4D31B6B2AE40 /* GRMustacheIdentifierExpression.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheIdentifierExpression.m; path = src/classes/GRMustacheIdentifierExpression.m; sourceTree = "<group>"; };
+		7ABCC44E435A489498E55296 /* RMMapViewDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapViewDelegate.h; path = MapView/Map/RMMapViewDelegate.h; sourceTree = "<group>"; };
+		7B2EEDF724EE4A0C8E77C283 /* GRMustacheExpressionParser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheExpressionParser.m; path = src/classes/GRMustacheExpressionParser.m; sourceTree = "<group>"; };
+		7CDBAE87D91649689E88E17B /* RMDatabaseCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMDatabaseCache.m; path = MapView/Map/RMDatabaseCache.m; sourceTree = "<group>"; };
+		7D456F67F662431D8C278260 /* GRMustacheVariableTag.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheVariableTag.m; path = src/classes/GRMustacheVariableTag.m; sourceTree = "<group>"; };
+		7F8812A85D5B47E8850A846C /* Pods-SMCalloutView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SMCalloutView-dummy.m"; sourceTree = "<group>"; };
+		7FFDCCFFE1D4470DAFD45501 /* GRMustacheExpressionParser_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheExpressionParser_private.h; path = src/classes/GRMustacheExpressionParser_private.h; sourceTree = "<group>"; };
+		804253F15D994848BB87B45A /* RMUserLocation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMUserLocation.m; path = MapView/Map/RMUserLocation.m; sourceTree = "<group>"; };
+		82902EB802B846E9B9ECDE82 /* GRMustacheLocalizer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheLocalizer.m; path = src/classes/GRMustacheLocalizer.m; sourceTree = "<group>"; };
+		83C87026A2A7424481B43DFC /* RMAbstractWebMapSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMAbstractWebMapSource.m; path = MapView/Map/RMAbstractWebMapSource.m; sourceTree = "<group>"; };
+		8449D2D910A3463EBCD97E5D /* Pods-JRSwizzle.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-JRSwizzle.xcconfig"; sourceTree = "<group>"; };
+		848031ECDA894D84A4A608EC /* pj_list.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pj_list.h; path = Proj4/pj_list.h; sourceTree = "<group>"; };
+		84D5271B84C64C518F8E540D /* libPods-SMCalloutView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SMCalloutView.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85EFDA12F3F74F4DBC680AF8 /* RMPointAnnotation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMPointAnnotation.m; path = MapView/Map/RMPointAnnotation.m; sourceTree = "<group>"; };
+		872EFC7AF91D4334B5724BBE /* RMUserTrackingBarButtonItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMUserTrackingBarButtonItem.h; path = MapView/Map/RMUserTrackingBarButtonItem.h; sourceTree = "<group>"; };
+		87B4D1EC59244E87882BD58E /* RMMapQuestOpenAerialSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapQuestOpenAerialSource.m; path = MapView/Map/RMMapQuestOpenAerialSource.m; sourceTree = "<group>"; };
+		8A9B95ED81074BD4B2E10B6C /* GRMustacheTemplateRepository.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTemplateRepository.h; path = src/classes/GRMustacheTemplateRepository.h; sourceTree = "<group>"; };
+		8AC8E5F6692947A0BC4CA11F /* RMOpenSeaMapLayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMOpenSeaMapLayer.m; path = MapView/Map/RMOpenSeaMapLayer.m; sourceTree = "<group>"; };
+		8B6AB4350937428CADF4E831 /* GRMustacheIdentifierExpression_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheIdentifierExpression_private.h; path = src/classes/GRMustacheIdentifierExpression_private.h; sourceTree = "<group>"; };
+		8E0E832BEF8A4B6FB5D30F0C /* RMMapTiledLayerView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapTiledLayerView.h; path = MapView/Map/RMMapTiledLayerView.h; sourceTree = "<group>"; };
+		8E959ED0A96848F793F40A1F /* RMQuadTree.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMQuadTree.m; path = MapView/Map/RMQuadTree.m; sourceTree = "<group>"; };
+		8EDC8535417746DCB8DCCF3E /* RMPointAnnotation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMPointAnnotation.h; path = MapView/Map/RMPointAnnotation.h; sourceTree = "<group>"; };
+		8F4D124B02E04D2B8701AB1A /* GRMustacheTemplateRepository.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheTemplateRepository.m; path = src/classes/GRMustacheTemplateRepository.m; sourceTree = "<group>"; };
+		8FA8F9EA029C4A0C89B647A2 /* RMMapQuestOSMSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapQuestOSMSource.m; path = MapView/Map/RMMapQuestOSMSource.m; sourceTree = "<group>"; };
+		918B95B0C9C74357BAF0AB31 /* GRMustacheToken.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheToken.m; path = src/classes/GRMustacheToken.m; sourceTree = "<group>"; };
+		91D364FF224949BFA01F2AB6 /* Pods-GRMustache-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-GRMustache-dummy.m"; sourceTree = "<group>"; };
+		924A004D5972447D896CC6DA /* RMNotifications.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMNotifications.h; path = MapView/Map/RMNotifications.h; sourceTree = "<group>"; };
+		970BFCAE2FBB4377A234402B /* RMPixel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMPixel.h; path = MapView/Map/RMPixel.h; sourceTree = "<group>"; };
+		972CA043CB224BF092D05A19 /* geocent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = geocent.h; path = Proj4/geocent.h; sourceTree = "<group>"; };
+		9745116369864C7A96C53D6E /* org_proj4_Projections.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = org_proj4_Projections.h; path = Proj4/org_proj4_Projections.h; sourceTree = "<group>"; };
+		98E86776F9EF46108A87D677 /* JRSwizzle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
+		994F7F8B6834480F9DFD6770 /* RMMapScrollView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapScrollView.h; path = MapView/Map/RMMapScrollView.h; sourceTree = "<group>"; };
+		9ACF9B21F03B47C5AF88D253 /* RMOpenSeaMapSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMOpenSeaMapSource.m; path = MapView/Map/RMOpenSeaMapSource.m; sourceTree = "<group>"; };
+		9AD995FEB59D49A7A5620DA0 /* RMFoundation.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = RMFoundation.c; path = MapView/Map/RMFoundation.c; sourceTree = "<group>"; };
+		9E5A470FE26E45A9B2EB5593 /* NSValueTransformer+GRMustache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+GRMustache.m"; path = "src/classes/NSValueTransformer+GRMustache.m"; sourceTree = "<group>"; };
+		9EEB5E0982C3447A9A93B3F1 /* RMGlobalConstants.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMGlobalConstants.h; path = MapView/Map/RMGlobalConstants.h; sourceTree = "<group>"; };
+		9F70A42375A94AA992FDF880 /* FMDatabase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = src/FMDatabase.h; sourceTree = "<group>"; };
+		9FA2B08E46144D75AEA61D9C /* RMFractalTileProjection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMFractalTileProjection.m; path = MapView/Map/RMFractalTileProjection.m; sourceTree = "<group>"; };
+		A0EDF54A190046068008AC58 /* RMInteractiveSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMInteractiveSource.m; path = MapView/Map/RMInteractiveSource.m; sourceTree = "<group>"; };
+		A1E2BBB28A1743A0A21029D4 /* GRMustacheLocalizer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheLocalizer.h; path = src/classes/GRMustacheLocalizer.h; sourceTree = "<group>"; };
+		A2A4387E166A4FBD926310F5 /* RMTileSourcesContainer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMTileSourcesContainer.m; path = MapView/Map/RMTileSourcesContainer.m; sourceTree = "<group>"; };
+		A73EE3CB373F42AEB4EAE6E6 /* Pods-GRMustache-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GRMustache-Private.xcconfig"; sourceTree = "<group>"; };
+		A77F9DA3864E47098235D083 /* RMMapView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapView.h; path = MapView/Map/RMMapView.h; sourceTree = "<group>"; };
+		A78735482C7C4F7B9B920BF6 /* proj_config.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = proj_config.h; path = Proj4/proj_config.h; sourceTree = "<group>"; };
+		AA0166ACD542401D86C3472E /* GRMustacheFilter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheFilter.h; path = src/classes/GRMustacheFilter.h; sourceTree = "<group>"; };
+		AA0D0CFED233410786D22D64 /* RMTileMillSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMTileMillSource.m; path = MapView/Map/RMTileMillSource.m; sourceTree = "<group>"; };
+		AAFFC50AF1C44DC9B6A27FEF /* GRMustache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustache.m; path = src/classes/GRMustache.m; sourceTree = "<group>"; };
+		AC03EC51760A4046AEAC9BC3 /* GRMustacheJavascriptLibrary_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheJavascriptLibrary_private.h; path = src/classes/GRMustacheJavascriptLibrary_private.h; sourceTree = "<group>"; };
+		AC14A13DF0F54462B5E4816F /* GRMustacheTemplateRepository_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTemplateRepository_private.h; path = src/classes/GRMustacheTemplateRepository_private.h; sourceTree = "<group>"; };
+		AC460BE2E6D049F290F86F1F /* GRMustacheExpression.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheExpression.m; path = src/classes/GRMustacheExpression.m; sourceTree = "<group>"; };
+		ACA7915075CC42F2ACAAEB14 /* RMCircleAnnotation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMCircleAnnotation.m; path = MapView/Map/RMCircleAnnotation.m; sourceTree = "<group>"; };
+		AD401430AB88452A8A611ACD /* RMBingSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMBingSource.h; path = MapView/Map/RMBingSource.h; sourceTree = "<group>"; };
+		AF260910E6AB4108A3472BF2 /* GRMustacheTemplate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTemplate.h; path = src/classes/GRMustacheTemplate.h; sourceTree = "<group>"; };
+		AF77CEECDBDB426F8F08238A /* RMOpenSeaMapSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMOpenSeaMapSource.h; path = MapView/Map/RMOpenSeaMapSource.h; sourceTree = "<group>"; };
+		B0C322D7B3714F92BA79E1CA /* GRMustacheContext.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheContext.m; path = src/classes/GRMustacheContext.m; sourceTree = "<group>"; };
+		B1699328EB52442090D41655 /* Mapbox.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = Mapbox.bundle; path = Resources/Mapbox.bundle; sourceTree = "<group>"; };
+		B1FA7C9E5483495F809D10B3 /* GRMustacheTag.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheTag.m; path = src/classes/GRMustacheTag.m; sourceTree = "<group>"; };
+		B43E506A4A9E4FA684B9442A /* RMStaticMapView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMStaticMapView.m; path = MapView/Map/RMStaticMapView.m; sourceTree = "<group>"; };
+		B4B47A7F871B431AA830FC36 /* FMResultSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = src/FMResultSet.m; sourceTree = "<group>"; };
+		B4C505EBFBC3411C904AA7A1 /* RMCircle.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMCircle.m; path = MapView/Map/RMCircle.m; sourceTree = "<group>"; };
+		B52342EBF12A4D17BD2EC67B /* RMTileImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMTileImage.m; path = MapView/Map/RMTileImage.m; sourceTree = "<group>"; };
+		B61B5372D78F4FC390E83811 /* GRMustacheContext.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheContext.h; path = src/classes/GRMustacheContext.h; sourceTree = "<group>"; };
+		B85E5C5CE9FD4EF184973443 /* GRMustacheSectionTag_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheSectionTag_private.h; path = src/classes/GRMustacheSectionTag_private.h; sourceTree = "<group>"; };
+		B97686BAACDC41BF8A663863 /* Pods-SMCalloutView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SMCalloutView.xcconfig"; sourceTree = "<group>"; };
+		B9B27BA07F9643C89B098D39 /* RMUserLocation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMUserLocation.h; path = MapView/Map/RMUserLocation.h; sourceTree = "<group>"; };
+		BB3B5C9CCE794CE595944433 /* RMShape.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMShape.m; path = MapView/Map/RMShape.m; sourceTree = "<group>"; };
+		BC562DA97B0842E3B319C150 /* RMTile.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = RMTile.c; path = MapView/Map/RMTile.c; sourceTree = "<group>"; };
+		BCB66B08968A4C5F8D25A369 /* RMConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMConfiguration.h; path = MapView/Map/RMConfiguration.h; sourceTree = "<group>"; };
+		BEDED73B70D14E78BDEA53A4 /* RMPolygonAnnotation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMPolygonAnnotation.m; path = MapView/Map/RMPolygonAnnotation.m; sourceTree = "<group>"; };
+		BFE1C9FAD4EE4111BA287E2B /* RMMapboxSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapboxSource.m; path = MapView/Map/RMMapboxSource.m; sourceTree = "<group>"; };
+		C0F28A05E2BC43E2A86E2CDF /* projects.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = projects.h; path = Proj4/projects.h; sourceTree = "<group>"; };
+		C15F50D4144341D5B7A886F1 /* RMCompositeSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMCompositeSource.m; path = MapView/Map/RMCompositeSource.m; sourceTree = "<group>"; };
+		C221C1978FB945CBB3F63F4E /* Pods-FMDB.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FMDB.xcconfig"; sourceTree = "<group>"; };
+		C30BB425B3B84348BA321D7B /* GRMustacheImplicitIteratorExpression_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheImplicitIteratorExpression_private.h; path = src/classes/GRMustacheImplicitIteratorExpression_private.h; sourceTree = "<group>"; };
+		C39CE666CD47415F9F3DE86B /* GRMustacheFilteredExpression.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheFilteredExpression.m; path = src/classes/GRMustacheFilteredExpression.m; sourceTree = "<group>"; };
+		C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		C442D6331E894603927B0DCC /* GRMustacheTemplateOverride_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTemplateOverride_private.h; path = src/classes/GRMustacheTemplateOverride_private.h; sourceTree = "<group>"; };
+		C502295C3B114B3FBE1534C9 /* RMProjection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMProjection.m; path = MapView/Map/RMProjection.m; sourceTree = "<group>"; };
+		C5671A9886984AF09243E65C /* Pods-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-acknowledgements.markdown"; sourceTree = "<group>"; };
+		C57929A48FC34646AFD71567 /* RMMapOverlayView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapOverlayView.h; path = MapView/Map/RMMapOverlayView.h; sourceTree = "<group>"; };
+		C58C217424DC4F0FB7B0A695 /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
+		C63F84AB17BB44EF9A85F1D9 /* GRMustacheScopedExpression_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheScopedExpression_private.h; path = src/classes/GRMustacheScopedExpression_private.h; sourceTree = "<group>"; };
+		C646A4E62FB7486DA1914A8F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		C7BEB4D7C5AE4C948875D7B5 /* RMMapScrollView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapScrollView.m; path = MapView/Map/RMMapScrollView.m; sourceTree = "<group>"; };
+		C8CF08F09379401A96263ABA /* RMQuadTree.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMQuadTree.h; path = MapView/Map/RMQuadTree.h; sourceTree = "<group>"; };
+		C95380A997104862B0FE76B9 /* RMBingSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMBingSource.m; path = MapView/Map/RMBingSource.m; sourceTree = "<group>"; };
+		CA5E18BF015F471990387D3B /* GRMustacheVariableTag_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheVariableTag_private.h; path = src/classes/GRMustacheVariableTag_private.h; sourceTree = "<group>"; };
+		CAEDF922A2F64B4689F801B5 /* GRMustacheConfiguration_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheConfiguration_private.h; path = src/classes/GRMustacheConfiguration_private.h; sourceTree = "<group>"; };
+		CB485337BA444D8DA5F49D59 /* Pods-FMDB-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-FMDB-prefix.pch"; sourceTree = "<group>"; };
+		CD132F0923EA4F2292194A48 /* RMMapboxSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapboxSource.h; path = MapView/Map/RMMapboxSource.h; sourceTree = "<group>"; };
+		CF59B884474441CCABA87119 /* RMMapQuestOSMSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMapQuestOSMSource.h; path = MapView/Map/RMMapQuestOSMSource.h; sourceTree = "<group>"; };
+		D16DFB232BE74D87B64E83C3 /* RMCompositeSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMCompositeSource.h; path = MapView/Map/RMCompositeSource.h; sourceTree = "<group>"; };
+		D33D9B6F00E748CF8AD11241 /* RMTileSourcesContainer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMTileSourcesContainer.h; path = MapView/Map/RMTileSourcesContainer.h; sourceTree = "<group>"; };
+		D358AE39CB9143A083AF2D15 /* RMPolylineAnnotation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMPolylineAnnotation.m; path = MapView/Map/RMPolylineAnnotation.m; sourceTree = "<group>"; };
+		D7DF3236DD4C4E769F5CEF1F /* RMUserTrackingBarButtonItem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMUserTrackingBarButtonItem.m; path = MapView/Map/RMUserTrackingBarButtonItem.m; sourceTree = "<group>"; };
+		D85C8788FD624E85A72593F0 /* RMDatabaseCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMDatabaseCache.h; path = MapView/Map/RMDatabaseCache.h; sourceTree = "<group>"; };
+		DA6BADD3828D4AFFB3DDF60D /* SMCalloutView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SMCalloutView.m; sourceTree = "<group>"; };
+		DC06AE11FC2840ABB905B7CA /* GRMustacheRendering.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheRendering.h; path = src/classes/GRMustacheRendering.h; sourceTree = "<group>"; };
+		DC252C431AD544B8B8ECCEFD /* RMGenericMapSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMGenericMapSource.m; path = MapView/Map/RMGenericMapSource.m; sourceTree = "<group>"; };
+		DDEA46CE0FD4455B935F13CE /* RMDBMapSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMDBMapSource.h; path = MapView/Map/RMDBMapSource.h; sourceTree = "<group>"; };
+		DEBCDA9CD395459A80CE33E4 /* GRMustacheTextComponent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheTextComponent.m; path = src/classes/GRMustacheTextComponent.m; sourceTree = "<group>"; };
+		DF39F27899B24E7AA8DAEA16 /* GRMustacheTemplate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheTemplate.m; path = src/classes/GRMustacheTemplate.m; sourceTree = "<group>"; };
+		DF97FF94074A459693D59BCA /* RMShapeAnnotation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMShapeAnnotation.m; path = MapView/Map/RMShapeAnnotation.m; sourceTree = "<group>"; };
+		E015DF33A0234F9380265A6D /* GRMustacheVersion.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheVersion.h; path = src/classes/GRMustacheVersion.h; sourceTree = "<group>"; };
+		E01EEA455F4848468C5F42BC /* GRMustacheTag.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTag.h; path = src/classes/GRMustacheTag.h; sourceTree = "<group>"; };
+		E03FAE353FFE4B3EB8D6D66B /* FMDatabasePool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabasePool.h; path = src/FMDatabasePool.h; sourceTree = "<group>"; };
+		E04AB02BF8324B849ECD192D /* RMOpenStreetMapSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMOpenStreetMapSource.m; path = MapView/Map/RMOpenStreetMapSource.m; sourceTree = "<group>"; };
+		E1598CCD9DF643D99B847F79 /* RMCoordinateGridSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMCoordinateGridSource.h; path = MapView/Map/RMCoordinateGridSource.h; sourceTree = "<group>"; };
+		E42915E25FAB47FE8CF81930 /* RMPolylineAnnotation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMPolylineAnnotation.h; path = MapView/Map/RMPolylineAnnotation.h; sourceTree = "<group>"; };
+		E42FAD02981A4DBC83961A74 /* GRMustacheTemplate_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheTemplate_private.h; path = src/classes/GRMustacheTemplate_private.h; sourceTree = "<group>"; };
+		E4E2BEC49EF54A9BB7C4E2E4 /* RMTile.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMTile.h; path = MapView/Map/RMTile.h; sourceTree = "<group>"; };
+		E64F237BC55A4DE68764A042 /* RMProjection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMProjection.h; path = MapView/Map/RMProjection.h; sourceTree = "<group>"; };
+		E6C6FAF68DD84F23AA917BED /* GRMustacheConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheConfiguration.h; path = src/classes/GRMustacheConfiguration.h; sourceTree = "<group>"; };
+		E7DF486B1FFD4BFE89FF603B /* JRSwizzle.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		E9E524D3C6A64E9A87330B21 /* GRMustacheAvailabilityMacros_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheAvailabilityMacros_private.h; path = src/classes/GRMustacheAvailabilityMacros_private.h; sourceTree = "<group>"; };
+		EBE87451DB134A4EAF31B436 /* GRMustacheJavascriptLibrary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheJavascriptLibrary.m; path = src/classes/GRMustacheJavascriptLibrary.m; sourceTree = "<group>"; };
+		EBEA36F6E0F34359A7866829 /* RMOpenSeaMapLayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMOpenSeaMapLayer.h; path = MapView/Map/RMOpenSeaMapLayer.h; sourceTree = "<group>"; };
+		EF5CB625FB634DD6B87A3B25 /* RMTileCacheDownloadOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMTileCacheDownloadOperation.h; path = MapView/Map/RMTileCacheDownloadOperation.h; sourceTree = "<group>"; };
+		F1B5DD7426DF4840A8E5FC9A /* RMAbstractWebMapSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMAbstractWebMapSource.h; path = MapView/Map/RMAbstractWebMapSource.h; sourceTree = "<group>"; };
+		F2E7191B00984A75AD335C2F /* GRMustacheFilteredExpression_private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GRMustacheFilteredExpression_private.h; path = src/classes/GRMustacheFilteredExpression_private.h; sourceTree = "<group>"; };
+		F32101917FBD49768D68EEC7 /* RMMapLayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RMMapLayer.m; path = MapView/Map/RMMapLayer.m; sourceTree = "<group>"; };
+		F639D48FFE574AFC9AAD7B18 /* RMMBTilesSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RMMBTilesSource.h; path = MapView/Map/RMMBTilesSource.h; sourceTree = "<group>"; };
+		F661D188D838476AB7BADEC1 /* NSFormatter+GRMustache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSFormatter+GRMustache.h"; path = "src/classes/NSFormatter+GRMustache.h"; sourceTree = "<group>"; };
+		F880AAAD28724DBEBEFCB47F /* GRMustacheURLLibrary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GRMustacheURLLibrary.m; path = src/classes/GRMustacheURLLibrary.m; sourceTree = "<group>"; };
+		F9A6FA0588774E11A3B200E2 /* Pods-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-dummy.m"; sourceTree = "<group>"; };
+		FA76D9226E164BE787A8B92D /* SMCalloutView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SMCalloutView.h; sourceTree = "<group>"; };
+		FBAC00FD0E9A43E784C78B7E /* FMDatabaseQueue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = src/FMDatabaseQueue.m; sourceTree = "<group>"; };
+		FC62C0CDB0BC4133A80868A8 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.xcconfig; sourceTree = "<group>"; };
+		FCA1C9F599C2408C970B7CCD /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		376C6BD9B8D2471A8BF5E2FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				013FD06279944C41B94CD831 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A7F4027B7FA4A4381E9A8EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69C8B974E5664E3A979C6766 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AC05E4AF5944F49A348E50C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A29413BCDD11434388A63F5D /* CoreGraphics.framework in Frameworks */,
+				D69F6C999152415BB4CB45C6 /* CoreLocation.framework in Frameworks */,
+				27AA94414C7A4C9D9CB78946 /* Foundation.framework in Frameworks */,
+				3AD9230E771E4D7EB1D02854 /* QuartzCore.framework in Frameworks */,
+				D168B8161FD74EBAB6B7041F /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B094AA93957482BB5B1DD30 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B84701D38827434A9194A551 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A799A23BE034962996ECA45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE786D2C08014CA6A6A297A3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1EF1D59DE804AA1BB535CD1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78FCA096CC7E4055A6B5B92D /* Foundation.framework in Frameworks */,
+				12FAE6F0843E41F49010372D /* libPods-FMDB.a in Frameworks */,
+				9296024C688747D19F0EE385 /* libPods-GRMustache.a in Frameworks */,
+				1F0CF52B75CF4D4C8904F637 /* libPods-JRSwizzle.a in Frameworks */,
+				4D0D8C3551BA45E6B0330907 /* libPods-MapBox.a in Frameworks */,
+				3D8EB968F34A43728F41D71C /* libPods-SMCalloutView.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1260DF9A147546DB8AB8A066 /* SMCalloutView */ = {
+			isa = PBXGroup;
+			children = (
+				FA76D9226E164BE787A8B92D /* SMCalloutView.h */,
+				DA6BADD3828D4AFFB3DDF60D /* SMCalloutView.m */,
+				EDACF2E60D074C6E89EA476C /* Support Files */,
+			);
+			path = SMCalloutView;
+			sourceTree = "<group>";
+		};
+		163E2BAE2C1B4BA0A2332C12 /* MapBox */ = {
+			isa = PBXGroup;
+			children = (
+				4FA99954569D4A57851EB154 /* Mapbox.h */,
+				5CF28FFD56624B4293DC2516 /* RMAbstractMercatorTileSource.h */,
+				0249A03D9812407B932DD49E /* RMAbstractMercatorTileSource.m */,
+				F1B5DD7426DF4840A8E5FC9A /* RMAbstractWebMapSource.h */,
+				83C87026A2A7424481B43DFC /* RMAbstractWebMapSource.m */,
+				3B993176DB0A4442A5EB81FB /* RMAnnotation.h */,
+				1BDA03668702467684D620D9 /* RMAnnotation.m */,
+				24104F31DE5F4254BA63B84A /* RMAttributionViewController.h */,
+				551B2CB16B7A4FDAA4BA1E81 /* RMAttributionViewController.m */,
+				AD401430AB88452A8A611ACD /* RMBingSource.h */,
+				C95380A997104862B0FE76B9 /* RMBingSource.m */,
+				23E1A1F06BC64C7CAB5BAD77 /* RMCacheObject.h */,
+				13488AEC6CF8456FAF8AC82E /* RMCacheObject.m */,
+				12BE3AB2E3AC4D2AA02B6537 /* RMCircle.h */,
+				B4C505EBFBC3411C904AA7A1 /* RMCircle.m */,
+				5F3676A4275B4191B90CAA6F /* RMCircleAnnotation.h */,
+				ACA7915075CC42F2ACAAEB14 /* RMCircleAnnotation.m */,
+				D16DFB232BE74D87B64E83C3 /* RMCompositeSource.h */,
+				C15F50D4144341D5B7A886F1 /* RMCompositeSource.m */,
+				BCB66B08968A4C5F8D25A369 /* RMConfiguration.h */,
+				117BECEFAF7744CE8FD85851 /* RMConfiguration.m */,
+				E1598CCD9DF643D99B847F79 /* RMCoordinateGridSource.h */,
+				75C64EDD53AC4CA68014372C /* RMCoordinateGridSource.m */,
+				DDEA46CE0FD4455B935F13CE /* RMDBMapSource.h */,
+				1E85FC1E83E44CBFA67EAEF3 /* RMDBMapSource.m */,
+				D85C8788FD624E85A72593F0 /* RMDatabaseCache.h */,
+				7CDBAE87D91649689E88E17B /* RMDatabaseCache.m */,
+				9AD995FEB59D49A7A5620DA0 /* RMFoundation.c */,
+				5B3E62221DCF47CA968E4169 /* RMFoundation.h */,
+				3ED46780310A483F99FD0D2C /* RMFractalTileProjection.h */,
+				9FA2B08E46144D75AEA61D9C /* RMFractalTileProjection.m */,
+				45B9BF7B8A664DA78CCD2885 /* RMGenericMapSource.h */,
+				DC252C431AD544B8B8ECCEFD /* RMGenericMapSource.m */,
+				9EEB5E0982C3447A9A93B3F1 /* RMGlobalConstants.h */,
+				30E5299945354461A735A4AC /* RMInteractiveSource.h */,
+				A0EDF54A190046068008AC58 /* RMInteractiveSource.m */,
+				044FBF3309EF46488ED0CAF7 /* RMLoadingTileView.h */,
+				3100884EFFA344EF8DF75AA8 /* RMLoadingTileView.m */,
+				F639D48FFE574AFC9AAD7B18 /* RMMBTilesSource.h */,
+				5FDD030803C94E83994C2858 /* RMMBTilesSource.m */,
+				5B22DE31E4B6473F8794EDF5 /* RMMapLayer.h */,
+				F32101917FBD49768D68EEC7 /* RMMapLayer.m */,
+				C57929A48FC34646AFD71567 /* RMMapOverlayView.h */,
+				0C1061EA41734E8EA32B94D2 /* RMMapOverlayView.m */,
+				CF59B884474441CCABA87119 /* RMMapQuestOSMSource.h */,
+				8FA8F9EA029C4A0C89B647A2 /* RMMapQuestOSMSource.m */,
+				62DCC872605E47C99F4D4819 /* RMMapQuestOpenAerialSource.h */,
+				87B4D1EC59244E87882BD58E /* RMMapQuestOpenAerialSource.m */,
+				994F7F8B6834480F9DFD6770 /* RMMapScrollView.h */,
+				C7BEB4D7C5AE4C948875D7B5 /* RMMapScrollView.m */,
+				8E0E832BEF8A4B6FB5D30F0C /* RMMapTiledLayerView.h */,
+				0EAB2FE2629C4C3EACB611E6 /* RMMapTiledLayerView.m */,
+				A77F9DA3864E47098235D083 /* RMMapView.h */,
+				2D14960B9A384F8DA0830D28 /* RMMapView.m */,
+				7ABCC44E435A489498E55296 /* RMMapViewDelegate.h */,
+				CD132F0923EA4F2292194A48 /* RMMapboxSource.h */,
+				BFE1C9FAD4EE4111BA287E2B /* RMMapboxSource.m */,
+				5461BEF5DDB842CCA9699472 /* RMMarker.h */,
+				5C5FF25FE5334A2586499D95 /* RMMarker.m */,
+				3C2F0491132343358C5B9B28 /* RMMemoryCache.h */,
+				50F22FA3880F4BB293B91151 /* RMMemoryCache.m */,
+				924A004D5972447D896CC6DA /* RMNotifications.h */,
+				65FB415CEA0B41219274EDBA /* RMOpenCycleMapSource.h */,
+				01236B5A62874C69B3D90E68 /* RMOpenCycleMapSource.m */,
+				EBEA36F6E0F34359A7866829 /* RMOpenSeaMapLayer.h */,
+				8AC8E5F6692947A0BC4CA11F /* RMOpenSeaMapLayer.m */,
+				AF77CEECDBDB426F8F08238A /* RMOpenSeaMapSource.h */,
+				9ACF9B21F03B47C5AF88D253 /* RMOpenSeaMapSource.m */,
+				3083A4BE47F64C7B9114FD99 /* RMOpenStreetMapSource.h */,
+				E04AB02BF8324B849ECD192D /* RMOpenStreetMapSource.m */,
+				1A12877C11054A8180A2527E /* RMPixel.c */,
+				970BFCAE2FBB4377A234402B /* RMPixel.h */,
+				8EDC8535417746DCB8DCCF3E /* RMPointAnnotation.h */,
+				85EFDA12F3F74F4DBC680AF8 /* RMPointAnnotation.m */,
+				69F21E93BB9748C487F8952F /* RMPolygonAnnotation.h */,
+				BEDED73B70D14E78BDEA53A4 /* RMPolygonAnnotation.m */,
+				E42915E25FAB47FE8CF81930 /* RMPolylineAnnotation.h */,
+				D358AE39CB9143A083AF2D15 /* RMPolylineAnnotation.m */,
+				E64F237BC55A4DE68764A042 /* RMProjection.h */,
+				C502295C3B114B3FBE1534C9 /* RMProjection.m */,
+				C8CF08F09379401A96263ABA /* RMQuadTree.h */,
+				8E959ED0A96848F793F40A1F /* RMQuadTree.m */,
+				5BF747F5F06B469A8193F131 /* RMShape.h */,
+				BB3B5C9CCE794CE595944433 /* RMShape.m */,
+				5E9CF9AE81924ECDA2D5790B /* RMShapeAnnotation.h */,
+				DF97FF94074A459693D59BCA /* RMShapeAnnotation.m */,
+				043952C7609745B4A942B4C7 /* RMStaticMapView.h */,
+				B43E506A4A9E4FA684B9442A /* RMStaticMapView.m */,
+				BC562DA97B0842E3B319C150 /* RMTile.c */,
+				E4E2BEC49EF54A9BB7C4E2E4 /* RMTile.h */,
+				51072CD5B99E4AB2807DC94F /* RMTileCache.h */,
+				326AFEB890A64B1299A23DC8 /* RMTileCache.m */,
+				EF5CB625FB634DD6B87A3B25 /* RMTileCacheDownloadOperation.h */,
+				4B3172BA6DAC4F40AF7216B3 /* RMTileCacheDownloadOperation.m */,
+				165F7A341D09470BA37CE3B1 /* RMTileImage.h */,
+				B52342EBF12A4D17BD2EC67B /* RMTileImage.m */,
+				6A61B3882B984CB98C86E55C /* RMTileMillSource.h */,
+				AA0D0CFED233410786D22D64 /* RMTileMillSource.m */,
+				1FDCAAEA600E487C84BD756C /* RMTileSource.h */,
+				D33D9B6F00E748CF8AD11241 /* RMTileSourcesContainer.h */,
+				A2A4387E166A4FBD926310F5 /* RMTileSourcesContainer.m */,
+				B9B27BA07F9643C89B098D39 /* RMUserLocation.h */,
+				804253F15D994848BB87B45A /* RMUserLocation.m */,
+				872EFC7AF91D4334B5724BBE /* RMUserTrackingBarButtonItem.h */,
+				D7DF3236DD4C4E769F5CEF1F /* RMUserTrackingBarButtonItem.m */,
+				733FD9B25629474ABB2FC01D /* emess.h */,
+				972CA043CB224BF092D05A19 /* geocent.h */,
+				04AFFDEC944D4EE78935E8E0 /* geodesic.h */,
+				0F8FB65ACA66440D9CB7C114 /* nad_list.h */,
+				9745116369864C7A96C53D6E /* org_proj4_Projections.h */,
+				848031ECDA894D84A4A608EC /* pj_list.h */,
+				773B88DE14664446984D9DF0 /* proj_api.h */,
+				A78735482C7C4F7B9B920BF6 /* proj_config.h */,
+				C0F28A05E2BC43E2A86E2CDF /* projects.h */,
+				C48499FFFF6E461EBF92BDDB /* Resources */,
+				4A569522B51B4B78A1E1A8BE /* Support Files */,
+			);
+			path = MapBox;
+			sourceTree = "<group>";
+		};
+		1948F0EB752442C9889201E2 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				35BC52F38F8348438EAB401A /* Pods */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		27A38566F4654836A429157B /* GRMustache */ = {
+			isa = PBXGroup;
+			children = (
+				3533918C290040F9AB1389F2 /* GRMustache.h */,
+				AAFFC50AF1C44DC9B6A27FEF /* GRMustache.m */,
+				1B8CA56B42934EC8825E2C96 /* GRMustacheAccumulatorTag.m */,
+				074C7EF6588E4A8F8D198D40 /* GRMustacheAccumulatorTag_private.h */,
+				44E351FF553844808935B772 /* GRMustacheAvailabilityMacros.h */,
+				E9E524D3C6A64E9A87330B21 /* GRMustacheAvailabilityMacros_private.h */,
+				480A504687ED431EB902D7CC /* GRMustacheCompiler.m */,
+				346D0E99A9A9483DA18DE306 /* GRMustacheCompiler_private.h */,
+				E6C6FAF68DD84F23AA917BED /* GRMustacheConfiguration.h */,
+				64533BE39D0047A583FAAD07 /* GRMustacheConfiguration.m */,
+				CAEDF922A2F64B4689F801B5 /* GRMustacheConfiguration_private.h */,
+				B61B5372D78F4FC390E83811 /* GRMustacheContext.h */,
+				B0C322D7B3714F92BA79E1CA /* GRMustacheContext.m */,
+				66BF8361B7234E5EA34465A5 /* GRMustacheContext_private.h */,
+				32077279DF8245F99CDB91AB /* GRMustacheError.h */,
+				6390836874804ACDB86E4443 /* GRMustacheError.m */,
+				AC460BE2E6D049F290F86F1F /* GRMustacheExpression.m */,
+				7B2EEDF724EE4A0C8E77C283 /* GRMustacheExpressionParser.m */,
+				7FFDCCFFE1D4470DAFD45501 /* GRMustacheExpressionParser_private.h */,
+				40C241E4B3B6469681586FCE /* GRMustacheExpression_private.h */,
+				AA0166ACD542401D86C3472E /* GRMustacheFilter.h */,
+				11530C4DD07C48C9BE7AFE2A /* GRMustacheFilter.m */,
+				73FB6F5EF2D5466E8906F639 /* GRMustacheFilter_private.h */,
+				C39CE666CD47415F9F3DE86B /* GRMustacheFilteredExpression.m */,
+				F2E7191B00984A75AD335C2F /* GRMustacheFilteredExpression_private.h */,
+				05A27C89D97E4A48A3FDDAC1 /* GRMustacheHTMLLibrary.m */,
+				671A553C82424D6DB73A7282 /* GRMustacheHTMLLibrary_private.h */,
+				7830E20D28EA4D31B6B2AE40 /* GRMustacheIdentifierExpression.m */,
+				8B6AB4350937428CADF4E831 /* GRMustacheIdentifierExpression_private.h */,
+				06DE94A54205467896FAAC70 /* GRMustacheImplicitIteratorExpression.m */,
+				C30BB425B3B84348BA321D7B /* GRMustacheImplicitIteratorExpression_private.h */,
+				EBE87451DB134A4EAF31B436 /* GRMustacheJavascriptLibrary.m */,
+				AC03EC51760A4046AEAC9BC3 /* GRMustacheJavascriptLibrary_private.h */,
+				A1E2BBB28A1743A0A21029D4 /* GRMustacheLocalizer.h */,
+				82902EB802B846E9B9ECDE82 /* GRMustacheLocalizer.m */,
+				3842D59FE7D8407A82371E8F /* GRMustacheParser.m */,
+				2E818FF5AF6C479983E2D614 /* GRMustacheParser_private.h */,
+				DC06AE11FC2840ABB905B7CA /* GRMustacheRendering.h */,
+				56307580993D4EE08458C832 /* GRMustacheScopedExpression.m */,
+				C63F84AB17BB44EF9A85F1D9 /* GRMustacheScopedExpression_private.h */,
+				26D48A32B0444A0F90343224 /* GRMustacheSectionTag.m */,
+				B85E5C5CE9FD4EF184973443 /* GRMustacheSectionTag_private.h */,
+				1CECC766A6D344619A3DB273 /* GRMustacheStandardLibrary.m */,
+				116F8EA0E6EA4050A98BCD26 /* GRMustacheStandardLibrary_private.h */,
+				E01EEA455F4848468C5F42BC /* GRMustacheTag.h */,
+				B1FA7C9E5483495F809D10B3 /* GRMustacheTag.m */,
+				0B6F6E610E564B3F82DED79B /* GRMustacheTagDelegate.h */,
+				62388239A7BD4EB5AFD50890 /* GRMustacheTag_private.h */,
+				AF260910E6AB4108A3472BF2 /* GRMustacheTemplate.h */,
+				DF39F27899B24E7AA8DAEA16 /* GRMustacheTemplate.m */,
+				2A6664875A7F4DABB425F5AC /* GRMustacheTemplateComponent_private.h */,
+				5DCC43B578C8481192043A5B /* GRMustacheTemplateOverride.m */,
+				C442D6331E894603927B0DCC /* GRMustacheTemplateOverride_private.h */,
+				8A9B95ED81074BD4B2E10B6C /* GRMustacheTemplateRepository.h */,
+				8F4D124B02E04D2B8701AB1A /* GRMustacheTemplateRepository.m */,
+				AC14A13DF0F54462B5E4816F /* GRMustacheTemplateRepository_private.h */,
+				E42FAD02981A4DBC83961A74 /* GRMustacheTemplate_private.h */,
+				DEBCDA9CD395459A80CE33E4 /* GRMustacheTextComponent.m */,
+				1812F023675E4FAEB061825D /* GRMustacheTextComponent_private.h */,
+				918B95B0C9C74357BAF0AB31 /* GRMustacheToken.m */,
+				4FC932128AF947229D559448 /* GRMustacheToken_private.h */,
+				F880AAAD28724DBEBEFCB47F /* GRMustacheURLLibrary.m */,
+				38DFB9025E6646C08F01D707 /* GRMustacheURLLibrary_private.h */,
+				7D456F67F662431D8C278260 /* GRMustacheVariableTag.m */,
+				CA5E18BF015F471990387D3B /* GRMustacheVariableTag_private.h */,
+				E015DF33A0234F9380265A6D /* GRMustacheVersion.h */,
+				53A64726FD2E429B923FA543 /* GRMustache_private.h */,
+				F661D188D838476AB7BADEC1 /* NSFormatter+GRMustache.h */,
+				0366600662234D95A07966BE /* NSFormatter+GRMustache.m */,
+				5283F0C4EFA848A4ACEB7FC5 /* NSValueTransformer+GRMustache.h */,
+				9E5A470FE26E45A9B2EB5593 /* NSValueTransformer+GRMustache.m */,
+				FC5DADBC33164FD09C5BEC48 /* Support Files */,
+			);
+			path = GRMustache;
+			sourceTree = "<group>";
+		};
+		35BC52F38F8348438EAB401A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FC62C0CDB0BC4133A80868A8 /* Pods.xcconfig */,
+				C5671A9886984AF09243E65C /* Pods-acknowledgements.markdown */,
+				C58C217424DC4F0FB7B0A695 /* Pods-acknowledgements.plist */,
+				F9A6FA0588774E11A3B200E2 /* Pods-dummy.m */,
+				57F14091199940E5923E9A9F /* Pods-environment.h */,
+				17B72C2BF3EF44BFB3368B3F /* Pods-resources.sh */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		3C701BE055A6491BAC950A18 /* JRSwizzle */ = {
+			isa = PBXGroup;
+			children = (
+				98E86776F9EF46108A87D677 /* JRSwizzle.h */,
+				E7DF486B1FFD4BFE89FF603B /* JRSwizzle.m */,
+				82F2ABF33F90498090BD794C /* Support Files */,
+			);
+			path = JRSwizzle;
+			sourceTree = "<group>";
+		};
+		4A569522B51B4B78A1E1A8BE /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				3A3E824FFECF41CDBD3FC78C /* Pods-MapBox.xcconfig */,
+				11AD6087113E4E5BAFF76AC0 /* Pods-MapBox-Private.xcconfig */,
+				3C61903F6CD44F29B903A844 /* Pods-MapBox-dummy.m */,
+				0092A0CEB36543518797F479 /* Pods-MapBox-prefix.pch */,
+			);
+			name = "Support Files";
+			sourceTree = SOURCE_ROOT;
+		};
+		5770DA8970CF40108347DD6A /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				7537E5B02AE948D3B74FD29D /* CoreGraphics.framework */,
+				4DE186588A254544A2585270 /* CoreLocation.framework */,
+				C3CD58E9AE0A4C35B113DA12 /* Foundation.framework */,
+				6338D1373F9D4441A40D1A08 /* QuartzCore.framework */,
+				C646A4E62FB7486DA1914A8F /* UIKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		82F2ABF33F90498090BD794C /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				8449D2D910A3463EBCD97E5D /* Pods-JRSwizzle.xcconfig */,
+				1000DFBF39414641842E7FFF /* Pods-JRSwizzle-Private.xcconfig */,
+				0DE6A823828C418D972ACB30 /* Pods-JRSwizzle-dummy.m */,
+				29D8E2DAA28F4604B69BD6F6 /* Pods-JRSwizzle-prefix.pch */,
+			);
+			name = "Support Files";
+			sourceTree = SOURCE_ROOT;
+		};
+		9247314CDAF74B74B97F4157 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C221C1978FB945CBB3F63F4E /* Pods-FMDB.xcconfig */,
+				59166692861144AAA752F625 /* Pods-FMDB-Private.xcconfig */,
+				73748E5C15E0477787E0E345 /* Pods-FMDB-dummy.m */,
+				CB485337BA444D8DA5F49D59 /* Pods-FMDB-prefix.pch */,
+			);
+			name = "Support Files";
+			sourceTree = SOURCE_ROOT;
+		};
+		9D24DF81C93C44869C2D698B = {
+			isa = PBXGroup;
+			children = (
+				581286AD87124C04A9390DE5 /* Podfile */,
+				D4DCD8724BF24E199A57B99A /* Frameworks */,
+				BCC91ECE65C74DC3AAD1C4C6 /* Pods */,
+				B16BCC1D96874BCEAAB80B34 /* Products */,
+				1948F0EB752442C9889201E2 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		A8F1924359334D35826A29E4 /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				9247314CDAF74B74B97F4157 /* Support Files */,
+				E1C105993259445EA4C2CF89 /* common */,
+			);
+			path = FMDB;
+			sourceTree = "<group>";
+		};
+		B16BCC1D96874BCEAAB80B34 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FCA1C9F599C2408C970B7CCD /* libPods.a */,
+				6443E1986B964C4194A679AA /* libPods-FMDB.a */,
+				75B0BF96FE0F4013B3385F4B /* libPods-GRMustache.a */,
+				47A895D56CCF42FEBFFE459F /* libPods-JRSwizzle.a */,
+				29336B0461A2449EAC94D18E /* libPods-MapBox.a */,
+				84D5271B84C64C518F8E540D /* libPods-SMCalloutView.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BCC91ECE65C74DC3AAD1C4C6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A8F1924359334D35826A29E4 /* FMDB */,
+				27A38566F4654836A429157B /* GRMustache */,
+				3C701BE055A6491BAC950A18 /* JRSwizzle */,
+				163E2BAE2C1B4BA0A2332C12 /* MapBox */,
+				1260DF9A147546DB8AB8A066 /* SMCalloutView */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C48499FFFF6E461EBF92BDDB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B1699328EB52442090D41655 /* Mapbox.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		D4DCD8724BF24E199A57B99A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5770DA8970CF40108347DD6A /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E1C105993259445EA4C2CF89 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				9F70A42375A94AA992FDF880 /* FMDatabase.h */,
+				6C000F19EEAB459F94FC4756 /* FMDatabase.m */,
+				15ABB0061C7D45708E2AA9FF /* FMDatabaseAdditions.h */,
+				1A970F1646E3487281C8276A /* FMDatabaseAdditions.m */,
+				E03FAE353FFE4B3EB8D6D66B /* FMDatabasePool.h */,
+				3E2D25F5A8E74662A4973766 /* FMDatabasePool.m */,
+				2E220B52EAB64BE5945690B5 /* FMDatabaseQueue.h */,
+				FBAC00FD0E9A43E784C78B7E /* FMDatabaseQueue.m */,
+				455057B1BE20452EB3CC4497 /* FMResultSet.h */,
+				B4B47A7F871B431AA830FC36 /* FMResultSet.m */,
+			);
+			name = common;
+			sourceTree = "<group>";
+		};
+		EDACF2E60D074C6E89EA476C /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				B97686BAACDC41BF8A663863 /* Pods-SMCalloutView.xcconfig */,
+				1AEE01CFFA274691935E4DFD /* Pods-SMCalloutView-Private.xcconfig */,
+				7F8812A85D5B47E8850A846C /* Pods-SMCalloutView-dummy.m */,
+				54D355EE24F24FC7A5CB9B24 /* Pods-SMCalloutView-prefix.pch */,
+			);
+			name = "Support Files";
+			sourceTree = SOURCE_ROOT;
+		};
+		FC5DADBC33164FD09C5BEC48 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				5915C35E7DD34189A4B26141 /* Pods-GRMustache.xcconfig */,
+				A73EE3CB373F42AEB4EAE6E6 /* Pods-GRMustache-Private.xcconfig */,
+				91D364FF224949BFA01F2AB6 /* Pods-GRMustache-dummy.m */,
+				1883F070C51F4B3DB2CCD2A6 /* Pods-GRMustache-prefix.pch */,
+			);
+			name = "Support Files";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		156110B13C5448E5A81AC4F7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93ADB355C434A45B636F4FC /* SMCalloutView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4592FE8FDCEC41C2BFA5A674 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C2898F9247D40F2A68C07C5 /* Mapbox.h in Headers */,
+				6F66A82798CF40EF8BADDDFA /* RMAbstractMercatorTileSource.h in Headers */,
+				94E57443D0344CE5A0FFD71D /* RMAbstractWebMapSource.h in Headers */,
+				7D400D94CE8548DE8320DA3F /* RMAnnotation.h in Headers */,
+				E04D4AE3C2324B009E9594BB /* RMAttributionViewController.h in Headers */,
+				7CD0CBFA3631493BA36CAE49 /* RMBingSource.h in Headers */,
+				1AFEA0CFC6BF4690A50F3B7B /* RMCacheObject.h in Headers */,
+				EE93ECE5C7C04938A1FDFB06 /* RMCircle.h in Headers */,
+				7E93B89291094E80B458E389 /* RMCircleAnnotation.h in Headers */,
+				523B3CBB89244B2584F6638D /* RMCompositeSource.h in Headers */,
+				74EB38672381491999279E3B /* RMConfiguration.h in Headers */,
+				DB3C5022A85443B49B028A42 /* RMCoordinateGridSource.h in Headers */,
+				9CCEC5F3B76E429ABF6663F0 /* RMDBMapSource.h in Headers */,
+				A90075720C624E1D8E275099 /* RMDatabaseCache.h in Headers */,
+				643917D45C624FEAAA972002 /* RMFoundation.h in Headers */,
+				C79800A48C68433A95D6C266 /* RMFractalTileProjection.h in Headers */,
+				F3F2316E47A448FDB86E29F7 /* RMGenericMapSource.h in Headers */,
+				87C9B7A0B7AB49978CB10E04 /* RMGlobalConstants.h in Headers */,
+				5C15B0B7348F436FA479B100 /* RMInteractiveSource.h in Headers */,
+				105E094E8E104542B95C92DC /* RMLoadingTileView.h in Headers */,
+				36473B7F13EB4BFD8B58E9DF /* RMMBTilesSource.h in Headers */,
+				0E3C3286C2D64428AA684FA8 /* RMMapLayer.h in Headers */,
+				B4A9ABAAC64D44A180AEE8DC /* RMMapOverlayView.h in Headers */,
+				4C72B77914B44C46B2EB01CE /* RMMapQuestOSMSource.h in Headers */,
+				FEE164674C604E58A68A9BE0 /* RMMapQuestOpenAerialSource.h in Headers */,
+				E1343CB46A57444BB3E02B0A /* RMMapScrollView.h in Headers */,
+				43A2F6810F624A0FB43568DA /* RMMapTiledLayerView.h in Headers */,
+				FF2846EB732F4EAC98ADA484 /* RMMapView.h in Headers */,
+				10E7448512C24F57A183532D /* RMMapViewDelegate.h in Headers */,
+				C845A020A4BD4B2E875C5FEC /* RMMapboxSource.h in Headers */,
+				57C38DA023AB45719DC91104 /* RMMarker.h in Headers */,
+				4197C38787F94D98A911973F /* RMMemoryCache.h in Headers */,
+				D3D611FD73E449CA88D40697 /* RMNotifications.h in Headers */,
+				D7FA66A886C1495BBAC5FD59 /* RMOpenCycleMapSource.h in Headers */,
+				DD2221BB32D846FB86B1C558 /* RMOpenSeaMapLayer.h in Headers */,
+				7857194809E343DCB7DE4C0E /* RMOpenSeaMapSource.h in Headers */,
+				45DF85AEA23244E094F41E66 /* RMOpenStreetMapSource.h in Headers */,
+				624738E5AECB4C4BADD535B2 /* RMPixel.h in Headers */,
+				04DC8C915AF84BD2808E8CF9 /* RMPointAnnotation.h in Headers */,
+				21E2A6B8190342F2ACAEC800 /* RMPolygonAnnotation.h in Headers */,
+				D04657C0EF6748B0BF36F3C7 /* RMPolylineAnnotation.h in Headers */,
+				A7DBE4B3451F4C99B63E1220 /* RMProjection.h in Headers */,
+				2D81DD3C5DFB496B89CA1E9F /* RMQuadTree.h in Headers */,
+				A3622710C7374675B25FCEBD /* RMShape.h in Headers */,
+				8CC4861AD0DA48109AA4D80A /* RMShapeAnnotation.h in Headers */,
+				41312CCC47164A2289203400 /* RMStaticMapView.h in Headers */,
+				C3331FD6408A4149B6A287D0 /* RMTile.h in Headers */,
+				654BD1413D4D4251B87C1F66 /* RMTileCache.h in Headers */,
+				6AE541A04C36419693D8081E /* RMTileCacheDownloadOperation.h in Headers */,
+				DC228CB0A26E4F7992E919A2 /* RMTileImage.h in Headers */,
+				1D9B8FAC74964F4BA06FAE3B /* RMTileMillSource.h in Headers */,
+				01DB3200A1A54675BC4D7521 /* RMTileSource.h in Headers */,
+				0EC23903A402456DA8B4D4B2 /* RMTileSourcesContainer.h in Headers */,
+				265F362E1FB14F25A7535CC8 /* RMUserLocation.h in Headers */,
+				F17D5BE71A85453CB5636671 /* RMUserTrackingBarButtonItem.h in Headers */,
+				3875E4EFDFAA4C8BAA164D8D /* emess.h in Headers */,
+				6C8C8848FB9341EF8E93B0AA /* geocent.h in Headers */,
+				3D950D5728DF4040A650C0FC /* geodesic.h in Headers */,
+				D9FB0EB5D7464D6F9C7C2319 /* nad_list.h in Headers */,
+				B6E9ABF2EC4C4A5991C68302 /* org_proj4_Projections.h in Headers */,
+				4D0D6CFD0D594189B138C8AC /* pj_list.h in Headers */,
+				75C07D5A6B2D4E2D902072B8 /* proj_api.h in Headers */,
+				BBF0B495F67741F382E27AA1 /* proj_config.h in Headers */,
+				5871B4B9D763471991E3691F /* projects.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		844745CE11D84F0B9B723380 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1307FBEEE1A34E5CB1B813C4 /* FMDatabase.h in Headers */,
+				E4EE8B8F44584E4E9A000C67 /* FMDatabaseAdditions.h in Headers */,
+				A3B6C282E7B542819941F072 /* FMDatabasePool.h in Headers */,
+				4CD46EE1A86D422B81E82848 /* FMDatabaseQueue.h in Headers */,
+				ACBB38AEFE604261A9877C40 /* FMResultSet.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDEB7A038C904C2D8D44B37F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BFDD2B126AA46E088C27ED4 /* GRMustache.h in Headers */,
+				4151DC5D572B4B318A8A21E6 /* GRMustacheAccumulatorTag_private.h in Headers */,
+				E919E7270CDC472999C6A946 /* GRMustacheAvailabilityMacros.h in Headers */,
+				88492507E9FE4DC687B70522 /* GRMustacheAvailabilityMacros_private.h in Headers */,
+				E983F13FA4EE48FA9EFB8826 /* GRMustacheCompiler_private.h in Headers */,
+				7B1A49075EC846818C06F452 /* GRMustacheConfiguration.h in Headers */,
+				AD340A98AEB140D7BEED2BC5 /* GRMustacheConfiguration_private.h in Headers */,
+				56DEEED3414E46AC8917B420 /* GRMustacheContext.h in Headers */,
+				D1CE98CFE0264498A5038539 /* GRMustacheContext_private.h in Headers */,
+				52BDDA3357D04DF79B336C06 /* GRMustacheError.h in Headers */,
+				4F517BE8EB5C463B8FEB5CF1 /* GRMustacheExpressionParser_private.h in Headers */,
+				DF3D4E2DAF5744B1A3398966 /* GRMustacheExpression_private.h in Headers */,
+				C5FDEA55EFAA4B289973C1F6 /* GRMustacheFilter.h in Headers */,
+				D1F2DB8182A54FF7B91BE5FC /* GRMustacheFilter_private.h in Headers */,
+				75163FCC5B2B4D2BA151B3F0 /* GRMustacheFilteredExpression_private.h in Headers */,
+				48D28EF2777C48A1AF8B4BBB /* GRMustacheHTMLLibrary_private.h in Headers */,
+				E5914328EFB44136AE6FA47B /* GRMustacheIdentifierExpression_private.h in Headers */,
+				24F74F2DE1334FB38F05044D /* GRMustacheImplicitIteratorExpression_private.h in Headers */,
+				D7CCD902D3584400A8B5182E /* GRMustacheJavascriptLibrary_private.h in Headers */,
+				9ACFABF28C1243D18FCA5141 /* GRMustacheLocalizer.h in Headers */,
+				41368941A57E437B8D50FBC5 /* GRMustacheParser_private.h in Headers */,
+				F84DC863888F4A96B0DDBFD5 /* GRMustacheRendering.h in Headers */,
+				079497C9807B4CBBAAABAE12 /* GRMustacheScopedExpression_private.h in Headers */,
+				E98D97319E024B2F8EFEDF2E /* GRMustacheSectionTag_private.h in Headers */,
+				4C62E518F9AB478F993A6F68 /* GRMustacheStandardLibrary_private.h in Headers */,
+				40A8193A36E2418EAF542F67 /* GRMustacheTag.h in Headers */,
+				597874AC096842ABA41ABDB4 /* GRMustacheTagDelegate.h in Headers */,
+				69CAAC2544C745608DD52C7F /* GRMustacheTag_private.h in Headers */,
+				05F5A6BE7C704F6590D60F1B /* GRMustacheTemplate.h in Headers */,
+				CEE578EDBAD947E09BFB2A90 /* GRMustacheTemplateComponent_private.h in Headers */,
+				46B6E8B5E8C644C097771AA5 /* GRMustacheTemplateOverride_private.h in Headers */,
+				958C35E141A048FCAD1BBC1D /* GRMustacheTemplateRepository.h in Headers */,
+				3980371EE9C4480FA058D5D0 /* GRMustacheTemplateRepository_private.h in Headers */,
+				1D209D68531E4F5F91C43C71 /* GRMustacheTemplate_private.h in Headers */,
+				CC984CE4A7F846E1A107A947 /* GRMustacheTextComponent_private.h in Headers */,
+				EF8227136F2742DC8FFD8971 /* GRMustacheToken_private.h in Headers */,
+				C88B6910AB8649329EE09D70 /* GRMustacheURLLibrary_private.h in Headers */,
+				BD6E012627D34627BB0683FB /* GRMustacheVariableTag_private.h in Headers */,
+				6E40462A51204091A5B098DE /* GRMustacheVersion.h in Headers */,
+				7AFEF195D3FD441D987A30B2 /* GRMustache_private.h in Headers */,
+				AC2125F3DF1346F58A7A05E1 /* NSFormatter+GRMustache.h in Headers */,
+				0675E922C5184507AC93148B /* NSValueTransformer+GRMustache.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D13A7B97BB8F42C9B3360139 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0E77596DC444EFDA91199C3 /* JRSwizzle.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		1E6DE5B46E2F4CFFA75C1898 /* Pods-MapBox */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 348DB7CE3DBC4B61A4EA766D /* Build configuration list for PBXNativeTarget "Pods-MapBox" */;
+			buildPhases = (
+				79617D1D0D1A410DADE8AF6F /* Sources */,
+				7AC05E4AF5944F49A348E50C /* Frameworks */,
+				4592FE8FDCEC41C2BFA5A674 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				879DC43E4415499F8484DDFC /* PBXTargetDependency */,
+				D9D41250348440DCA091F2BE /* PBXTargetDependency */,
+				2002B474CD4D461592BB58EA /* PBXTargetDependency */,
+			);
+			name = "Pods-MapBox";
+			productName = "Pods-MapBox";
+			productReference = 29336B0461A2449EAC94D18E /* libPods-MapBox.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		1E82B5BEAD0E4C3C8220EB3F /* Pods-GRMustache */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08277AB1F3064168A9DD8902 /* Build configuration list for PBXNativeTarget "Pods-GRMustache" */;
+			buildPhases = (
+				24CBC1CE5FED4B39843A9B02 /* Sources */,
+				9A799A23BE034962996ECA45 /* Frameworks */,
+				CDEB7A038C904C2D8D44B37F /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A52C4CD3A5D44F69F16470A /* PBXTargetDependency */,
+			);
+			name = "Pods-GRMustache";
+			productName = "Pods-GRMustache";
+			productReference = 75B0BF96FE0F4013B3385F4B /* libPods-GRMustache.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		3BAFD94ADA28485BB86E41CC /* Pods-JRSwizzle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 98BE2F36E95C447AA46552D6 /* Build configuration list for PBXNativeTarget "Pods-JRSwizzle" */;
+			buildPhases = (
+				D536A1626CE245B8B93291A2 /* Sources */,
+				8B094AA93957482BB5B1DD30 /* Frameworks */,
+				D13A7B97BB8F42C9B3360139 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-JRSwizzle";
+			productName = "Pods-JRSwizzle";
+			productReference = 47A895D56CCF42FEBFFE459F /* libPods-JRSwizzle.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4931AB0F471846FDBF4269A9 /* Pods-FMDB */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F459BF041CF94F0CB2B84AF8 /* Build configuration list for PBXNativeTarget "Pods-FMDB" */;
+			buildPhases = (
+				CC8FAB078F0F4049AA252C51 /* Sources */,
+				5A7F4027B7FA4A4381E9A8EC /* Frameworks */,
+				844745CE11D84F0B9B723380 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-FMDB";
+			productName = "Pods-FMDB";
+			productReference = 6443E1986B964C4194A679AA /* libPods-FMDB.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4F035A63171C43C282E86039 /* Pods-SMCalloutView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FE726A41D334360B6443446 /* Build configuration list for PBXNativeTarget "Pods-SMCalloutView" */;
+			buildPhases = (
+				7A39A976D63A4400809D6482 /* Sources */,
+				376C6BD9B8D2471A8BF5E2FF /* Frameworks */,
+				156110B13C5448E5A81AC4F7 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-SMCalloutView";
+			productName = "Pods-SMCalloutView";
+			productReference = 84D5271B84C64C518F8E540D /* libPods-SMCalloutView.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		CA2BEA904C474E79840BDB3A /* Pods */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83B1B2E16712434EBDE9BAFD /* Build configuration list for PBXNativeTarget "Pods" */;
+			buildPhases = (
+				E036D9761F144BE384987D69 /* Sources */,
+				F1EF1D59DE804AA1BB535CD1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1E8BF26D4814330A1E4D36F /* PBXTargetDependency */,
+				9F8C24B2D57F48ED8B3F3BB6 /* PBXTargetDependency */,
+				4E6359F60E7D4DE29D3DC021 /* PBXTargetDependency */,
+				F19B8ABCC8134680B5E231AB /* PBXTargetDependency */,
+				8AE6E409FDFD4A7F91555829 /* PBXTargetDependency */,
+			);
+			name = Pods;
+			productName = Pods;
+			productReference = FCA1C9F599C2408C970B7CCD /* libPods.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C6F003EB75FE4BA99466E533 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
+			buildConfigurationList = 7A9DA2567AF24E1BB457701E /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9D24DF81C93C44869C2D698B;
+			productRefGroup = B16BCC1D96874BCEAAB80B34 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CA2BEA904C474E79840BDB3A /* Pods */,
+				4931AB0F471846FDBF4269A9 /* Pods-FMDB */,
+				1E82B5BEAD0E4C3C8220EB3F /* Pods-GRMustache */,
+				3BAFD94ADA28485BB86E41CC /* Pods-JRSwizzle */,
+				1E6DE5B46E2F4CFFA75C1898 /* Pods-MapBox */,
+				4F035A63171C43C282E86039 /* Pods-SMCalloutView */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		24CBC1CE5FED4B39843A9B02 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60B13CE07C75472D8E92BCFE /* GRMustache.m in Sources */,
+				A2CD935CE0B34FC086B2ECC9 /* GRMustacheAccumulatorTag.m in Sources */,
+				ED0C1A6FBD2846B6AF671116 /* GRMustacheCompiler.m in Sources */,
+				A27170C54AA5415EA4C72C6C /* GRMustacheConfiguration.m in Sources */,
+				0B71F0FC6A9542DEB7646295 /* GRMustacheContext.m in Sources */,
+				E8E5554D372B4DE581C7B945 /* GRMustacheError.m in Sources */,
+				0A7BA5E604D2482DB5DAE5A3 /* GRMustacheExpression.m in Sources */,
+				F9D8A6EBAF3F4C91BD371DCB /* GRMustacheExpressionParser.m in Sources */,
+				6195A8E684474357A2B9C6C8 /* GRMustacheFilter.m in Sources */,
+				F076FE1CCC634CA68A63FC66 /* GRMustacheFilteredExpression.m in Sources */,
+				28D5AC290119430A8FBD4AC6 /* GRMustacheHTMLLibrary.m in Sources */,
+				4112A91DEC90444DA03AA619 /* GRMustacheIdentifierExpression.m in Sources */,
+				F2F3E3808F454E05A4FA6814 /* GRMustacheImplicitIteratorExpression.m in Sources */,
+				8D99EB3B10C446A08ED72246 /* GRMustacheJavascriptLibrary.m in Sources */,
+				ACA3839C9C6A49B29CC03A80 /* GRMustacheLocalizer.m in Sources */,
+				666633392F894B3DB908062E /* GRMustacheParser.m in Sources */,
+				6F3686261C03482688959544 /* GRMustacheScopedExpression.m in Sources */,
+				827A8CEF4E454FC8AA44F46C /* GRMustacheSectionTag.m in Sources */,
+				3D3709E56F494673B8068BDA /* GRMustacheStandardLibrary.m in Sources */,
+				D54CC5AFAC86420C876B45FB /* GRMustacheTag.m in Sources */,
+				17B77D0A4A1E49E8ACF6ED5C /* GRMustacheTemplate.m in Sources */,
+				E1B1F6882F4747F786D48BC5 /* GRMustacheTemplateOverride.m in Sources */,
+				DAD94C3D1AF94C42A49AF6ED /* GRMustacheTemplateRepository.m in Sources */,
+				63BF01FABE7847DF87F9F135 /* GRMustacheTextComponent.m in Sources */,
+				17E265BCDADF409694218B90 /* GRMustacheToken.m in Sources */,
+				40808E7511304F65802FCE2F /* GRMustacheURLLibrary.m in Sources */,
+				0DEC325EB21F4969BA93AEDC /* GRMustacheVariableTag.m in Sources */,
+				C93B77AB97C4402BAC78BD82 /* NSFormatter+GRMustache.m in Sources */,
+				EEF25308499A49BDA13B75F1 /* NSValueTransformer+GRMustache.m in Sources */,
+				916DF7C2C9684CAE9B09EB81 /* Pods-GRMustache-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		79617D1D0D1A410DADE8AF6F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38F64789D7B44E2A902BBACC /* Pods-MapBox-dummy.m in Sources */,
+				AEEFD800FDCB469088AD6751 /* RMAbstractMercatorTileSource.m in Sources */,
+				EBE67C0E80B44A2A86DE7B5A /* RMAbstractWebMapSource.m in Sources */,
+				26CEB1FDE96240238AAC6C4D /* RMAnnotation.m in Sources */,
+				80A1AC78FA694FC6BFD33244 /* RMAttributionViewController.m in Sources */,
+				B788868CDC1440EA8C4F23E4 /* RMBingSource.m in Sources */,
+				48D7CBBF50F041C78DB99C7F /* RMCacheObject.m in Sources */,
+				0EC2854AEA474B4389186395 /* RMCircle.m in Sources */,
+				4D10BB1E9E804BCBAAEF80F6 /* RMCircleAnnotation.m in Sources */,
+				E3932FB1387F4C8DA32BE9D0 /* RMCompositeSource.m in Sources */,
+				6F0B15A947F74FEB8DCD7CF9 /* RMConfiguration.m in Sources */,
+				8062A2505F1C4E45B19C0B86 /* RMCoordinateGridSource.m in Sources */,
+				C93C60593C0C4CA69A98DDC4 /* RMDBMapSource.m in Sources */,
+				6C92550C6B10492F8C4BAF20 /* RMDatabaseCache.m in Sources */,
+				60F6C36D0AA24C1ABC1F34A0 /* RMFoundation.c in Sources */,
+				751C6DD01CBD4E2A88BECCA1 /* RMFractalTileProjection.m in Sources */,
+				681422FAB0884243B1E0F33C /* RMGenericMapSource.m in Sources */,
+				4770FACFF8C14C59A20B640C /* RMInteractiveSource.m in Sources */,
+				641250242AA1446C83D7702C /* RMLoadingTileView.m in Sources */,
+				C17EB7603D7543DEA7098E63 /* RMMBTilesSource.m in Sources */,
+				2E285C4E8560411898F36955 /* RMMapLayer.m in Sources */,
+				5F3EFF8815374EFB895381CF /* RMMapOverlayView.m in Sources */,
+				1A5E8EEA1EC24DCC9EC1C76B /* RMMapQuestOSMSource.m in Sources */,
+				EAA6C252ACCE48A6B8D45C94 /* RMMapQuestOpenAerialSource.m in Sources */,
+				9138B76E0167443581E2D2F7 /* RMMapScrollView.m in Sources */,
+				84B9C061F0A2431AADB8B48D /* RMMapTiledLayerView.m in Sources */,
+				5DFA5D37CC1B480EA5D39533 /* RMMapView.m in Sources */,
+				91FD865290D444B7A3ABA194 /* RMMapboxSource.m in Sources */,
+				C777EC302D1C4A9D97F74972 /* RMMarker.m in Sources */,
+				5ACCE4E7F08C480CB3003972 /* RMMemoryCache.m in Sources */,
+				91973A1B16204FD0AB04F5A2 /* RMOpenCycleMapSource.m in Sources */,
+				6737F808AB7F454693F68BFA /* RMOpenSeaMapLayer.m in Sources */,
+				010C0FBE06134C398B415C5F /* RMOpenSeaMapSource.m in Sources */,
+				65D6494AB1A04A7583FD6B2C /* RMOpenStreetMapSource.m in Sources */,
+				2FE692E1428C4BF7A59E2577 /* RMPixel.c in Sources */,
+				904004E5B5A54C408100FBDA /* RMPointAnnotation.m in Sources */,
+				CFC61CF126CE4B518D365147 /* RMPolygonAnnotation.m in Sources */,
+				FD2FE7A4E1E14C1BBEE6A16A /* RMPolylineAnnotation.m in Sources */,
+				3067EBDD5FD4439D90A733E1 /* RMProjection.m in Sources */,
+				F70D771DC25E49F1948280E1 /* RMQuadTree.m in Sources */,
+				6BA9F42EEA474F90857C6A1B /* RMShape.m in Sources */,
+				F03B0387B23748929AADE697 /* RMShapeAnnotation.m in Sources */,
+				FEC08996750A4E62A4EF347F /* RMStaticMapView.m in Sources */,
+				B0707B21E84846DEB19A6796 /* RMTile.c in Sources */,
+				7B7F69D518C643A080A1B991 /* RMTileCache.m in Sources */,
+				5FA09FF16C8044AA8CF62EA9 /* RMTileCacheDownloadOperation.m in Sources */,
+				DD35900B2AB743A791ACCE38 /* RMTileImage.m in Sources */,
+				C0D22C47EA5C4F828F3A056E /* RMTileMillSource.m in Sources */,
+				C4778D2A15434D80ADBD5088 /* RMTileSourcesContainer.m in Sources */,
+				1E5FB2D6C3494F5E817B6E22 /* RMUserLocation.m in Sources */,
+				FEE9D55F82A24F45AC9F5F7E /* RMUserTrackingBarButtonItem.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A39A976D63A4400809D6482 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC3BBF1B9F4143A5B19519D1 /* Pods-SMCalloutView-dummy.m in Sources */,
+				C7C38B8F2DAC4018889A0811 /* SMCalloutView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC8FAB078F0F4049AA252C51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F74CF69B743B4A12A303C01E /* FMDatabase.m in Sources */,
+				84F5E53418804864BD75F558 /* FMDatabaseAdditions.m in Sources */,
+				9D07D05E19894B2581D5CFEF /* FMDatabasePool.m in Sources */,
+				6DC8BEED89BF4870AEC52A17 /* FMDatabaseQueue.m in Sources */,
+				CB6EBE98ADB04C3B871FFE4C /* FMResultSet.m in Sources */,
+				D3B320CE531D4250906105D0 /* Pods-FMDB-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D536A1626CE245B8B93291A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4D57577A6F340469284258A /* JRSwizzle.m in Sources */,
+				08E215A0FCDA42FF965CD9D1 /* Pods-JRSwizzle-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E036D9761F144BE384987D69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7CBE6EE3A1B491AAB0D2610 /* Pods-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2002B474CD4D461592BB58EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F035A63171C43C282E86039 /* Pods-SMCalloutView */;
+			targetProxy = 0C498D61CD684BD8A32ADA75 /* PBXContainerItemProxy */;
+		};
+		4E6359F60E7D4DE29D3DC021 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3BAFD94ADA28485BB86E41CC /* Pods-JRSwizzle */;
+			targetProxy = 91F9C7E37286424285842BCE /* PBXContainerItemProxy */;
+		};
+		5A52C4CD3A5D44F69F16470A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3BAFD94ADA28485BB86E41CC /* Pods-JRSwizzle */;
+			targetProxy = FCE95F6E3D134AD4ACF99AB9 /* PBXContainerItemProxy */;
+		};
+		879DC43E4415499F8484DDFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4931AB0F471846FDBF4269A9 /* Pods-FMDB */;
+			targetProxy = 830D71F85F7A4FCC9425C9A2 /* PBXContainerItemProxy */;
+		};
+		8AE6E409FDFD4A7F91555829 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F035A63171C43C282E86039 /* Pods-SMCalloutView */;
+			targetProxy = 0EB0563ABAAB422A861304FF /* PBXContainerItemProxy */;
+		};
+		9F8C24B2D57F48ED8B3F3BB6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E82B5BEAD0E4C3C8220EB3F /* Pods-GRMustache */;
+			targetProxy = 9D80F601F9154968840A83D4 /* PBXContainerItemProxy */;
+		};
+		D9D41250348440DCA091F2BE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E82B5BEAD0E4C3C8220EB3F /* Pods-GRMustache */;
+			targetProxy = A7258F962F7C4F35A082408F /* PBXContainerItemProxy */;
+		};
+		F19B8ABCC8134680B5E231AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E6DE5B46E2F4CFFA75C1898 /* Pods-MapBox */;
+			targetProxy = AA945706274E4F4BA26EAB6E /* PBXContainerItemProxy */;
+		};
+		F1E8BF26D4814330A1E4D36F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4931AB0F471846FDBF4269A9 /* Pods-FMDB */;
+			targetProxy = C9520E23B2A24AAB9A91F37D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		09DFD8854D4A4ED8938EA78F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59166692861144AAA752F625 /* Pods-FMDB-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-FMDB-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		158ED6F49D69429B86172B17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1AEE01CFFA274691935E4DFD /* Pods-SMCalloutView-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-SMCalloutView-prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		198649470FBD405BBC7EDC4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A73EE3CB373F42AEB4EAE6E6 /* Pods-GRMustache-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-GRMustache-prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3D09FB523B4E484BB589C92B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11AD6087113E4E5BAFF76AC0 /* Pods-MapBox-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-MapBox-prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7554114B15D14AC39358DBA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		7EFD3DA4BE9247988E1F4BBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1000DFBF39414641842E7FFF /* Pods-JRSwizzle-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-JRSwizzle-prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8C209BB43F7341E4B42BA8A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC62C0CDB0BC4133A80868A8 /* Pods.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8F355477081F4535880E38C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A90034B480ED428692405F14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1000DFBF39414641842E7FFF /* Pods-JRSwizzle-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-JRSwizzle-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		AD24622F81D74B94AC8921FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1AEE01CFFA274691935E4DFD /* Pods-SMCalloutView-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-SMCalloutView-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		C7DD08CD4D564CFE91AE28C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC62C0CDB0BC4133A80868A8 /* Pods.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E059D96F09CC4F9C9C3AF7CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11AD6087113E4E5BAFF76AC0 /* Pods-MapBox-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-MapBox-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		EBB6400E179D4CC3B00DE9C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A73EE3CB373F42AEB4EAE6E6 /* Pods-GRMustache-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-GRMustache-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		F21C9D6B2C0142BD82E74273 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59166692861144AAA752F625 /* Pods-FMDB-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pods-FMDB-prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		08277AB1F3064168A9DD8902 /* Build configuration list for PBXNativeTarget "Pods-GRMustache" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBB6400E179D4CC3B00DE9C9 /* Debug */,
+				198649470FBD405BBC7EDC4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0FE726A41D334360B6443446 /* Build configuration list for PBXNativeTarget "Pods-SMCalloutView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD24622F81D74B94AC8921FB /* Debug */,
+				158ED6F49D69429B86172B17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		348DB7CE3DBC4B61A4EA766D /* Build configuration list for PBXNativeTarget "Pods-MapBox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E059D96F09CC4F9C9C3AF7CC /* Debug */,
+				3D09FB523B4E484BB589C92B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A9DA2567AF24E1BB457701E /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7554114B15D14AC39358DBA4 /* Debug */,
+				8F355477081F4535880E38C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83B1B2E16712434EBDE9BAFD /* Build configuration list for PBXNativeTarget "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C209BB43F7341E4B42BA8A6 /* Debug */,
+				C7DD08CD4D564CFE91AE28C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		98BE2F36E95C447AA46552D6 /* Build configuration list for PBXNativeTarget "Pods-JRSwizzle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90034B480ED428692405F14 /* Debug */,
+				7EFD3DA4BE9247988E1F4BBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F459BF041CF94F0CB2B84AF8 /* Build configuration list for PBXNativeTarget "Pods-FMDB" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09DFD8854D4A4ED8938EA78F /* Debug */,
+				F21C9D6B2C0142BD82E74273 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C6F003EB75FE4BA99466E533 /* Project object */;
+}
