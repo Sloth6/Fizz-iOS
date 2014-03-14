@@ -25,6 +25,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#import "MyMarker.h"
+
 #import "RMMapView.h"
 #import "RMMapViewDelegate.h"
 #import "RMPixel.h"
@@ -160,6 +162,7 @@
     BOOL _delegateHasDidUpdateUserLocation;
     BOOL _delegateHasDidFailToLocateUserWithError;
     BOOL _delegateHasDidChangeUserTrackingMode;
+    BOOL _delegateHasMyMarkerDelegate;
 
     UIView *_backgroundView;
     RMMapScrollView *_mapScrollView;
@@ -699,6 +702,8 @@
     _delegateHasDidUpdateUserLocation = [_delegate respondsToSelector:@selector(mapView:didUpdateUserLocation:)];
     _delegateHasDidFailToLocateUserWithError = [_delegate respondsToSelector:@selector(mapView:didFailToLocateUserWithError:)];
     _delegateHasDidChangeUserTrackingMode = [_delegate respondsToSelector:@selector(mapView:didChangeUserTrackingMode:animated:)];
+    
+    _delegateHasMyMarkerDelegate=[_delegate respondsToSelector:@selector(tapOnMarker:at:)];
 }
 
 - (void)registerMoveEventByUser:(BOOL)wasUserEvent
@@ -738,6 +743,15 @@
         [_moveDelegateQueue setSuspended:NO];
     else
         [_moveDelegateQueue performSelector:@selector(setSuspended:) withObject:[NSNumber numberWithBool:NO] afterDelay:delay];
+}
+
+- (void)tapOnMarker:(MyMarker *)marker at:(CGPoint)aPoint
+{
+    if (_delegateHasMyMarkerDelegate)
+    {
+        [_delegate tapOnMarker:marker at:aPoint];
+    }
+    
 }
 
 - (void)registerZoomEventByUser:(BOOL)wasUserEvent

@@ -10,52 +10,59 @@
 #import "BCNEventCell.h"
 #import "BCNEvent.h"
 #import "BCNMessage.h"
-#import "BCNEventDetailViewController.h"
+#import "BCNAppDelegate.h"
 
+#import "BCNTitleFlowLayout.h"
+
+#import "BCNEventDetailViewDelegate.h"
+#import "BCNOverviewCollectionViewController.h"
 
 #import "BCNTestViewController.h"
 
-static int kBCNNumCellsBeforeEvents = 2;
+static int kBCNNumCellsBeforeEvents = 1; // Add New Event
 
 @interface BCNEventStreamViewController ()
 
 @property NSMutableArray *events;
-@property BCNEventDetailViewController *edvc;
+
+@property BCNEventDetailViewDelegate *edvd;
+@property BCNOverviewCollectionViewController *ocvc;
+@property UICollectionViewFlowLayout *overviewFlowLayout;
+
+@property UICollectionView *textCV;
+@property UIBarButtonItem *burgerButton;
+
+@property BOOL firstAppear;
 
 @end
 
 @implementation BCNEventStreamViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout{
+    self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
         
+        _viewMode = kTimeline;
+        
+        _firstAppear = YES;
+        
+        _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
+        
         //self.collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:];
         
-        self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        [self setUseLayoutToLayoutNavigationTransitions:NO];
         
-        _events = [[NSMutableArray alloc] init];
-        _edvc   = [[BCNEventDetailViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
-        
-        [_edvc setupViewForm];
-        
-        _edvc.esvc = self;
-        
-        // Create a flow layout for the collection view that scrolls
-        // vertically and has no space between items
-        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-        flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-        flowLayout.minimumLineSpacing = 0;
-        flowLayout.minimumInteritemSpacing = 0;
+        CGRect frame = [[UIScreen mainScreen] bounds];
         
         // Set up the collection view with no scrollbars, paging enabled
         // and the delegate and data source set to this view controller
         self.collectionView = [[UICollectionView alloc]
-                               initWithFrame:self.view.frame
-                               collectionViewLayout:flowLayout
+                               initWithFrame:frame
+                               collectionViewLayout:layout
                                ];
+        
+        self.automaticallyAdjustsScrollViewInsets = NO;
         
         self.collectionView.showsVerticalScrollIndicator = YES;
         self.collectionView.pagingEnabled = YES;
@@ -63,11 +70,50 @@ static int kBCNNumCellsBeforeEvents = 2;
         self.collectionView.alwaysBounceVertical = YES;
         self.collectionView.delegate = self;
         self.collectionView.dataSource = self;
+        self.navigationController.automaticallyAdjustsScrollViewInsets = NO;
         
         self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [self.collectionView registerClass:[BCNEventCell class] forCellWithReuseIdentifier:@"EventCell"];
         [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+        
+        //        self.textCV = [[UICollectionView alloc]
+        //                       initWithFrame:self.view.frame
+        //                       collectionViewLayout:flowLayout
+        //                       ];
+        
+        [self.view addSubview:self.collectionView];
+        
+        
+        //        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self];
+        //
+        //        BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+        //
+        //        appDelegate.window.RootViewController = navController;
+        
+        //BCNTitleFlowLayout *titleFlowLayout = [[BCNTitleFlowLayout alloc] init];
+        CGSize itemSize = CGSizeMake(100, 70);
+        //CGSizeMake([UIScreen mainScreen].bounds.size.width, 30);
+        
+        _overviewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+        _overviewFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        _overviewFlowLayout.minimumLineSpacing = 0;
+        _overviewFlowLayout.minimumInteritemSpacing = 0;
+        
+        _overviewFlowLayout.collectionView.pagingEnabled = NO;
+        _overviewFlowLayout.itemSize = itemSize;
+        
+        _events = [[NSMutableArray alloc] init];
+        _edvd   = [[BCNEventDetailViewDelegate alloc] init];
+        _ocvc   = [[BCNOverviewCollectionViewController alloc] initWithCollectionViewLayout:_overviewFlowLayout];
+        
+        _ocvc.useLayoutToLayoutNavigationTransitions = YES;
+        
+        _ocvc.esvc = self;
+        
+        [_edvd setupViewForm];
+        
+        _edvd.esvc = self;
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
@@ -89,6 +135,15 @@ static int kBCNNumCellsBeforeEvents = 2;
     }
     
     return opacity;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 0.0;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -119,8 +174,6 @@ static int kBCNNumCellsBeforeEvents = 2;
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
-    
-    [[[self navigationController] navigationBar] setHidden:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -140,41 +193,64 @@ static int kBCNNumCellsBeforeEvents = 2;
 //}
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.item == 0){
-        NSString *cellID = @"Cell";
-        
-        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                           forIndexPath:indexPath];
-        
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-        
-        return cell;
-    } else if (indexPath.item == 1){
-        static NSString *identifier = @"Cell";
-        
-        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-        
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-        
-        return cell;
-    } else {
-        int eventNum = indexPath.item - kBCNNumCellsBeforeEvents;
-        
-        NSString *cellID = @"EventCell";
-        
-        BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                           forIndexPath:indexPath];
-        
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
-        
-        BCNEvent *event = [_events objectAtIndex:eventNum];
-        
-        [cell setEvent:event];
-        
-        return cell;
-    }
+    
+    if (_viewMode == kTimeline){
+        if (indexPath.item == 0){
+            NSString *cellID = @"Cell";
+            
+            UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                               forIndexPath:indexPath];
+            
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+            
+            return cell;
+        } else {
+            int eventNum = indexPath.item - kBCNNumCellsBeforeEvents;
+            
+            NSString *cellID = @"EventCell";
+            
+            BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                               forIndexPath:indexPath];
+            
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
+            
+            BCNEvent *event = [_events objectAtIndex:eventNum];
+            
+            [cell setEvent:event];
+            
+            return cell;
+        }
+    } else //if (_viewMode == kOverview){ {
+        if (indexPath.item == 0){
+            NSString *cellID = @"Cell";
+            
+            UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                                       forIndexPath:indexPath];
+            
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+            
+            return cell;
+        } else {
+            int eventNum = indexPath.item - kBCNNumCellsBeforeEvents;
+            
+            NSString *cellID = @"EventCell";
+            
+            BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                               forIndexPath:indexPath];
+            
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
+            
+            BCNEvent *event = [_events objectAtIndex:eventNum];
+            
+            [cell setEventCollapsed:event];
+            
+            return cell;
+        }
+    //}
 }
 
 /*- (UICollectionReusableView *)collectionView:
@@ -192,20 +268,20 @@ static int kBCNNumCellsBeforeEvents = 2;
     
     if (index >= 0){
         
-        _edvc.event = [_events objectAtIndex:index];
+        _edvd.event = [_events objectAtIndex:index];
         
-        [_edvc.viewForm removeFromSuperview];
+        [_edvd.viewForm removeFromSuperview];
         
-        self.collectionView.delegate   = _edvc;
-        self.collectionView.dataSource = _edvc;
+        self.collectionView.delegate   = _edvd;
+        self.collectionView.dataSource = _edvd;
         [self.collectionView reloadData];
+        _edvd.eventIndexPath = indexPath;
         
-        [self.view addSubview:_edvc.viewForm];
-        
+        [self.view addSubview:_edvd.viewForm];
         
 //        NSLog(@"PUSH DETAIL");
 //
-//        [[self navigationController] pushViewController:_edvc animated:YES];
+//        [[self navigationController] pushViewController:_edvd animated:YES];
     }
 }
 
@@ -215,14 +291,21 @@ static int kBCNNumCellsBeforeEvents = 2;
 
 #pragma mark – UICollectionViewDelegateFlowLayout
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    CGFloat width  = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [self calculateHeightForEventAtIndexPath:indexPath];
-    
-    CGSize retval = CGSizeMake(width, height);
-    
-    return retval;
+    if (_viewMode == kOverview){ // Overview
+        CGFloat width  = [UIScreen mainScreen].bounds.size.width;
+        CGFloat height = 70;//[self calculateHeightForEventAtIndexPath:indexPath];
+        
+        CGSize retval = CGSizeMake(width, height);
+        
+        return retval;
+        
+    } else if (_viewMode == kTimeline){
+        return [UIScreen mainScreen].bounds.size;
+    } else {
+        return [UIScreen mainScreen].bounds.size;
+    }
 }
 
 - (UIEdgeInsets)collectionView:
@@ -241,15 +324,104 @@ static int kBCNNumCellsBeforeEvents = 2;
     return events;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    if (_selectedIndex != NULL){
+        [self.collectionView scrollToItemAtIndexPath:_selectedIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+        _selectedIndex = NULL;
+    }
+    
+    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
+}
+
+//- (void)viewDidAppear:(BOOL)animated{
+//    if (_firstAppear){
+//        _firstAppear = NO;
+//    } else {
+//        float navBarHeight = self.navigationController.navigationBar.bounds.size.height;
+//        float statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+//        float offset = -(navBarHeight + statusBarHeight);
+//        
+//        CGPoint offsetPoint = CGPointMake(0, offset);
+//        
+//        self.collectionView.contentOffset = offsetPoint;
+//    }
+//}
+
+- (void)burgerButtonPress:(UIButton*)button{
+    if (_edvd.eventIndexPath == NULL){
+        [self contractView];
+    } else {
+        [_edvd popView];
+    }
+}
+
+- (void)contractView{
+    
+    _ocvc.lastIndex = [[self.collectionView indexPathsForVisibleItems]objectAtIndex:0];
+    
+//    [self.collectionView setCollectionViewLayout:_ocvc.collectionViewLayout
+//                                        animated:YES
+//                                      completion:nil];
+
+    _ocvc.useLayoutToLayoutNavigationTransitions = YES;
+    
+    _viewMode = kOverview;
+    
+    [self setAutomaticallyAdjustsScrollViewInsets:NO];
+    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];
+    [self.navigationController setAutomaticallyAdjustsScrollViewInsets:NO];
+    [self.collectionView setPagingEnabled:NO];
+    
+    [[self navigationController] pushViewController:_ocvc animated:YES];
+    
+//    [_ocvc updateEvents:_events];
+//    self.collectionView.delegate = _ocvc;
+//    self.collectionView.dataSource = _ocvc;
+//
+//    [_ocvc setCollectionView:self.collectionView];
+//    
+//    [self.collectionView scrollToItemAtIndexPath:_ocvc.lastIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+}
+
+- (void)expandViewToIndexPath:(NSIndexPath *)indexPath{
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+}
+
+- (void)expandView{
+    [self.collectionView setPagingEnabled:YES];
+    [self expandViewToIndexPath:_ocvc.lastIndex];
+    
+    _ocvc.lastIndex = NULL;
+}
+
 // Your code is bad, and you should feel bad!
 // Couldn't get update to work, so I'm just remaking the
 // entire collection view any time I get new data :(
 
 // Update code remains below, commented out
 
-- (void)updateEvents:(NSMutableArray *)incomingEvents{
-    // incoming events are unsorted
+- (BOOL)lookingAtAllEvents{
+    if (self.collectionView.delegate == self || self.collectionView.delegate == _ocvc){
+        return YES;
+    }
     
+    return NO;
+}
+
+
+
+- (void)updateEvents:(NSMutableArray *)incomingEvents{
+    
+    // Resort current Events because of messaging activity
+    if (incomingEvents == NULL){
+        
+        return;
+    }
+    
+    // incoming events are unsorted
     NSMutableArray *updatedEvents = [incomingEvents mutableCopy];
     
     [_events removeObjectsInArray:incomingEvents];
@@ -259,93 +431,9 @@ static int kBCNNumCellsBeforeEvents = 2;
     
     _events = updatedEvents;
     
-    // Don't visually update anything if you're not looking at all events
-    if (self.collectionView.delegate != self) return;
+    [self.collectionView reloadData];
     
-    // Create a flow layout for the collection view that scrolls
-    // vertically and has no space between items
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    flowLayout.minimumLineSpacing = 0;
-    flowLayout.minimumInteritemSpacing = 0;
-    
-    [self.collectionView removeFromSuperview];
-    
-    // Set up the collection view with no scrollbars, paging enabled
-    // and the delegate and data source set to this view controller
-    self.collectionView = [[UICollectionView alloc]
-                           initWithFrame:self.view.frame
-                           collectionViewLayout:flowLayout
-                           ];
-    
-    self.collectionView.showsVerticalScrollIndicator = YES;
-    self.collectionView.pagingEnabled = YES;
-    self.collectionView.bounces = YES;
-    self.collectionView.alwaysBounceVertical = YES;
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    
-    [self.collectionView registerClass:[BCNEventCell class] forCellWithReuseIdentifier:@"EventCell"];
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
-    
-    [[self collectionView] scrollToItemAtIndexPath:
-            [NSIndexPath indexPathForItem:kBCNNumCellsBeforeEvents inSection:0]
-                                  atScrollPosition:UICollectionViewScrollPositionTop
-                                          animated:NO];
-    
-    self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    //[self.view addSubview:_mvc.view];
-    
-    [self.view addSubview:self.collectionView];
-    
-    //[self.collectionView addSubview:[_mvc view]];
-    
-    /*NSMutableArray *updatedEvents = [incomingEvents mutableCopy];
-    NSArray *currentEvents = [_events copy];
-    
-    NSSet *currentEventsSet = [[NSSet alloc] initWithArray:currentEvents];
-    
-    [_events removeObjectsInArray:incomingEvents];
-    [updatedEvents addObjectsFromArray:_events];
-    
-    [self sortEvents:updatedEvents];
-    
-    _events = updatedEvents;
-
-    [self.collectionView performBatchUpdates:^{
-        NSMutableArray *newIndices = [[NSMutableArray alloc] init];
-        
-        for (int i = 0; i < [_events count]; ++i){
-            NSIndexPath *target = [NSIndexPath indexPathForItem:i inSection:0];
-            
-            BCNEvent *event = [_events objectAtIndex:i];
-            
-            if ([currentEventsSet containsObject:event]){
-                
-                NSInteger index = [currentEvents indexOfObject:event];
-                
-                if (i != index){
-                    
-                    NSIndexPath *fromPath = [NSIndexPath indexPathForItem:index inSection:0];
-                    
-                    // Update Index Path
-                    [self.collectionView moveItemAtIndexPath:fromPath
-                                                 toIndexPath:target];
-                }
-            } else {
-                // Queue Insert Index Path
-                [newIndices addObject:[NSIndexPath indexPathForItem:0 inSection:0]];
-            }
-        }
-        
-        // Insert all new index paths
-        [self.collectionView insertItemsAtIndexPaths:newIndices];
-        
-        NSLog(@"newIndices: %@", newIndices);
-        
-    } completion:nil];*/
-    
+    return;
 }
 
 @end

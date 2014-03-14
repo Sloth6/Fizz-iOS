@@ -22,8 +22,8 @@
     
 //    appDelegate.esvc = [[BCNEventStreamViewController alloc] init];
     
-    [(UINavigationController *)appDelegate.window.rootViewController presentViewController:appDelegate.esvc animated:YES completion:nil];
-//
+    [appDelegate setupNavigationController];
+    
 //    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:appDelegate.esvc];
 //    
 //    [navigationController setNavigationBarHidden:YES animated:NO];

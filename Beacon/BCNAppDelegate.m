@@ -17,9 +17,28 @@
 
 @synthesize ioSocketDelegate, fbLoginDelegate;
 
+- (void)setupNavigationController{
+    UINavigationController *navigationController = [[UINavigationController alloc]
+                                                    initWithRootViewController:_esvc];
+    
+    _esvc.automaticallyAdjustsScrollViewInsets = NO;
+    navigationController.automaticallyAdjustsScrollViewInsets = NO;
+    
+    self.window.rootViewController = navigationController;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    _esvc = [[BCNEventStreamViewController alloc] init];
+    
+    // Create a flow layout for the collection view that scrolls
+    // vertically and has no space between items
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    flowLayout.minimumLineSpacing = 0;
+    flowLayout.minimumInteritemSpacing = 0;
+    flowLayout.itemSize = [UIScreen mainScreen].bounds.size;
+    
+    _esvc = [[BCNEventStreamViewController alloc] initWithCollectionViewLayout:flowLayout];
     _mvc = [[BCNMapViewController alloc] initWithNibName:@"BCNMapViewController" bundle:nil];
     
     _esvc.mvc = _mvc;
@@ -48,11 +67,7 @@
     /**** PUSH NOTIFY ****/
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_esvc];
-    
-    [navigationController setNavigationBarHidden:YES animated:NO];
-    
-    self.window.rootViewController = navigationController;
+    [self setupNavigationController];
     
     // Whenever a person opens the app, check for a cached session
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {

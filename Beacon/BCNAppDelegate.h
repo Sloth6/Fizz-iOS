@@ -36,5 +36,6 @@ static float const kBCNInviteProfilePictureHeight = 50;
 + (BOOL)isRetinaDisplay;
 - (void)updateEvents:(NSArray *)events;
 - (void)sessionStateChanged:(FBSession *)session state:(FBSessionState)state error:(NSError *)error;
+- (void)setupNavigationController;
 
 @end

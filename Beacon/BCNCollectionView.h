@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BCNCollectionView : UICollectionView <UICollectionViewDelegate>
+@interface BCNCollectionView : UICollectionView
 
 @end

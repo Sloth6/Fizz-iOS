@@ -11,15 +11,16 @@
 
 @class BCNEvent;
 
-@interface BCNEventCell : UICollectionViewCell <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface BCNEventCell : UICollectionViewCell //<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property UICollectionView *collectionView;
 
 @property UILabel *label;
-@property UILabel *prevLabel;
-@property UILabel *nextLabel;
+//@property UILabel *prevLabel;
+//@property UILabel *nextLabel;
 
--(void)setupCollectionViewForEvent:(BCNEvent *)event;
+//-(void)setupCollectionViewForEvent:(BCNEvent *)event;
 -(void)setEvent:(BCNEvent *)event;
+-(void)setEventCollapsed:(BCNEvent *)event;
 
 @end

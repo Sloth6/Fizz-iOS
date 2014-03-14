@@ -15,8 +15,8 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
 
 @interface BCNMessage ()
 
-@property (strong, nonatomic)  NSString *text;
-@property (strong, nonatomic) BCNUser *user;
+@property (strong, nonatomic) NSString *text;
+@property (strong, nonatomic) BCNUser  *user;
 @property (strong, nonatomic) BCNEvent *event;
 @property (strong, nonatomic) NSNumber *messageID;
 @property (strong, nonatomic) BCNMarker *marker;

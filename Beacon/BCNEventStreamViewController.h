@@ -13,7 +13,20 @@
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 - (void)updateEvents:(NSMutableArray *)incomingEvents;
+- (void)expandView;
+
++ (CGRect)makeBurgerButtonFrame;
 
 @property BCNMapViewController *mvc;
+
+typedef enum {
+    kOverview,
+    kTimeline,
+    kConversation
+} ViewMode;
+
+@property NSIndexPath *selectedIndex;
+
+@property ViewMode viewMode;
 
 @end

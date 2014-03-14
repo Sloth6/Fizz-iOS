@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import <MapView/Map/MapBox.h>
+#import <Mapbox/Mapbox.h>
+
 @class BCNEventStreamViewController;
 
 static NSString *kBCN_MAP_ID = @"beaconbeta.gknee3gd";
 
-@interface BCNMapViewController : UIViewController //<RMMapViewDelegate>
+@interface BCNMapViewController : UIViewController <RMMapViewDelegate>
 
-//@property RMMapView *mapView;
+@property RMMapView *mapView;
 @property BCNEventStreamViewController *esvc;
 
 @end
