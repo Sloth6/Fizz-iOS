@@ -12,6 +12,7 @@
 
 static NSMutableDictionary *users;
 static int kBCNProfilePictureDimension = 50;
+
 static NSString *BCN_NEW_USER_LOCATION = @"newUserLocation";
 
 @interface BCNUser (){
@@ -21,6 +22,7 @@ static NSString *BCN_NEW_USER_LOCATION = @"newUserLocation";
 @property (nonatomic) NSNumber *userID;
 @property (nonatomic) NSNumber *facebookID;
 @property (strong, nonatomic) NSString *phoneNumber;
+@property (strong, nonatomic) NSString *userType;
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) BCNCoordinate *coords;
 
@@ -38,7 +40,7 @@ static NSString *BCN_NEW_USER_LOCATION = @"newUserLocation";
 
 static BCNUser *currentUser = nil;
 
-@synthesize facebookID, image, name, phoneNumber;
+@synthesize facebookID, image, name, phoneNumber, userType;
 
 +(void)setupUserClass{
     if (!users){
@@ -169,6 +171,10 @@ static BCNUser *currentUser = nil;
 
 -(NSString *)name{
     return name;
+}
+
+-(NSString *)userType{
+    return userType;
 }
 
 -(NSString *)phoneNumber{
@@ -306,28 +312,30 @@ static BCNUser *currentUser = nil;
     // User ID Number
     NSNumber *uid = [userJSON objectForKey:@"uid"];
     
+    // User Type ("Member", "Guest", "Phone", "Incomplete")
+    NSString *userType = [userJSON objectForKey:@"type"];
+    
     // Facebook ID number
     NSNumber *fbid = [userJSON objectForKey:@"fbid"];
     
     // Phone Number
     NSString *phoneNumber = [userJSON objectForKey:@"pn"];
     
+    // FB Token
+    //NSString *fbToken = [userJSON objectForKey:@"fbToken"];
+    
+    // iOS Token
+    //NSString *iosToken = [userJSON objectForKey:@"iosToken"];
+    
     // User's Name
     NSString *name = [userJSON objectForKey:@"name"];
-    
-    // "iPhone" or ""
-    NSString *hasApp = [userJSON objectForKey:@"hasApp"];
-    
-    // Access Token
-    NSString *accessToken = [userJSON objectForKey:@"accessToken"];
     
     /* Update user info */
     BCNUser *user = [BCNUser userWithUID:uid];
     user.facebookID = fbid;
+    user.userType = userType;
     user.phoneNumber = phoneNumber;
     user.name = name;
-    user.hasApp = hasApp;
-    user.accessToken = accessToken;
     
     return user;
 }
@@ -348,6 +356,21 @@ static BCNUser *currentUser = nil;
         BCNUser *user = (BCNUser *)obj;
         
         [result setObject:[user userID] atIndexedSubscript:idx];
+    }];
+    
+    return result;
+}
+
++(NSArray *)parseUserJSONList:(NSArray *)friendListJSON{
+    if (friendListJSON == NULL){
+        return NULL;
+    }
+    
+    NSMutableArray *result = [[NSMutableArray alloc] initWithArray:friendListJSON];
+    
+    [friendListJSON enumerateObjectsUsingBlock:^(id userJSON, NSUInteger index, BOOL *stop) {
+        BCNUser *user = [BCNUser parseJSON:userJSON];
+        [result setObject:user atIndexedSubscript:index];
     }];
     
     return result;

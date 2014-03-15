@@ -15,6 +15,7 @@
 -(NSNumber *)facebookID;
 -(NSString *)phoneNumber;
 -(NSString *)name;
+-(NSString *)userType;
 
 // Use this to get a profile picture
 -(void)fetchProfilePictureIfNeededWithCompletionHandler:(void(^)(UIImage *image))handler;
@@ -38,6 +39,8 @@
 +(NSArray *)getUsers;
 
 +(BCNUser *)parseJSON:(NSDictionary *)userJSON;
+
++(NSArray *)parseUserJSONList:(NSArray *)friendListJSON;
 
 +(NSArray *)getUserIDsFromUsers:(NSArray *)users;
 

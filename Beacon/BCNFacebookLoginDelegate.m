@@ -10,6 +10,8 @@
 #import "BCN_IOSocketDelegate.h"
 #import "BCNAppDelegate.h"
 
+#import "BCNInputPhoneViewController.h"
+
 @implementation BCNFacebookLoginDelegate
 
 // This method will be called when the user information has been fetched
@@ -22,7 +24,26 @@
     
 //    appDelegate.esvc = [[BCNEventStreamViewController alloc] init];
     
-    [appDelegate setupNavigationController];
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSNumber *didRegister = [pref objectForKey:@"registered"];
+    
+    if (didRegister){
+        [appDelegate.ioSocketDelegate openConnectionCheckingForInternet];
+        
+        [appDelegate setupNavigationController];
+    } else {
+        // Prompt for Phone
+        BCNInputPhoneViewController *phoneVC = [[BCNInputPhoneViewController alloc] init];
+        
+        UINavigationController *navigationController = [[UINavigationController alloc]
+                                                        initWithRootViewController:phoneVC];
+        
+        appDelegate.window.rootViewController.automaticallyAdjustsScrollViewInsets = NO;
+        
+        appDelegate.window.rootViewController = navigationController;
+    }
+    
     
 //    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:appDelegate.esvc];
 //    

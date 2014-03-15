@@ -10,7 +10,7 @@
 #import "BCNMapViewController.h"
 
 @interface BCNEventStreamViewController : UICollectionViewController
-        <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+        <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
 
 - (void)updateEvents:(NSMutableArray *)incomingEvents;
 - (void)expandView;

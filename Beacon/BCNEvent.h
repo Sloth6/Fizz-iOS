@@ -16,18 +16,26 @@
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
+-(void)socketIOInviteWithInviteList:(NSArray *)inviteList
+                    InvitePhoneList:(NSArray *)phoneList
+                     AndAcknowledge:(SocketIOCallback)function;
+-(void)socketIORequestEventWithAcknowledge:(SocketIOCallback)function;
+-(void)socketIOSetSeatCapacityToCapacity:(int)capacity
+                         WithAcknowledge:(SocketIOCallback)function;
 +(void)socketIONewEventWithMessage:(NSString *)message
-                        InviteList:(NSArray *)inviteList
-                   InvitePhoneList:(NSArray *)phoneList
+                        InviteOnly:(BOOL)isInviteOnly
                     AndAcknowledge:(SocketIOCallback)function;
 
 -(NSNumber *)eventID;
 
--(BCNUser *)host;
+-(BCNUser *)creator;
 -(NSArray *)messages;
 -(NSArray *)attendees;
 -(NSArray *)invitees;
 -(NSArray *)engaged;
+
+-(int)numSeats;
+-(int)numEmptySeats;
 
 // Most recent new thing, used for sorting
 -(NSDate *)lastUpdate;

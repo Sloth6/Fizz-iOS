@@ -43,8 +43,10 @@
 
 - (void)performServerLogout{
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    [[appDelegate ioSocketDelegate] logout];
+    
+    [appDelegate setupNavigationController];
+    
+    //[[appDelegate ioSocketDelegate] logout];
 }
 
 - (void)didReceiveMemoryWarning

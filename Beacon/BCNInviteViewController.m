@@ -10,6 +10,10 @@
 
 @interface BCNInviteViewController ()
 
+@property NSArray *friends;
+@property NSMutableArray *phoneNumbers;
+@property NSMutableSet *selected;
+
 @end
 
 @implementation BCNInviteViewController
@@ -19,6 +23,13 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        
+        UINib *nib = [UINib nibWithNibName:@"BCNInviteCell" bundle:nil];
+        [[self tableView] registerNib:nib forCellReuseIdentifier:@"InviteCell"];
+        
+        _friends = [[NSMutableArray alloc] init];
+        _phoneNumbers = [[NSMutableArray alloc] init];
+        _selected = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -44,21 +55,51 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+    if (section == 0){ // Title followed by "+ Add By Phone Number"
+        return 2;
+    }
+    
     // Return the number of rows in the section.
-    return 0;
+    return [_friends count] + [_phoneNumbers count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    if (indexPath.section == 0){ // BIG top cell
+        if (indexPath.row == 0){
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            }
+            
+            // Configure the cell...
+            
+            return cell;
+        }
+        
+        // New Phone Number
+        
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        // Configure the cell...
+        
+        return cell;
+    }
+    
+    // All other cells
+    
+    static NSString *CellIdentifier = @"InviteCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -68,6 +109,43 @@
     
     return cell;
 }
+
+
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+
+//-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    
+//}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 0 && indexPath.row == 0){
+        return [UIScreen mainScreen].bounds.size.height;
+    }
+    
+    return 65;
+}
+
+
+
+
+/* Use these methods to handle persistent bubbles across all interfaces */
+/*-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+ 
+ }
+ 
+ -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+ 
+ }*/
+
+
+
 
 /*
 // Override to support conditional editing of the table view.

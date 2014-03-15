@@ -15,9 +15,9 @@
     
     NSArray *usPhoneFormats = [NSArray arrayWithObjects:
                                
-                               @"+1 (###) ###-####",
-                               
                                @"1 (###) ###-####",
+                               
+                               @"+1 (###) ###-####",
                                
                                @"011 $",
                                
@@ -285,7 +285,7 @@
 
 - (BOOL)canBeInputByPhonePad:(char)c {
     
-    if(c == '+' || c == '*' || c == '#') return YES;
+    //if(c == '+' || c == '*' || c == '#') return YES;
     
     if(c >= '0' && c <= '9') return YES;
     

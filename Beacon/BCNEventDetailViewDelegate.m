@@ -152,6 +152,10 @@ static int kBCNNumCellsBeforeMessages = 1;
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{
+    if (![chatBox isFirstResponder]) {
+        return;
+    }
+    
 //    [UIView beginAnimations:nil context:NULL];
 //    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
 //    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
@@ -168,8 +172,6 @@ static int kBCNNumCellsBeforeMessages = 1;
     
 	// get the height since this is the main value that we need.
 	NSInteger kbSizeH = keyboardBounds.size.height;
-    
-    NSLog(@"%ld", (long)kbSizeH);
     
 	// get a rect for the table/main frame
 	CGRect tableFrame = _esvc.collectionView.frame;
@@ -262,7 +264,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     
     // I output the new dimensions to the console
     // so we can see what is happening
-	NSLog(@"NEW SIZE : %d X %d", newSizeW, newSizeH);
+	//NSLog(@"NEW SIZE : %d X %d", newSizeW, newSizeH);
 
     // if the height of our new chatbox is
     // below 90 we can set the height
@@ -306,14 +308,14 @@ static int kBCNNumCellsBeforeMessages = 1;
     CGRect chatBoxFrame = chatBox.frame;
     NSInteger chatBoxH = chatBoxFrame.size.height;
     NSInteger chatBoxW = chatBoxFrame.size.width;
-    NSLog(@"CHAT BOX SIZE : %d X %d", chatBoxW, chatBoxH);
+    //NSLog(@"CHAT BOX SIZE : %d X %d", chatBoxW, chatBoxH);
     chatBoxFrame.size.height = newSizeH + 12;
     chatBox.frame = chatBoxFrame;
     
     // form view
     CGRect formFrame = viewForm.frame;
     NSInteger viewFormH = formFrame.size.height;
-    NSLog(@"FORM VIEW HEIGHT : %d", viewFormH);
+    //NSLog(@"FORM VIEW HEIGHT : %d", viewFormH);
     formFrame.size.height = 20 + newSizeH;
     //formFrame.origin.y = 199 - (newSizeH - 18);
     formFrame.origin.y = screenY - formFrame.size.height - _keyboardRect.size.height;
@@ -322,7 +324,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     // table view
     CGRect tableFrame = _esvc.collectionView.frame;
     NSInteger viewTableH = tableFrame.size.height;
-    NSLog(@"TABLE VIEW HEIGHT : %d", viewTableH);
+    //NSLog(@"TABLE VIEW HEIGHT : %d", viewTableH);
     tableFrame.size.height = formFrame.origin.y;
     //tableFrame.size.height = 199 - (newSizeH - 18);
     _esvc.collectionView.frame = tableFrame;
@@ -357,6 +359,10 @@ static int kBCNNumCellsBeforeMessages = 1;
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{
+    if (![chatBox isFirstResponder]) {
+        return;
+    }
+    
     //    [UIView beginAnimations:nil context:NULL];
     //    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     //    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];

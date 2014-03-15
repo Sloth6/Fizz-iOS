@@ -18,17 +18,19 @@
 @synthesize ioSocketDelegate, fbLoginDelegate;
 
 - (void)setupNavigationController{
+
+    _esvc.automaticallyAdjustsScrollViewInsets = NO;
+    
     UINavigationController *navigationController = [[UINavigationController alloc]
                                                     initWithRootViewController:_esvc];
     
-    _esvc.automaticallyAdjustsScrollViewInsets = NO;
     navigationController.automaticallyAdjustsScrollViewInsets = NO;
-    
     self.window.rootViewController = navigationController;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    _hasLoggedIn = NO;
     
     // Create a flow layout for the collection view that scrolls
     // vertically and has no space between items
@@ -39,10 +41,6 @@
     flowLayout.itemSize = [UIScreen mainScreen].bounds.size;
     
     _esvc = [[BCNEventStreamViewController alloc] initWithCollectionViewLayout:flowLayout];
-    _mvc = [[BCNMapViewController alloc] initWithNibName:@"BCNMapViewController" bundle:nil];
-    
-    _esvc.mvc = _mvc;
-    _mvc.esvc = _esvc;
     
     [FBLoginView class];
     ioSocketDelegate = [[BCN_IOSocketDelegate alloc] init];
@@ -64,13 +62,22 @@
     [BCNUser setupUserClass];
     [BCNEvent setupEventClass];
     
-    /**** PUSH NOTIFY ****/
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
-    
     [self setupNavigationController];
     
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSNumber *registered = [pref objectForKey:@"registered"];
+    
+    BOOL hasRegistered;
+    
+    if (registered != NULL){
+        hasRegistered = [registered boolValue];
+    } else {
+        hasRegistered = NO;
+    }
+    
     // Whenever a person opens the app, check for a cached session
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
+    if (hasRegistered &&
+        FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
         NSLog(@"\n\nActive Session Loading\n\n");
         
          // If there's one, just open the session silently, without showing the user the login UI
@@ -82,6 +89,8 @@
          allowLoginUI:NO
          completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
          
+             _hasLoggedIn = YES;
+             
              NSLog(@"\n\n\nFBSession: %@\n\n\n", session);
              
              // Handler for session state changes
@@ -163,7 +172,7 @@
     NSString *json = [writer stringWithObject:wrapper];
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    [pref setObject:[self stringWithDeviceToken:deviceToken] forKey:@"token"];
+    [pref setObject:[self stringWithDeviceToken:deviceToken] forKey:@"iosToken"];
     [pref synchronize];
     
     NSLog(@"\n\nDevice Token: <%@>\n\n", [contents objectForKey:@"deviceToken"]);
@@ -202,11 +211,13 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    if (![ioSocketDelegate isConnectionOpen]){
-        [ioSocketDelegate openConnectionCheckingForInternet];
+    if (_hasLoggedIn){ // if I've already gotten through the login process
+        if (![ioSocketDelegate isConnectionOpen]){
+            [ioSocketDelegate openConnectionCheckingForInternet];
+        }
+            
+        [[FBSession activeSession] handleDidBecomeActive];
     }
-        
-    [[FBSession activeSession] handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

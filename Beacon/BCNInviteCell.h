@@ -10,4 +10,7 @@
 
 @interface BCNInviteCell : UITableViewCell
 
+@property IBOutlet UIImageView *imageView;
+@property IBOutlet UILabel *label;
+
 @end

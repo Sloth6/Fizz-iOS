@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BCNNewEventCell : UICollectionViewCell
+@class BCNInviteViewController;
+
+@interface BCNNewEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
+
+@property UITextView *textView;
+@property float lineHeight;
+@property UISwitch *toggleSecret;
+@property UILabel *label;
+
+@property BCNInviteViewController *ivc;
 
 @end

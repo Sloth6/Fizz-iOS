@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BCNInputPhoneViewController : UIViewController
+@interface BCNInputPhoneViewController : UIViewController <UITextFieldDelegate>
+
+@property IBOutlet UITextField *textField;
+@property IBOutlet UIButton *confirmPhoneButton;
+
+- (IBAction)savePhoneNumber:(id)sender;
 
 @end

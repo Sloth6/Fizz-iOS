@@ -12,7 +12,6 @@
 #import "BCNEvent.h"
 #import "BCNUser.h"
 #import "BCNMessage.h"
-#import "BCNFriendList.h"
 #import "BCNAppDelegate.h"
 #import <FacebookSDK/FacebookSDK.h>
 
@@ -26,12 +25,14 @@ _Pragma("clang diagnostic pop") \
 
 static NSString *BCN_INCOMING_MY_INFO = @"myInfo";
 static NSString *BCN_INCOMING_FRIEND_LIST = @"friendList";
+static NSString *BCN_INCOMING_NEW_FRIEND = @"newFriend";
 static NSString *BCN_INCOMING_EVENT_LIST = @"eventList";
 static NSString *BCN_INCOMING_NEW_EVENT = @"newEvent";
 static NSString *BCN_INCOMING_ADD_GUEST = @"addGuest";
 static NSString *BCN_INCOMING_REMOVE_GUEST = @"removeGuest";
+static NSString *BCN_INCOMING_NEW_INVITE_LIST = @"newInviteList";
 static NSString *BCN_INCOMING_NEW_MESSAGE = @"newMessage";
-static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
+static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
 
 @interface BCN_IOSocketDelegate ()
 
@@ -66,20 +67,34 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
         
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingMyInfo:))
                                   forKey:BCN_INCOMING_MY_INFO];
+        
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingFriendList:))
                                   forKey:BCN_INCOMING_FRIEND_LIST];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewFriend:))
+                                  forKey:BCN_INCOMING_NEW_FRIEND];
+        
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingEventList:))
                                   forKey:BCN_INCOMING_EVENT_LIST];
+        
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewEvent:))
                                   forKey:BCN_INCOMING_NEW_EVENT];
+        
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingAddGuest:))
                                   forKey:BCN_INCOMING_ADD_GUEST];
+        
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingRemoveGuest:))
                                   forKey:BCN_INCOMING_REMOVE_GUEST];
+                                                              
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewInviteList:))
+                                  forKey:BCN_INCOMING_NEW_INVITE_LIST];
+                                                              
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewMessage:))
-                                  forKey:BCN_INCOMING_MY_INFO];
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewUserLocationList:))
-                                  forKey:BCN_INCOMING_NEW_USER_LOCATION_LIST];
+                                  forKey:BCN_INCOMING_NEW_MESSAGE];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingSetSeatCapacity:))
+                                  forKey:BCN_INCOMING_SET_SEAT_CAPACITY];
+        
     }
     
     return self;
@@ -90,8 +105,12 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     BCN_Reachability *reachability = [BCN_Reachability reachabilityForInternetConnection];
     
     if ([reachability isReachable]){
+        NSLog(@"isReachable");
+        
         [self openConnection];
     } else {
+        NSLog(@"is NOT reachable");
+        
         [self performSelector:@selector(openConnectionCheckingForInternet) withObject:nil afterDelay:reconnectDelay];
         
         [self updateReconnectDelay];
@@ -100,27 +119,66 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
 
 /* AJAX */
 
-- (BOOL)ajaxGetRequest{
-    NSLog(@"getting FBaccessToken");
+- (BOOL)ajaxPostRequest{
+    NSLog(@"getting active FBaccessToken");
     
-    NSString *accessToken = [FBSession activeSession].accessTokenData.accessToken;
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    if (accessToken){
+    NSString *fbToken = [FBSession activeSession].accessTokenData.accessToken;
+    NSString *phoneNumber = [appDelegate userPhoneNumber]; //("+" followed by just digits)
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSString *iosToken = [pref objectForKey:@"iosToken"];
+    
+    appDelegate.userPhoneNumber = NULL;
+    
+    if (fbToken){
         NSLog(@"sending AJAX");
         
-        NSArray *keys = [NSArray arrayWithObjects:@"access_token", nil];
-        NSArray *objects = [NSArray arrayWithObjects:accessToken, nil];
+        // FB Session Token
+        NSMutableArray *keys = [[NSMutableArray alloc] initWithObjects:@"fbToken", nil];
+        NSMutableArray *objects = [[NSMutableArray alloc] initWithObjects:fbToken, nil];
+        
+        NSLog(@"fbToken: %@", fbToken);
+        
+        // Phone Number
+        if (phoneNumber != NULL){
+            [keys addObject:@"pn"];
+            [objects addObject:phoneNumber];
+            
+            NSLog(@"pn: %@", phoneNumber);
+        }
+        
+        // iOS Token
+        if (iosToken != NULL){
+            [keys addObject:@"iosToken"];
+            [objects addObject:iosToken];
+            
+            NSLog(@"iosToken: %@", iosToken);
+        }
+        
+        // Version Number
+        NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
+        NSString *version = [info objectForKey:@"CFBundleShortVersionString"];
+        
+        [keys addObject:@"version"];
+        [objects addObject:version];
+        
         NSDictionary *jsonDictionary = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
 
         SBJson4Writer *writer = [[SBJson4Writer alloc] init];
         
         NSString *jsonString = [writer stringWithObject:jsonDictionary];
         
+        NSLog(@"\n\n%@\n\n", jsonString);
+        
         NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/iosLogin", kBCNSocketHost, kBCNSocketPort]]];
-        [request setValue:jsonString forHTTPHeaderField:@"json"];
         [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:[NSString stringWithFormat:@"%d", [jsonData length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:jsonData];
         
         connection = [[NSURLConnection alloc]
@@ -242,7 +300,9 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     if (didAjax){
         [socketIO connectToHost:kBCNSocketHost onPort:kBCNSocketPort];
     } else {
-        [self ajaxGetRequest];
+        if (![self ajaxPostRequest]){
+            // Get the fb token and post an AJAX Request Again
+        }
     }
 }
 
@@ -327,15 +387,19 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     
     NSDictionary *userJSON = [json objectForKey:@"me"];
     
+    // User (me)
     BCNUser *user = [BCNUser parseJSON:userJSON];
 }
 
 - (void)incomingFriendList:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
     
-    NSDictionary *friendListJSON = [json objectForKey:@"friendList"];
+    NSArray *friendListJSON = [json objectForKey:@"friendList"];
     
-    BCNFriendList *friendList = [BCNFriendList parseJSON:friendListJSON];
+    // User Array (friends)
+    NSArray *friends = [BCNUser parseUserJSONList:friendListJSON];
+    
+    
 }
 
 - (void)incomingEventList:(NSArray *)args{
@@ -343,6 +407,7 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     
     NSArray *eventListJSON = [json objectForKey:@"eventList"];
     
+    // Events
     NSArray *events = [BCNEvent parseEventJSONList:eventListJSON];
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -355,6 +420,7 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     
     NSDictionary *eventJSON = [json objectForKey:@"event"];
     
+    // Event
     BCNEvent *event = [BCNEvent parseJSON:eventJSON];
 }
 
@@ -364,8 +430,41 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     NSNumber *eventID = [json objectForKey:@"eid"];
     NSNumber *userID  = [json objectForKey:@"uid"];
     
+    // Event
     BCNEvent *event = [BCNEvent eventWithEID:eventID];
+    
+    // User (guest)
     BCNUser  *user  = [BCNUser userWithUID:userID];
+}
+                                                              
+- (void)incomingNewFriend:(NSArray *)args{
+    NSDictionary *json  = [args objectAtIndex:0];
+    
+    NSDictionary *userJSON = [json objectForKey:@"user"];
+    
+    // User (new friend)
+    BCNUser *user = [BCNUser parseJSON:userJSON];
+}
+                                                              
+- (void)incomingNewInviteList:(NSArray *)args{
+    NSDictionary *json  = [args objectAtIndex:0];
+    
+    // Event ID
+    NSNumber *eventID = [json objectForKey:@"eid"];
+    NSArray *friendListJSON = [json objectForKey:@"friendList"];
+    
+    // Friends
+    NSArray *friends = [BCNUser parseUserJSONList:friendListJSON];
+}
+                                                              
+- (void)incomingSetSeatCapacity:(NSArray *)args{
+    NSDictionary *json  = [args objectAtIndex:0];
+    
+    // Event ID
+    NSNumber *eventID = [json objectForKey:@"eid"];
+    
+    // Num Seats
+    NSNumber *numSeats = [json objectForKey:@"seats"];
 }
 
 - (void)incomingRemoveGuest:(NSArray *)args{
@@ -374,7 +473,10 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     NSNumber *eventID = [json objectForKey:@"eid"];
     NSNumber *userID  = [json objectForKey:@"uid"];
     
+    // Event
     BCNEvent *event = [BCNEvent eventWithEID:eventID];
+    
+    // User to remove
     BCNUser  *user  = [BCNUser userWithUID:userID];
 }
 
@@ -383,29 +485,24 @@ static NSString *BCN_INCOMING_NEW_USER_LOCATION_LIST = @"newUserLocationList";
     
     NSDictionary *messageJSON = [json objectForKey:@"message"];
     
+    // New Message
     BCNMessage *message = [BCNMessage parseJSON:messageJSON];
 }
 
-- (void)incomingNewUserLocationList:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSDictionary *userLocationJSON = [json objectForKey:@"userLocation"];
-    
-    NSNumber *uid = [userLocationJSON objectForKey:@"uid"];
-    
-    BCNUser *user = [BCNUser userWithUID:uid];
-    
-    NSDictionary *latlngJSON = [userLocationJSON objectForKey:@"latlng"];
-    
-    BCNCoordinate *coord = [BCNCoordinate parseJSON:latlngJSON];
-}
+//- (void)incomingNewUserLocationList:(NSArray *)args{
+//    NSDictionary *json  = [args objectAtIndex:0];
+//    
+//    NSDictionary *userLocationJSON = [json objectForKey:@"userLocation"];
+//    
+//    NSNumber *uid = [userLocationJSON objectForKey:@"uid"];
+//    
+//    BCNUser *user = [BCNUser userWithUID:uid];
+//    
+//    NSDictionary *latlngJSON = [userLocationJSON objectForKey:@"latlng"];
+//    
+//    BCNCoordinate *coord = [BCNCoordinate parseJSON:latlngJSON];
+//}
 
-
--(void)incomingLoginSuccess:(NSArray *)args{
-    NSDictionary *json = [args objectAtIndex:0];
-    NSNumber *isAdmin = [json objectForKey:@"admin"];
-    
-}
 
 /* Send */
 

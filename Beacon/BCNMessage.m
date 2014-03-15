@@ -57,7 +57,7 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
     /* eid : int */
     [json setObject:[event eventID] forKey:@"eid"];
     
-    /* message : string} */
+    /* message : message */
     NSDictionary *messageJSON = [message jsonDict];
     
     [json setObject:messageJSON forKey:@"message"];

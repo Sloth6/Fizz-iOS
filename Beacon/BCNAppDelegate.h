@@ -12,13 +12,12 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "BCNFacebookLoginDelegate.h"
 #import "BCNEventStreamViewController.h"
-#import "BCNMapViewController.h"
 
 static const UIColor *facebookColor;
 static const UIColor *beaconColor;
 
-static float const kBCNHostProfilePictureWidth = 50;
-static float const kBCNHostProfilePictureHeight = 50;
+static float const kBCNCreatorProfilePictureWidth = 50;
+static float const kBCNCreatorProfilePictureHeight = 50;
 static float const kBCNCommentProfilePictureWidth = 50;
 static float const kBCNCommentProfilePictureHeight = 50;
 static float const kBCNInviteProfilePictureWidth = 50;
@@ -31,7 +30,10 @@ static float const kBCNInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) FBSession *session;
 @property (strong, nonatomic) BCNFacebookLoginDelegate *fbLoginDelegate;
 @property (strong, nonatomic) BCNEventStreamViewController *esvc;
-@property (strong, nonatomic) BCNMapViewController *mvc;
+
+@property BOOL hasLoggedIn;
+
+@property (strong, nonatomic) NSString *userPhoneNumber;
 
 + (BOOL)isRetinaDisplay;
 - (void)updateEvents:(NSArray *)events;

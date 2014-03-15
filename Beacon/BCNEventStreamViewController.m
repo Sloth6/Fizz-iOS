@@ -8,6 +8,7 @@
 
 #import "BCNEventStreamViewController.h"
 #import "BCNEventCell.h"
+#import "BCNNewEventCell.h"
 #import "BCNEvent.h"
 #import "BCNMessage.h"
 #import "BCNAppDelegate.h"
@@ -20,6 +21,8 @@
 #import "BCNTestViewController.h"
 
 static int kBCNNumCellsBeforeEvents = 1; // Add New Event
+static NSString *kBCNPlaceholderText = @"What do you want to do?";
+
 
 @interface BCNEventStreamViewController ()
 
@@ -28,6 +31,11 @@ static int kBCNNumCellsBeforeEvents = 1; // Add New Event
 @property BCNEventDetailViewDelegate *edvd;
 @property BCNOverviewCollectionViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
+
+@property UISwitch *toggleSecret;
+@property UILabel  *secretLabel;
+
+@property float lineHeight;
 
 @property UICollectionView *textCV;
 @property UIBarButtonItem *burgerButton;
@@ -45,6 +53,7 @@ static int kBCNNumCellsBeforeEvents = 1; // Add New Event
         
         _viewMode = kTimeline;
         
+        _lineHeight = -1;
         _firstAppear = YES;
         
         _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
@@ -76,6 +85,8 @@ static int kBCNNumCellsBeforeEvents = 1; // Add New Event
         
         [self.collectionView registerClass:[BCNEventCell class] forCellWithReuseIdentifier:@"EventCell"];
         [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+        
+        [self.collectionView registerClass:[BCNNewEventCell class] forCellWithReuseIdentifier:@"NewEventCell"];
         
         //        self.textCV = [[UICollectionView alloc]
         //                       initWithFrame:self.view.frame
@@ -196,13 +207,32 @@ static int kBCNNumCellsBeforeEvents = 1; // Add New Event
     
     if (_viewMode == kTimeline){
         if (indexPath.item == 0){
-            NSString *cellID = @"Cell";
+            NSString *cellID = @"NewEventCell";
             
-            UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                               forIndexPath:indexPath];
+            BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                                  forIndexPath:indexPath];
             
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+            
+            NSLog(@"here");
+            
+            if (_lineHeight == -1) {
+                
+                [cell.textView setText:@"."];
+                
+                _lineHeight = [self measureHeightOfUITextView:cell.textView];
+            }
+            
+            [self setupTextView:cell.textView];
+            
+            [cell.textView setDelegate:self];
+            [cell.textView setText:kBCNPlaceholderText];
+            
+            _toggleSecret = cell.toggleSecret;
+            _secretLabel  = cell.label;
+            
+            [_toggleSecret setAlpha:0.0];
+            [_secretLabel setAlpha:0.0];
             
             return cell;
         } else {
@@ -278,10 +308,6 @@ static int kBCNNumCellsBeforeEvents = 1; // Add New Event
         _edvd.eventIndexPath = indexPath;
         
         [self.view addSubview:_edvd.viewForm];
-        
-//        NSLog(@"PUSH DETAIL");
-//
-//        [[self navigationController] pushViewController:_edvd animated:YES];
     }
 }
 
@@ -330,6 +356,7 @@ static int kBCNNumCellsBeforeEvents = 1; // Add New Event
         _selectedIndex = NULL;
     }
     
+    [self.collectionView setScrollsToTop:YES];
     [[self navigationItem] setLeftBarButtonItem:_burgerButton];
 }
 
@@ -411,6 +438,177 @@ static int kBCNNumCellsBeforeEvents = 1; // Add New Event
     return NO;
 }
 
+
+#pragma mark -
+#pragma mark TextView Delegate methods
+
+- (BOOL) textViewShouldBeginEditing:(UITextView *)textView
+{
+    if (textView.textColor == [UIColor lightGrayColor]) {
+        [UIView animateWithDuration:0.25 animations:^{
+            [_toggleSecret setAlpha:1.0];
+            [_secretLabel setAlpha:1.0];
+            [textView setAlpha:0.0];
+        } completion:^(BOOL finished) {
+            [textView setAlpha:1.0];
+            textView.text = @"";
+            textView.textColor = [UIColor blackColor];
+            [self.collectionView setScrollEnabled:NO];
+        }];
+    }
+    
+    return YES;
+}
+
+- (CGFloat)measureHeightOfUITextView:(UITextView *)textView
+{
+    // This is the code for iOS 7. contentSize no longer returns the correct value, so
+    // we have to calculate it.
+    //
+    // This is partly borrowed from HPGrowingTextView, but I've replaced the
+    // magic fudge factors with the calculated values (having worked out where
+    // they came from)
+    
+    CGRect frame = textView.bounds;
+    
+    // Take account of the padding added around the text.
+    
+    UIEdgeInsets textContainerInsets = textView.textContainerInset;
+    UIEdgeInsets contentInsets = textView.contentInset;
+    
+    CGFloat leftRightPadding = textContainerInsets.left + textContainerInsets.right + textView.textContainer.lineFragmentPadding * 2 + contentInsets.left + contentInsets.right;
+
+    frame.size.width -= leftRightPadding;
+    
+    NSString *textToMeasure = textView.text;
+    if ([textToMeasure hasSuffix:@"\n"])
+    {
+        textToMeasure = [NSString stringWithFormat:@"%@-", textView.text];
+    }
+    
+    // NSString class method: boundingRectWithSize:options:attributes:context is
+    // available only on ios7.0 sdk.
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
+    
+    NSDictionary *attributes = @{ NSFontAttributeName: textView.font, NSParagraphStyleAttributeName : paragraphStyle };
+    
+    CGRect size = [textToMeasure boundingRectWithSize:CGSizeMake(CGRectGetWidth(frame), MAXFLOAT)
+                                              options:NSStringDrawingUsesLineFragmentOrigin
+                                           attributes:attributes
+                                              context:nil];
+    
+    CGFloat measuredHeight = ceilf(CGRectGetHeight(size));
+    return measuredHeight;
+}
+
+-(void) setupTextView:(UITextView *)textView
+{
+    float endY = textView.frame.origin.y + textView.frame.size.height;
+    
+    //    UIEdgeInsets inset = textView.contentInset;
+    
+    float minHeight = 2 * _lineHeight;
+    float maxHeight = 3 * _lineHeight;
+    
+    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:textView]),
+                       maxHeight) + 20;
+    
+    //float height = textView.frame.size.height-insetDelta;
+    
+    float y = endY - height;
+    
+    float x = textView.frame.origin.x;
+    float width = textView.frame.size.width;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [textView setFrame:CGRectMake(x, y, width, height)];
+    });
+}
+
+-(void) textViewDidChange:(UITextView *)textView
+{
+    if(textView.text.length == 0){
+        textView.textColor = [UIColor lightGrayColor];
+        textView.text = kBCNPlaceholderText;
+        [self.collectionView setScrollEnabled:YES];
+        [textView resignFirstResponder];
+    }
+    
+    float endY = textView.frame.origin.y + textView.frame.size.height;
+    
+//    UIEdgeInsets inset = textView.contentInset;
+    
+    float minHeight = 2 * _lineHeight;
+    float maxHeight = 3 * _lineHeight;
+    
+    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:textView]),
+                       maxHeight) + 20;
+    
+    //float height = textView.frame.size.height-insetDelta;
+    
+    float y = endY - height;
+    
+    float x = textView.frame.origin.x;
+    float width = textView.frame.size.width;
+    
+    
+    [textView setFrame:CGRectMake(x, y, width, height)];
+    
+//    textView.frame.size.height = result;
+//    
+//    NSLog(@"insetDelta: %f, result: %f", insetDelta, result);
+//    
+//    inset.top = result;
+//    [textView setContentInset:inset];
+////    [textView invalidateIntrinsicContentSize];
+////    [textView setNeedsDisplay];
+//    [textView setNeedsLayout];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    if([text isEqualToString:@"\n"]) {
+        
+        [textView resignFirstResponder];
+        
+        if(textView.text.length == 0){
+            textView.textColor = [UIColor lightGrayColor];
+            textView.text = kBCNPlaceholderText;
+            
+            [self.collectionView setScrollEnabled:YES];
+            return NO;
+        }
+        
+        [textView setEditable:NO];
+        [_toggleSecret setEnabled:NO];
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            [_toggleSecret setAlpha:0.0];
+            [_secretLabel setAlpha:0.0];
+        } completion:^(BOOL finished) {
+            _toggleSecret = NULL;
+            _secretLabel  = NULL;
+        }];
+        
+        
+        BOOL isSecret = [_toggleSecret isOn];
+        
+        // Submitting content
+        // Scrolling is still disabled
+        [BCNEvent socketIONewEventWithMessage:textView.text
+                                   InviteOnly:isSecret
+                               AndAcknowledge:^(id argsData) {
+                                   NSLog(@"Acknowledge!");
+                                   NSLog(@"%@", argsData);
+                               }];
+        
+        return NO;
+    }
+    
+    return YES;
+}
 
 
 - (void)updateEvents:(NSMutableArray *)incomingEvents{

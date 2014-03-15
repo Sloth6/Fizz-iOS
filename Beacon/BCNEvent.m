@@ -16,13 +16,18 @@ static NSMutableDictionary *events;
 static NSString *BCN_NEW_EVENT   = @"newEvent";
 static NSString *BCN_JOIN_EVENT  = @"joinEvent";
 static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
+static NSString *BCN_SET_SEAT_CAPACITY = @"setSeatCapacity";
+static NSString *BCN_INVITE  = @"invite";
+static NSString *BCN_REQUEST = @"request";
 
 
 @interface BCNEvent ()
 
 @property (strong, nonatomic) NSNumber *eventID;
 
-@property (strong, nonatomic) BCNUser *host;
+@property (strong, nonatomic) BCNUser *creator;
+
+@property (nonatomic) int numSeats;
 
 @property (strong, nonatomic) NSMutableArray *attendees;
 @property (strong, nonatomic) NSMutableArray *invitees;
@@ -69,8 +74,8 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
 
 #pragma mark Accessors
 
--(BCNUser *)host{
-    return _host;
+-(BCNUser *)creator{
+    return _creator;
 }
 
 -(NSArray *)messages{
@@ -83,6 +88,14 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
 
 -(NSArray *)engaged{
     return [_engaged copy];
+}
+
+-(int)numSeats{
+    return _numSeats;
+}
+
+-(int)numEmptySeats{
+    return _numSeats - [attendees count];
 }
 
 +(BCNEvent *)eventWithEID:(NSNumber *)eID{
@@ -99,7 +112,7 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
     /* id : int */
-    [json setObject:eventID forKey:@"id"];
+    [json setObject:eventID forKey:@"eid"];
     
     BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
     
@@ -121,30 +134,17 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
     /* id : int */
-    [json setObject:eventID forKey:@"id"];
+    [json setObject:eventID forKey:@"eid"];
     
     BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
     
     [[socketIODelegate socketIO] sendEvent:BCN_LEAVE_EVENT withData:json andAcknowledge:function];
 }
 
-+(void)socketIONewEventWithMessage:(NSString *)message
-                        InviteList:(NSArray *)inviteList
-                   InvitePhoneList:(NSArray *)phoneList
-                    AndAcknowledge:(SocketIOCallback)function{
+-(void)socketIOInviteWithInviteList:(NSArray *)inviteList
+                    InvitePhoneList:(NSArray *)phoneList
+                     AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* creationTime : int */
-    NSNumber *creationTime;
-    {
-        NSTimeInterval timeInterval =
-        [NSDate timeIntervalSinceReferenceDate];
-
-        NSInteger integerTime = round(timeInterval);
-            creationTime = [NSNumber numberWithInt:integerTime];
-    }
-
-    [json setObject:creationTime forKey:@"creationTime"];
     
     /* inviteList : user.uid array */
     {
@@ -156,8 +156,50 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
     // Any user without a UID, send their phone number
     [json setObject:phoneList forKey:@"invitePnList"];
     
-    /* message : string */
-    [json setObject:message forKey:@"message"];
+    /* id : int */
+    [json setObject:eventID forKey:@"eid"];
+    
+    BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
+    
+    [[socketIODelegate socketIO] sendEvent:BCN_INVITE withData:json andAcknowledge:function];
+}
+
+-(void)socketIORequestEventWithAcknowledge:(SocketIOCallback)function{
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    /* id : int */
+    [json setObject:eventID forKey:@"eid"];
+    
+    BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
+    
+    [[socketIODelegate socketIO] sendEvent:BCN_REQUEST withData:json andAcknowledge:function];
+}
+
+-(void)socketIOSetSeatCapacityToCapacity:(int)capacity
+                            WithAcknowledge:(SocketIOCallback)function{
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    /* id : int */
+    [json setObject:eventID forKey:@"eid"];
+    
+    /* seats : int */
+    [json setObject:[NSNumber numberWithInt:capacity] forKey:@"seats"];
+    
+    BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
+    
+    [[socketIODelegate socketIO] sendEvent:BCN_SET_SEAT_CAPACITY withData:json andAcknowledge:function];
+}
+
++(void)socketIONewEventWithMessage:(NSString *)message
+                        InviteOnly:(BOOL)isInviteOnly
+                    AndAcknowledge:(SocketIOCallback)function{
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    /* inviteOnly : BOOL */
+    [json setObject:[NSNumber numberWithBool:isInviteOnly] forKey:@"inviteOnly"];
+    
+    /* text : string */
+    [json setObject:message forKey:@"text"];
     
     BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
     
@@ -251,11 +293,11 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
     /* Event ID */
     NSNumber *eid = [eventJSON objectForKey:@"eid"];
     
-    /* Host uID */
-    BCNUser *host;
+    /* Creator uID */
+    BCNUser *creator;
     {
-        NSNumber *hostUID = [eventJSON objectForKey:@"host"];
-        host = [BCNUser userWithUID:hostUID];
+        NSNumber *creatorUID = [eventJSON objectForKey:@"creator"];
+        creator = [BCNUser userWithUID:creatorUID];
     }
     
     /* Guest uID List */
@@ -291,6 +333,9 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
               atIndexedSubscript:idx];
     }];
     
+    /* Seats */
+    NSNumber *numSeats = [eventJSON objectForKey:@"seats"];
+    
     /* Message List */
     NSMutableArray *mutMessageList;
     NSArray *messageJSONList = [eventJSON objectForKey:@"messageList"];
@@ -309,9 +354,10 @@ static NSString *BCN_LEAVE_EVENT = @"leaveEvent";
     /* Allocate Memory and Assign Values */
     BCNEvent *event = [[BCNEvent alloc] init];
     event.eventID = eid;
-    event.host = host;
+    event.creator = creator;
     event.attendees = mutGuestList;
     event.invitees = mutInviteList;
+    event.numSeats = [numSeats integerValue];
     event.messages = mutMessageList;
     
     return event;

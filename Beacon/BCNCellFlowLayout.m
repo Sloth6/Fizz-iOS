@@ -12,23 +12,23 @@
 #import "BCNAppDelegate.h"
 #import "BCNEvent.h"
 
-static NSString * const BCNHostCellKind = @"HostCell";
+static NSString * const BCNCreatorCellKind = @"CreatorCell";
 static NSString * const BCNEngagedCellKind = @"EngagedCell";
 static NSString * const BCNInvitedCellKind = @"InvitedCell";
 
-// Max number of displayed Chat Bubbles around the host's post
+// Max number of displayed Chat Bubbles around the creator's post
 static int const MAX_ENGAGED_BUBBLES = 5;
 
 // Max number of displayed invited members
 static int const MAX_INVITED_BUBBLES = 5;
 
-// Amount of horizontal overlap between the host image and the chat bubble
-static float const HOST_CHAT_OVERLAP = 5.0;
+// Amount of horizontal overlap between the creator image and the chat bubble
+static float const CREATOR_CHAT_OVERLAP = 5.0;
 
 @interface BCNCellFlowLayout ()
 
 @property (nonatomic, strong) NSDictionary *layoutInfo;
-@property CGRect hostRect;
+@property CGRect creatorRect;
 @property (nonatomic, strong) BCNEvent *event;
 
 @end
@@ -56,9 +56,9 @@ static float const HOST_CHAT_OVERLAP = 5.0;
 }
 
 - (CGRect)getTextRectFromEvent:(BCNEvent *)event{
-    BCNUser *host = [event host];
+    BCNUser *creator = [event creator];
     
-    NSString *hostName = [host name];
+    NSString *creatorName = [creator name];
     NSString *text;
     
     {
@@ -90,13 +90,13 @@ static float const HOST_CHAT_OVERLAP = 5.0;
                                          attributes:attributes
                                             context:nil];
     
-    CGSize hostNameSize =
-    [hostName sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:12.0]}];
+    CGSize creatorNameSize =
+    [creatorName sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:12.0]}];
     CGSize dateStringSize =
     [dateString sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
     
     float messWidth = messageRect.size.width;
-    float nameWidth = hostNameSize.width;
+    float nameWidth = creatorNameSize.width;
     float dateWidth = dateStringSize.width;
     
     // The minimum width to best fit all three labels on the screen
@@ -119,16 +119,16 @@ static float const HOST_CHAT_OVERLAP = 5.0;
     return CGRectMake(originX, originY, width, height);
 }
 
-- (CGRect)makeHostFrameFromTextBubbleRect:(CGRect)textBubbleRect{
+- (CGRect)makeCreatorFrameFromTextBubbleRect:(CGRect)textBubbleRect{
     float originX = textBubbleRect.origin.x;
     float originY = textBubbleRect.origin.y;
     
-    float width  = kBCNHostProfilePictureWidth;
-    float height = kBCNHostProfilePictureHeight;
+    float width  = kBCNCreatorProfilePictureWidth;
+    float height = kBCNCreatorProfilePictureHeight;
     
     originY += textBubbleRect.size.height
                 - (height/2.0);
-    originX -= width - HOST_CHAT_OVERLAP;
+    originX -= width - CREATOR_CHAT_OVERLAP;
     
     return CGRectMake(originX, originY, width, height);
 }
@@ -166,16 +166,16 @@ static float const HOST_CHAT_OVERLAP = 5.0;
      anywhere on the frame's top and bottom edges
      */
     
-    float bufferBetweenHostAndComment = 10.0;
+    float bufferBetweenCreatorAndComment = 10.0;
     
     float x = textBubbleRect.origin.x
-            + HOST_CHAT_OVERLAP
-            + bufferBetweenHostAndComment;
+            + CREATOR_CHAT_OVERLAP
+            + bufferBetweenCreatorAndComment;
     
     float y = textBubbleRect.origin.y - maxVerticalCommentJutOut;
     
     float width = textBubbleRect.size.width
-                - HOST_CHAT_OVERLAP
+                - CREATOR_CHAT_OVERLAP
                 - kBCNCommentProfilePictureWidth
                 + maxHorizontalCommentJutOut;
     
@@ -342,8 +342,8 @@ static float const HOST_CHAT_OVERLAP = 5.0;
     // Create the visual bubble's rect around the bounding box
     CGRect textBubbleRect = [self makeTextBubbleRectFromTextRect:textRect];
     
-    // Rect for host bubble
-    CGRect hostRect = [self makeHostFrameFromTextBubbleRect:textBubbleRect];
+    // Rect for creator bubble
+    CGRect creatorRect = [self makeCreatorFrameFromTextBubbleRect:textBubbleRect];
     
     // Rects for attendee bubbles
     NSArray *attendeeFrames = [self makeAttendeeFramesFromTextBubbleRect:textBubbleRect
@@ -355,7 +355,7 @@ static float const HOST_CHAT_OVERLAP = 5.0;
     
     /*NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     
-    for (NSInteger section = 0; section < sectionCount - 1; section++) { // Ignore the host
+    for (NSInteger section = 0; section < sectionCount - 1; section++) { // Ignore the creator
         NSInteger itemCount = [self.collectionView numberOfItemsInSection:section];
         
         switch (section) {
@@ -365,7 +365,7 @@ static float const HOST_CHAT_OVERLAP = 5.0;
             case 1: // Chat
                 break;
      
-            case 2: // Host
+            case 2: // Creator
                 break;
                 
             default:
@@ -384,7 +384,7 @@ static float const HOST_CHAT_OVERLAP = 5.0;
     }*/
     
     /*newLayoutInfo[BCNInvitedCellKind] = ;
-    newLayoutInfo[BCNHostCellKind] = ;
+    newLayoutInfo[BCNCreatorCellKind] = ;
     newLayoutInfo[BCNEngagedCellKind][indexPath] = ;*/
     
     self.layoutInfo = newLayoutInfo;
