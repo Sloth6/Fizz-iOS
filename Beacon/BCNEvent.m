@@ -33,6 +33,7 @@ static NSString *BCN_REQUEST = @"request";
 @property (strong, nonatomic) NSMutableArray *invitees;
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSDate *lastUpdate;
+@property BOOL inviteOnly;
 
 // A lightly-sorted list of users who are engaged with the event (attending or commenting or both)
 @property (strong, nonatomic) NSMutableArray *engaged;
@@ -106,6 +107,10 @@ static NSString *BCN_REQUEST = @"request";
 
 -(NSNumber *)eventID{
     return eventID;
+}
+
+-(BOOL)isInviteOnly{
+    return _inviteOnly;
 }
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function{
@@ -351,6 +356,9 @@ static NSString *BCN_REQUEST = @"request";
               atIndexedSubscript:idx];
     }];
     
+    /* Invite Only */
+    NSNumber *inviteOnly = [eventJSON objectForKey:@"inviteOnly"];
+    
     /* Allocate Memory and Assign Values */
     BCNEvent *event = [[BCNEvent alloc] init];
     event.eventID = eid;
@@ -359,6 +367,7 @@ static NSString *BCN_REQUEST = @"request";
     event.invitees = mutInviteList;
     event.numSeats = [numSeats integerValue];
     event.messages = mutMessageList;
+    event.inviteOnly = [inviteOnly boolValue];
     
     return event;
 }

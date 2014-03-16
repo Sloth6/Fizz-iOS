@@ -19,4 +19,6 @@
 
 @property BCNInviteViewController *ivc;
 
+- (void)setScrollingEnabled:(BOOL)canScroll;
+
 @end

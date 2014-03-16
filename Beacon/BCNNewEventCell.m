@@ -17,22 +17,31 @@
     if (self) {
         // Initialization code
         
-        [self setupTableview];
-        
         [self setupTextView];
-        
         [self setupToggle];
+        
+        [self setupTableview];
     }
     return self;
 }
 
 - (void)setupTableview{
     _ivc = [[BCNInviteViewController alloc] init];
+    
+    _ivc.label = _label;
+    _ivc.textView = _textView;
+    _ivc.toggleSecret = _toggleSecret;
+    
     [_ivc.tableView setFrame:self.frame];
     [_ivc.tableView setScrollEnabled:NO];
     
     [self.contentView addSubview:_ivc.tableView];
 }
+
+- (void)setScrollingEnabled:(BOOL)canScroll{
+    [_ivc.tableView setScrollEnabled:canScroll];
+}
+
 
 - (void)setupToggle{
     float y = _textView.frame.origin.y + _textView.frame.size.height;
@@ -59,6 +68,7 @@
     CGRect labelRect = CGRectMake(labelX, labelY, labelWidth, labelHeight);
     
     _toggleSecret = [[UISwitch alloc] initWithFrame:switchRect];
+    
     _label = [[UILabel alloc] initWithFrame:labelRect];
     
     [_label setTextAlignment:NSTextAlignmentRight];
@@ -87,8 +97,6 @@
     float height = sHeight - y - vOutset;
     
     _textView = [[UITextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
-    
-    [self.contentView addSubview:_textView];
     
     _textView.enablesReturnKeyAutomatically = YES;
     [_textView setReturnKeyType:UIReturnKeySend];

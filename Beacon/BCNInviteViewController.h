@@ -10,4 +10,8 @@
 
 @interface BCNInviteViewController : UITableViewController
 
+@property UILabel *label;
+@property UITextView *textView;
+@property UISwitch *toggleSecret;
+
 @end

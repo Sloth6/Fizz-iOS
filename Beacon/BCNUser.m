@@ -56,16 +56,16 @@ static BCNUser *currentUser = nil;
     [users removeObjectForKey:self.userID];
 }
 
--(id)initWithUserID:(NSNumber *)uID{
-    BCNUser *user = [users objectForKey:uID];
-    
-    if (user){
-        self = user.self;
-        return self;
-    } else {
-        return [self initPrivateWithUserID:uID];
-    }
-}
+//-(id)initWithUserID:(NSNumber *)uID{
+//    BCNUser *user = [users objectForKey:uID];
+//    
+//    if (user){
+//        self = user.self;
+//        return self;
+//    } else {
+//        return [self initPrivateWithUserID:uID];
+//    }
+//}
 
 -(id)initPrivateWithUserID:(NSNumber *)uID{
     self = [super init];

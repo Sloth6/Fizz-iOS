@@ -444,7 +444,12 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 - (BOOL) textViewShouldBeginEditing:(UITextView *)textView
 {
+    
     if (textView.textColor == [UIColor lightGrayColor]) {
+        UITextPosition *newCursorPosition = [textView positionFromPosition:textView.beginningOfDocument offset:0];
+        UITextRange *newSelectedRange = [textView textRangeFromPosition:newCursorPosition toPosition:newCursorPosition];
+        [textView setSelectedTextRange:newSelectedRange];
+        
         [UIView animateWithDuration:0.25 animations:^{
             [_toggleSecret setAlpha:1.0];
             [_secretLabel setAlpha:1.0];
@@ -567,6 +572,45 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    [textView setNeedsLayout];
 }
 
+- (UICollectionViewCell *)getNewEventCell{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+    
+    return [self.collectionView cellForItemAtIndexPath:indexPath];
+}
+
+- (void)confirmNewEventMessageWithTextView:(UITextView *)textView{
+    [textView setEditable:NO];
+    [_toggleSecret setEnabled:NO];
+    
+    
+    BOOL isSecret = [_toggleSecret isOn];
+    
+    // Submitting content
+    // Scrolling is still disabled
+    [BCNEvent socketIONewEventWithMessage:textView.text
+                               InviteOnly:isSecret
+                           AndAcknowledge:^(id argsData) {
+                               NSLog(@"Acknowledge!");
+                               NSLog(@"%@", argsData);
+                           }];
+    
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [_toggleSecret setAlpha:0.0];
+        [_secretLabel setAlpha:0.0];
+    } completion:^(BOOL finished) {
+        [_toggleSecret removeFromSuperview];
+        [_secretLabel removeFromSuperview];
+        
+        _toggleSecret = NULL;
+        _secretLabel  = NULL;
+        
+        BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
+        
+        [nec setScrollingEnabled:YES];
+    }];
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
     if([text isEqualToString:@"\n"]) {
@@ -581,28 +625,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             return NO;
         }
         
-        [textView setEditable:NO];
-        [_toggleSecret setEnabled:NO];
-        
-        [UIView animateWithDuration:0.25 animations:^{
-            [_toggleSecret setAlpha:0.0];
-            [_secretLabel setAlpha:0.0];
-        } completion:^(BOOL finished) {
-            _toggleSecret = NULL;
-            _secretLabel  = NULL;
-        }];
-        
-        
-        BOOL isSecret = [_toggleSecret isOn];
-        
-        // Submitting content
-        // Scrolling is still disabled
-        [BCNEvent socketIONewEventWithMessage:textView.text
-                                   InviteOnly:isSecret
-                               AndAcknowledge:^(id argsData) {
-                                   NSLog(@"Acknowledge!");
-                                   NSLog(@"%@", argsData);
-                               }];
+        [self confirmNewEventMessageWithTextView:textView];
         
         return NO;
     }

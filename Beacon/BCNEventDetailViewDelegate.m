@@ -152,6 +152,9 @@ static int kBCNNumCellsBeforeMessages = 1;
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{
+    
+    NSLog(@"KEYBOARD");
+    
     if (![chatBox isFirstResponder]) {
         return;
     }

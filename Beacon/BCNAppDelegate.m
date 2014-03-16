@@ -42,9 +42,10 @@
     
     _esvc = [[BCNEventStreamViewController alloc] initWithCollectionViewLayout:flowLayout];
     
+    // Load the FBLoginView Class
     [FBLoginView class];
-    ioSocketDelegate = [[BCN_IOSocketDelegate alloc] init];
     
+    ioSocketDelegate = [[BCN_IOSocketDelegate alloc] init];
     fbLoginDelegate = [[BCNFacebookLoginDelegate alloc] init];
     
     facebookColor = [UIColor colorWithRed:59.0/256.0 green:89.0/256.0 blue:152.0/256.0 alpha:1.0];
@@ -78,30 +79,32 @@
     // Whenever a person opens the app, check for a cached session
     if (hasRegistered &&
         FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-        NSLog(@"\n\nActive Session Loading\n\n");
+        NSLog(@"\n\nActive Session Loaded\n\n");
         
-         // If there's one, just open the session silently, without showing the user the login UI
-         [FBSession openActiveSessionWithReadPermissions:@[@"user_friends",
-         @"user_groups",
-         @"email",
-         @"xmpp_login"
-         ]
-         allowLoginUI:NO
-         completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
-         
-             _hasLoggedIn = YES;
-             
-             NSLog(@"\n\n\nFBSession: %@\n\n\n", session);
-             
-             // Handler for session state changes
-             // This method will be called EACH time the session state changes,
-             // also for intermediate states and NOT just when the session open
-             [fbLoginDelegate sessionStateChanged:session state:state error:error];
-         }];
+        [ioSocketDelegate openConnectionCheckingForInternet];
+        
+//         // If there's one, just open the session silently, without showing the user the login UI
+//         [FBSession openActiveSessionWithReadPermissions:@[@"user_friends",
+//         @"user_groups",
+//         @"email",
+//         @"xmpp_login"
+//         ]
+//         allowLoginUI:NO
+//         completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
+//         
+//             _hasLoggedIn = YES;
+//             
+//             NSLog(@"\n\n\nFBSession: %@\n\n\n", session);
+//             
+//             // Handler for session state changes
+//             // This method will be called EACH time the session state changes,
+//             // also for intermediate states and NOT just when the session open
+//             [fbLoginDelegate sessionStateChanged:session state:state error:error];
+//         }];
      } else { // Send to Login View Controller
          NSLog(@"\n\nSend To Login View Controller\n\n");
          
-         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[BCNLoginViewController alloc] initWithNibName:@"BCNLoginViewController" bundle:nil]];
+         [self promptForNewFacebookToken];
 //        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[BCNMapViewController alloc] initWithNibName:@"BCNMapViewController" bundle:Nil]];
      }
     
@@ -153,11 +156,22 @@
     return YES;
 }
 
+- (void)promptForNewFacebookToken{
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[BCNLoginViewController alloc] initWithNibName:@"BCNLoginViewController" bundle:nil]];
+}
+
 -(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     if (url != nil)
     {
-        return [[FBSession activeSession] handleOpenURL:url];
+        // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
+        BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+        
+        // You can add your app-specific url handling code here if needed
+        
+        return wasHandled;
+        
+        //return [[FBSession activeSession] handleOpenURL:url];
     }
     
     return NO;
@@ -211,20 +225,20 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    if (_hasLoggedIn){ // if I've already gotten through the login process
-        if (![ioSocketDelegate isConnectionOpen]){
-            [ioSocketDelegate openConnectionCheckingForInternet];
-        }
-            
-        [[FBSession activeSession] handleDidBecomeActive];
+        
+    if (![ioSocketDelegate isConnectionOpen]){
+        NSLog(@"Connection is not open");
+        [ioSocketDelegate openConnectionCheckingForInternet];
     }
+            
+//        [[FBSession activeSession] handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
-    [[FBSession activeSession] close];
+//    [[FBSession activeSession] close];
 }
 
 + (BOOL)isRetinaDisplay{

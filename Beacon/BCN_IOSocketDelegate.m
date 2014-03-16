@@ -23,10 +23,8 @@ Stuff; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
-static NSString *BCN_INCOMING_MY_INFO = @"myInfo";
-static NSString *BCN_INCOMING_FRIEND_LIST = @"friendList";
+static NSString *BCN_INCOMING_ON_LOGIN = @"onLogin";
 static NSString *BCN_INCOMING_NEW_FRIEND = @"newFriend";
-static NSString *BCN_INCOMING_EVENT_LIST = @"eventList";
 static NSString *BCN_INCOMING_NEW_EVENT = @"newEvent";
 static NSString *BCN_INCOMING_ADD_GUEST = @"addGuest";
 static NSString *BCN_INCOMING_REMOVE_GUEST = @"removeGuest";
@@ -65,17 +63,11 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
         
         incomingEventResponses = [[NSMutableDictionary alloc] init];
         
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingMyInfo:))
-                                  forKey:BCN_INCOMING_MY_INFO];
-        
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingFriendList:))
-                                  forKey:BCN_INCOMING_FRIEND_LIST];
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingOnLogin:))
+                                  forKey:BCN_INCOMING_ON_LOGIN];
         
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewFriend:))
                                   forKey:BCN_INCOMING_NEW_FRIEND];
-        
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingEventList:))
-                                  forKey:BCN_INCOMING_EVENT_LIST];
         
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewEvent:))
                                   forKey:BCN_INCOMING_NEW_EVENT];
@@ -190,7 +182,6 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
                               forMode:NSDefaultRunLoopMode];*/
         
         [connection start];
-        didAjax = YES;
         
         return YES;
     }
@@ -249,9 +240,14 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     NSLog(@"got response with status @push %d",[resp statusCode]);
     
     if ([resp statusCode] == 200){
+        didAjax = YES;
         [self openConnectionCheckingForInternet];
     } else {
         // AJAX failed
+        
+        BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+        
+        [appDelegate promptForNewFacebookToken];
     }
 }
 
@@ -382,30 +378,18 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     }
 }
 
-- (void)incomingMyInfo:(NSArray *)args{
+- (void)incomingOnLogin:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
     
     NSDictionary *userJSON = [json objectForKey:@"me"];
+    NSArray *friendListJSON = [json objectForKey:@"friendList"];
+    NSArray *eventListJSON = [json objectForKey:@"eventList"];
     
     // User (me)
     BCNUser *user = [BCNUser parseJSON:userJSON];
-}
-
-- (void)incomingFriendList:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSArray *friendListJSON = [json objectForKey:@"friendList"];
     
     // User Array (friends)
     NSArray *friends = [BCNUser parseUserJSONList:friendListJSON];
-    
-    
-}
-
-- (void)incomingEventList:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSArray *eventListJSON = [json objectForKey:@"eventList"];
     
     // Events
     NSArray *events = [BCNEvent parseEventJSONList:eventListJSON];

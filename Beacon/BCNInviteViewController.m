@@ -34,6 +34,10 @@
     return self;
 }
 
+-(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
+    return NO;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -80,6 +84,14 @@
             }
             
             // Configure the cell...
+            
+            [_textView removeFromSuperview];
+            [_toggleSecret removeFromSuperview];
+            [_label removeFromSuperview];
+            
+            [cell addSubview:_textView];
+            [cell addSubview:_toggleSecret];
+            [cell addSubview:_label];
             
             return cell;
         }

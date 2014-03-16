@@ -33,6 +33,7 @@
 -(NSArray *)attendees;
 -(NSArray *)invitees;
 -(NSArray *)engaged;
+-(BOOL)isInviteOnly;
 
 -(int)numSeats;
 -(int)numEmptySeats;
