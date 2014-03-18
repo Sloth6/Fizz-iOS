@@ -100,6 +100,8 @@
 		49E983F2186A5D1600D37B2A /* BCNMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E983F0186A5D1600D37B2A /* BCNMapViewController.xib */; };
 		49E9843B1872685E00D37B2A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E9843118723D3300D37B2A /* Social.framework */; };
 		49E9843F187268B800D37B2A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E9843E187268B800D37B2A /* AdSupport.framework */; };
+		49EEEA8A18D8D1E600BDA605 /* BCNPhoneInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */; };
+		49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */; };
 		DB071FC8809641459481673B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1294CA912292415881418914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -319,6 +321,9 @@
 		49E9843118723D3300D37B2A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		49E9843C1872687400D37B2A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		49E9843E187268B800D37B2A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNPhoneInputCell.xib; sourceTree = "<group>"; };
+		49EEEA8C18D8D37300BDA605 /* BCNPhoneInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNPhoneInputCell.h; sourceTree = "<group>"; };
+		49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNPhoneInputCell.m; sourceTree = "<group>"; };
 		555E166FEAAF48F096591AE1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -496,6 +501,9 @@
 			children = (
 				4954FB1618D4EFFF0083D07F /* BCNInviteViewController.h */,
 				4954FB1718D4EFFF0083D07F /* BCNInviteViewController.m */,
+				49EEEA8C18D8D37300BDA605 /* BCNPhoneInputCell.h */,
+				49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */,
+				49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */,
 				4954FB1E18D4F1000083D07F /* BCNInviteCell.h */,
 				4954FB1F18D4F1010083D07F /* BCNInviteCell.m */,
 				4954FB1C18D4F0A30083D07F /* BCNInviteCell.xib */,
@@ -923,6 +931,7 @@
 				4954FB2218D5044D0083D07F /* BCNNewEventTopCell.xib in Resources */,
 				495E9D25187BADB4008F7CC7 /* BCNTimelineHostView.xib in Resources */,
 				49C8B0F11888B47700400832 /* BCNEngagedUserCell.xib in Resources */,
+				49EEEA8A18D8D1E600BDA605 /* BCNPhoneInputCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1010,6 +1019,7 @@
 				49069B7D18661555003D003A /* SBJson4StreamWriter.m in Sources */,
 				49E983F1186A5D1600D37B2A /* BCNMapViewController.m in Sources */,
 				49D5C9D0186042F7002BB1F0 /* BCFacebookConnection.m in Sources */,
+				49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */,
 				49871637187D1713004C8F16 /* BCNTimelineFlowLayout.m in Sources */,
 				49D5C9DE1860471D002BB1F0 /* BCNInternalUtils.m in Sources */,
 				49C9619218D2A3DD0061A903 /* BCNMainTransitionController.m in Sources */,

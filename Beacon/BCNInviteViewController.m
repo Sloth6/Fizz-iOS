@@ -7,12 +7,19 @@
 //
 
 #import "BCNInviteViewController.h"
+#import "BCNPhoneInputCell.h"
+
+#import "PhoneNumberFormatter.h"
 
 @interface BCNInviteViewController ()
 
 @property NSArray *friends;
 @property NSMutableArray *phoneNumbers;
 @property NSMutableSet *selected;
+
+@property NSString *country;
+
+@property PhoneNumberFormatter *phoneNumberFormat;
 
 @end
 
@@ -24,8 +31,14 @@
     if (self) {
         // Custom initialization
         
-        UINib *nib = [UINib nibWithNibName:@"BCNInviteCell" bundle:nil];
-        [[self tableView] registerNib:nib forCellReuseIdentifier:@"InviteCell"];
+        _phoneNumberFormat = [[PhoneNumberFormatter alloc] init];
+        _country = @"us";
+        
+        UINib *inviteNib = [UINib nibWithNibName:@"BCNInviteCell" bundle:nil];
+        [[self tableView] registerNib:inviteNib forCellReuseIdentifier:@"InviteCell"];
+        
+        UINib *phoneNib = [UINib nibWithNibName:@"BCNPhoneInputCell" bundle:nil];
+        [[self tableView] registerNib:phoneNib forCellReuseIdentifier:@"PhoneInputCell"];
         
         _friends = [[NSMutableArray alloc] init];
         _phoneNumbers = [[NSMutableArray alloc] init];
@@ -98,13 +111,25 @@
         
         // New Phone Number
         
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        static NSString *CellIdentifier = @"PhoneInputCell";
+        BCNPhoneInputCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell = [[BCNPhoneInputCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         // Configure the cell...
+        
+        _phoneTextField = cell.textField;
+        _confirmPhoneButton = cell.button;
+        [cell.button setEnabled:NO];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(phoneChange)
+         name:UITextFieldTextDidChangeNotification
+         object:_phoneTextField];
+        
+        [cell.textField setDelegate:self];
         
         return cell;
     }
@@ -122,15 +147,60 @@
     return cell;
 }
 
-
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (BOOL)isValidUSPhoneNumber:(NSString *)phoneNumber{
     
+    // Not Using Strip incase strip decides to keep other characters
+    NSString *digits = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
+    
+    // require area code
+    if ([digits length] < 10){
+        NSLog(@"TOO SHORT");
+        return NO;
+    }
+    
+    NSString *testExtra = [NSString stringWithFormat:@"%@5", digits];
+    
+    NSString *formattedOneExtra = [_phoneNumberFormat format:testExtra
+                                                  withLocale:_country];
+    
+    // It was unformatted, and thus unmatched as a correct number
+    if ([digits length] == [phoneNumber length]){
+        NSLog(@"NOT FORMATTED");
+        return NO;
+    }
+    
+    // Adding a digit still counted as a match for a valid substring
+    // Meaning we're still missing digits until we have a valid match
+    if ([testExtra length] != [formattedOneExtra length]){
+        NSLog(@"PROPER FORMAT BUT NOT COMPLETE");
+        return NO;
+    }
+    
+    NSLog(@"VALID");
+    
+    return YES;
+}
+
+-(void)phoneChange{
+    _phoneTextField.text = [_phoneNumberFormat format:_phoneTextField.text withLocale:_country];
+    
+    if ([self isValidUSPhoneNumber:_phoneTextField.text]){
+        [_confirmPhoneButton setEnabled:YES];
+        return;
+    }
+    
+    [_confirmPhoneButton setEnabled:NO];
 }
 
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-}
+//-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+//    
+//}
+//
+//
+//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+//    
+//}
 
 //-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
 //    
@@ -138,7 +208,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 && indexPath.row == 0){
-        return [UIScreen mainScreen].bounds.size.height;
+        return 300;//[UIScreen mainScreen].bounds.size.height;
     }
     
     return 65;

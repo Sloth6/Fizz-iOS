@@ -214,8 +214,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             
             cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
             
-            NSLog(@"here");
-            
             if (_lineHeight == -1) {
                 
                 [cell.textView setText:@"."];
@@ -226,13 +224,17 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             [self setupTextView:cell.textView];
             
             [cell.textView setDelegate:self];
-            [cell.textView setText:kBCNPlaceholderText];
             
             _toggleSecret = cell.toggleSecret;
             _secretLabel  = cell.label;
             
-            [_toggleSecret setAlpha:0.0];
-            [_secretLabel setAlpha:0.0];
+            // It was yelling about how it needed to be run on the main thread, dirty fix
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [cell.textView setText:kBCNPlaceholderText];
+                
+                [_toggleSecret setAlpha:0.0];
+                [_secretLabel setAlpha:0.0];
+            });
             
             return cell;
         } else {
@@ -446,6 +448,9 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 {
     
     if (textView.textColor == [UIColor lightGrayColor]) {
+        
+        [self.collectionView setScrollEnabled:NO];
+        
         UITextPosition *newCursorPosition = [textView positionFromPosition:textView.beginningOfDocument offset:0];
         UITextRange *newSelectedRange = [textView textRangeFromPosition:newCursorPosition toPosition:newCursorPosition];
         [textView setSelectedTextRange:newSelectedRange];
@@ -458,7 +463,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             [textView setAlpha:1.0];
             textView.text = @"";
             textView.textColor = [UIColor blackColor];
-            [self.collectionView setScrollEnabled:NO];
         }];
     }
     
@@ -537,6 +541,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     if(textView.text.length == 0){
         textView.textColor = [UIColor lightGrayColor];
         textView.text = kBCNPlaceholderText;
+        NSLog(@"problem1");
         [self.collectionView setScrollEnabled:YES];
         [textView resignFirstResponder];
     }
@@ -598,16 +603,16 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     [UIView animateWithDuration:0.25 animations:^{
         [_toggleSecret setAlpha:0.0];
         [_secretLabel setAlpha:0.0];
+        
+        BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
+        
+        [nec setScrollingEnabled:YES];
     } completion:^(BOOL finished) {
         [_toggleSecret removeFromSuperview];
         [_secretLabel removeFromSuperview];
         
         _toggleSecret = NULL;
         _secretLabel  = NULL;
-        
-        BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
-        
-        [nec setScrollingEnabled:YES];
     }];
 }
 
@@ -621,6 +626,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             textView.textColor = [UIColor lightGrayColor];
             textView.text = kBCNPlaceholderText;
             
+            NSLog(@"problem1");
             [self.collectionView setScrollEnabled:YES];
             return NO;
         }
@@ -652,7 +658,9 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     _events = updatedEvents;
     
-    [self.collectionView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView reloadData];
+    });
     
     return;
 }
