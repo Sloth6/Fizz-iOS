@@ -17,6 +17,7 @@
 
 #import "BCNEventDetailViewDelegate.h"
 #import "BCNOverviewCollectionViewController.h"
+#import "BCNBackspaceResignTextView.h"
 
 #import "BCNTestViewController.h"
 
@@ -31,6 +32,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property BCNEventDetailViewDelegate *edvd;
 @property BCNOverviewCollectionViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
+
+@property NSIndexPath *inviteToolsIndex;
 
 @property UISwitch *toggleSecret;
 @property UILabel  *secretLabel;
@@ -55,6 +58,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         _lineHeight = -1;
         _firstAppear = YES;
+        _inviteToolsIndex = NULL;
         
         _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
         
@@ -86,7 +90,11 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [self.collectionView registerClass:[BCNEventCell class] forCellWithReuseIdentifier:@"EventCell"];
         [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
         
+        // For the new event
         [self.collectionView registerClass:[BCNNewEventCell class] forCellWithReuseIdentifier:@"NewEventCell"];
+        
+        // For all other events
+        [self.collectionView registerClass:[BCNNewEventCell class] forCellWithReuseIdentifier:@"NewEventCell2"];
         
         //        self.textCV = [[UICollectionView alloc]
         //                       initWithFrame:self.view.frame
@@ -201,6 +209,66 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    return 1;
 //}
 
+- (BCNNewEventCell *)setupNewEventCell:(BCNNewEventCell *)cell{
+    
+    cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    
+    [cell setupToggle];
+    cell.textView.enablesReturnKeyAutomatically = YES;
+    [cell.textView setReturnKeyType:UIReturnKeySend];
+    [cell.textView setTextColor:[UIColor lightGrayColor]];
+    [cell.textView setEditable:YES];
+    
+    [cell.textView setESVC:self];
+    
+    if (_lineHeight == -1) {
+        
+        [cell.textView setText:@"."];
+        
+        _lineHeight = [self measureHeightOfUITextView:cell.textView];
+    }
+    
+    [self setupTextView:cell.textView];
+    
+    [cell.textView setDelegate:self];
+    
+    _toggleSecret = cell.toggleSecret;
+    _secretLabel  = cell.label;
+    
+    // It was yelling about how it needed to be run on the main thread, dirty fix
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [cell.textView setText:kBCNPlaceholderText];
+        
+        [_toggleSecret setAlpha:0.0];
+        [_secretLabel setAlpha:0.0];
+    });
+    
+    return cell;
+}
+
+- (BCNNewEventCell *)setupEventCell:(BCNNewEventCell *)cell withEvent:(BCNEvent *)event{
+    
+    //[cell setEvent:event];
+    
+    cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    
+    if (_lineHeight == -1) {
+        
+        [cell.textView setText:@"."];
+        
+        _lineHeight = [self measureHeightOfUITextView:cell.textView];
+    }
+    
+    [self setupTextView:cell.textView];
+    
+    BCNMessage *message = [event firstMessage];
+    
+    [cell.textView setEditable:NO];
+    [cell.textView setText:message.text];
+    
+    return cell;
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_viewMode == kTimeline){
@@ -210,45 +278,20 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                                   forIndexPath:indexPath];
             
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-            
-            if (_lineHeight == -1) {
-                
-                [cell.textView setText:@"."];
-                
-                _lineHeight = [self measureHeightOfUITextView:cell.textView];
-            }
-            
-            [self setupTextView:cell.textView];
-            
-            [cell.textView setDelegate:self];
-            
-            _toggleSecret = cell.toggleSecret;
-            _secretLabel  = cell.label;
-            
-            // It was yelling about how it needed to be run on the main thread, dirty fix
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [cell.textView setText:kBCNPlaceholderText];
-                
-                [_toggleSecret setAlpha:0.0];
-                [_secretLabel setAlpha:0.0];
-            });
+            cell = [self setupNewEventCell:cell];
             
             return cell;
         } else {
             int eventNum = indexPath.item - kBCNNumCellsBeforeEvents;
             
-            NSString *cellID = @"EventCell";
+            NSString *cellID = @"NewEventCell2";
             
-            BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                               forIndexPath:indexPath];
-            
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
+            BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                                  forIndexPath:indexPath];
             
             BCNEvent *event = [_events objectAtIndex:eventNum];
             
-            [cell setEvent:event];
+            [self setupEventCell:cell withEvent:event];
             
             return cell;
         }
@@ -375,9 +418,21 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //}
 
 - (void)burgerButtonPress:(UIButton*)button{
-    if (_edvd.eventIndexPath == NULL){
+    if (_inviteToolsIndex != NULL) { // In invitation details of event
+        // Disable scrolling within the cell
+        BCNNewEventCell *cell = (BCNNewEventCell *)[self.collectionView cellForItemAtIndexPath:_inviteToolsIndex];
+        
+        [cell scrollToTopAnimated:YES];
+        [cell setScrollingEnabled:NO];
+        
+        // Enable main scrolling
+        self.collectionView.scrollEnabled = YES;
+        
+        _inviteToolsIndex = NULL;
+        
+    } else if (_edvd.eventIndexPath == NULL){ // In the timeline view
         [self contractView];
-    } else {
+    } else { // In the messenger
         [_edvd popView];
     }
 }
@@ -539,9 +594,12 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     if(textView.text.length == 0){
         textView.textColor = [UIColor lightGrayColor];
         textView.text = kBCNPlaceholderText;
-        NSLog(@"problem1");
         [self.collectionView setScrollEnabled:YES];
         [textView resignFirstResponder];
+        
+        // Hide secret event toggle
+        [_toggleSecret setAlpha:0.0];
+        [_secretLabel setAlpha:0.0];
     }
     
     float endY = textView.frame.origin.y + textView.frame.size.height;
@@ -560,7 +618,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     float x = textView.frame.origin.x;
     float width = textView.frame.size.width;
-    
     
     [textView setFrame:CGRectMake(x, y, width, height)];
     
@@ -585,7 +642,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     [textView setEditable:NO];
     [_toggleSecret setEnabled:NO];
     
-    
     BOOL isSecret = [_toggleSecret isOn];
     
     // Submitting content
@@ -602,6 +658,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [_toggleSecret setAlpha:0.0];
         [_secretLabel setAlpha:0.0];
         
+        _inviteToolsIndex = [NSIndexPath indexPathForItem:0 inSection:0];
         BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
         
         [nec setScrollingEnabled:YES];

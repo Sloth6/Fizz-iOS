@@ -113,6 +113,14 @@ static NSString *BCN_REQUEST = @"request";
     return _inviteOnly;
 }
 
+-(BCNMessage *)firstMessage{
+    if ([_messages count] > 0){
+        return [_messages objectAtIndex:0];
+    }
+    
+    return NULL;
+}
+
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     

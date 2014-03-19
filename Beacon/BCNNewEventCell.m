@@ -9,6 +9,8 @@
 #import "BCNNewEventCell.h"
 #import "BCNInviteViewController.h"
 
+#import "BCNBackspaceResignTextView.h"
+
 @implementation BCNNewEventCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -17,7 +19,6 @@
     if (self) {
         // Initialization code
         [self setupTextView];
-        [self setupToggle];
         
         [self setupTableview];
     }
@@ -29,11 +30,10 @@
 
     [_ivc updateFriends];
     
-    _ivc.label = _label;
     _ivc.textView = _textView;
-    _ivc.toggleSecret = _toggleSecret;
     
-    [_ivc.tableView setFrame:self.frame];
+    [_ivc.tableView setFrame:self.bounds];
+    
     [_ivc.tableView setScrollEnabled:NO];
     
     [self.contentView addSubview:_ivc.tableView];
@@ -41,6 +41,10 @@
 
 - (void)sendInvitations{
     [_ivc sendInvitations];
+}
+
+- (void)scrollToTopAnimated:(BOOL)isAnimated{
+    [_ivc.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:isAnimated];
 }
 
 - (void)setScrollingEnabled:(BOOL)canScroll{
@@ -100,13 +104,10 @@
     float y = vInset;
     float height = sHeight - y - vOutset;
     
-    _textView = [[UITextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
+    _textView = [[BCNBackspaceResignTextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
     
-    _textView.enablesReturnKeyAutomatically = YES;
-    [_textView setReturnKeyType:UIReturnKeySend];
     [_textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:26]];
-    [_textView setTextColor:[UIColor lightGrayColor]];
-    
+    [_textView setEditable:NO];
     [_textView setScrollEnabled:NO];
 }
 

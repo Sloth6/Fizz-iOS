@@ -103,6 +103,8 @@
 		49EEEA8A18D8D1E600BDA605 /* BCNPhoneInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */; };
 		49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */; };
 		49EEEA9118D932F000BDA605 /* BCNBackspaceResignTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9018D932F000BDA605 /* BCNBackspaceResignTextField.m */; };
+		49EEEA9418D95D1200BDA605 /* BCNTimelineEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9318D95D1100BDA605 /* BCNTimelineEventCell.m */; };
+		49EEEA9718D972FB00BDA605 /* BCNBackspaceResignTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9618D972FB00BDA605 /* BCNBackspaceResignTextView.m */; };
 		DB071FC8809641459481673B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1294CA912292415881418914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -327,6 +329,10 @@
 		49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNPhoneInputCell.m; sourceTree = "<group>"; };
 		49EEEA8F18D932F000BDA605 /* BCNBackspaceResignTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNBackspaceResignTextField.h; sourceTree = "<group>"; };
 		49EEEA9018D932F000BDA605 /* BCNBackspaceResignTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNBackspaceResignTextField.m; sourceTree = "<group>"; };
+		49EEEA9218D95D1100BDA605 /* BCNTimelineEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTimelineEventCell.h; sourceTree = "<group>"; };
+		49EEEA9318D95D1100BDA605 /* BCNTimelineEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTimelineEventCell.m; sourceTree = "<group>"; };
+		49EEEA9518D972FB00BDA605 /* BCNBackspaceResignTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNBackspaceResignTextView.h; sourceTree = "<group>"; };
+		49EEEA9618D972FB00BDA605 /* BCNBackspaceResignTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNBackspaceResignTextView.m; sourceTree = "<group>"; };
 		555E166FEAAF48F096591AE1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -509,6 +515,8 @@
 				49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */,
 				49EEEA8F18D932F000BDA605 /* BCNBackspaceResignTextField.h */,
 				49EEEA9018D932F000BDA605 /* BCNBackspaceResignTextField.m */,
+				49EEEA9518D972FB00BDA605 /* BCNBackspaceResignTextView.h */,
+				49EEEA9618D972FB00BDA605 /* BCNBackspaceResignTextView.m */,
 				4954FB1E18D4F1000083D07F /* BCNInviteCell.h */,
 				4954FB1F18D4F1010083D07F /* BCNInviteCell.m */,
 				4954FB1C18D4F0A30083D07F /* BCNInviteCell.xib */,
@@ -581,6 +589,8 @@
 				49C8B1541889F08600400832 /* BCNEventCell.m */,
 				4954FB0918D4BD280083D07F /* BCNNewEventCell.h */,
 				4954FB0A18D4BD280083D07F /* BCNNewEventCell.m */,
+				49EEEA9218D95D1100BDA605 /* BCNTimelineEventCell.h */,
+				49EEEA9318D95D1100BDA605 /* BCNTimelineEventCell.m */,
 				499A8E7918CD32B000842EA7 /* DetailView */,
 				4922702618CA20CB00816AD4 /* NestedView */,
 			);
@@ -988,12 +998,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49EEEA9418D95D1200BDA605 /* BCNTimelineEventCell.m in Sources */,
 				49C9619B18D361830061A903 /* BCNNavigationBar.m in Sources */,
 				499A8E7818CD304300842EA7 /* BCNEventDetailViewDelegate.m in Sources */,
 				49069B2018651FFA003D003A /* BCN_IOSocketDelegate.m in Sources */,
 				49D5C9D3186044B2002BB1F0 /* BCNUser.m in Sources */,
 				49C9619518D2A4720061A903 /* BCNOverviewTransitionLayout.m in Sources */,
 				4954FB0818D3AB800083D07F /* PhoneNumberFormatter.m in Sources */,
+				49EEEA9718D972FB00BDA605 /* BCNBackspaceResignTextView.m in Sources */,
 				49069B2618652D58003D003A /* BCNMessage.m in Sources */,
 				498E5E7618B4506000487898 /* BCNEventsViewViewController.m in Sources */,
 				49C8B1551889F08600400832 /* BCNEventCell.m in Sources */,

@@ -11,6 +11,7 @@
 
 @class BCNComment;
 @class BCNUser;
+@class BCNMessage;
 
 @interface BCNEvent : NSObject
 
@@ -34,6 +35,7 @@
 -(NSArray *)invitees;
 -(NSArray *)engaged;
 -(BOOL)isInviteOnly;
+-(BCNMessage *)firstMessage;
 
 -(int)numSeats;
 -(int)numEmptySeats;

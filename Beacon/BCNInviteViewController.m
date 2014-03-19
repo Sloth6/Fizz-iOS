@@ -46,7 +46,7 @@
         UINib *phoneNib = [UINib nibWithNibName:@"BCNPhoneInputCell" bundle:nil];
         [[self tableView] registerNib:phoneNib forCellReuseIdentifier:@"PhoneInputCell"];
         
-        _friends = [[NSMutableArray alloc] init];
+        //_friends = [[NSMutableArray alloc] init];
         _phoneNumbers = [[NSMutableArray alloc] init];
         _selected = [[NSMutableSet alloc] init];
     }
@@ -150,12 +150,8 @@
             // Configure the cell...
             
             [_textView removeFromSuperview];
-            [_toggleSecret removeFromSuperview];
-            [_label removeFromSuperview];
             
             [cell addSubview:_textView];
-            [cell addSubview:_toggleSecret];
-            [cell addSubview:_label];
             
             return cell;
         }

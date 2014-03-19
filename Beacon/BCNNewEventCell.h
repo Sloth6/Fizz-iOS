@@ -10,19 +10,22 @@
 
 @class BCNInviteViewController;
 @class BCNEvent;
+@class BCNBackspaceResignTextView;
 
 @interface BCNNewEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property UITextView *textView;
+@property BCNBackspaceResignTextView *textView;
 @property float lineHeight;
 @property UISwitch *toggleSecret;
 @property UILabel *label;
 
 @property BCNInviteViewController *ivc;
 
+- (void)scrollToTopAnimated:(BOOL)isAnimated;
 - (void)setScrollingEnabled:(BOOL)canScroll;
 - (void)sendInvitations;
 
+- (void)setupToggle;
 - (void)setupCellWithEvent:(BCNEvent *)event;
 
 @end
