@@ -106,11 +106,11 @@
         }
     }
     
-    _event =
-    
-    [_event socketIOInviteWithInviteList:userInvites
-                         InvitePhoneList:phoneInvites
-                          AndAcknowledge:nil];
+//    _event =
+//    
+//    [_event socketIOInviteWithInviteList:userInvites
+//                         InvitePhoneList:phoneInvites
+//                          AndAcknowledge:nil];
 }
 
 - (int)lengthOfOptions{
