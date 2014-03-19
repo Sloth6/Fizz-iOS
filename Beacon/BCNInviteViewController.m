@@ -106,11 +106,11 @@
         }
     }
     
-//    _event = [BCNEvent getNewEvent];
-//    
-//    [_event socketIOInviteWithInviteList:userInvites
-//                         InvitePhoneList:phoneInvites
-//                          AndAcknowledge:nil];
+    _event =
+    
+    [_event socketIOInviteWithInviteList:userInvites
+                         InvitePhoneList:phoneInvites
+                          AndAcknowledge:nil];
 }
 
 - (int)lengthOfOptions{
@@ -210,7 +210,7 @@
     } else {
         int index = indexPath.row - [_phoneNumbers count];
         
-        [cell.label setText:[_friends objectAtIndex:index]];
+        [cell.label setText:[[_friends objectAtIndex:index] name]];
     }
     
     return cell;

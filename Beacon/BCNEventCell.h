@@ -16,8 +16,6 @@
 @property UICollectionView *collectionView;
 
 @property UILabel *label;
-//@property UILabel *prevLabel;
-//@property UILabel *nextLabel;
 
 //-(void)setupCollectionViewForEvent:(BCNEvent *)event;
 -(void)setEvent:(BCNEvent *)event;
