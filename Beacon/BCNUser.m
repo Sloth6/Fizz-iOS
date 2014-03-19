@@ -13,6 +13,8 @@
 static NSMutableDictionary *users;
 static int kBCNProfilePictureDimension = 50;
 
+static NSMutableArray *friends;
+
 static NSString *BCN_NEW_USER_LOCATION = @"newUserLocation";
 
 @interface BCNUser (){
@@ -50,6 +52,10 @@ static BCNUser *currentUser = nil;
 
 +(NSArray *)getUsers{
     return [users allValues];
+}
+
++(NSArray *)getFriends{
+    return friends;
 }
 
 -(void)dealloc {
@@ -372,6 +378,8 @@ static BCNUser *currentUser = nil;
         BCNUser *user = [BCNUser parseJSON:userJSON];
         [result setObject:user atIndexedSubscript:index];
     }];
+    
+    friends = result;
     
     return result;
 }

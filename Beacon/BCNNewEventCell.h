@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class BCNInviteViewController;
+@class BCNEvent;
 
 @interface BCNNewEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -20,5 +21,8 @@
 @property BCNInviteViewController *ivc;
 
 - (void)setScrollingEnabled:(BOOL)canScroll;
+- (void)sendInvitations;
+
+- (void)setupCellWithEvent:(BCNEvent *)event;
 
 @end

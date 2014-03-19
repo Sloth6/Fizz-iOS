@@ -16,7 +16,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
         [self setupTextView];
         [self setupToggle];
         
@@ -27,6 +26,8 @@
 
 - (void)setupTableview{
     _ivc = [[BCNInviteViewController alloc] init];
+
+    [_ivc updateFriends];
     
     _ivc.label = _label;
     _ivc.textView = _textView;
@@ -38,10 +39,13 @@
     [self.contentView addSubview:_ivc.tableView];
 }
 
+- (void)sendInvitations{
+    [_ivc sendInvitations];
+}
+
 - (void)setScrollingEnabled:(BOOL)canScroll{
     [_ivc.tableView setScrollEnabled:canScroll];
 }
-
 
 - (void)setupToggle{
     float y = _textView.frame.origin.y + _textView.frame.size.height;

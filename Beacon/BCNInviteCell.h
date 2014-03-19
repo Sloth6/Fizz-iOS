@@ -13,4 +13,7 @@
 @property IBOutlet UIImageView *imageView;
 @property IBOutlet UILabel *label;
 
+- (void)setIsSelected:(BOOL)selection;
+- (BOOL)isSelected;
+
 @end

@@ -153,8 +153,6 @@ static int kBCNNumCellsBeforeMessages = 1;
 
 -(void) keyboardWillShow:(NSNotification *)note{
     
-    NSLog(@"KEYBOARD");
-    
     if (![chatBox isFirstResponder]) {
         return;
     }
@@ -235,6 +233,11 @@ static int kBCNNumCellsBeforeMessages = 1;
 }
 
 -(void) keyPressed: (NSNotification*) notification{
+    
+    if (![chatBox isFirstResponder]) {
+        return;
+    }
+    
     float screenY = [UIScreen mainScreen].bounds.size.height;
     
 	// get the size of the text block so we can work our magic
@@ -334,9 +337,13 @@ static int kBCNNumCellsBeforeMessages = 1;
 }
 
 - (void)chatButtonClick{
+    [BCNMessage socketIONewMessage:chatBox.text
+                          ForEvent:_event
+                   WithAcknowledge:nil];
+    
 	// hide the keyboard, we are done with it.
 	[chatBox resignFirstResponder];
-	chatBox.text = nil;
+	chatBox.text = @"";
     
     float screenY = [UIScreen mainScreen].bounds.size.height;
     

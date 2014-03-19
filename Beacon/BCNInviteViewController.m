@@ -8,6 +8,10 @@
 
 #import "BCNInviteViewController.h"
 #import "BCNPhoneInputCell.h"
+#import "BCNInviteCell.h"
+#import "BCNUser.h"
+#import "BCNEvent.h"
+#import "BCNEventStreamViewController.h"
 
 #import "PhoneNumberFormatter.h"
 
@@ -34,6 +38,8 @@
         _phoneNumberFormat = [[PhoneNumberFormatter alloc] init];
         _country = @"us";
         
+        self.tableView.separatorColor = [UIColor clearColor];
+        
         UINib *inviteNib = [UINib nibWithNibName:@"BCNInviteCell" bundle:nil];
         [[self tableView] registerNib:inviteNib forCellReuseIdentifier:@"InviteCell"];
         
@@ -48,7 +54,10 @@
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-    return NO;
+    
+    if (indexPath.section == 0) return NO;
+    
+    return YES;
 }
 
 - (void)viewDidLoad
@@ -76,6 +85,38 @@
     return 2;
 }
 
+-(void)sendInvitations{
+    NSArray *inviteRefs = [_selected allObjects];
+    NSMutableArray *userInvites = [[NSMutableArray alloc] init];
+    NSMutableArray *phoneInvites = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [inviteRefs count]; ++i){
+        int index = [self lengthOfOptions] -
+                    [(NSNumber *)[inviteRefs objectAtIndex:i] integerValue];
+        
+        if (index < [_phoneNumbers count]){
+            NSString *phoneNumber = [_phoneNumbers objectAtIndex:index];
+            NSString *stripped = [_phoneNumberFormat strip:phoneNumber];
+            phoneNumber = [NSString stringWithFormat:@"+%@", stripped];
+            [phoneInvites addObject:phoneNumber];
+        } else {
+            index -= [_phoneNumbers count];
+            BCNUser *friend = [_friends objectAtIndex:index];
+            [userInvites addObject:friend];
+        }
+    }
+    
+//    _event = [BCNEvent getNewEvent];
+//    
+//    [_event socketIOInviteWithInviteList:userInvites
+//                         InvitePhoneList:phoneInvites
+//                          AndAcknowledge:nil];
+}
+
+- (int)lengthOfOptions{
+    return [_friends count] + [_phoneNumbers count];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0){ // Title followed by "+ Add By Phone Number"
@@ -83,7 +124,17 @@
     }
     
     // Return the number of rows in the section.
-    return [_friends count] + [_phoneNumbers count];
+    return [self lengthOfOptions];
+}
+
+-(void)updateFriends{
+    // Worry about selected indices when this happens
+    // OR simply remove everything from the selection. That'll do for now
+    _selected = [[NSMutableSet alloc] init];
+    
+    _friends = [BCNUser getFriends];
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -129,6 +180,9 @@
          name:UITextFieldTextDidChangeNotification
          object:_phoneTextField];
         
+        UIButton *btn = cell.button;
+        [btn addTarget:self action:@selector(addPhoneNumber:) forControlEvents:UIControlEventTouchUpInside];
+        
         [cell.textField setDelegate:self];
         
         return cell;
@@ -137,12 +191,27 @@
     // All other cells
     
     static NSString *CellIdentifier = @"InviteCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    BCNInviteCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[BCNInviteCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
+    
+    [cell setIsSelected:[_selected containsObject:cellReference]];
+    
     // Configure the cell...
+    if (indexPath.row < [_phoneNumbers count]){
+        int index = indexPath.row;
+        
+        [cell.label setText:[_phoneNumbers objectAtIndex:index]];
+    } else {
+        int index = indexPath.row - [_phoneNumbers count];
+        
+        [cell.label setText:[_friends objectAtIndex:index]];
+    }
     
     return cell;
 }
@@ -181,6 +250,38 @@
     return YES;
 }
 
+- (void) addPhoneNumber:(UIButton *)button{
+    [button setEnabled:NO];
+    [self movePhoneToFriends];
+    [_phoneTextField setText:@""];
+    [_phoneTextField deleteBackward];
+    [self phoneChange];
+}
+
+- (void) movePhoneToFriends{
+    
+    [_phoneNumbers insertObject:_phoneTextField.text
+                   atIndex:0];
+    
+    NSNumber *cellRef = [self getSelectedReferenceFromIndexPath:
+                         [NSIndexPath indexPathForRow:0 inSection:1]];
+    
+    [_selected addObject:cellRef];
+    
+//    NSIndexPath *sourceIndexPath = [NSIndexPath indexPathForRow:1
+//                                                      inSection:0];
+//    NSIndexPath *destinationIndexPath = [NSIndexPath indexPathForRow:0
+//                                                           inSection:1];
+//    
+//    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+//    
+//    [self.tableView moveRowAtIndexPath:sourceIndexPath
+//                           toIndexPath:destinationIndexPath];
+
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+    
+}
+
 -(void)phoneChange{
     _phoneTextField.text = [_phoneNumberFormat format:_phoneTextField.text withLocale:_country];
     
@@ -193,14 +294,33 @@
 }
 
 
-//-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    
-//}
-//
-//
-//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    
-//}
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+
+- (NSNumber *)getSelectedReferenceFromIndexPath:(NSIndexPath *)indexPath{
+    return [NSNumber numberWithInt:[self lengthOfOptions] - indexPath.row];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BCNInviteCell *cell = (BCNInviteCell* )[tableView cellForRowAtIndexPath:indexPath];
+    
+    if(indexPath.section != 0)
+    {
+        NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
+        if([cell isSelected])
+        {
+            [_selected removeObject:cellReference];
+            [cell setIsSelected:NO];
+        }
+        else
+        {
+            [_selected addObject:cellReference];
+            [cell setIsSelected:YES];
+        }
+    }
+}
 
 //-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
 //    
@@ -208,7 +328,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 && indexPath.row == 0){
-        return 300;//[UIScreen mainScreen].bounds.size.height;
+        return [UIScreen mainScreen].bounds.size.height;
     }
     
     return 65;

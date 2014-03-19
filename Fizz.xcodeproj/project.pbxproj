@@ -102,6 +102,7 @@
 		49E9843F187268B800D37B2A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E9843E187268B800D37B2A /* AdSupport.framework */; };
 		49EEEA8A18D8D1E600BDA605 /* BCNPhoneInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */; };
 		49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */; };
+		49EEEA9118D932F000BDA605 /* BCNBackspaceResignTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9018D932F000BDA605 /* BCNBackspaceResignTextField.m */; };
 		DB071FC8809641459481673B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1294CA912292415881418914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -324,6 +325,8 @@
 		49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNPhoneInputCell.xib; sourceTree = "<group>"; };
 		49EEEA8C18D8D37300BDA605 /* BCNPhoneInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNPhoneInputCell.h; sourceTree = "<group>"; };
 		49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNPhoneInputCell.m; sourceTree = "<group>"; };
+		49EEEA8F18D932F000BDA605 /* BCNBackspaceResignTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNBackspaceResignTextField.h; sourceTree = "<group>"; };
+		49EEEA9018D932F000BDA605 /* BCNBackspaceResignTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNBackspaceResignTextField.m; sourceTree = "<group>"; };
 		555E166FEAAF48F096591AE1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -504,6 +507,8 @@
 				49EEEA8C18D8D37300BDA605 /* BCNPhoneInputCell.h */,
 				49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */,
 				49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */,
+				49EEEA8F18D932F000BDA605 /* BCNBackspaceResignTextField.h */,
+				49EEEA9018D932F000BDA605 /* BCNBackspaceResignTextField.m */,
 				4954FB1E18D4F1000083D07F /* BCNInviteCell.h */,
 				4954FB1F18D4F1010083D07F /* BCNInviteCell.m */,
 				4954FB1C18D4F0A30083D07F /* BCNInviteCell.xib */,
@@ -1018,6 +1023,7 @@
 				49069B8018661555003D003A /* SBJson4Writer.m in Sources */,
 				49069B7D18661555003D003A /* SBJson4StreamWriter.m in Sources */,
 				49E983F1186A5D1600D37B2A /* BCNMapViewController.m in Sources */,
+				49EEEA9118D932F000BDA605 /* BCNBackspaceResignTextField.m in Sources */,
 				49D5C9D0186042F7002BB1F0 /* BCFacebookConnection.m in Sources */,
 				49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */,
 				49871637187D1713004C8F16 /* BCNTimelineFlowLayout.m in Sources */,

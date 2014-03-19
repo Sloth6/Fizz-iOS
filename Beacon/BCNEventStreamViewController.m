@@ -167,8 +167,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     float p = fmodf(y, maxY);
     if (p < 0) p += maxY;
     
-    
-    
 //    if (y < 0) y = -y;
 //    
 //    float opacity = [self mapPositionToOpacity:y];
@@ -626,7 +624,10 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             textView.textColor = [UIColor lightGrayColor];
             textView.text = kBCNPlaceholderText;
             
-            NSLog(@"problem1");
+            BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
+            
+            UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:nec action:@selector(sendInvitations)];
+            [self.navigationItem setRightBarButtonItem:button animated:YES];
             [self.collectionView setScrollEnabled:YES];
             return NO;
         }

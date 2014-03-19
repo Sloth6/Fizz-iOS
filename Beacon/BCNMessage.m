@@ -49,7 +49,7 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
     return text;
 }
 
-+(void)socketIONewMessage:(BCNMessage *)message
++(void)socketIONewMessage:(NSString *)message
                  ForEvent:(BCNEvent *)event
           WithAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
@@ -57,10 +57,8 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
     /* eid : int */
     [json setObject:[event eventID] forKey:@"eid"];
     
-    /* message : message */
-    NSDictionary *messageJSON = [message jsonDict];
-    
-    [json setObject:messageJSON forKey:@"message"];
+    /* message : string */
+    [json setObject:message forKey:@"text"];
     
     BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
     

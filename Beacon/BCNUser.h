@@ -37,6 +37,7 @@
 +(BCNUser *)userWithUID:(NSNumber *)uID;
 +(BCNUser *)currentUser;
 +(NSArray *)getUsers;
++(NSArray *)getFriends;
 
 +(BCNUser *)parseJSON:(NSDictionary *)userJSON;
 

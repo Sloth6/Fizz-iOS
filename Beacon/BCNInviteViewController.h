@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class BCNEvent;
+
 @interface BCNInviteViewController : UITableViewController <UITextFieldDelegate>
 
 @property UILabel *label;
@@ -15,5 +17,10 @@
 @property UISwitch *toggleSecret;
 @property UITextField *phoneTextField;
 @property UIButton *confirmPhoneButton;
+
+@property BCNEvent *event;
+
+-(void)updateFriends;
+-(void)sendInvitations;
 
 @end
