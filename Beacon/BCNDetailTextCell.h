@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BCNDetailTextCell : UICollectionViewCell
+@interface BCNDetailTextCell : UITableViewCell
 
 @property IBOutlet UILabel *label;
 @property IBOutlet UIImageView *imageView;

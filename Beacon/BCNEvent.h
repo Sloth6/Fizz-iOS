@@ -37,8 +37,11 @@
 -(BOOL)isInviteOnly;
 -(BCNMessage *)firstMessage;
 
+-(int)pendingNumSeats;
 -(int)numSeats;
 -(int)numEmptySeats;
+-(void)addSeat;
+-(BOOL)removeSeat;
 
 // Most recent new thing, used for sorting
 -(NSDate *)lastUpdate;

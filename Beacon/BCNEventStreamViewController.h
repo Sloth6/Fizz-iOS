@@ -9,19 +9,27 @@
 #import <UIKit/UIKit.h>
 #import "BCNMapViewController.h"
 
+@class BCNChatDelegate;
+
 @interface BCNEventStreamViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
 
 - (void)updateEvents:(NSMutableArray *)incomingEvents;
 - (void)expandView;
+- (void)enterCellDetail;
+- (void)exitNewEventPrompt:(UITextView *)textView;
 
 + (CGRect)makeBurgerButtonFrame;
 
+@property NSMutableArray *events;
+
+@property BCNChatDelegate *chatDelegate;
 @property BCNMapViewController *mvc;
 
 typedef enum {
     kOverview,
     kTimeline,
+    kDetail,    // Or invite view
     kConversation
 } ViewMode;
 

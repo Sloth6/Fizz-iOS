@@ -12,6 +12,7 @@
 #import "BCNEvent.h"
 #import "BCNLoginViewController.h"
 #import "BCNEventStreamViewController.h"
+#import "BCNInviteViewController.h"
 
 @implementation BCNAppDelegate
 
@@ -41,6 +42,9 @@
     flowLayout.itemSize = [UIScreen mainScreen].bounds.size;
     
     _esvc = [[BCNEventStreamViewController alloc] initWithCollectionViewLayout:flowLayout];
+    
+    
+    [BCNInviteViewController setupClass];
     
     // Load the FBLoginView Class
     [FBLoginView class];

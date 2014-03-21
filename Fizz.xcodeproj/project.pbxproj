@@ -40,9 +40,9 @@
 		4954FB1918D4EFFF0083D07F /* BCNInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4954FB1718D4EFFF0083D07F /* BCNInviteViewController.m */; };
 		4954FB1D18D4F0A30083D07F /* BCNInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4954FB1C18D4F0A30083D07F /* BCNInviteCell.xib */; };
 		4954FB2018D4F1010083D07F /* BCNInviteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4954FB1F18D4F1010083D07F /* BCNInviteCell.m */; };
-		4954FB2218D5044D0083D07F /* BCNNewEventTopCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4954FB2118D5044D0083D07F /* BCNNewEventTopCell.xib */; };
 		495E9D25187BADB4008F7CC7 /* BCNTimelineHostView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 495E9D24187BADB4008F7CC7 /* BCNTimelineHostView.xib */; };
 		495E9D28187BAF98008F7CC7 /* BCNSpeechBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9D27187BAF98008F7CC7 /* BCNSpeechBubble.m */; };
+		497F349118DCB75D00B70FD4 /* BCNChatDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349018DCB75D00B70FD4 /* BCNChatDelegate.m */; };
 		49871637187D1713004C8F16 /* BCNTimelineFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 49871636187D1713004C8F16 /* BCNTimelineFlowLayout.m */; };
 		498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498E5E6D18B42CB300487898 /* FacebookSDK.framework */; };
 		498E5E7618B4506000487898 /* BCNEventsViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 498E5E7518B4506000487898 /* BCNEventsViewViewController.m */; };
@@ -229,10 +229,11 @@
 		4954FB1C18D4F0A30083D07F /* BCNInviteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNInviteCell.xib; sourceTree = "<group>"; };
 		4954FB1E18D4F1000083D07F /* BCNInviteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNInviteCell.h; sourceTree = "<group>"; };
 		4954FB1F18D4F1010083D07F /* BCNInviteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNInviteCell.m; sourceTree = "<group>"; };
-		4954FB2118D5044D0083D07F /* BCNNewEventTopCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNNewEventTopCell.xib; sourceTree = "<group>"; };
 		495E9D24187BADB4008F7CC7 /* BCNTimelineHostView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNTimelineHostView.xib; sourceTree = "<group>"; };
 		495E9D26187BAF98008F7CC7 /* BCNSpeechBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNSpeechBubble.h; sourceTree = "<group>"; };
 		495E9D27187BAF98008F7CC7 /* BCNSpeechBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNSpeechBubble.m; sourceTree = "<group>"; };
+		497F348F18DCB75D00B70FD4 /* BCNChatDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNChatDelegate.h; sourceTree = "<group>"; };
+		497F349018DCB75D00B70FD4 /* BCNChatDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNChatDelegate.m; sourceTree = "<group>"; };
 		49871635187D1713004C8F16 /* BCNTimelineFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTimelineFlowLayout.h; sourceTree = "<group>"; };
 		49871636187D1713004C8F16 /* BCNTimelineFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTimelineFlowLayout.m; sourceTree = "<group>"; };
 		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
@@ -510,6 +511,8 @@
 			children = (
 				4954FB1618D4EFFF0083D07F /* BCNInviteViewController.h */,
 				4954FB1718D4EFFF0083D07F /* BCNInviteViewController.m */,
+				497F348F18DCB75D00B70FD4 /* BCNChatDelegate.h */,
+				497F349018DCB75D00B70FD4 /* BCNChatDelegate.m */,
 				49EEEA8C18D8D37300BDA605 /* BCNPhoneInputCell.h */,
 				49EEEA8D18D8D37300BDA605 /* BCNPhoneInputCell.m */,
 				49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */,
@@ -520,7 +523,6 @@
 				4954FB1E18D4F1000083D07F /* BCNInviteCell.h */,
 				4954FB1F18D4F1010083D07F /* BCNInviteCell.m */,
 				4954FB1C18D4F0A30083D07F /* BCNInviteCell.xib */,
-				4954FB2118D5044D0083D07F /* BCNNewEventTopCell.xib */,
 			);
 			name = InviteView;
 			sourceTree = "<group>";
@@ -943,7 +945,6 @@
 				49C8B0E81888B3AA00400832 /* BCNHostCell.xib in Resources */,
 				49A31F5D18CF5E3A001214B9 /* BCNTestViewController.xib in Resources */,
 				499AAB41187886D7002C0724 /* BCNMapAnnotationView.xib in Resources */,
-				4954FB2218D5044D0083D07F /* BCNNewEventTopCell.xib in Resources */,
 				495E9D25187BADB4008F7CC7 /* BCNTimelineHostView.xib in Resources */,
 				49C8B0F11888B47700400832 /* BCNEngagedUserCell.xib in Resources */,
 				49EEEA8A18D8D1E600BDA605 /* BCNPhoneInputCell.xib in Resources */,
@@ -1058,6 +1059,7 @@
 				49069B0418651731003D003A /* base64.c in Sources */,
 				49923ADE18727FDF0045107C /* BCNFacebookLoginDelegate.m in Sources */,
 				49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */,
+				497F349118DCB75D00B70FD4 /* BCNChatDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,8 +21,6 @@
 @property (strong, nonatomic) BCNEvent *event;
 @property (strong, nonatomic) BCNEventStreamViewController *esvc;
 
-@property (strong, nonatomic) NSIndexPath *eventIndexPath;
-
 - (void)setupViewForm;
 - (void)setupKeyboard;
 - (void)popView;

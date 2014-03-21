@@ -76,9 +76,16 @@ static int kBCNNumCellsBeforeMessages = 1;
     _esvc.collectionView.delegate   = _esvc;
     _esvc.collectionView.dataSource = _esvc;
     
-    [_esvc.collectionView scrollToItemAtIndexPath:_eventIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+    // Offset by one to ignore the new event. Maybe make new event in it's own section?
+    int index = [_esvc.events indexOfObject:_event] + 1;
     
-    _eventIndexPath = NULL;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+    
+    [_esvc.collectionView scrollToItemAtIndexPath:indexPath
+                                 atScrollPosition:UICollectionViewScrollPositionTop
+                                         animated:NO];
+    
+    _event = NULL;
 }
 
 - (void)setupViewForm{

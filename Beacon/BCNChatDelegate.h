@@ -6,8 +6,26 @@
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "BCNEvent.h"
 
-@interface BCNChatDelegate : NSObject
+@class BCNEventStreamViewController;
+@class BCNInviteViewController;
+
+@interface BCNChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, retain) UIView *viewForm;
+@property (nonatomic, retain) UITextView *chatBox;
+@property (nonatomic, retain) UIButton *chatButton;
+
+@property (strong, nonatomic) BCNEvent *event;
+@property (strong, nonatomic) BCNEventStreamViewController *esvc;
+@property (strong, nonatomic) BCNInviteViewController *ivc;
+
+@property (strong, nonatomic) UITableView *tableView;
+
+- (void)setupViewForm;
+- (void)setupKeyboard;
+//- (void)popView;
 
 @end

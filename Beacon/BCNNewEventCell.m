@@ -8,8 +8,16 @@
 
 #import "BCNNewEventCell.h"
 #import "BCNInviteViewController.h"
+#import "BCNAppDelegate.h"
+#import "BCNChatDelegate.h"
 
 #import "BCNBackspaceResignTextView.h"
+
+@interface BCNNewEventCell ()
+
+@property (strong, nonatomic) BCNEvent *event;
+
+@end
 
 @implementation BCNNewEventCell
 
@@ -21,8 +29,86 @@
         [self setupTextView];
         
         [self setupTableview];
+        
+        [self setupChat];
     }
     return self;
+}
+
+- (void)enterInviteMode{
+    // Remove chatbox if there is one
+    [_chatDelegate.viewForm removeFromSuperview];
+    
+    _chatDelegate.ivc = NULL;
+    _chatDelegate.event = NULL;
+    
+    _ivc.tableView.dataSource = _ivc;
+    _ivc.tableView.delegate   = _ivc;
+    
+    CGRect frame = [UIScreen mainScreen].bounds;
+    
+    [_ivc.tableView setFrame:frame];
+    
+    [_ivc.tableView reloadData];
+}
+
+- (void)enterChatMode{
+    // Add chatbox to screen
+    [_chatDelegate.viewForm removeFromSuperview];
+    [self.contentView addSubview:_chatDelegate.viewForm];
+    
+    _chatDelegate.ivc = _ivc;
+    _chatDelegate.event = _event;
+    
+    _ivc.tableView.dataSource = _chatDelegate;
+    _ivc.tableView.delegate   = _chatDelegate;
+    
+    CGRect frame = _ivc.tableView.frame;
+    
+    float chatBoxHeight = _chatDelegate.viewForm.frame.size.height;
+    
+    float height = frame.size.height - chatBoxHeight;
+    
+    frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, height);
+    
+    [_ivc.tableView setFrame:frame];
+    [_ivc.tableView reloadData];
+    
+    //    _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
+    //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
+}
+
+- (void)chatButtonPress{
+    [self enterChatMode];
+}
+
+- (void)setupChat{
+    // Chat Button
+    float screenY = [UIScreen mainScreen].bounds.size.height;
+    float screenX = [UIScreen mainScreen].bounds.size.width;
+    float chatHeight = 30;
+    float chatMarginY = 10;
+    float chatY = screenY - (chatMarginY + chatHeight);
+    float chatWidth = 50;
+    float chatMarginX = 10;
+    float chatX = screenX - (chatWidth + chatMarginX);
+    
+    CGRect chatFrame  = CGRectMake(chatX, chatY, chatWidth, chatHeight);
+    
+    _chatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_chatButton setFrame:chatFrame];
+    [_chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+    
+    
+    
+    [_chatButton addTarget:self action:@selector(chatButtonPress)
+          forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.contentView addSubview:_chatButton];
+}
+
+- (void)updateFriends{
+    [_ivc updateFriends];
 }
 
 - (void)setupTableview{
@@ -31,12 +117,18 @@
     [_ivc updateFriends];
     
     _ivc.textView = _textView;
+    [_ivc setupInterface];
     
     [_ivc.tableView setFrame:self.bounds];
     
     [_ivc.tableView setScrollEnabled:NO];
     
     [self.contentView addSubview:_ivc.tableView];
+}
+
+- (void)setEvent:(BCNEvent *)event{
+    _event = event;
+    _ivc.event = event;
 }
 
 - (void)sendInvitations{

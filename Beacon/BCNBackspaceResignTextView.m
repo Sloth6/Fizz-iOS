@@ -9,6 +9,8 @@
 #import "BCNBackspaceResignTextView.h"
 #import "BCNEventStreamViewController.h"
 
+static NSString *kBCNPlaceholderText = @"What do you want to do?";
+
 @interface BCNBackspaceResignTextView ()
 
 @property BCNEventStreamViewController *esvc;
@@ -31,7 +33,8 @@
     [super deleteBackward];
     
     if ([self.text isEqualToString:@""]){
-        [_esvc textViewDidChange:self];
+        // Resign first responder status, update interface
+        [_esvc exitNewEventPrompt:self];
     }
 }
 

@@ -15,7 +15,7 @@
 
 #import "BCNTitleFlowLayout.h"
 
-#import "BCNEventDetailViewDelegate.h"
+#import "BCNChatDelegate.h"
 #import "BCNOverviewCollectionViewController.h"
 #import "BCNBackspaceResignTextView.h"
 
@@ -27,9 +27,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 @interface BCNEventStreamViewController ()
 
-@property NSMutableArray *events;
-
-@property BCNEventDetailViewDelegate *edvd;
 @property BCNOverviewCollectionViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
@@ -123,20 +120,25 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         _overviewFlowLayout.itemSize = itemSize;
         
         _events = [[NSMutableArray alloc] init];
-        _edvd   = [[BCNEventDetailViewDelegate alloc] init];
+        _chatDelegate = [[BCNChatDelegate alloc] init];
         _ocvc   = [[BCNOverviewCollectionViewController alloc] initWithCollectionViewLayout:_overviewFlowLayout];
         
         _ocvc.useLayoutToLayoutNavigationTransitions = YES;
         
         _ocvc.esvc = self;
         
-        [_edvd setupViewForm];
+        [_chatDelegate setupViewForm];
         
-        _edvd.esvc = self;
+        _chatDelegate.esvc = self;
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
     return self;
+}
+
+- (void)enterCellDetail{
+    [self.collectionView setScrollEnabled:NO];
+    
 }
 
 - (float)mapPositionToOpacity:(float) y{
@@ -202,12 +204,16 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 #pragma mark - UICollectionView Datasource
 
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-    return [_events count] + kBCNNumCellsBeforeEvents;
+    if (section == 0){
+        return kBCNNumCellsBeforeEvents;
+    }
+    
+    return [_events count];
 }
 
-//- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
-//    return 1;
-//}
+- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
+    return 2;
+}
 
 - (BCNNewEventCell *)setupNewEventCell:(BCNNewEventCell *)cell{
     
@@ -272,7 +278,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_viewMode == kTimeline){
-        if (indexPath.item == 0){
+        if (indexPath.section == 0){
             NSString *cellID = @"NewEventCell";
             
             BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
@@ -280,9 +286,11 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             
             cell = [self setupNewEventCell:cell];
             
+            cell.chatDelegate = _chatDelegate;
+            
             return cell;
         } else {
-            int eventNum = indexPath.item - kBCNNumCellsBeforeEvents;
+            int eventNum = indexPath.item;
             
             NSString *cellID = @"NewEventCell2";
             
@@ -291,7 +299,11 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             
             BCNEvent *event = [_events objectAtIndex:eventNum];
             
+            [cell setEvent:event];
+            
             [self setupEventCell:cell withEvent:event];
+            
+            cell.chatDelegate = _chatDelegate;
             
             return cell;
         }
@@ -332,26 +344,19 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
  return [[UICollectionReusableView alloc] init];
  }*/
 
+//- (void)loadChatForEvent:(BCNEvent *)event{
+//    _chatDelegate.event = event;
+//    
+//    // Add Chat Box on bottom of screen
+//    [_chatDelegate.viewForm removeFromSuperview];
+//    
+//    [self.view addSubview:_chatDelegate.viewForm];
+//}
+
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    //[self.collectionView setCollectionViewLayout:<#(UICollectionViewLayout *)#> animated:<#(BOOL)#> completion:<#^(BOOL finished)completion#>];
-    
-    int index = indexPath.item - kBCNNumCellsBeforeEvents;
-    
-    if (index >= 0){
-        
-        _edvd.event = [_events objectAtIndex:index];
-        
-        [_edvd.viewForm removeFromSuperview];
-        
-        self.collectionView.delegate   = _edvd;
-        self.collectionView.dataSource = _edvd;
-        [self.collectionView reloadData];
-        _edvd.eventIndexPath = indexPath;
-        
-        [self.view addSubview:_edvd.viewForm];
-    }
+    return;
 }
 
 - (CGFloat)calculateHeightForEventAtIndexPath:(NSIndexPath *)indexPath {
@@ -430,10 +435,10 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         _inviteToolsIndex = NULL;
         
-    } else if (_edvd.eventIndexPath == NULL){ // In the timeline view
+    } else if (_chatDelegate.event == NULL){ // In the timeline view
         [self contractView];
     } else { // In the messenger
-        [_edvd popView];
+        //[_chatDelegate popView];
     }
 }
 
@@ -502,7 +507,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     if (textView.textColor == [UIColor lightGrayColor]) {
         
-        [self.collectionView setScrollEnabled:NO];
+        [self enterCellDetail];
         
         UITextPosition *newCursorPosition = [textView positionFromPosition:textView.beginningOfDocument offset:0];
         UITextRange *newSelectedRange = [textView textRangeFromPosition:newCursorPosition toPosition:newCursorPosition];
@@ -589,19 +594,23 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     });
 }
 
+// Call when TextView will resign First Responder status
+- (void)exitNewEventPrompt:(UITextView *)textView{
+    textView.textColor = [UIColor lightGrayColor];
+    textView.text = kBCNPlaceholderText;
+    [textView resignFirstResponder];
+    
+    [self.collectionView setScrollEnabled:YES];
+    
+    // Hide secret event toggle
+    [_toggleSecret setAlpha:0.0];
+    [_secretLabel setAlpha:0.0];
+    
+    [self textViewDidChange:textView];
+}
+
 -(void) textViewDidChange:(UITextView *)textView
 {
-    if(textView.text.length == 0){
-        textView.textColor = [UIColor lightGrayColor];
-        textView.text = kBCNPlaceholderText;
-        [self.collectionView setScrollEnabled:YES];
-        [textView resignFirstResponder];
-        
-        // Hide secret event toggle
-        [_toggleSecret setAlpha:0.0];
-        [_secretLabel setAlpha:0.0];
-    }
-    
     float endY = textView.frame.origin.y + textView.frame.size.height;
     
 //    UIEdgeInsets inset = textView.contentInset;
@@ -706,7 +715,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         return;
     }
     
-    // incoming events are unsorted
+    // Incoming events are unsorted
     NSMutableArray *updatedEvents = [incomingEvents mutableCopy];
     
     [_events removeObjectsInArray:incomingEvents];

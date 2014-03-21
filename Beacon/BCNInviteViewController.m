@@ -12,8 +12,11 @@
 #import "BCNUser.h"
 #import "BCNEvent.h"
 #import "BCNEventStreamViewController.h"
+#import "BCNAppDelegate.h"
 
 #import "PhoneNumberFormatter.h"
+
+static NSMutableArray *instances;
 
 @interface BCNInviteViewController ()
 
@@ -28,6 +31,10 @@
 @end
 
 @implementation BCNInviteViewController
+
++ (void)setupClass{
+    instances = [[NSMutableArray alloc] init];
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -50,12 +57,141 @@
         _phoneNumbers = [[NSMutableArray alloc] init];
         _selected = [[NSMutableSet alloc] init];
     }
+    
+    [instances addObject:self];
+    
     return self;
+}
+
+- (void)setupInterface{
+    [self setupSeats];
+    [self setupInvite];
+}
+
+- (void)updateSeatUI{
+    if ([_event pendingNumSeats] == 1){
+        [_seatsLabel setText:@"1 Seat"];
+    } else {
+        [_seatsLabel setText:[NSString stringWithFormat:@"%d Seats", [_event pendingNumSeats]]];
+    }
+}
+
+// You can always add a seat
+- (void)addSeat{
+    [_event addSeat];
+    [self updateSeatUI];
+}
+
+// Attempt to subtract an empty seat. If no empty seats, no subtraction
+- (void)removeSeat{
+    if ([_event removeSeat]){
+        [self updateSeatUI];
+    }
+}
+
+- (void)setupSeats{
+    // Get TextView positions
+    float textX = _textView.frame.origin.x;
+    float textXEnd = _textView.frame.size.width + textX;
+    
+    float textY = _textView.frame.origin.y;
+    float textYEnd = textY + _textView.frame.size.height;
+    
+    float midX = (textX + textXEnd)/2;
+    
+    // Seats
+    float seatsWidth = 80;
+    float seatsX = midX - (seatsWidth/2);
+    float seatsY = textYEnd - 140;
+    float seatsHeight = 40;
+    CGRect seatsLabelFrame = CGRectMake(seatsX, seatsY, seatsWidth, seatsHeight);
+    
+    // Seat Buttons
+    float buttonWidth = seatsHeight;
+    float buttonHeight = buttonWidth;
+    
+    float buttonY = seatsY;
+    float buttonMinusX = 5;// + seatsWidth + seatsX;
+    float buttonPlusX = buttonMinusX + 8 + buttonWidth;
+    
+    CGRect seatsMinusFrame = CGRectMake(buttonMinusX, buttonY, buttonWidth, buttonHeight);
+    CGRect seatsPlusFrame  = CGRectMake(buttonPlusX,  buttonY, buttonWidth, buttonHeight);
+    
+    //    CGRect attendeeFrame =
+    
+    //    _attendeesLabel = [[UILabel alloc] initWithFrame:attendeeFrame];
+    _seatsLabel = [[UILabel alloc] initWithFrame:seatsLabelFrame];
+    
+    [_seatsLabel setText:@"0 Seats"];
+    
+    _addSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
+    _removeSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    
+    [_addSeatButton setFrame:seatsPlusFrame];
+    [_removeSeatButton setFrame:seatsMinusFrame];
+    
+    [_addSeatButton setTitle:@"ADD" forState:UIControlStateNormal];
+    [_removeSeatButton setTitle:@"DEL" forState:UIControlStateNormal];
+    
+    [_addSeatButton addTarget:self action:@selector(addSeat)
+             forControlEvents:UIControlEventTouchUpInside];
+    
+    [_removeSeatButton addTarget:self action:@selector(removeSeat)
+             forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)setupInvite{
+    // Get TextView positions
+    float textX = _textView.frame.origin.x;
+    float textXEnd = _textView.frame.size.width + textX;
+    
+    float textY = _textView.frame.origin.y;
+    float textYEnd = textY + _textView.frame.size.height;
+    
+    float midX = (textX + textXEnd)/2;
+    
+    // InviteButton
+    float inviteWidth = 100;
+    float inviteX = midX + 20;
+    float inviteY = textYEnd + 40;
+    float inviteHeight = 40;
+    CGRect inviteFrame = CGRectMake(inviteX, inviteY, inviteWidth, inviteHeight);
+    
+    _inviteButton = [UIButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
+    
+    [_inviteButton setFrame:inviteFrame];
+    
+    [_inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
+    
+    [_inviteButton addTarget:self
+                      action:@selector(inviteButtonPress)
+            forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(void)inviteButtonPress{
+    [_inviteButton setEnabled:NO];
+    [_inviteButton setHidden:YES];
+    
+    // Disable main scroll
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.esvc enterCellDetail];
+    
+    // Enable nested scroll
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+    
+    [self.tableView setScrollEnabled:YES];
+    [self.tableView scrollToRowAtIndexPath:indexPath
+                          atScrollPosition:UITableViewScrollPositionTop
+                                  animated:YES];
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0) return NO;
+    else if (indexPath.section == 1) return NO;
     
     return YES;
 }
@@ -71,6 +207,11 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+// Need to override in order to avoid awkward forced scroll on textField selection
+- (void)viewWillAppear:(BOOL)animated{
+    return;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -82,7 +223,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 -(void)sendInvitations{
@@ -119,12 +260,26 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0){ // Title followed by "+ Add By Phone Number"
-        return 2;
+    if (section == 0){ // Title cell
+        return 1;
+    }
+    
+    if (section == 1) { // "+ Add By Phone Number" cell
+        return 1;
     }
     
     // Return the number of rows in the section.
     return [self lengthOfOptions];
+}
+
+-(void)dealloc {
+    [instances removeObject:self];
+}
+
++(void)updateFriends{
+    for (int i = 0; i < [instances count]; ++i){
+        [((BCNInviteViewController *)[instances objectAtIndex:0]) updateFriends];
+    }
 }
 
 -(void)updateFriends{
@@ -134,29 +289,45 @@
     
     _friends = [BCNUser getFriends];
     
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+//    
+//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)setTopCellSubviews:(UITableViewCell *)cell{
+    [_textView removeFromSuperview];
+    [_seatsLabel removeFromSuperview];
+    [_addSeatButton removeFromSuperview];
+    [_removeSeatButton removeFromSuperview];
+    [_inviteButton removeFromSuperview];
+    
+    [cell addSubview:_textView];
+    [cell addSubview:_seatsLabel];
+    [cell addSubview:_addSeatButton];
+    [cell addSubview:_removeSeatButton];
+    [cell addSubview:_inviteButton];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0){ // BIG top cell
-        if (indexPath.row == 0){
-            static NSString *CellIdentifier = @"Cell";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            }
-            
-            // Configure the cell...
-            
-            [_textView removeFromSuperview];
-            
-            [cell addSubview:_textView];
-            
-            return cell;
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
-        // New Phone Number
+        // Configure the cell...
+        
+        [self setTopCellSubviews:cell];
+        
+        return cell;
+    }
+    
+    if (indexPath.section == 1){
+        // New Phone Number Cell
         
         static NSString *CellIdentifier = @"PhoneInputCell";
         BCNPhoneInputCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -329,8 +500,6 @@
     
     return 65;
 }
-
-
 
 
 /* Use these methods to handle persistent bubbles across all interfaces */

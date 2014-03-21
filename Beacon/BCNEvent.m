@@ -28,6 +28,10 @@ static NSString *BCN_REQUEST = @"request";
 @property (strong, nonatomic) BCNUser *creator;
 
 @property (nonatomic) int numSeats;
+@property (nonatomic) int pendingNumSeats;
+
+@property NSTimer *seatTimer;
+
 
 @property (strong, nonatomic) NSMutableArray *attendees;
 @property (strong, nonatomic) NSMutableArray *invitees;
@@ -95,6 +99,10 @@ static NSString *BCN_REQUEST = @"request";
     return _numSeats;
 }
 
+-(int)pendingNumSeats{
+    return _pendingNumSeats;
+}
+
 -(int)numEmptySeats{
     return _numSeats - [attendees count];
 }
@@ -120,6 +128,55 @@ static NSString *BCN_REQUEST = @"request";
     
     return NULL;
 }
+
+// You can always add a seat
+- (void)addSeat{
+    _pendingNumSeats++;
+}
+
+// Attempt to subtract an empty seat. If no empty seats, no subtraction
+- (BOOL)removeSeat{
+    [self restartTimer];
+    
+    int numOccupiedSeats = 0;
+    
+    if (_pendingNumSeats > numOccupiedSeats){
+        _pendingNumSeats--;
+        
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)pushSeatsToServer{
+    _seatTimer = NULL;
+    
+    // Don't send anything if nothing has changed
+    if (_numSeats == _pendingNumSeats){
+        return;
+    }
+    
+    _numSeats = _pendingNumSeats;
+    
+    // Perform the push to the server
+    [self socketIOSetSeatCapacityToCapacity:_numSeats
+                            WithAcknowledge:nil];
+}
+
+// Call this every time the seats change, it ensures 1.6 second after the last seat change
+// The data will be pushed to the server if need be
+// Avoids spamming the server
+- (void)restartTimer{
+    [_seatTimer invalidate];
+    
+    _seatTimer = [NSTimer scheduledTimerWithTimeInterval:1.6
+                                                  target:self
+                                                selector:@selector(pushSeatsToServer)
+                                                userInfo:nil
+                                                 repeats:NO];
+}
+
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];

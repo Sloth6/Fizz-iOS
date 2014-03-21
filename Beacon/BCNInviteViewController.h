@@ -18,7 +18,18 @@
 
 @property BCNEvent *event;
 
+@property UILabel *seatsLabel;
+@property UIButton *addSeatButton;
+@property UIButton *removeSeatButton;
+
+@property UIButton *inviteButton;
+
++(void)setupClass;
+
++(void)updateFriends;
 -(void)updateFriends;
 -(void)sendInvitations;
+
+- (void)setupInterface;
 
 @end

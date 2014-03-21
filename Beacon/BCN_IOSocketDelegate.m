@@ -13,6 +13,7 @@
 #import "BCNUser.h"
 #import "BCNMessage.h"
 #import "BCNAppDelegate.h"
+#import "BCNInviteViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 
 #define SuppressPerformSelectorLeakWarning(Stuff) \
@@ -384,6 +385,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     NSDictionary *userJSON = [json objectForKey:@"me"];
     NSArray *friendListJSON = [json objectForKey:@"friendList"];
     NSArray *eventListJSON = [json objectForKey:@"eventList"];
+    NSString *fbAccessToken = [json objectForKey:@"fbToken"];
     
     // User (me)
     BCNUser *user = [BCNUser parseJSON:userJSON];
@@ -391,12 +393,19 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     // User Array (friends)
     NSArray *friends = [BCNUser parseUserJSONList:friendListJSON];
     
+    [BCNInviteViewController updateFriends];
+    
     // Events
     NSArray *events = [BCNEvent parseEventJSONList:eventListJSON];
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [appDelegate updateEvents:events];
+    
+    // Facebook Access Token
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    [pref setObject:fbAccessToken forKey:@"fbToken"];
+    
 }
 
 - (void)incomingNewEvent:(NSArray *)args{

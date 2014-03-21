@@ -11,6 +11,7 @@
 @class BCNInviteViewController;
 @class BCNEvent;
 @class BCNBackspaceResignTextView;
+@class BCNChatDelegate;
 
 @interface BCNNewEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -19,13 +20,25 @@
 @property UISwitch *toggleSecret;
 @property UILabel *label;
 
+@property UILabel *attendeesLabel;
+
+@property UILabel *seatsLabel;
+@property UIButton *addSeatButton;
+@property UIButton *removeSeatButton;
+
+@property UIButton *chatButton;
+@property BCNChatDelegate *chatDelegate;
+
 @property BCNInviteViewController *ivc;
 
 - (void)scrollToTopAnimated:(BOOL)isAnimated;
 - (void)setScrollingEnabled:(BOOL)canScroll;
 - (void)sendInvitations;
 
+- (void)setEvent:(BCNEvent *)event;
+
+- (void)updateFriends;
+
 - (void)setupToggle;
-- (void)setupCellWithEvent:(BCNEvent *)event;
 
 @end
