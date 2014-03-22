@@ -36,6 +36,10 @@
 }
 
 - (void)enterInviteMode{
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    appDelegate.esvc.viewMode = kInvite;
+    
     // Remove chatbox if there is one
     [_chatDelegate.viewForm removeFromSuperview];
     
@@ -52,7 +56,32 @@
     [_ivc.tableView reloadData];
 }
 
+- (void)exitInviteMode{
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    appDelegate.esvc.viewMode = kTimeline;
+    
+    _chatDelegate.ivc = NULL;
+    _chatDelegate.event = NULL;
+    
+//    CGRect frame = [UIScreen mainScreen].bounds;
+//    
+//    [_ivc.tableView setFrame:frame];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    [_ivc.tableView scrollToRowAtIndexPath:indexPath
+                          atScrollPosition:UITableViewScrollPositionTop
+                                  animated:YES];
+    
+//    [_ivc.tableView reloadData];
+}
+
 - (void)enterChatMode{
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    appDelegate.esvc.viewMode = kChat;
+    
     // Add chatbox to screen
     [_chatDelegate.viewForm removeFromSuperview];
     [self.contentView addSubview:_chatDelegate.viewForm];
@@ -73,6 +102,32 @@
     
     [_ivc.tableView setFrame:frame];
     [_ivc.tableView reloadData];
+    
+    //    _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
+    //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
+}
+
+- (void)exitChatMode{
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    appDelegate.esvc.viewMode = kTimeline;
+    
+    // Add chatbox to screen
+    [_chatDelegate.viewForm removeFromSuperview];
+    
+    _chatDelegate.ivc = NULL;
+    _chatDelegate.event = NULL;
+    
+    CGRect frame = [UIScreen mainScreen].bounds;
+    
+    [_ivc.tableView setFrame:frame];
+    //[_ivc.tableView reloadData];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    [_ivc.tableView scrollToRowAtIndexPath:indexPath
+                          atScrollPosition:UITableViewScrollPositionTop
+                                  animated:YES];
     
     //    _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
     //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
@@ -114,6 +169,7 @@
 - (void)setupTableview{
     _ivc = [[BCNInviteViewController alloc] init];
 
+    _ivc.eventCell = self;
     [_ivc updateFriends];
     
     _ivc.textView = _textView;

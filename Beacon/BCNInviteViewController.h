@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class BCNEvent;
+@class BCNNewEventCell;
 
 @interface BCNInviteViewController : UITableViewController <UITextFieldDelegate>
 
@@ -21,6 +22,8 @@
 @property UILabel *seatsLabel;
 @property UIButton *addSeatButton;
 @property UIButton *removeSeatButton;
+
+@property BCNNewEventCell *eventCell;
 
 @property UIButton *inviteButton;
 

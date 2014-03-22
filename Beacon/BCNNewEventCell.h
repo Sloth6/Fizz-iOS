@@ -35,6 +35,12 @@
 - (void)setScrollingEnabled:(BOOL)canScroll;
 - (void)sendInvitations;
 
+- (void)enterInviteMode;
+- (void)exitInviteMode;
+- (void)enterChatMode;
+- (void)exitChatMode;
+
+
 - (void)setEvent:(BCNEvent *)event;
 
 - (void)updateFriends;

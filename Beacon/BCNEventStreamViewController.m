@@ -275,67 +275,78 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     return cell;
 }
 
+- (UICollectionViewCell *)timelineCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0){
+        NSString *cellID = @"NewEventCell";
+        
+        BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                              forIndexPath:indexPath];
+        
+        cell = [self setupNewEventCell:cell];
+        
+        cell.chatDelegate = _chatDelegate;
+        
+        return cell;
+    } else {
+        int eventNum = indexPath.item;
+        
+        NSString *cellID = @"NewEventCell2";
+        
+        BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                              forIndexPath:indexPath];
+        
+        BCNEvent *event = [_events objectAtIndex:eventNum];
+        
+        [cell setEvent:event];
+        
+        [self setupEventCell:cell withEvent:event];
+        
+        cell.chatDelegate = _chatDelegate;
+        
+        return cell;
+    }
+}
+
+- (UICollectionViewCell *)overviewCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0){
+        NSString *cellID = @"Cell";
+        
+        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                                   forIndexPath:indexPath];
+        
+        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        
+        return cell;
+    } else {
+        int eventNum = indexPath.item;
+        
+        NSString *cellID = @"EventCell";
+        
+        BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                           forIndexPath:indexPath];
+        
+        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
+        
+        BCNEvent *event = [_events objectAtIndex:eventNum];
+        
+        [cell setEventCollapsed:event];
+        
+        return cell;
+    }
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (_viewMode == kTimeline){
-        if (indexPath.section == 0){
-            NSString *cellID = @"NewEventCell";
-            
-            BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                                  forIndexPath:indexPath];
-            
-            cell = [self setupNewEventCell:cell];
-            
-            cell.chatDelegate = _chatDelegate;
-            
-            return cell;
-        } else {
-            int eventNum = indexPath.item;
-            
-            NSString *cellID = @"NewEventCell2";
-            
-            BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                                  forIndexPath:indexPath];
-            
-            BCNEvent *event = [_events objectAtIndex:eventNum];
-            
-            [cell setEvent:event];
-            
-            [self setupEventCell:cell withEvent:event];
-            
-            cell.chatDelegate = _chatDelegate;
-            
-            return cell;
-        }
-    } else //if (_viewMode == kOverview){ {
-        if (indexPath.item == 0){
-            NSString *cellID = @"Cell";
-            
-            UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                                       forIndexPath:indexPath];
-            
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-            
-            return cell;
-        } else {
-            int eventNum = indexPath.item - kBCNNumCellsBeforeEvents;
-            
-            NSString *cellID = @"EventCell";
-            
-            BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                               forIndexPath:indexPath];
-            
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-            cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
-            
-            BCNEvent *event = [_events objectAtIndex:eventNum];
-            
-            [cell setEventCollapsed:event];
-            
-            return cell;
-        }
-    //}
+    if (_viewMode == kOverview){
+        return [self overviewCollectionView:cv cellForItemAtIndexPath:indexPath];
+    } else {
+    
+//    if (_viewMode == kTimeline){
+        return [self timelineCollectionView:cv cellForItemAtIndexPath:indexPath];
+//    }
+    }
 }
 
 /*- (UICollectionReusableView *)collectionView:

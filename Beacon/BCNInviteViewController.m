@@ -13,6 +13,7 @@
 #import "BCNEvent.h"
 #import "BCNEventStreamViewController.h"
 #import "BCNAppDelegate.h"
+#import "BCNNewEventCell.h"
 
 #import "PhoneNumberFormatter.h"
 
@@ -177,6 +178,12 @@ static NSMutableArray *instances;
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [appDelegate.esvc enterCellDetail];
+    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithTitle:@"Send!"
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(sendInvitations)];
+    
+    [appDelegate.esvc.navigationItem setRightBarButtonItem:buttonItem animated:YES];
     
     // Enable nested scroll
     
@@ -227,6 +234,11 @@ static NSMutableArray *instances;
 }
 
 -(void)sendInvitations{
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.esvc.navigationItem setRightBarButtonItem:NULL animated:YES];
+    
+    [_eventCell exitInviteMode];
+    
     NSArray *inviteRefs = [_selected allObjects];
     NSMutableArray *userInvites = [[NSMutableArray alloc] init];
     NSMutableArray *phoneInvites = [[NSMutableArray alloc] init];
@@ -247,11 +259,11 @@ static NSMutableArray *instances;
         }
     }
     
-//    _event =
-//    
-//    [_event socketIOInviteWithInviteList:userInvites
-//                         InvitePhoneList:phoneInvites
-//                          AndAcknowledge:nil];
+    if ([userInvites count] > 0 || [phoneInvites count] > 0){
+        [_event socketIOInviteWithInviteList:userInvites
+                             InvitePhoneList:phoneInvites
+                              AndAcknowledge:nil];
+    }
 }
 
 - (int)lengthOfOptions{
@@ -343,6 +355,18 @@ static NSMutableArray *instances;
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
+         selector:@selector(phoneStartEdit)
+         name:UITextFieldTextDidBeginEditingNotification
+         object:_phoneTextField];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(phoneStopEdit)
+         name:UITextFieldTextDidEndEditingNotification
+         object:_phoneTextField];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
          selector:@selector(phoneChange)
          name:UITextFieldTextDidChangeNotification
          object:_phoneTextField];
@@ -420,6 +444,7 @@ static NSMutableArray *instances;
 - (void) addPhoneNumber:(UIButton *)button{
     [button setEnabled:NO];
     [self movePhoneToFriends];
+    
     [_phoneTextField setText:@""];
     [_phoneTextField deleteBackward];
     [self phoneChange];
@@ -431,7 +456,7 @@ static NSMutableArray *instances;
                    atIndex:0];
     
     NSNumber *cellRef = [self getSelectedReferenceFromIndexPath:
-                         [NSIndexPath indexPathForRow:0 inSection:1]];
+                         [NSIndexPath indexPathForRow:0 inSection:2]];
     
     [_selected addObject:cellRef];
     
@@ -445,8 +470,20 @@ static NSMutableArray *instances;
 //    [self.tableView moveRowAtIndexPath:sourceIndexPath
 //                           toIndexPath:destinationIndexPath];
 
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
     
+}
+
+-(void)phoneStartEdit{
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height - 190);
+    
+    NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:1];
+    
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+-(void)phoneStopEdit{
+    self.tableView.frame = [UIScreen mainScreen].bounds;
 }
 
 -(void)phoneChange{

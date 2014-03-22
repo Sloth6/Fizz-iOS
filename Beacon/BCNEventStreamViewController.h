@@ -29,8 +29,8 @@
 typedef enum {
     kOverview,
     kTimeline,
-    kDetail,    // Or invite view
-    kConversation
+    kInvite,
+    kChat
 } ViewMode;
 
 @property NSIndexPath *selectedIndex;
