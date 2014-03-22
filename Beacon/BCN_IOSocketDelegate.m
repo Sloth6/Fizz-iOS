@@ -118,12 +118,14 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSString *fbToken = [FBSession activeSession].accessTokenData.accessToken;
-    NSString *phoneNumber = [appDelegate userPhoneNumber]; //("+" followed by just digits)
+//    NSString *phoneNumber = [appDelegate userPhoneNumber]; //("+" followed by just digits)
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     NSString *iosToken = [pref objectForKey:@"iosToken"];
     
-    appDelegate.userPhoneNumber = NULL;
+    NSString *phoneNumber = [pref objectForKey:@"phoneNumber"];
+    
+//    appDelegate.userPhoneNumber = NULL;
     
     if (fbToken){
         NSLog(@"sending AJAX");

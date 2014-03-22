@@ -61,14 +61,14 @@
     phoneNumber = [NSString stringWithFormat:@"+%@", cleanedString];
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    appDelegate.userPhoneNumber = phoneNumber;
-    
-    [appDelegate.ioSocketDelegate openConnectionCheckingForInternet];
+//    appDelegate.userPhoneNumber = phoneNumber;
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     [pref setObject:[NSNumber numberWithBool:YES] forKey:@"registered"];
+    [pref setObject:phoneNumber forKey:@"phoneNumber"];
     [pref synchronize];
+    
+    [appDelegate.ioSocketDelegate openConnectionCheckingForInternet];
     
     [self finishPhoneSetup];
 }
