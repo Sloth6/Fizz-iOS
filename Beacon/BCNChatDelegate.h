@@ -22,6 +22,9 @@
 @property (strong, nonatomic) BCNEventStreamViewController *esvc;
 @property (strong, nonatomic) BCNInviteViewController *ivc;
 
+// For temporary deletion of the chat portion
+@property int numSectionsDeleted;
+
 @property (strong, nonatomic) UITableView *tableView;
 
 - (void)setupViewForm;

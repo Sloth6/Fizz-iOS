@@ -170,29 +170,7 @@ static NSMutableArray *instances;
 }
 
 -(void)inviteButtonPress{
-    [_inviteButton setEnabled:NO];
-    [_inviteButton setHidden:YES];
-    
-    // Disable main scroll
-    
-    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    [appDelegate.esvc enterCellDetail];
-    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithTitle:@"Send!"
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(sendInvitations)];
-    
-    [appDelegate.esvc.navigationItem setRightBarButtonItem:buttonItem animated:YES];
-    
-    // Enable nested scroll
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-    
-    [self.tableView setScrollEnabled:YES];
-    [self.tableView scrollToRowAtIndexPath:indexPath
-                          atScrollPosition:UITableViewScrollPositionTop
-                                  animated:YES];
+    [_eventCell enterInviteMode];
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{

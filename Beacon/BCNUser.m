@@ -16,6 +16,8 @@ static int kBCNProfilePictureDimension = 50;
 static NSMutableArray *friends;
 
 static NSString *BCN_NEW_USER_LOCATION = @"newUserLocation";
+static NSString *BCN_ADD_FRIEND_LIST = @"addFriendList";
+static NSString *BCN_REMOVE_FRIEND_LIST = @"removeFriendList";
 
 @interface BCNUser (){
     void (^_completionHandler)(UIImage *image);
@@ -160,8 +162,8 @@ static BCNUser *currentUser = nil;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.layer.cornerRadius = cornerRadius;
     imageView.layer.masksToBounds = YES;
-    imageView.layer.borderColor = [UIColor blackColor].CGColor;
-    imageView.layer.borderWidth = 1.0;
+//    imageView.layer.borderColor = [UIColor blackColor].CGColor;
+//    imageView.layer.borderWidth = 1.0;
     
     return imageView;
 }
@@ -400,6 +402,36 @@ static BCNUser *currentUser = nil;
     BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
     
     [[socketIODelegate socketIO] sendEvent:BCN_NEW_USER_LOCATION withData:json andAcknowledge:function];
+}
+
++(void)socketIOAddFriendsUserArray:(NSArray *)friendList
+                   WithAcknowledge:(SocketIOCallback)function{
+    
+    NSArray *uids = [BCNUser getUserIDsFromUsers:friendList];
+    
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    /* Array of UIDs */
+    [json setObject:uids forKey:@"friendList"];
+    
+    BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
+    
+    [[socketIODelegate socketIO] sendEvent:BCN_ADD_FRIEND_LIST withData:json andAcknowledge:function];
+}
+
++(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
+                      WithAcknowledge:(SocketIOCallback)function{
+    
+    NSArray *uids = [BCNUser getUserIDsFromUsers:friendList];
+    
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    /* Array of UIDs */
+    [json setObject:uids forKey:@"friendList"];
+    
+    BCN_IOSocketDelegate *socketIODelegate = [BCNObject getIOSocketDelegate];
+    
+    [[socketIODelegate socketIO] sendEvent:BCN_REMOVE_FRIEND_LIST withData:json andAcknowledge:function];
 }
 
 @end

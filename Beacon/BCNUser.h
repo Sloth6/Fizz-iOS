@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "BCNCoordinate.h"
+#import "SocketIO.h"
+
 
 @interface BCNUser : NSObject
 
@@ -44,5 +46,15 @@
 +(NSArray *)parseUserJSONList:(NSArray *)friendListJSON;
 
 +(NSArray *)getUserIDsFromUsers:(NSArray *)users;
+
++(void)socketIONewUserLocation:(BCNCoordinate *)coord
+                ForUserWithUID:(NSNumber *)uid
+               WithAcknowledge:(SocketIOCallback)function;
+
++(void)socketIOAddFriendsUserArray:(NSArray *)friendList
+                   WithAcknowledge:(SocketIOCallback)function;
+
++(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
+                      WithAcknowledge:(SocketIOCallback)function;
 
 @end

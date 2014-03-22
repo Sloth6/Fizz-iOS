@@ -36,9 +36,24 @@
 }
 
 - (void)enterInviteMode{
+    [_ivc.inviteButton setEnabled:NO];
+    [_ivc.inviteButton setHidden:YES];
+    [_chatButton setEnabled:YES];
+    [_chatButton setHidden:NO];
+    
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
+    // Disable Main Scroll
+    [appDelegate.esvc enterCellDetail];
     appDelegate.esvc.viewMode = kInvite;
+    appDelegate.esvc.currentCell = self;
+    
+    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithTitle:@"Send!"
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(sendInvitations)];
+    
+    [appDelegate.esvc.navigationItem setRightBarButtonItem:buttonItem animated:YES];
     
     // Remove chatbox if there is one
     [_chatDelegate.viewForm removeFromSuperview];
@@ -54,12 +69,34 @@
     [_ivc.tableView setFrame:frame];
     
     [_ivc.tableView reloadData];
+    
+    // Enable nested scroll
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+    
+    [_ivc.tableView setScrollEnabled:YES];
+    [_ivc.tableView scrollToRowAtIndexPath:indexPath
+                          atScrollPosition:UITableViewScrollPositionTop
+                                  animated:YES];
+}
+
+- (void)hideCommitInvites{
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.esvc.navigationItem setRightBarButtonItem:NULL animated:YES];
 }
 
 - (void)exitInviteMode{
+    [_ivc.inviteButton setEnabled:YES];
+    [_ivc.inviteButton setHidden:NO];
+    [_chatButton setEnabled:YES];
+    [_chatButton setHidden:NO];
+    
+    [self hideCommitInvites];
+    
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     appDelegate.esvc.viewMode = kTimeline;
+    appDelegate.esvc.currentCell = NULL;
     
     _chatDelegate.ivc = NULL;
     _chatDelegate.event = NULL;
@@ -73,14 +110,31 @@
     [_ivc.tableView scrollToRowAtIndexPath:indexPath
                           atScrollPosition:UITableViewScrollPositionTop
                                   animated:YES];
+    [_ivc.tableView setScrollEnabled:NO];
     
 //    [_ivc.tableView reloadData];
+}
+
+-(void)scrollToBottom{
+    [_ivc.tableView scrollRectToVisible:CGRectMake(0, _ivc.tableView.contentSize.height - _ivc.tableView.bounds.size.height, _ivc.tableView.bounds.size.width, _ivc.tableView.bounds.size.height)
+                               animated:YES];
 }
 
 - (void)enterChatMode{
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
+    [_chatButton setEnabled:NO];
+    [_chatButton setHidden:YES];
+    
+    [_ivc.inviteButton setEnabled:YES];
+    [_ivc.inviteButton setHidden:NO];
+    
+    [self hideCommitInvites];
+    
+    // Disable Main Scroll
+    [appDelegate.esvc enterCellDetail];
     appDelegate.esvc.viewMode = kChat;
+    appDelegate.esvc.currentCell = self;
     
     // Add chatbox to screen
     [_chatDelegate.viewForm removeFromSuperview];
@@ -103,14 +157,32 @@
     [_ivc.tableView setFrame:frame];
     [_ivc.tableView reloadData];
     
-    //    _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
-    //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
+    _ivc.tableView.scrollEnabled = YES;
+    [self scrollToBottom];
 }
 
 - (void)exitChatMode{
+    [_chatButton setEnabled:YES];
+    [_chatButton setHidden:NO];
+    
+    [_ivc.inviteButton setEnabled:YES];
+    [_ivc.inviteButton setHidden:NO];
+    
+    [self hideCommitInvites];
+    
+    NSIndexSet *sectionsToDelete = [NSIndexSet indexSetWithIndex:1]; //NSMakeRange(1, 2);
+    
+    _chatDelegate.numSectionsDeleted = [sectionsToDelete count];
+    
+    [_ivc.tableView deleteSections:sectionsToDelete
+                  withRowAnimation:UITableViewRowAnimationFade];
+    
+    _chatDelegate.numSectionsDeleted = 0;
+    
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     appDelegate.esvc.viewMode = kTimeline;
+    appDelegate.esvc.currentCell = NULL;
     
     // Add chatbox to screen
     [_chatDelegate.viewForm removeFromSuperview];
@@ -123,11 +195,15 @@
     [_ivc.tableView setFrame:frame];
     //[_ivc.tableView reloadData];
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    //[_ivc.tableView reloadData];
+ 
+    [_ivc.tableView setScrollEnabled:NO];
     
-    [_ivc.tableView scrollToRowAtIndexPath:indexPath
-                          atScrollPosition:UITableViewScrollPositionTop
-                                  animated:YES];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//
+//    [_ivc.tableView scrollToRowAtIndexPath:indexPath
+//                          atScrollPosition:UITableViewScrollPositionTop
+//                                  animated:YES];
     
     //    _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
     //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
@@ -159,6 +235,7 @@
     [_chatButton addTarget:self action:@selector(chatButtonPress)
           forControlEvents:UIControlEventTouchUpInside];
     
+    NSLog(@"\nBUTTONHERE\n");
     [self.contentView addSubview:_chatButton];
 }
 

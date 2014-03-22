@@ -29,7 +29,7 @@ static int kBCNNumCellsBeforeMessages = 1;
 
 @interface BCNChatDelegate ()
 
-@property BOOL nibTextCellLoaded;
+@property NSMutableSet *nibTextCellLoaded;
 @property float pictureDimension;
 @property float textLabelWidth;
 @property BOOL didGetDimensionsFromCell;
@@ -51,11 +51,13 @@ static int kBCNNumCellsBeforeMessages = 1;
     if (self) {
         // Custom initialization
         
-        _nibTextCellLoaded = NO;
+        _nibTextCellLoaded = [[NSMutableSet alloc] init];
         
         _didGetDimensionsFromCell = NO;
         
         _pictureDimension = 52;
+        
+        _numSectionsDeleted = 0;
         
         [self setupKeyboard];
         
@@ -470,7 +472,7 @@ static int kBCNNumCellsBeforeMessages = 1;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+    return 2 - _numSectionsDeleted;
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -514,11 +516,11 @@ static int kBCNNumCellsBeforeMessages = 1;
     
     NSString *cellID = @"TextCell";
     
-    if(!_nibTextCellLoaded)
+    if(![_nibTextCellLoaded containsObject:tableView])
     {
         UINib *nib = [UINib nibWithNibName:@"BCNDetailTextCell" bundle: nil];
         [tableView registerNib:nib forCellReuseIdentifier:cellID];
-        _nibTextCellLoaded = YES;
+        [_nibTextCellLoaded addObject:tableView];
     }
     
     BCNDetailTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID
@@ -527,7 +529,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     if (!_didGetDimensionsFromCell){
         _didGetDimensionsFromCell = YES;
         _textLabelWidth = cell.label.bounds.size.width;
-        _pictureDimension = cell.imageView.bounds.size.width;
+        _pictureDimension = cell.profileImageView.bounds.size.width;
     }
     
     int index = [indexPath item];// - kBCNNumCellsBeforeMessages
@@ -550,8 +552,8 @@ static int kBCNNumCellsBeforeMessages = 1;
     [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
         if (image != NULL){
             // Set image
-            [cell.imageView setImage:image];
-            [BCNUser formatImageViewToCircular:cell.imageView withScalar:1.0];
+            [cell.profileImageView setImage:image];
+            [BCNUser formatImageViewToCircular:cell.profileImageView withScalar:1.0];
         }
     }];
     

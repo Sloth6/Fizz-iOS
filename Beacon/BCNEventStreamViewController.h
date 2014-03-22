@@ -10,6 +10,7 @@
 #import "BCNMapViewController.h"
 
 @class BCNChatDelegate;
+@class BCNNewEventCell;
 
 @interface BCNEventStreamViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
@@ -34,6 +35,7 @@ typedef enum {
 } ViewMode;
 
 @property NSIndexPath *selectedIndex;
+@property BCNNewEventCell *currentCell;
 
 @property ViewMode viewMode;
 

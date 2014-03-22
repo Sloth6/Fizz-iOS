@@ -30,8 +30,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property BCNOverviewCollectionViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
-@property NSIndexPath *inviteToolsIndex;
-
 @property UISwitch *toggleSecret;
 @property UILabel  *secretLabel;
 
@@ -55,7 +53,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         _lineHeight = -1;
         _firstAppear = YES;
-        _inviteToolsIndex = NULL;
+        _currentCell = NULL;
         
         _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
         
@@ -138,7 +136,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 - (void)enterCellDetail{
     [self.collectionView setScrollEnabled:NO];
-    
 }
 
 - (float)mapPositionToOpacity:(float) y{
@@ -434,22 +431,39 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //}
 
 - (void)burgerButtonPress:(UIButton*)button{
-    if (_inviteToolsIndex != NULL) { // In invitation details of event
-        // Disable scrolling within the cell
-        BCNNewEventCell *cell = (BCNNewEventCell *)[self.collectionView cellForItemAtIndexPath:_inviteToolsIndex];
-        
-        [cell scrollToTopAnimated:YES];
-        [cell setScrollingEnabled:NO];
-        
-        // Enable main scrolling
-        self.collectionView.scrollEnabled = YES;
-        
-        _inviteToolsIndex = NULL;
-        
-    } else if (_chatDelegate.event == NULL){ // In the timeline view
-        [self contractView];
-    } else { // In the messenger
-        //[_chatDelegate popView];
+    switch (_viewMode) {
+        case kOverview:
+        {
+            
+        }
+            break;
+            
+        case kTimeline:
+        {
+            [self contractView];
+        }
+            break;
+            
+        case kChat:
+        {
+            [_currentCell exitChatMode];
+            
+            // Enable main scrolling
+            self.collectionView.scrollEnabled = YES;
+        }
+            break;
+            
+        case kInvite:
+        {
+            [_currentCell exitInviteMode];
+            
+            // Enable main scrolling
+            self.collectionView.scrollEnabled = YES;
+        }
+            break;
+            
+        default:
+            break;
     }
 }
 
@@ -678,7 +692,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [_toggleSecret setAlpha:0.0];
         [_secretLabel setAlpha:0.0];
         
-        _inviteToolsIndex = [NSIndexPath indexPathForItem:0 inSection:0];
+        //_currentIndex = [NSIndexPath indexPathForItem:0 inSection:0];
         BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
         
         [nec setScrollingEnabled:YES];
