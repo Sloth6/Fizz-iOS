@@ -48,9 +48,12 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"SELECTED!");
     
+    _esvc.viewMode = kTimeline;
+    
     [_esvc.collectionView setPagingEnabled:YES];
     _esvc.selectedIndex = indexPath;
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
+    [_esvc.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
 }
 
 //- (void)setupBurgerButton{

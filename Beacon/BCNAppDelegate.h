@@ -12,6 +12,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "BCNFacebookLoginDelegate.h"
 #import "BCNEventStreamViewController.h"
+#import "BCNOverviewCollectionViewController.h"
 
 static const UIColor *facebookColor;
 static const UIColor *beaconColor;
@@ -30,6 +31,7 @@ static float const kBCNInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) FBSession *session;
 @property (strong, nonatomic) BCNFacebookLoginDelegate *fbLoginDelegate;
 @property (strong, nonatomic) BCNEventStreamViewController *esvc;
+@property (strong, nonatomic) BCNOverviewCollectionViewController *ocvc;
 
 @property BOOL hasLoggedIn;
 
