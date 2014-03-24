@@ -113,9 +113,11 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
 /* AJAX */
 
 - (BOOL)ajaxPostRequest{
-    NSLog(@"getting active FBaccessToken");
+    NSLog(@"AJAX REQUEST");
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    appDelegate.isConnecting = YES;
     
     NSString *fbToken = [FBSession activeSession].accessTokenData.accessToken;
 //    NSString *phoneNumber = [appDelegate userPhoneNumber]; //("+" followed by just digits)
@@ -128,6 +130,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
 //    appDelegate.userPhoneNumber = NULL;
     
     if (fbToken){
+        
         NSLog(@"sending AJAX");
         
         // FB Session Token
@@ -188,6 +191,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
                               forMode:NSDefaultRunLoopMode];*/
         
         [connection start];
+        appDelegate.hasLoggedIn = YES;
         
         return YES;
     }
@@ -385,6 +389,11 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
 }
 
 - (void)incomingOnLogin:(NSArray *)args{
+    {
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.isConnecting = NO;
+    }
+    
     NSDictionary *json  = [args objectAtIndex:0];
     
     NSDictionary *userJSON = [json objectForKey:@"me"];

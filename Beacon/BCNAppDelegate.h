@@ -34,6 +34,7 @@ static float const kBCNInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) BCNOverviewCollectionViewController *ocvc;
 
 @property BOOL hasLoggedIn;
+@property BOOL isConnecting;
 
 @property (strong, nonatomic) NSString *userPhoneNumber;
 

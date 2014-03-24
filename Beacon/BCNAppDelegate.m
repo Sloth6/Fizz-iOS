@@ -230,11 +230,12 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-    if (![ioSocketDelegate isConnectionOpen]){
+    if ((![ioSocketDelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
+//    if ((![ioSocketDelegate isConnectionOpen]) && !_hasLoggedIn){
         NSLog(@"Connection is not open");
         [ioSocketDelegate openConnectionCheckingForInternet];
     }
-            
+    
 //        [[FBSession activeSession] handleDidBecomeActive];
 }
 
