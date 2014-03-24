@@ -131,6 +131,8 @@ static NSString *BCN_REQUEST = @"request";
 
 // You can always add a seat
 - (void)addSeat{
+    [self restartTimer];
+    
     _pendingNumSeats++;
 }
 
