@@ -13,6 +13,8 @@
 #import "BCNLoginViewController.h"
 #import "BCNEventStreamViewController.h"
 #import "BCNInviteViewController.h"
+#import "BCNBubbleViewController.h"
+#import "BCNParallaxViewController.h"
 
 @implementation BCNAppDelegate
 
@@ -27,6 +29,18 @@
     
     navigationController.automaticallyAdjustsScrollViewInsets = NO;
     self.window.rootViewController = navigationController;
+    
+    _bvc = [[BCNBubbleViewController alloc] init];
+    _esvc.bvc = _bvc;
+    
+    _pvc = [[BCNParallaxViewController alloc] init];
+    _esvc.pvc = _pvc;
+    
+    [self.window addSubview:(UIView *)_bvc.bubbleView];
+    
+    // Add the parallax text view on top of this
+    [self.window addSubview:_pvc.tableView];
+    
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

@@ -12,7 +12,7 @@
 @class BCNEventStreamViewController;
 @class BCNInviteViewController;
 
-@interface BCNChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource>
+@interface BCNChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @property (nonatomic, retain) UIView *viewForm;
 @property (nonatomic, retain) UITextView *chatBox;

@@ -46,5 +46,7 @@
 - (void)updateFriends;
 
 - (void)setupToggle;
+- (void)setupNewEventCell;
+- (void)setupCell;
 
 @end

@@ -15,6 +15,8 @@
 #import "BCNAppDelegate.h"
 #import "BCNNewEventCell.h"
 
+#import "BCNInviteGuestButton.h"
+
 #import "PhoneNumberFormatter.h"
 
 static NSMutableArray *instances;
@@ -152,17 +154,17 @@ static NSMutableArray *instances;
     float midX = (textX + textXEnd)/2;
     
     // InviteButton
-    float inviteWidth = 100;
+    float inviteWidth = 44;
     float inviteX = midX + 20;
     float inviteY = textYEnd + 40;
-    float inviteHeight = 40;
+    float inviteHeight = inviteWidth;
     CGRect inviteFrame = CGRectMake(inviteX, inviteY, inviteWidth, inviteHeight);
     
-    _inviteButton = [UIButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
+    _inviteButton = [BCNInviteGuestButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
     
     [_inviteButton setFrame:inviteFrame];
     
-    [_inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
+    //[_inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
     
     [_inviteButton addTarget:self
                       action:@selector(inviteButtonPress)

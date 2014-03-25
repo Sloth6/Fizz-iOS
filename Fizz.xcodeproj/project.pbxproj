@@ -32,6 +32,17 @@
 		49069B8218661555003D003A /* SBJson4StreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B7A18661555003D003A /* SBJson4StreamTokeniser.m */; };
 		4922702118CA1CA600816AD4 /* BCNEventStreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4922702018CA1CA600816AD4 /* BCNEventStreamViewController.m */; };
 		49469A83189D6742005EAE66 /* BCNMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 49469A82189D6742005EAE66 /* BCNMarker.m */; };
+		494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */; };
+		494BFB3218E08FD600C59D18 /* CMTPCustomForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2118E08FD600C59D18 /* CMTPCustomForce.m */; };
+		494BFB3318E08FD600C59D18 /* CMTPForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2318E08FD600C59D18 /* CMTPForce.m */; };
+		494BFB3418E08FD600C59D18 /* CMTPIntegrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2518E08FD600C59D18 /* CMTPIntegrator.m */; };
+		494BFB3518E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2718E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m */; };
+		494BFB3618E08FD600C59D18 /* CMTPParticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2918E08FD600C59D18 /* CMTPParticle.m */; };
+		494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2B18E08FD600C59D18 /* CMTPParticleSystem.m */; };
+		494BFB3818E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2D18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m */; };
+		494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2F18E08FD600C59D18 /* CMTPSpring.m */; };
+		494BFB3D18E093B400C59D18 /* BCNBubbleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB3C18E093B400C59D18 /* BCNBubbleViewController.m */; };
+		494BFB4018E0B88400C59D18 /* BCNInteractiveBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB3F18E0B88400C59D18 /* BCNInteractiveBubble.m */; };
 		4950F8AE18D0E41900E6D798 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E9186A5C7900D37B2A /* libz.dylib */; };
 		4954FB0118D3AAA40083D07F /* BCNInputPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4954FAFF18D3AAA40083D07F /* BCNInputPhoneViewController.m */; };
 		4954FB0218D3AAA40083D07F /* BCNInputPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4954FB0018D3AAA40083D07F /* BCNInputPhoneViewController.xib */; };
@@ -42,7 +53,13 @@
 		4954FB2018D4F1010083D07F /* BCNInviteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4954FB1F18D4F1010083D07F /* BCNInviteCell.m */; };
 		495E9D25187BADB4008F7CC7 /* BCNTimelineHostView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 495E9D24187BADB4008F7CC7 /* BCNTimelineHostView.xib */; };
 		495E9D28187BAF98008F7CC7 /* BCNSpeechBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9D27187BAF98008F7CC7 /* BCNSpeechBubble.m */; };
+		497DB6E118E1090900095053 /* BCNBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6E018E1090900095053 /* BCNBubbleView.m */; };
+		497DB6E618E11DE000095053 /* BCNParallaxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6E518E11DE000095053 /* BCNParallaxView.m */; };
+		497DB6EC18E1220400095053 /* BCNParallaxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6EB18E1220400095053 /* BCNParallaxCell.m */; };
+		497DB6EF18E125E800095053 /* BCNParallaxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6EE18E125E800095053 /* BCNParallaxViewController.m */; };
+		497DB6F218E12A6D00095053 /* BCNParallaxTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6F118E12A6D00095053 /* BCNParallaxTableView.m */; };
 		497F349118DCB75D00B70FD4 /* BCNChatDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349018DCB75D00B70FD4 /* BCNChatDelegate.m */; };
+		497F349518E07F1200B70FD4 /* BCNInviteGuestButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349418E07F1200B70FD4 /* BCNInviteGuestButton.m */; };
 		49871637187D1713004C8F16 /* BCNTimelineFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 49871636187D1713004C8F16 /* BCNTimelineFlowLayout.m */; };
 		498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498E5E6D18B42CB300487898 /* FacebookSDK.framework */; };
 		498E5E7618B4506000487898 /* BCNEventsViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 498E5E7518B4506000487898 /* BCNEventsViewViewController.m */; };
@@ -217,6 +234,30 @@
 		4922702018CA1CA600816AD4 /* BCNEventStreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNEventStreamViewController.m; sourceTree = "<group>"; };
 		49469A81189D6742005EAE66 /* BCNMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNMarker.h; sourceTree = "<group>"; };
 		49469A82189D6742005EAE66 /* BCNMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNMarker.m; sourceTree = "<group>"; };
+		494BFB1D18E08FD600C59D18 /* CMTPAttraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPAttraction.h; path = CMTraerPhysics/CMTraerPhysics/CMTPAttraction.h; sourceTree = SOURCE_ROOT; };
+		494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPAttraction.m; path = CMTraerPhysics/CMTraerPhysics/CMTPAttraction.m; sourceTree = SOURCE_ROOT; };
+		494BFB1F18E08FD600C59D18 /* CMTPCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPCommon.h; path = CMTraerPhysics/CMTraerPhysics/CMTPCommon.h; sourceTree = SOURCE_ROOT; };
+		494BFB2018E08FD600C59D18 /* CMTPCustomForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPCustomForce.h; path = CMTraerPhysics/CMTraerPhysics/CMTPCustomForce.h; sourceTree = SOURCE_ROOT; };
+		494BFB2118E08FD600C59D18 /* CMTPCustomForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPCustomForce.m; path = CMTraerPhysics/CMTraerPhysics/CMTPCustomForce.m; sourceTree = SOURCE_ROOT; };
+		494BFB2218E08FD600C59D18 /* CMTPForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPForce.h; path = CMTraerPhysics/CMTraerPhysics/CMTPForce.h; sourceTree = SOURCE_ROOT; };
+		494BFB2318E08FD600C59D18 /* CMTPForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPForce.m; path = CMTraerPhysics/CMTraerPhysics/CMTPForce.m; sourceTree = SOURCE_ROOT; };
+		494BFB2418E08FD600C59D18 /* CMTPIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPIntegrator.h; path = CMTraerPhysics/CMTraerPhysics/CMTPIntegrator.h; sourceTree = SOURCE_ROOT; };
+		494BFB2518E08FD600C59D18 /* CMTPIntegrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPIntegrator.m; path = CMTraerPhysics/CMTraerPhysics/CMTPIntegrator.m; sourceTree = SOURCE_ROOT; };
+		494BFB2618E08FD600C59D18 /* CMTPModifiedEulerIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPModifiedEulerIntegrator.h; path = CMTraerPhysics/CMTraerPhysics/CMTPModifiedEulerIntegrator.h; sourceTree = SOURCE_ROOT; };
+		494BFB2718E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPModifiedEulerIntegrator.m; path = CMTraerPhysics/CMTraerPhysics/CMTPModifiedEulerIntegrator.m; sourceTree = SOURCE_ROOT; };
+		494BFB2818E08FD600C59D18 /* CMTPParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPParticle.h; path = CMTraerPhysics/CMTraerPhysics/CMTPParticle.h; sourceTree = SOURCE_ROOT; };
+		494BFB2918E08FD600C59D18 /* CMTPParticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPParticle.m; path = CMTraerPhysics/CMTraerPhysics/CMTPParticle.m; sourceTree = SOURCE_ROOT; };
+		494BFB2A18E08FD600C59D18 /* CMTPParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPParticleSystem.h; path = CMTraerPhysics/CMTraerPhysics/CMTPParticleSystem.h; sourceTree = SOURCE_ROOT; };
+		494BFB2B18E08FD600C59D18 /* CMTPParticleSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPParticleSystem.m; path = CMTraerPhysics/CMTraerPhysics/CMTPParticleSystem.m; sourceTree = SOURCE_ROOT; };
+		494BFB2C18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPRungeKuttaIntegrator.h; path = CMTraerPhysics/CMTraerPhysics/CMTPRungeKuttaIntegrator.h; sourceTree = SOURCE_ROOT; };
+		494BFB2D18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPRungeKuttaIntegrator.m; path = CMTraerPhysics/CMTraerPhysics/CMTPRungeKuttaIntegrator.m; sourceTree = SOURCE_ROOT; };
+		494BFB2E18E08FD600C59D18 /* CMTPSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPSpring.h; path = CMTraerPhysics/CMTraerPhysics/CMTPSpring.h; sourceTree = SOURCE_ROOT; };
+		494BFB2F18E08FD600C59D18 /* CMTPSpring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPSpring.m; path = CMTraerPhysics/CMTraerPhysics/CMTPSpring.m; sourceTree = SOURCE_ROOT; };
+		494BFB3018E08FD600C59D18 /* CMTraerPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTraerPhysics.h; path = CMTraerPhysics/CMTraerPhysics/CMTraerPhysics.h; sourceTree = SOURCE_ROOT; };
+		494BFB3B18E093B400C59D18 /* BCNBubbleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNBubbleViewController.h; sourceTree = "<group>"; };
+		494BFB3C18E093B400C59D18 /* BCNBubbleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNBubbleViewController.m; sourceTree = "<group>"; };
+		494BFB3E18E0B88400C59D18 /* BCNInteractiveBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNInteractiveBubble.h; sourceTree = "<group>"; };
+		494BFB3F18E0B88400C59D18 /* BCNInteractiveBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNInteractiveBubble.m; sourceTree = "<group>"; };
 		4954FAFE18D3AAA40083D07F /* BCNInputPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNInputPhoneViewController.h; sourceTree = "<group>"; };
 		4954FAFF18D3AAA40083D07F /* BCNInputPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNInputPhoneViewController.m; sourceTree = "<group>"; };
 		4954FB0018D3AAA40083D07F /* BCNInputPhoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNInputPhoneViewController.xib; sourceTree = "<group>"; };
@@ -232,8 +273,20 @@
 		495E9D24187BADB4008F7CC7 /* BCNTimelineHostView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNTimelineHostView.xib; sourceTree = "<group>"; };
 		495E9D26187BAF98008F7CC7 /* BCNSpeechBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNSpeechBubble.h; sourceTree = "<group>"; };
 		495E9D27187BAF98008F7CC7 /* BCNSpeechBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNSpeechBubble.m; sourceTree = "<group>"; };
+		497DB6DF18E1090900095053 /* BCNBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNBubbleView.h; sourceTree = "<group>"; };
+		497DB6E018E1090900095053 /* BCNBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNBubbleView.m; sourceTree = "<group>"; };
+		497DB6E418E11DE000095053 /* BCNParallaxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNParallaxView.h; sourceTree = "<group>"; };
+		497DB6E518E11DE000095053 /* BCNParallaxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNParallaxView.m; sourceTree = "<group>"; };
+		497DB6EA18E1220400095053 /* BCNParallaxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNParallaxCell.h; sourceTree = "<group>"; };
+		497DB6EB18E1220400095053 /* BCNParallaxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNParallaxCell.m; sourceTree = "<group>"; };
+		497DB6ED18E125E800095053 /* BCNParallaxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNParallaxViewController.h; sourceTree = "<group>"; };
+		497DB6EE18E125E800095053 /* BCNParallaxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNParallaxViewController.m; sourceTree = "<group>"; };
+		497DB6F018E12A6D00095053 /* BCNParallaxTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNParallaxTableView.h; sourceTree = "<group>"; };
+		497DB6F118E12A6D00095053 /* BCNParallaxTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNParallaxTableView.m; sourceTree = "<group>"; };
 		497F348F18DCB75D00B70FD4 /* BCNChatDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNChatDelegate.h; sourceTree = "<group>"; };
 		497F349018DCB75D00B70FD4 /* BCNChatDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNChatDelegate.m; sourceTree = "<group>"; };
+		497F349318E07F1200B70FD4 /* BCNInviteGuestButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNInviteGuestButton.h; sourceTree = "<group>"; };
+		497F349418E07F1200B70FD4 /* BCNInviteGuestButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNInviteGuestButton.m; sourceTree = "<group>"; };
 		49871635187D1713004C8F16 /* BCNTimelineFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTimelineFlowLayout.h; sourceTree = "<group>"; };
 		49871636187D1713004C8F16 /* BCNTimelineFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTimelineFlowLayout.m; sourceTree = "<group>"; };
 		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
@@ -506,6 +559,46 @@
 			name = NestedView;
 			sourceTree = "<group>";
 		};
+		494BFB1B18E08FBF00C59D18 /* Physics */ = {
+			isa = PBXGroup;
+			children = (
+				494BFB1D18E08FD600C59D18 /* CMTPAttraction.h */,
+				494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */,
+				494BFB1F18E08FD600C59D18 /* CMTPCommon.h */,
+				494BFB2018E08FD600C59D18 /* CMTPCustomForce.h */,
+				494BFB2118E08FD600C59D18 /* CMTPCustomForce.m */,
+				494BFB2218E08FD600C59D18 /* CMTPForce.h */,
+				494BFB2318E08FD600C59D18 /* CMTPForce.m */,
+				494BFB2418E08FD600C59D18 /* CMTPIntegrator.h */,
+				494BFB2518E08FD600C59D18 /* CMTPIntegrator.m */,
+				494BFB2618E08FD600C59D18 /* CMTPModifiedEulerIntegrator.h */,
+				494BFB2718E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m */,
+				494BFB2818E08FD600C59D18 /* CMTPParticle.h */,
+				494BFB2918E08FD600C59D18 /* CMTPParticle.m */,
+				494BFB2A18E08FD600C59D18 /* CMTPParticleSystem.h */,
+				494BFB2B18E08FD600C59D18 /* CMTPParticleSystem.m */,
+				494BFB2C18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.h */,
+				494BFB2D18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m */,
+				494BFB2E18E08FD600C59D18 /* CMTPSpring.h */,
+				494BFB2F18E08FD600C59D18 /* CMTPSpring.m */,
+				494BFB3018E08FD600C59D18 /* CMTraerPhysics.h */,
+			);
+			name = Physics;
+			sourceTree = "<group>";
+		};
+		494BFB3A18E0939500C59D18 /* Bubbles */ = {
+			isa = PBXGroup;
+			children = (
+				494BFB3B18E093B400C59D18 /* BCNBubbleViewController.h */,
+				494BFB3C18E093B400C59D18 /* BCNBubbleViewController.m */,
+				494BFB3E18E0B88400C59D18 /* BCNInteractiveBubble.h */,
+				494BFB3F18E0B88400C59D18 /* BCNInteractiveBubble.m */,
+				497DB6DF18E1090900095053 /* BCNBubbleView.h */,
+				497DB6E018E1090900095053 /* BCNBubbleView.m */,
+			);
+			name = Bubbles;
+			sourceTree = "<group>";
+		};
 		4954FB1B18D4F0900083D07F /* InviteView */ = {
 			isa = PBXGroup;
 			children = (
@@ -557,6 +650,30 @@
 			name = Timeline;
 			sourceTree = "<group>";
 		};
+		497DB6E318E11DA100095053 /* Parallax Scroll */ = {
+			isa = PBXGroup;
+			children = (
+				497DB6E418E11DE000095053 /* BCNParallaxView.h */,
+				497DB6E518E11DE000095053 /* BCNParallaxView.m */,
+				497DB6F018E12A6D00095053 /* BCNParallaxTableView.h */,
+				497DB6F118E12A6D00095053 /* BCNParallaxTableView.m */,
+				497DB6EA18E1220400095053 /* BCNParallaxCell.h */,
+				497DB6EB18E1220400095053 /* BCNParallaxCell.m */,
+				497DB6ED18E125E800095053 /* BCNParallaxViewController.h */,
+				497DB6EE18E125E800095053 /* BCNParallaxViewController.m */,
+			);
+			name = "Parallax Scroll";
+			sourceTree = "<group>";
+		};
+		497F349218E07EE300B70FD4 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				497F349318E07F1200B70FD4 /* BCNInviteGuestButton.h */,
+				497F349418E07F1200B70FD4 /* BCNInviteGuestButton.m */,
+			);
+			name = Buttons;
+			sourceTree = "<group>";
+		};
 		499A8E7918CD32B000842EA7 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
@@ -587,6 +704,9 @@
 		49C8B0E91888B3C500400832 /* Collection View Cells */ = {
 			isa = PBXGroup;
 			children = (
+				497DB6E318E11DA100095053 /* Parallax Scroll */,
+				494BFB3A18E0939500C59D18 /* Bubbles */,
+				497F349218E07EE300B70FD4 /* Buttons */,
 				49C8B1531889F08600400832 /* BCNEventCell.h */,
 				49C8B1541889F08600400832 /* BCNEventCell.m */,
 				4954FB0918D4BD280083D07F /* BCNNewEventCell.h */,
@@ -707,6 +827,7 @@
 		49D5C9DB1860470E002BB1F0 /* Internal */ = {
 			isa = PBXGroup;
 			children = (
+				494BFB1B18E08FBF00C59D18 /* Physics */,
 				49D5C9DC1860471D002BB1F0 /* BCNInternalUtils.h */,
 				49D5C9DD1860471D002BB1F0 /* BCNInternalUtils.m */,
 			);
@@ -999,6 +1120,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */,
 				49EEEA9418D95D1200BDA605 /* BCNTimelineEventCell.m in Sources */,
 				49C9619B18D361830061A903 /* BCNNavigationBar.m in Sources */,
 				499A8E7818CD304300842EA7 /* BCNEventDetailViewDelegate.m in Sources */,
@@ -1007,19 +1129,26 @@
 				49C9619518D2A4720061A903 /* BCNOverviewTransitionLayout.m in Sources */,
 				4954FB0818D3AB800083D07F /* PhoneNumberFormatter.m in Sources */,
 				49EEEA9718D972FB00BDA605 /* BCNBackspaceResignTextView.m in Sources */,
+				494BFB3318E08FD600C59D18 /* CMTPForce.m in Sources */,
 				49069B2618652D58003D003A /* BCNMessage.m in Sources */,
+				494BFB3218E08FD600C59D18 /* CMTPCustomForce.m in Sources */,
 				498E5E7618B4506000487898 /* BCNEventsViewViewController.m in Sources */,
 				49C8B1551889F08600400832 /* BCNEventCell.m in Sources */,
+				497DB6F218E12A6D00095053 /* BCNParallaxTableView.m in Sources */,
 				49A31F6318CF9D46001214B9 /* BCNMessageTextView.m in Sources */,
 				49C8B0E51881BD4E00400832 /* BCNCellFlowLayout.m in Sources */,
+				494BFB3418E08FD600C59D18 /* CMTPIntegrator.m in Sources */,
 				49069B2318652C66003D003A /* BCNEvent.m in Sources */,
 				4954FB2018D4F1010083D07F /* BCNInviteCell.m in Sources */,
 				49069B1C186517FE003D003A /* SocketIOTransportWebsocket.m in Sources */,
 				49069B8218661555003D003A /* SBJson4StreamTokeniser.m in Sources */,
+				494BFB3518E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m in Sources */,
 				4954FB0B18D4BD280083D07F /* BCNNewEventCell.m in Sources */,
+				494BFB4018E0B88400C59D18 /* BCNInteractiveBubble.m in Sources */,
 				49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */,
 				49D8661A18CE71CE00B208CF /* BCNTextInputView.m in Sources */,
 				49A31F5C18CF5E3A001214B9 /* BCNTestViewController.m in Sources */,
+				494BFB3D18E093B400C59D18 /* BCNBubbleViewController.m in Sources */,
 				49D5C9E218604973002BB1F0 /* BCN_Reachability.m in Sources */,
 				49069B0618651731003D003A /* SRWebSocket.m in Sources */,
 				49D5C9AC186042C2002BB1F0 /* main.m in Sources */,
@@ -1032,18 +1161,26 @@
 				499A8E7F18CD336800842EA7 /* BCNDetailTextCell.m in Sources */,
 				495E9D28187BAF98008F7CC7 /* BCNSpeechBubble.m in Sources */,
 				49069B1D186517FE003D003A /* SocketIOTransportXHR.m in Sources */,
+				497DB6EC18E1220400095053 /* BCNParallaxCell.m in Sources */,
 				49C8B0F91888B62000400832 /* BCNBeaconInfoCell.m in Sources */,
 				49069B8018661555003D003A /* SBJson4Writer.m in Sources */,
 				49069B7D18661555003D003A /* SBJson4StreamWriter.m in Sources */,
+				494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */,
 				49E983F1186A5D1600D37B2A /* BCNMapViewController.m in Sources */,
 				49EEEA9118D932F000BDA605 /* BCNBackspaceResignTextField.m in Sources */,
 				49D5C9D0186042F7002BB1F0 /* BCFacebookConnection.m in Sources */,
 				49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */,
+				497DB6EF18E125E800095053 /* BCNParallaxViewController.m in Sources */,
 				49871637187D1713004C8F16 /* BCNTimelineFlowLayout.m in Sources */,
 				49D5C9DE1860471D002BB1F0 /* BCNInternalUtils.m in Sources */,
 				49C9619218D2A3DD0061A903 /* BCNMainTransitionController.m in Sources */,
 				49069B1B186517FE003D003A /* SocketIOPacket.m in Sources */,
+				494BFB3618E08FD600C59D18 /* CMTPParticle.m in Sources */,
+				497DB6E618E11DE000095053 /* BCNParallaxView.m in Sources */,
+				494BFB3818E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m in Sources */,
 				49C9618E18D28E3F0061A903 /* BCNOverviewCollectionViewController.m in Sources */,
+				497F349518E07F1200B70FD4 /* BCNInviteGuestButton.m in Sources */,
+				497DB6E118E1090900095053 /* BCNBubbleView.m in Sources */,
 				49469A83189D6742005EAE66 /* BCNMarker.m in Sources */,
 				49C8B0EF1888B46600400832 /* BCNEngagedUserCell.m in Sources */,
 				4922702118CA1CA600816AD4 /* BCNEventStreamViewController.m in Sources */,
@@ -1054,6 +1191,7 @@
 				49BBF68818942B5400292723 /* BCNCoordinate.m in Sources */,
 				49069B19186517FE003D003A /* SocketIO.m in Sources */,
 				49069B1A186517FE003D003A /* SocketIOJSONSerialization.m in Sources */,
+				494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */,
 				49069B7E18661555003D003A /* SBJson4StreamParser.m in Sources */,
 				49BBF68E18945C9100292723 /* BCNObject.m in Sources */,
 				49069B0418651731003D003A /* base64.c in Sources */,

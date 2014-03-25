@@ -33,8 +33,12 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     [super deleteBackward];
     
     if ([self.text isEqualToString:@""]){
-        // Resign first responder status, update interface
-        [_esvc exitNewEventPrompt:self];
+        if (_esvc != NULL){
+            // Resign first responder status, update interface
+            [_esvc exitNewEventPrompt:self];
+        } else {
+            [self resignFirstResponder];
+        }
     }
 }
 

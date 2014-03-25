@@ -285,11 +285,13 @@ static BCNUser *currentUser = nil;
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         // Call completion handler.
-                        _completionHandler(image);
-                        
-                        for (int i = 0; i < [_completionHandlers count]; ++i){
-                            _completionHandler = [_completionHandlers objectAtIndex:i];
+                        if (_completionHandler != nil){
                             _completionHandler(image);
+                            
+                            for (int i = 0; i < [_completionHandlers count]; ++i){
+                                _completionHandler = [_completionHandlers objectAtIndex:i];
+                                _completionHandler(image);
+                            }
                         }
                         
                         // Clean up.
@@ -300,13 +302,15 @@ static BCNUser *currentUser = nil;
             }
         });
     } else {
-        _completionHandler = [handler copy];
-        
-        // Call completion handler.
-        _completionHandler(image);
-        
-        // Clean up.
-        _completionHandler = nil;
+        if (handler != NULL){
+            _completionHandler = [handler copy];
+            
+            // Call completion handler.
+            _completionHandler(image);
+            
+            // Clean up.
+            _completionHandler = nil;
+        }
     }
 }
 
@@ -344,6 +348,9 @@ static BCNUser *currentUser = nil;
     user.userType = userType;
     user.phoneNumber = phoneNumber;
     user.name = name;
+    
+    // Prefetch all images
+    [user fetchProfilePictureIfNeededWithCompletionHandler:nil];
     
     return user;
 }

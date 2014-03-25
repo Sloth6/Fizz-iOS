@@ -24,6 +24,9 @@ static float const kBCNCommentProfilePictureHeight = 50;
 static float const kBCNInviteProfilePictureWidth = 50;
 static float const kBCNInviteProfilePictureHeight = 50;
 
+@class BCNBubbleViewController;
+@class BCNParallaxViewController;
+
 @interface BCNAppDelegate : UIResponder <UIApplicationDelegate, SocketIODelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -32,6 +35,8 @@ static float const kBCNInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) BCNFacebookLoginDelegate *fbLoginDelegate;
 @property (strong, nonatomic) BCNEventStreamViewController *esvc;
 @property (strong, nonatomic) BCNOverviewCollectionViewController *ocvc;
+@property (strong, nonatomic) BCNBubbleViewController *bvc;
+@property (strong, nonatomic) BCNParallaxViewController *pvc;
 
 @property BOOL hasLoggedIn;
 @property BOOL isConnecting;

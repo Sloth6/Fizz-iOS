@@ -30,6 +30,8 @@ static NSString *BCN_REQUEST = @"request";
 @property (nonatomic) int numSeats;
 @property (nonatomic) int pendingNumSeats;
 
+@property BOOL haveSeatsChanged;
+
 @property NSTimer *seatTimer;
 
 
@@ -40,7 +42,7 @@ static NSString *BCN_REQUEST = @"request";
 @property BOOL inviteOnly;
 
 // A lightly-sorted list of users who are engaged with the event (attending or commenting or both)
-@property (strong, nonatomic) NSMutableArray *engaged;
+//@property (strong, nonatomic) NSMutableArray *engaged;
 
 @end
 
@@ -58,6 +60,7 @@ static NSString *BCN_REQUEST = @"request";
     self = [super init];
     
     if (self){
+        _haveSeatsChanged = YES;
     }
     
     return self;
@@ -84,16 +87,25 @@ static NSString *BCN_REQUEST = @"request";
 }
 
 -(NSArray *)messages{
-    return [_messages copy];
+    // Autoreleased
+    return [NSArray arrayWithArray:_messages];
 }
 
 -(NSArray *)attendees{
-    return [attendees copy];
+    // Autoreleased
+    return [NSArray arrayWithArray:attendees];
 }
 
--(NSArray *)engaged{
-    return [_engaged copy];
+-(NSArray *)notYetAttending{
+    NSMutableArray *notAttending = [_invitees copy];
+    [notAttending removeObjectsInArray:attendees];
+    
+    return [NSArray arrayWithArray:notAttending];
 }
+
+//-(NSArray *)engaged{
+//    return [_engaged copy];
+//}
 
 -(int)numSeats{
     return _numSeats;
@@ -133,6 +145,7 @@ static NSString *BCN_REQUEST = @"request";
 - (void)addSeat{
     [self restartTimer];
     
+    _haveSeatsChanged = YES;
     _pendingNumSeats++;
 }
 
@@ -143,12 +156,27 @@ static NSString *BCN_REQUEST = @"request";
     int numOccupiedSeats = 0;
     
     if (_pendingNumSeats > numOccupiedSeats){
+        _haveSeatsChanged = YES;
         _pendingNumSeats--;
         
         return YES;
     } else {
         return NO;
     }
+}
+
+-(void)addGuest:(BCNUser *)guest{
+    if (![_invitees containsObject:guest]){
+        [_invitees addObject:guest];
+    }
+}
+
+-(BOOL)haveSeatsChangedSinceLastCheck{
+    BOOL result = _haveSeatsChanged;
+    
+    _haveSeatsChanged = NO;
+    
+    return result;
 }
 
 - (void)pushSeatsToServer{
@@ -340,22 +368,22 @@ static NSString *BCN_REQUEST = @"request";
     return commentingAttendees;
 }
 
--(void)updateEngaged{
-    NSMutableArray *uniqueCommenters = [self getArrayOfUniqueCommenters];
-    
-    NSMutableArray *uniqueAttendees = [attendees copy];
-    
-    // Removes commentingAttendees from uniqueCommenters and attendees
-    NSMutableArray *commentingAttendees = [self takeCommentingAttendeesFromCommenters:uniqueCommenters
-                                                                         andAttendees:uniqueAttendees];
-    
-    NSMutableArray *engagedTemp = commentingAttendees;
-    
-    [engagedTemp addObjectsFromArray:uniqueCommenters];
-    [engagedTemp addObjectsFromArray:uniqueAttendees];
-    
-    _engaged = engagedTemp;
-}
+//-(void)updateEngaged{
+//    NSMutableArray *uniqueCommenters = [self getArrayOfUniqueCommenters];
+//    
+//    NSMutableArray *uniqueAttendees = [attendees copy];
+//    
+//    // Removes commentingAttendees from uniqueCommenters and attendees
+//    NSMutableArray *commentingAttendees = [self takeCommentingAttendeesFromCommenters:uniqueCommenters
+//                                                                         andAttendees:uniqueAttendees];
+//    
+//    NSMutableArray *engagedTemp = commentingAttendees;
+//    
+//    [engagedTemp addObjectsFromArray:uniqueCommenters];
+//    [engagedTemp addObjectsFromArray:uniqueAttendees];
+//    
+//    _engaged = engagedTemp;
+//}
 
 +(BCNEvent *)parseJSON:(NSDictionary *)eventJSON{
     if (eventJSON == NULL){

@@ -31,9 +31,14 @@
 
 -(BCNUser *)creator;
 -(NSArray *)messages;
+
+// Attendees is a subset of invitees ALWAYS. People who join a non-secret event are "invited"
 -(NSArray *)attendees;
 -(NSArray *)invitees;
--(NSArray *)engaged;
+// invites - attendees
+-(NSArray *)notYetAttending;
+
+//-(NSArray *)engaged;
 -(BOOL)isInviteOnly;
 -(BCNMessage *)firstMessage;
 
@@ -43,13 +48,17 @@
 -(void)addSeat;
 -(BOOL)removeSeat;
 
+-(BOOL)haveSeatsChangedSinceLastCheck;
+
+-(void)addGuest:(BCNUser *)guest;
+
 // Most recent new thing, used for sorting
 -(NSDate *)lastUpdate;
 
 +(BCNEvent *)eventWithEID:(NSNumber *)eID;
 +(void)setupEventClass;
 
--(void)updateEngaged;
+//-(void)updateEngaged;
 
 +(BCNEvent *)parseJSON:(NSDictionary *)eventJSON;
 +(NSArray *)parseEventJSONList:(NSArray *)eventListJSON;

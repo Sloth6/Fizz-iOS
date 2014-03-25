@@ -35,6 +35,18 @@
     return self;
 }
 
+- (void)setupNewEventCell{
+    [self setupNewEventTextView];
+}
+
+- (void)setupEventCell{
+    [self setupTextView];
+    
+    [self setupTableview];
+    
+    [self setupChat];
+}
+
 - (void)enterInviteMode{
     [_ivc.inviteButton setEnabled:NO];
     [_ivc.inviteButton setHidden:YES];
@@ -311,11 +323,11 @@
     [self.contentView addSubview:_label];
 }
 
-- (void)setupTextView{
+- (void)setupNewEventTextView{
     // Hard coded value, should be fine for these purposes
     float keyboardHeight = 216;
     
-    float hInset  = 20;
+    float hInset  = 50;
     float hOutset = hInset;
     float vInset  = 60;
     float vOutset = 50 + keyboardHeight;
@@ -329,9 +341,27 @@
     float y = vInset;
     float height = sHeight - y - vOutset;
     
+    [_textView setFrame:CGRectMake(x, y, width, height)];
+}
+
+- (void)setupTextView{
+    float hInset  = 50;
+    float hOutset = hInset;
+    float vInset  = 341;
+    float vOutset = 151;
+    
+    float sWidth  = [UIScreen mainScreen].bounds.size.width;
+    float sHeight = [UIScreen mainScreen].bounds.size.height;
+    
+    float x = hInset;
+    float width = sWidth - x - hOutset;
+    
+    float y = vInset;
+    float height = sHeight - y - vOutset;
+    
     _textView = [[BCNBackspaceResignTextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
     
-    [_textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:26]];
+    [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
     [_textView setEditable:NO];
     [_textView setScrollEnabled:NO];
 }

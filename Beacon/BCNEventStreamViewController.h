@@ -11,6 +11,8 @@
 
 @class BCNChatDelegate;
 @class BCNNewEventCell;
+@class BCNBubbleViewController;
+@class BCNParallaxViewController;
 
 @interface BCNEventStreamViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
@@ -26,6 +28,8 @@
 
 @property BCNChatDelegate *chatDelegate;
 @property BCNMapViewController *mvc;
+@property BCNBubbleViewController *bvc;
+@property BCNParallaxViewController *pvc;
 
 typedef enum {
     kOverview,

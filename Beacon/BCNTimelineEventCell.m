@@ -64,7 +64,7 @@
     
     _textView = [[UITextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
 
-    [_textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:26]];
+    [_textView setFont:[UIFont fontWithName:@"Helvetica Neue" size:38]];
     [_textView setEditable:NO];
     
     [_textView setScrollEnabled:NO];

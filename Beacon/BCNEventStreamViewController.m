@@ -14,10 +14,15 @@
 #import "BCNAppDelegate.h"
 
 #import "BCNTitleFlowLayout.h"
+#import "BCNParallaxViewController.h"
 
 #import "BCNChatDelegate.h"
 #import "BCNOverviewCollectionViewController.h"
 #import "BCNBackspaceResignTextView.h"
+
+#import "BCNBubbleViewController.h"
+
+#import "BCNInteractiveBubble.h"
 
 #import "BCNTestViewController.h"
 
@@ -130,6 +135,11 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         _chatDelegate.esvc = self;
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        
+        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(30, 200, 40, 40)];
+        
+        [self.view addSubview:bubble];
+        
     }
     return self;
 }
@@ -278,7 +288,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
-        
+        [cell setupNewEventCell];
         cell = [self setupNewEventCell:cell];
         
         cell.chatDelegate = _chatDelegate;
@@ -291,7 +301,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
-        
         BCNEvent *event = [_events objectAtIndex:eventNum];
         
         [cell setEvent:event];
@@ -752,7 +761,15 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
+        [self.pvc.tableView reloadData];
     });
+    
+    for (int i = 0; i < [_events count]; ++i){
+        BCNEvent *event = [_events objectAtIndex:i];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:1];
+        [_bvc updateBubblesForEvent:event AtIndex:indexPath Animated:NO];
+    }
     
     return;
 }

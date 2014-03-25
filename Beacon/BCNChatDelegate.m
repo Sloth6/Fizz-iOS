@@ -61,11 +61,6 @@ static int kBCNNumCellsBeforeMessages = 1;
         
         [self setupKeyboard];
         
-        //turn off scrolling and set the font details.
-        chatBox.scrollEnabled = NO;
-        chatBox.font = [UIFont fontWithName:@"Helvetica" size:14];
-        chatBox.returnKeyType = UIReturnKeySend;
-        
         //        [[self collectionView] scrollToItemAtIndexPath:
         //         [NSIndexPath indexPathForItem:kBCNNumCellsBeforeMessages inSection:0]
         //                                      atScrollPosition:UICollectionViewScrollPositionTop
@@ -112,6 +107,12 @@ static int kBCNNumCellsBeforeMessages = 1;
     chatBox    = tvc.textView;
     chatButton = tvc.rightButton;
     
+    chatBox.delegate = self;
+    
+    //turn off scrolling and set the font details.
+    chatBox.font = [UIFont fontWithName:@"Helvetica" size:14];
+    chatBox.returnKeyType = UIReturnKeySend;
+    
     //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     [tvc.view setFrame:viewFormRect];
@@ -132,12 +133,14 @@ static int kBCNNumCellsBeforeMessages = 1;
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     
-    //set notification for when a key is pressed.
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector: @selector(keyPressed:)
-                                                 name: UITextViewTextDidChangeNotification
-                                               object: nil];
+//    //set notification for when a key is pressed.
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector: @selector(keyPressed:)
+//                                                 name: UITextViewTextDidChangeNotification
+//                                               object: nil];
 }
+
+
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if (scrollView != chatBox){
@@ -243,7 +246,36 @@ static int kBCNNumCellsBeforeMessages = 1;
     return YES;
 }
 
--(void) keyPressed: (NSNotification*) notification{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    if ([[textView text] length] > 0){
+        if([text isEqualToString:@"\n"]){ // Send message
+            return NO;
+        }
+    }
+    
+    NSString *validText = [text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    
+    if ([validText length] != [text length]){
+        
+        UITextPosition *beginning = textView.beginningOfDocument;
+        UITextPosition *start = [textView positionFromPosition:beginning offset:range.location];
+        UITextPosition *end = [textView positionFromPosition:start offset:range.length];
+        UITextRange *textRange = [textView textRangeFromPosition:start toPosition:end];
+        
+        [textView replaceRange:textRange withText:validText];
+        
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+-(void)textViewDidChange:(UITextView *)textView{
+    [self keyPressed];
+}
+
+-(void) keyPressed{
     
     if (![chatBox isFirstResponder]) {
         return;
@@ -253,7 +285,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     
 	// get the size of the text block so we can work our magic
 	
-    UIFont *font = [UIFont fontWithName:@"Helvetica" size:14];
+    UIFont *font = chatBox.font;
     
     NSString *text = chatBox.text;
     
