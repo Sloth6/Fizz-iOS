@@ -39,7 +39,7 @@
         UINavigationController *navigationController = [[UINavigationController alloc]
                                                         initWithRootViewController:phoneVC];
         
-        appDelegate.window.rootViewController.automaticallyAdjustsScrollViewInsets = NO;
+//        appDelegate.window.rootViewController.automaticallyAdjustsScrollViewInsets = NO;
         
         appDelegate.window.rootViewController = navigationController;
     }

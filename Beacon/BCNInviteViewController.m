@@ -215,7 +215,7 @@ static NSMutableArray *instances;
 
 -(void)sendInvitations{
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.esvc.navigationItem setRightBarButtonItem:NULL animated:YES];
+    [appDelegate.navigationBar setRightButton:NULL];
     
     [_eventCell exitInviteMode];
     

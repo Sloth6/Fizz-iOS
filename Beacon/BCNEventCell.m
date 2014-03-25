@@ -64,6 +64,13 @@
 }
 
 -(void)setEventCollapsed:(BCNEvent *)event{
+    if (event == NULL){
+        _label.text = @"Create A New Event";
+        _bubbles = NULL;
+        
+        return;
+    }
+    
     //[self setSubviews:[[NSArray alloc] initWithObjects:_label, nil]];
     
     // Text

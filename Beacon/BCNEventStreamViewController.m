@@ -13,6 +13,8 @@
 #import "BCNMessage.h"
 #import "BCNAppDelegate.h"
 
+#import "BCNNavButton.h"
+
 #import "BCNTitleFlowLayout.h"
 #import "BCNParallaxViewController.h"
 
@@ -41,7 +43,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property float lineHeight;
 
 @property UICollectionView *textCV;
-@property UIBarButtonItem *burgerButton;
+@property UIButton *burgerButton;
 
 @property BOOL firstAppear;
 
@@ -60,7 +62,20 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         _firstAppear = YES;
         _currentCell = NULL;
         
-        _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
+        CGRect buttonFrame = CGRectMake(14.5, 24.5, 40, 40);
+        
+        _burgerButton = [BCNNavButton buttonWithType:UIButtonTypeSystem];
+        [_burgerButton setTintColor:[UIColor blueColor]];
+        [_burgerButton setTitle:@"TEST" forState:UIControlStateNormal];
+        [_burgerButton addTarget:self action:@selector(burgerButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [_burgerButton setFrame:buttonFrame];
+        
+        BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+        
+        [appDelegate.navigationBar addSubview:_burgerButton];
+        
+//        [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
         
         //self.collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:];
         
@@ -136,9 +151,9 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         
-        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(30, 200, 40, 40)];
-        
-        [self.view addSubview:bubble];
+//        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(30, 200, 40, 40)];
+//        
+//        [self.view addSubview:bubble];
         
     }
     return self;
@@ -198,7 +213,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
 	// Do any additional setup after loading the view.
 }
 
@@ -315,13 +329,19 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 - (UICollectionViewCell *)overviewCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0){
-        NSString *cellID = @"Cell";
+//        NSString *cellID = @"Cell";
+//        
+//        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+//                                                                   forIndexPath:indexPath];
+
+        NSString *cellID = @"EventCell";
         
-        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                                   forIndexPath:indexPath];
+        BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+                                                           forIndexPath:indexPath];
         
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
         cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        
+        [cell.label setText:@"Create a New Event"];
         
         return cell;
     } else {
@@ -332,8 +352,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                            forIndexPath:indexPath];
         
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
+        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         
         BCNEvent *event = [_events objectAtIndex:eventNum];
         
@@ -422,7 +441,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     }
     
     [self.collectionView setScrollsToTop:YES];
-    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
+//    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
 }
 
 //- (void)viewDidAppear:(BOOL)animated{
@@ -440,10 +459,12 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //}
 
 - (void)burgerButtonPress:(UIButton*)button{
+    NSLog(@"BURGER!");
+    
     switch (_viewMode) {
         case kOverview:
         {
-            
+            [self expandView];
         }
             break;
             
@@ -488,12 +509,15 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     _viewMode = kOverview;
     
-    [self setAutomaticallyAdjustsScrollViewInsets:NO];
-    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];
-    [self.navigationController setAutomaticallyAdjustsScrollViewInsets:NO];
+//    [self setAutomaticallyAdjustsScrollViewInsets:NO];
+//    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];
+//    [self.navigationController setAutomaticallyAdjustsScrollViewInsets:NO];
     [self.collectionView setPagingEnabled:NO];
     
+    NSArray *toReload = [NSArray arrayWithObjects:_ocvc.lastIndex, [NSIndexPath indexPathForItem:0 inSection:0], nil];
+    
     [[self navigationController] pushViewController:_ocvc animated:YES];
+    [_ocvc.collectionView reloadItemsAtIndexPaths:toReload];
     
 //    [_ocvc updateEvents:_events];
 //    self.collectionView.delegate = _ocvc;
@@ -504,18 +528,24 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    [self.collectionView scrollToItemAtIndexPath:_ocvc.lastIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
 }
 
-- (void)expandViewToIndexPath:(NSIndexPath *)indexPath{
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    
-    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
-}
+//- (void)expandViewToIndexPath:(NSIndexPath *)indexPath{
+//    self.collectionView.delegate = self;
+//    self.collectionView.dataSource = self;
+//    
+//    [self.navigationController popViewControllerAnimated:YES];
+//    [self.reload]
+//    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+//}
 
 - (void)expandView{
-    [self.collectionView setPagingEnabled:YES];
-    [self expandViewToIndexPath:_ocvc.lastIndex];
+//    _viewMode = kTimeline;
     
-    _ocvc.lastIndex = NULL;
+    [_ocvc collectionView:_ocvc.collectionView didSelectItemAtIndexPath:_ocvc.lastIndex];
+//    
+//    [self.collectionView setPagingEnabled:YES];
+//    [self expandViewToIndexPath:_ocvc.lastIndex];
+//    
+//    _ocvc.lastIndex = NULL;
 }
 
 // Your code is bad, and you should feel bad!
@@ -726,8 +756,20 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             
             BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
             
-            UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:nec action:@selector(sendInvitations)];
-            [self.navigationItem setRightBarButtonItem:button animated:YES];
+//            UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:nec action:@selector(sendInvitations)];
+            
+            CGRect buttonFrame = CGRectMake(60, 10, 100, 100);
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+            [button setTitle:@"Send" forState:UIControlStateNormal];
+            [button addTarget:nec action:@selector(sendInvitations) forControlEvents:UIControlEventTouchUpInside];
+            [button setFrame:buttonFrame];
+            
+            BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+            
+            [appDelegate.navigationBar addSubview:button];
+            
+//            [self.navigationItem setRightBarButtonItem:button animated:YES];
             [self.collectionView setScrollEnabled:YES];
             return NO;
         }

@@ -16,18 +16,34 @@
 #import "BCNBubbleViewController.h"
 #import "BCNParallaxViewController.h"
 
+#import "BCNNullNavBar.h"
+
+#import "BCNNavigationBar.h"
+
 @implementation BCNAppDelegate
 
 @synthesize ioSocketDelegate, fbLoginDelegate;
 
+- (void)setupNavigationBar{
+    float screenWidth = [UIScreen mainScreen].bounds.size.width;
+    
+    CGRect navBarRect = CGRectMake(0, 0, screenWidth, 80);
+    
+    self.navigationBar = [[BCNNavigationBar alloc] initWithFrame:navBarRect];
+    self.navigationBar.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
+}
+
 - (void)setupNavigationController{
 
-    _esvc.automaticallyAdjustsScrollViewInsets = NO;
+//    _esvc.automaticallyAdjustsScrollViewInsets = NO;
     
     UINavigationController *navigationController = [[UINavigationController alloc]
                                                     initWithRootViewController:_esvc];
     
-    navigationController.automaticallyAdjustsScrollViewInsets = NO;
+    [navigationController setNavigationBarHidden:YES];
+    [navigationController.view sendSubviewToBack:self.navigationBar];
+    
+//    navigationController.automaticallyAdjustsScrollViewInsets = NO;
     self.window.rootViewController = navigationController;
     
     _bvc = [[BCNBubbleViewController alloc] init];
@@ -39,8 +55,9 @@
     [self.window addSubview:(UIView *)_bvc.bubbleView];
     
     // Add the parallax text view on top of this
-    [self.window addSubview:_pvc.tableView];
+//    [self.window addSubview:_pvc.tableView];
     
+    [self.window addSubview:self.navigationBar];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -54,6 +71,8 @@
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.itemSize = [UIScreen mainScreen].bounds.size;
+    
+    [self setupNavigationBar];
     
     _esvc = [[BCNEventStreamViewController alloc] initWithCollectionViewLayout:flowLayout];
     

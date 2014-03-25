@@ -111,9 +111,7 @@ static const int kVelocityThreshhold = 18;
     CGPoint centerOfCircle = CGPointMake(radius, radius);
     
     CGFloat distance = [self distanceSquaredWithCenter:centerOfCircle with:point];
-    
-    NSLog(@"distance: %f radius: %f", distance, radius * radius);
-    
+        
     return distance <= (radius * radius);
 }
 

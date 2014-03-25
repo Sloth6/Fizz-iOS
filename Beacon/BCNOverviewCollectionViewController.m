@@ -28,13 +28,22 @@
         
         _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
         
-        self.automaticallyAdjustsScrollViewInsets = NO;
+//        self.automaticallyAdjustsScrollViewInsets = NO;
         self.collectionView.pagingEnabled = NO;
         
         //[UIBarButtonItem alloc] initWithImage:<#(UIImage *)#> style:UIBarButtonItemStylePlain target:<#(id)#> action:<#(SEL)#>
     }
     
     return self;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 0.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -46,14 +55,13 @@
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"SELECTED!");
-    
     _esvc.viewMode = kTimeline;
     
     [_esvc.collectionView setPagingEnabled:YES];
     _esvc.selectedIndex = indexPath;
     [self.navigationController popViewControllerAnimated:NO];
     [_esvc.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+    [_esvc.collectionView reloadData];
 }
 
 //- (void)setupBurgerButton{
@@ -76,12 +84,14 @@
 
 - (void)burgerButtonPress:(UIButton*)button{
     [_esvc.collectionView setPagingEnabled:YES];
+    _esvc.viewMode = kTimeline;
     
     [[self navigationController] popViewControllerAnimated:YES];
+    [_esvc.collectionView reloadData];
 }
 
 -(void)setCollectionView:(UICollectionView *)cv{
-    [cv registerClass:[BCNEventCell class] forCellWithReuseIdentifier:@"EventCell"];
+    [cv registerClass:[BCNEventCell class] forCellWithReuseIdentifier:@"OverviewCell"];
 }
 
 -(void)updateEvents:(NSMutableArray *)events{
@@ -111,19 +121,23 @@
 //        return cell;
 //    } else {
         int eventNum = indexPath.item - 2;
-        
-        NSString *cellID = @"EventCell";
+    
+    NSLog(@"HEYa");
+    
+        NSString *cellID = @"OverviewCell";
         
         BCNEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                            forIndexPath:indexPath];
         
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
+//        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.2];
     
         if (eventNum >= 0){
             BCNEvent *event = [_events objectAtIndex:eventNum];
             
             [cell setEventCollapsed:event];
+        } else {
+            [cell setEventCollapsed:NULL];
         }
     
         return cell;
@@ -146,7 +160,7 @@
 
 - (UIEdgeInsets)collectionView:
 (UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(60, 0, 0, 0);
+    return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
 
