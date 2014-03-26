@@ -566,6 +566,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         {
             shouldStartButtonTimer = NO;
             
+            [self setViewMode:kTimeline];
+            
             [self.navigationController dismissViewControllerAnimated:YES completion:^{
                 [_burgerButton setEnabled:YES];
                 [_friendsButton setHidden:NO];

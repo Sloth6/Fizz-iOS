@@ -35,6 +35,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     _friends = [BCNUser getFriends];
     _friendsToRemove = [[NSMutableSet alloc] init];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
