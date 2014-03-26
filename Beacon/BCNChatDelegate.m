@@ -586,6 +586,8 @@ static int kBCNNumCellsBeforeMessages = 1;
             // Set image
             [cell.profileImageView setImage:image];
             [BCNUser formatImageViewToCircular:cell.profileImageView withScalar:1.0];
+        } else {
+            [user formatImageView:cell.profileImageView ForInitialsWithScalar:1.0];
         }
     }];
     

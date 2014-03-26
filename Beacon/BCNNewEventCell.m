@@ -338,8 +338,6 @@
 }
 
 - (void)setupNewEventTextView{
-    NSLog(@"\n\n\nSettingUpText");
-    
     // Hard coded value, should be fine for these purposes
     float keyboardHeight = 216;
     

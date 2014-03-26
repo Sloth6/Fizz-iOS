@@ -19,6 +19,8 @@ static NSString *BCN_NEW_USER_LOCATION = @"newUserLocation";
 static NSString *BCN_ADD_FRIEND_LIST = @"addFriendList";
 static NSString *BCN_REMOVE_FRIEND_LIST = @"removeFriendList";
 
+static BCNUser *me;
+
 @interface BCNUser (){
     void (^_completionHandler)(UIImage *image);
 }
@@ -28,6 +30,7 @@ static NSString *BCN_REMOVE_FRIEND_LIST = @"removeFriendList";
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *userType;
 @property (strong, nonatomic) UIImage *image;
+@property (nonatomic) BOOL hasFetched;
 @property (strong, nonatomic) BCNCoordinate *coords;
 
 @property (nonatomic)  NSString *name;
@@ -81,6 +84,7 @@ static BCNUser *currentUser = nil;
     if (self){
         _userID = uID;
         
+        _hasFetched = NO;
         _chid = 0;
         _isFetchingData = NO;
         
@@ -104,6 +108,14 @@ static BCNUser *currentUser = nil;
     }
     
     return facebookID;
+}
+
++(void)setMeAs:(BCNUser *)user{
+    me = user;
+}
+
++(BCNUser *)me{
+    return me;
 }
 
 +(BCNUser *)userWithUID:(NSNumber *)uID{
@@ -135,6 +147,10 @@ static BCNUser *currentUser = nil;
 
 -(void)setPhoneNumber:(NSString *)pn{
     phoneNumber = pn;
+}
+
+-(BOOL)hasNoImage{
+    return (!_hasFetched || image == NULL);
 }
 
 +(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
@@ -171,6 +187,35 @@ static BCNUser *currentUser = nil;
     return imageView;
 }
 
+-(UIImageView *)formatImageView:(UIImageView *)imageView ForInitialsWithScalar:(float)scalar{
+
+    CGRect rect = CGRectMake(0, 0, 104, 104);
+
+    NSArray *subviews = [imageView subviews];
+
+    for (int i = 0; i < [subviews count]; ++i){
+        UIView *subview = [subviews objectAtIndex:i];
+        [subview removeFromSuperview];
+    }
+
+    BCNDefaultBubble *bubble = [[BCNDefaultBubble alloc] initWithFrame:rect];
+
+    UIImage *image2 = [bubble imageFromBubble];
+    [imageView setImage:image2];
+    [BCNUser formatImageViewToCircular:imageView withScalar:1.0];
+
+    UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
+    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
+
+    [label setFont:font];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setText:[self initials]];
+    label.textAlignment = NSTextAlignmentCenter;
+    [imageView addSubview:label];
+    return imageView;
+}
+
+
 -(UIImageView *)circularImage:(float)scalar{
     
     if (image == NULL) return NULL;
@@ -182,6 +227,34 @@ static BCNUser *currentUser = nil;
 
 -(NSString *)name{
     return name;
+}
+
+-(NSString *)initials{
+    NSArray *terms = [name componentsSeparatedByString:@" "];
+    
+    NSString *firstName;
+    NSString *lastName;
+    
+    if ([terms count] > 0){
+        firstName = [terms objectAtIndex:0];
+    }
+    
+    if ([terms count] > 1){
+        lastName = [terms objectAtIndex:[terms count] - 1];
+    }
+    
+    NSString *firstInitial = @"";
+    NSString *lastInitial = @"";
+    
+    if ([firstName length] > 0){
+        firstInitial = [firstName substringToIndex:1];
+    }
+    
+    if ([lastName length] > 0){
+        lastInitial = [lastName substringToIndex:1];
+    }
+    
+    return [NSString stringWithFormat:@"%@%@", firstInitial, lastInitial];
 }
 
 -(NSString *)userType{

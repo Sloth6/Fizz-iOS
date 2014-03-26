@@ -29,7 +29,7 @@
         
         _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
         
-//        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.automaticallyAdjustsScrollViewInsets = NO;
         self.collectionView.pagingEnabled = NO;
         
         //[UIBarButtonItem alloc] initWithImage:<#(UIImage *)#> style:UIBarButtonItemStylePlain target:<#(id)#> action:<#(SEL)#>
@@ -125,8 +125,6 @@
 //        return cell;
 //    } else {
         int eventNum = indexPath.item - 2;
-    
-    NSLog(@"HEYa");
     
         NSString *cellID = @"OverviewCell";
         

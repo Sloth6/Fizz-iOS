@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "BCNCoordinate.h"
+#import "BCNDefaultBubble.h"
 #import "SocketIO.h"
 
 
@@ -17,6 +18,7 @@
 -(NSNumber *)facebookID;
 -(NSString *)phoneNumber;
 -(NSString *)name;
+-(NSString *)initials;
 -(NSString *)userType;
 
 // Use this to get a profile picture
@@ -29,9 +31,15 @@
 +(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
                                withScalar:(float)scalar;
 
+-(UIImageView *)formatImageView:(UIImageView *)imageView
+          ForInitialsWithScalar:(float)scalar;
+
 -(void)updateCoordinates:(BCNCoordinate *)coord;
 -(void)setFacebookID:(NSNumber *)fbID;
 -(void)setPhoneNumber:(NSString *)phoneNumber;
+
+// Returns true if user has no fb image OR hasn't fetched the image yet
+-(BOOL)hasNoImage;
 
 +(id)addUserWithUserID:(NSNumber *)uID andName:(NSString *)strName;
 
@@ -40,6 +48,9 @@
 +(BCNUser *)currentUser;
 +(NSArray *)getUsers;
 +(NSArray *)getFriends;
+
++(void)setMeAs:(BCNUser *)me;
++(BCNUser *)me;
 
 +(BCNUser *)parseJSON:(NSDictionary *)userJSON;
 

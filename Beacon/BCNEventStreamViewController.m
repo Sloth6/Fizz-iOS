@@ -10,6 +10,7 @@
 #import "BCNEventCell.h"
 #import "BCNNewEventCell.h"
 #import "BCNEvent.h"
+#import "BCNUser.h"
 #import "BCNMessage.h"
 #import "BCNAppDelegate.h"
 
@@ -104,6 +105,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [_friendsButton setFrame:button2Frame];
         
         [_friendsButton setBackgroundColor:[UIColor blueColor]];
+        [_friendsButton setHidden:YES];
         
         [_friendsButton addTarget:self action:@selector(friendsButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -357,6 +359,14 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         [self setupEventCell:cell withEvent:event];
         
+//        int numSeats = [event numSeats];
+//        
+//        if (numSeats == 1){
+//            [cell.seatsLabel setText:@"1 Seat"];
+//        } else {
+//            [cell.seatsLabel setText:[NSString stringWithFormat:@"%d Seats", numSeats]];
+//        }
+        
         cell.chatDelegate = _chatDelegate;
         
         return cell;
@@ -564,7 +574,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         {
             shouldStartButtonTimer = NO;
             
-            [self setViewMode:kTimeline];
+            [self setViewMode:kOverview];
             
             [self.navigationController dismissViewControllerAnimated:YES completion:^{
                 [_burgerButton setEnabled:YES];
@@ -576,12 +586,14 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             
         case kOverview:
         {
+            [_friendsButton setHidden:YES];
             [self expandView];
         }
             break;
             
         case kTimeline:
         {
+            [_friendsButton setHidden:NO];
             [self contractView];
         }
             break;
@@ -811,6 +823,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     float textViewHeight = [self measureHeightOfUITextView:textView];
     
+    // Limit textview num lines
     if (textViewHeight > maxHeight){
         UITextRange *textRange;
         
@@ -871,13 +884,16 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     
     [UIView animateWithDuration:0.25 animations:^{
+        [textView setTextColor:[UIColor blackColor]];
         [_toggleSecret setAlpha:0.0];
         [_secretLabel setAlpha:0.0];
         
         //_currentIndex = [NSIndexPath indexPathForItem:0 inSection:0];
-        BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
+        [self.collectionView setScrollEnabled:YES];
         
-        [nec setScrollingEnabled:YES];
+//        BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
+//        
+//        [nec setScrollingEnabled:YES];
     } completion:^(BOOL finished) {
         [_toggleSecret removeFromSuperview];
         [_secretLabel removeFromSuperview];
@@ -895,6 +911,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         [textView resignFirstResponder];
         
+        // Hit send on empty
         if(textView.text.length == 0){
             textView.textColor = [UIColor lightGrayColor];
             textView.text = kBCNPlaceholderText;
@@ -951,11 +968,25 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [self.pvc.tableView reloadData];
     });
     
+    int numIncomingEvents = [incomingEvents count];
+    
     for (int i = 0; i < [_events count]; ++i){
         BCNEvent *event = [_events objectAtIndex:i];
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:1];
         [_bvc updateBubblesForEvent:event AtIndex:indexPath Animated:NO];
+        
+        if (i < numIncomingEvents){
+            NSString *firstMessage = [[event firstMessage] text];
+            BCNUser *creator = [event creator];
+            
+            if (creator == [BCNUser me] && [firstMessage isEqualToString:_lastInputString]){
+                // Need to jump to proper view in Main Queue, QED
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+                });
+            }
+        }
     }
     
     return;

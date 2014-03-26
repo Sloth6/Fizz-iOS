@@ -184,7 +184,14 @@ static const int kMinInviteSize = 33;
             CGPoint point = [(NSValue *)[seatPoints objectAtIndex:i] CGPointValue];
             
             [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
-                UIImageView *imageView = [user circularImage:diameter];
+                UIImageView *imageView;
+                
+                if (image){
+                    imageView = [user circularImage:diameter];
+                } else {
+                    imageView = [user formatImageView:[user circularImage:diameter]
+                                ForInitialsWithScalar:1.0];
+                }
                 
                 float centerX = point.x;
                 float centerY = point.y;

@@ -64,6 +64,7 @@
 		4989270318E29E8300AECCF8 /* BCNManageFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270218E29E8300AECCF8 /* BCNManageFriendsViewController.m */; };
 		4989270618E2A02600AECCF8 /* BCNManageFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270518E2A02600AECCF8 /* BCNManageFriendCell.m */; };
 		4989270818E2A8DC00AECCF8 /* BCNManageFriendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4989270718E2A8DC00AECCF8 /* BCNManageFriendCell.xib */; };
+		4989270B18E34F3E00AECCF8 /* BCNDefaultBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270A18E34F3E00AECCF8 /* BCNDefaultBubble.m */; };
 		498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498E5E6D18B42CB300487898 /* FacebookSDK.framework */; };
 		498E5E7618B4506000487898 /* BCNEventsViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 498E5E7518B4506000487898 /* BCNEventsViewViewController.m */; };
 		49923ADE18727FDF0045107C /* BCNFacebookLoginDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49923ADD18727FDF0045107C /* BCNFacebookLoginDelegate.m */; };
@@ -297,6 +298,8 @@
 		4989270418E2A02600AECCF8 /* BCNManageFriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNManageFriendCell.h; sourceTree = "<group>"; };
 		4989270518E2A02600AECCF8 /* BCNManageFriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNManageFriendCell.m; sourceTree = "<group>"; };
 		4989270718E2A8DC00AECCF8 /* BCNManageFriendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNManageFriendCell.xib; sourceTree = "<group>"; };
+		4989270918E34F3E00AECCF8 /* BCNDefaultBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNDefaultBubble.h; sourceTree = "<group>"; };
+		4989270A18E34F3E00AECCF8 /* BCNDefaultBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNDefaultBubble.m; sourceTree = "<group>"; };
 		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		498E5E7418B4506000487898 /* BCNEventsViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNEventsViewViewController.h; sourceTree = "<group>"; };
 		498E5E7518B4506000487898 /* BCNEventsViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNEventsViewViewController.m; sourceTree = "<group>"; };
@@ -603,6 +606,8 @@
 				494BFB3F18E0B88400C59D18 /* BCNInteractiveBubble.m */,
 				497DB6DF18E1090900095053 /* BCNBubbleView.h */,
 				497DB6E018E1090900095053 /* BCNBubbleView.m */,
+				4989270918E34F3E00AECCF8 /* BCNDefaultBubble.h */,
+				4989270A18E34F3E00AECCF8 /* BCNDefaultBubble.m */,
 			);
 			name = Bubbles;
 			sourceTree = "<group>";
@@ -1213,6 +1218,7 @@
 				499AAB4418788843002C0724 /* BCNMapAnnotationView.m in Sources */,
 				49DD371418D1062A002ECF93 /* BCNTitleFlowLayout.m in Sources */,
 				49BBF68818942B5400292723 /* BCNCoordinate.m in Sources */,
+				4989270B18E34F3E00AECCF8 /* BCNDefaultBubble.m in Sources */,
 				49069B19186517FE003D003A /* SocketIO.m in Sources */,
 				49069B1A186517FE003D003A /* SocketIOJSONSerialization.m in Sources */,
 				494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */,
