@@ -295,6 +295,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         _lineHeight = [self measureHeightOfUITextView:cell.textView];
         
+        [cell.textView setText:@""];
         [cell.textView deleteBackward];
     }
     
@@ -321,6 +322,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         _lineHeight = [self measureHeightOfUITextView:cell.textView];
         
+        [cell.textView setText:@""];
         [cell.textView deleteBackward];
     }
     
