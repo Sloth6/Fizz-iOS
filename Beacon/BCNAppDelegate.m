@@ -96,8 +96,6 @@
     [BCNUser setupUserClass];
     [BCNEvent setupEventClass];
     
-    [self setupNavigationController];
-    
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     NSNumber *registered = [pref objectForKey:@"registered"];
     
@@ -115,7 +113,7 @@
         NSLog(@"\n\nActive Session Loaded\n\n");
         
         [ioSocketDelegate openConnectionCheckingForInternet];
-        
+        [self setupNavigationController];
 //         // If there's one, just open the session silently, without showing the user the login UI
 //         [FBSession openActiveSessionWithReadPermissions:@[@"user_friends",
 //         @"user_groups",
