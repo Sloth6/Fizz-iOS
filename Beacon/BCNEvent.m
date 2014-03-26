@@ -461,6 +461,7 @@ static NSString *BCN_REQUEST = @"request";
     event.attendees = mutGuestList;
     event.invitees = mutInviteList;
     event.numSeats = [numSeats integerValue];
+    event.pendingNumSeats = event.numSeats;
     event.messages = mutMessageList;
     event.inviteOnly = [inviteOnly boolValue];
     
