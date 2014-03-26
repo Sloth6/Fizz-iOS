@@ -140,6 +140,9 @@ static BCNUser *currentUser = nil;
 +(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
                                withScalar:(float)scalar{
     
+    float x = imageView.frame.origin.x;
+    float y = imageView.frame.origin.y;
+    
     UIImage *image = [imageView image];
     
     CGSize imageSize = [image size];
@@ -149,12 +152,12 @@ static BCNUser *currentUser = nil;
     float cornerRadius;
     
     if ([BCNAppDelegate isRetinaDisplay]){
-        imageRect = CGRectMake(0, 0, (imageSize.width/2.0) * scalar,
+        imageRect = CGRectMake(x, y, (imageSize.width/2.0) * scalar,
                                (imageSize.height/2.0) * scalar);
         cornerRadius = MAX((imageSize.width/4.0) * scalar,
                            (imageSize.height/4.0) * scalar);//MAX(imageSize.width/4.0, imageSize.height/4.0);
     } else {
-        imageRect = CGRectMake(0, 0, imageSize.width * scalar, imageSize.height * scalar);
+        imageRect = CGRectMake(x, y, imageSize.width * scalar, imageSize.height * scalar);
         cornerRadius = MAX(imageSize.width * scalar/2.0, imageSize.height * scalar/2.0);
     }
     

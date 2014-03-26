@@ -43,6 +43,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property UISwitch *toggleSecret;
 @property UILabel  *secretLabel;
 
+@property NSString *lastInputString;
+
 @property float lineHeight;
 
 @property UICollectionView *textCV;
@@ -290,6 +292,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [cell.textView setText:@"."];
         
         _lineHeight = [self measureHeightOfUITextView:cell.textView];
+        
+        [cell.textView deleteBackward];
     }
     
     [self setupTextView:cell.textView];
@@ -299,14 +303,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     _eventTextView = cell.textView;
     _toggleSecret = cell.toggleSecret;
     _secretLabel  = cell.label;
-    
-    // It was yelling about how it needed to be run on the main thread, dirty fix
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell.textView setText:kBCNPlaceholderText];
-        
-        [_toggleSecret setAlpha:0.0];
-        [_secretLabel setAlpha:0.0];
-    });
     
     return cell;
 }
@@ -322,6 +318,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [cell.textView setText:@"."];
         
         _lineHeight = [self measureHeightOfUITextView:cell.textView];
+        
+        [cell.textView deleteBackward];
     }
     
     [self setupTextView:cell.textView];
@@ -621,35 +619,40 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 }
 
 - (void)contractView{
-    [self exitNewEventPrompt:_eventTextView];
+    [_eventTextView setText:@""];
+    [_eventTextView deleteBackward];
     
-    _ocvc.lastIndex = [[self.collectionView indexPathsForVisibleItems]objectAtIndex:0];
-    
-//    [self.collectionView setCollectionViewLayout:_ocvc.collectionViewLayout
-//                                        animated:YES
-//                                      completion:nil];
-
-    _ocvc.useLayoutToLayoutNavigationTransitions = YES;
-    
-    [self setViewMode:kOverview];
-    
-//    [self setAutomaticallyAdjustsScrollViewInsets:NO];
-//    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];
-//    [self.navigationController setAutomaticallyAdjustsScrollViewInsets:NO];
-    [self.collectionView setPagingEnabled:NO];
-    
-    NSArray *toReload = [NSArray arrayWithObjects:_ocvc.lastIndex, [NSIndexPath indexPathForItem:0 inSection:0], nil];
-    
-    [[self navigationController] pushViewController:_ocvc animated:YES];
-    [_ocvc.collectionView reloadItemsAtIndexPaths:toReload];
-    
-//    [_ocvc updateEvents:_events];
-//    self.collectionView.delegate = _ocvc;
-//    self.collectionView.dataSource = _ocvc;
-//
-//    [_ocvc setCollectionView:self.collectionView];
-//    
-//    [self.collectionView scrollToItemAtIndexPath:_ocvc.lastIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+    double delayInSeconds = 0.01;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        _ocvc.lastIndex = [[self.collectionView indexPathsForVisibleItems]objectAtIndex:0];
+        
+        //    [self.collectionView setCollectionViewLayout:_ocvc.collectionViewLayout
+        //                                        animated:YES
+        //                                      completion:nil];
+        
+        _ocvc.useLayoutToLayoutNavigationTransitions = YES;
+        
+        [self setViewMode:kOverview];
+        
+        //    [self setAutomaticallyAdjustsScrollViewInsets:NO];
+        //    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];
+        //    [self.navigationController setAutomaticallyAdjustsScrollViewInsets:NO];
+        [self.collectionView setPagingEnabled:NO];
+        
+        NSArray *toReload = [NSArray arrayWithObjects:_ocvc.lastIndex, [NSIndexPath indexPathForItem:0 inSection:0], nil];
+        
+        [[self navigationController] pushViewController:_ocvc animated:YES];
+        [_ocvc.collectionView reloadItemsAtIndexPaths:toReload];
+        
+        //    [_ocvc updateEvents:_events];
+        //    self.collectionView.delegate = _ocvc;
+        //    self.collectionView.dataSource = _ocvc;
+        //
+        //    [_ocvc setCollectionView:self.collectionView];
+        //
+        //    [self.collectionView scrollToItemAtIndexPath:_ocvc.lastIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+    });
 }
 
 //- (void)expandViewToIndexPath:(NSIndexPath *)indexPath{
@@ -806,7 +809,23 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     float minHeight = 2 * _lineHeight;
     float maxHeight = 3 * _lineHeight;
     
-    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:textView]),
+    float textViewHeight = [self measureHeightOfUITextView:textView];
+    
+    if (textViewHeight > maxHeight){
+        UITextRange *textRange;
+        
+        if (textView.selectedTextRange.empty) {
+            textRange = [textView selectedTextRange];
+        }
+        
+        [textView setText:_lastInputString];
+        
+        if (textRange != NULL){
+            [textView setSelectedTextRange:textRange];
+        }
+    }
+    
+    float height = MIN(MAX(minHeight, textViewHeight),
                        maxHeight) + 20;
     
     //float height = textView.frame.size.height-insetDelta;
@@ -869,6 +888,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    _lastInputString = textView.text;
     
     if([text isEqualToString:@"\n"]) {
         

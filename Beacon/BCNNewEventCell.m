@@ -37,6 +37,18 @@
 
 - (void)setupNewEventCell{
     [self setupNewEventTextView];
+    
+    _seatsLabel = _ivc.seatsLabel;
+    _addSeatButton = _ivc.addSeatButton;
+    _removeSeatButton = _ivc.removeSeatButton;
+    
+    [_seatsLabel setHidden:YES];
+    [_addSeatButton setHidden:YES];
+    [_removeSeatButton setHidden:YES];
+    
+    [_chatButton setHidden:YES];
+    
+    [_ivc.inviteButton setHidden:YES];
 }
 
 - (void)setupEventCell{
@@ -313,8 +325,10 @@
     CGRect labelRect = CGRectMake(labelX, labelY, labelWidth, labelHeight);
     
     _toggleSecret = [[UISwitch alloc] initWithFrame:switchRect];
+    [_toggleSecret setHidden:YES];
     
     _label = [[UILabel alloc] initWithFrame:labelRect];
+    [_label setHidden:YES];
     
     [_label setTextAlignment:NSTextAlignmentRight];
     [_label setText:@"Secret Event"];
@@ -324,6 +338,8 @@
 }
 
 - (void)setupNewEventTextView{
+    NSLog(@"\n\n\nSettingUpText");
+    
     // Hard coded value, should be fine for these purposes
     float keyboardHeight = 216;
     
@@ -341,7 +357,10 @@
     float y = vInset;
     float height = sHeight - y - vOutset;
     
+    _textView.textContainer.maximumNumberOfLines = 3;
     [_textView setFrame:CGRectMake(x, y, width, height)];
+    [_textView setText:@""];
+    [_textView deleteBackward];
 }
 
 - (void)setupTextView{
