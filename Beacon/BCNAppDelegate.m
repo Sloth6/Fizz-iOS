@@ -16,8 +16,6 @@
 #import "BCNBubbleViewController.h"
 #import "BCNParallaxViewController.h"
 
-#import "BCNNullNavBar.h"
-
 #import "BCNNavigationBar.h"
 
 @implementation BCNAppDelegate
@@ -30,7 +28,6 @@
     CGRect navBarRect = CGRectMake(0, 0, screenWidth, 80);
     
     self.navigationBar = [[BCNNavigationBar alloc] initWithFrame:navBarRect];
-    self.navigationBar.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
 }
 
 - (void)setupNavigationController{
@@ -41,7 +38,6 @@
                                                     initWithRootViewController:_esvc];
     
     [navigationController setNavigationBarHidden:YES];
-    [navigationController.view sendSubviewToBack:self.navigationBar];
     
 //    navigationController.automaticallyAdjustsScrollViewInsets = NO;
     self.window.rootViewController = navigationController;

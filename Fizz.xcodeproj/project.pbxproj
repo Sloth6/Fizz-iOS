@@ -61,6 +61,9 @@
 		497F349118DCB75D00B70FD4 /* BCNChatDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349018DCB75D00B70FD4 /* BCNChatDelegate.m */; };
 		497F349518E07F1200B70FD4 /* BCNInviteGuestButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349418E07F1200B70FD4 /* BCNInviteGuestButton.m */; };
 		49871637187D1713004C8F16 /* BCNTimelineFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 49871636187D1713004C8F16 /* BCNTimelineFlowLayout.m */; };
+		4989270318E29E8300AECCF8 /* BCNManageFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270218E29E8300AECCF8 /* BCNManageFriendsViewController.m */; };
+		4989270618E2A02600AECCF8 /* BCNManageFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270518E2A02600AECCF8 /* BCNManageFriendCell.m */; };
+		4989270818E2A8DC00AECCF8 /* BCNManageFriendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4989270718E2A8DC00AECCF8 /* BCNManageFriendCell.xib */; };
 		498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498E5E6D18B42CB300487898 /* FacebookSDK.framework */; };
 		498E5E7618B4506000487898 /* BCNEventsViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 498E5E7518B4506000487898 /* BCNEventsViewViewController.m */; };
 		49923ADE18727FDF0045107C /* BCNFacebookLoginDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49923ADD18727FDF0045107C /* BCNFacebookLoginDelegate.m */; };
@@ -98,7 +101,6 @@
 		49D5C9BB186042C2002BB1F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A3186042C2002BB1F0 /* UIKit.framework */; };
 		49D5C9C3186042C2002BB1F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49D5C9C1186042C2002BB1F0 /* InfoPlist.strings */; };
 		49D5C9C5186042C2002BB1F0 /* BeaconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9C4186042C2002BB1F0 /* BeaconTests.m */; };
-		49D5C9D0186042F7002BB1F0 /* BCFacebookConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9CF186042F7002BB1F0 /* BCFacebookConnection.m */; };
 		49D5C9D3186044B2002BB1F0 /* BCNUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9D2186044B2002BB1F0 /* BCNUser.m */; };
 		49D5C9DE1860471D002BB1F0 /* BCNInternalUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9DD1860471D002BB1F0 /* BCNInternalUtils.m */; };
 		49D5C9E218604973002BB1F0 /* BCN_Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9E118604973002BB1F0 /* BCN_Reachability.m */; };
@@ -123,8 +125,6 @@
 		49EEEA9718D972FB00BDA605 /* BCNBackspaceResignTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9618D972FB00BDA605 /* BCNBackspaceResignTextView.m */; };
 		49F524D218E1C3040019C5DF /* BCNNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D118E1C3040019C5DF /* BCNNavigationBar.m */; };
 		49F524D518E212840019C5DF /* BCNNavButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D418E212840019C5DF /* BCNNavButton.m */; };
-		49F524D818E21AC20019C5DF /* BCNNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D718E21AC20019C5DF /* BCNNavigationViewController.m */; };
-		49F524DB18E21D450019C5DF /* BCNNullNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524DA18E21D450019C5DF /* BCNNullNavBar.m */; };
 		DB071FC8809641459481673B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1294CA912292415881418914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -292,6 +292,11 @@
 		497F349418E07F1200B70FD4 /* BCNInviteGuestButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNInviteGuestButton.m; sourceTree = "<group>"; };
 		49871635187D1713004C8F16 /* BCNTimelineFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTimelineFlowLayout.h; sourceTree = "<group>"; };
 		49871636187D1713004C8F16 /* BCNTimelineFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTimelineFlowLayout.m; sourceTree = "<group>"; };
+		4989270118E29E8300AECCF8 /* BCNManageFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNManageFriendsViewController.h; sourceTree = "<group>"; };
+		4989270218E29E8300AECCF8 /* BCNManageFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNManageFriendsViewController.m; sourceTree = "<group>"; };
+		4989270418E2A02600AECCF8 /* BCNManageFriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNManageFriendCell.h; sourceTree = "<group>"; };
+		4989270518E2A02600AECCF8 /* BCNManageFriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNManageFriendCell.m; sourceTree = "<group>"; };
+		4989270718E2A8DC00AECCF8 /* BCNManageFriendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNManageFriendCell.xib; sourceTree = "<group>"; };
 		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		498E5E7418B4506000487898 /* BCNEventsViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNEventsViewViewController.h; sourceTree = "<group>"; };
 		498E5E7518B4506000487898 /* BCNEventsViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNEventsViewViewController.m; sourceTree = "<group>"; };
@@ -352,8 +357,6 @@
 		49D5C9C0186042C2002BB1F0 /* FizzTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FizzTests-Info.plist"; sourceTree = "<group>"; };
 		49D5C9C2186042C2002BB1F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49D5C9C4186042C2002BB1F0 /* BeaconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeaconTests.m; sourceTree = "<group>"; };
-		49D5C9CE186042F7002BB1F0 /* BCFacebookConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCFacebookConnection.h; sourceTree = "<group>"; };
-		49D5C9CF186042F7002BB1F0 /* BCFacebookConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCFacebookConnection.m; sourceTree = "<group>"; };
 		49D5C9D1186044B2002BB1F0 /* BCNUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNUser.h; sourceTree = "<group>"; };
 		49D5C9D2186044B2002BB1F0 /* BCNUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNUser.m; sourceTree = "<group>"; };
 		49D5C9DC1860471D002BB1F0 /* BCNInternalUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNInternalUtils.h; sourceTree = "<group>"; };
@@ -392,10 +395,6 @@
 		49F524D118E1C3040019C5DF /* BCNNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNNavigationBar.m; sourceTree = "<group>"; };
 		49F524D318E212840019C5DF /* BCNNavButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNNavButton.h; sourceTree = "<group>"; };
 		49F524D418E212840019C5DF /* BCNNavButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNNavButton.m; sourceTree = "<group>"; };
-		49F524D618E21AC20019C5DF /* BCNNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNNavigationViewController.h; sourceTree = "<group>"; };
-		49F524D718E21AC20019C5DF /* BCNNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNNavigationViewController.m; sourceTree = "<group>"; };
-		49F524D918E21D450019C5DF /* BCNNullNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNNullNavBar.h; sourceTree = "<group>"; };
-		49F524DA18E21D450019C5DF /* BCNNullNavBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNNullNavBar.m; sourceTree = "<group>"; };
 		555E166FEAAF48F096591AE1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -600,8 +599,6 @@
 			children = (
 				494BFB3B18E093B400C59D18 /* BCNBubbleViewController.h */,
 				494BFB3C18E093B400C59D18 /* BCNBubbleViewController.m */,
-				49F524D318E212840019C5DF /* BCNNavButton.h */,
-				49F524D418E212840019C5DF /* BCNNavButton.m */,
 				494BFB3E18E0B88400C59D18 /* BCNInteractiveBubble.h */,
 				494BFB3F18E0B88400C59D18 /* BCNInteractiveBubble.m */,
 				497DB6DF18E1090900095053 /* BCNBubbleView.h */,
@@ -634,6 +631,9 @@
 		495E9D23187BAD83008F7CC7 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				494BFB3A18E0939500C59D18 /* Bubbles */,
+				497DB6E318E11DA100095053 /* Parallax Scroll */,
+				497F349218E07EE300B70FD4 /* Buttons */,
 				49C8B0E91888B3C500400832 /* Collection View Cells */,
 				495E9D24187BADB4008F7CC7 /* BCNTimelineHostView.xib */,
 				495E9D26187BAF98008F7CC7 /* BCNSpeechBubble.h */,
@@ -644,6 +644,8 @@
 				49C8B0E41881BD4E00400832 /* BCNCellFlowLayout.m */,
 				498E5E7418B4506000487898 /* BCNEventsViewViewController.h */,
 				498E5E7518B4506000487898 /* BCNEventsViewViewController.m */,
+				49C9618C18D28E3F0061A903 /* BCNOverviewCollectionViewController.h */,
+				49C9618D18D28E3F0061A903 /* BCNOverviewCollectionViewController.m */,
 				4922701F18CA1CA600816AD4 /* BCNEventStreamViewController.h */,
 				4922702018CA1CA600816AD4 /* BCNEventStreamViewController.m */,
 				4954FB1B18D4F0900083D07F /* InviteView */,
@@ -653,8 +655,6 @@
 				49C9619418D2A4720061A903 /* BCNOverviewTransitionLayout.m */,
 				49DD371218D1062A002ECF93 /* BCNTitleFlowLayout.h */,
 				49DD371318D1062A002ECF93 /* BCNTitleFlowLayout.m */,
-				49C9618C18D28E3F0061A903 /* BCNOverviewCollectionViewController.h */,
-				49C9618D18D28E3F0061A903 /* BCNOverviewCollectionViewController.m */,
 				499A8E7618CD304300842EA7 /* BCNEventDetailViewDelegate.h */,
 				499A8E7718CD304300842EA7 /* BCNEventDetailViewDelegate.m */,
 			);
@@ -679,10 +679,37 @@
 		497F349218E07EE300B70FD4 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				49F524D318E212840019C5DF /* BCNNavButton.h */,
+				49F524D418E212840019C5DF /* BCNNavButton.m */,
 				497F349318E07F1200B70FD4 /* BCNInviteGuestButton.h */,
 				497F349418E07F1200B70FD4 /* BCNInviteGuestButton.m */,
 			);
 			name = Buttons;
+			sourceTree = "<group>";
+		};
+		498926FF18E29C5900AECCF8 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				49E983EE186A5D1600D37B2A /* BCNMapViewController.h */,
+				49E983EF186A5D1600D37B2A /* BCNMapViewController.m */,
+				49E983F0186A5D1600D37B2A /* BCNMapViewController.xib */,
+				499AAB4218788843002C0724 /* BCNMapAnnotationView.h */,
+				499AAB4318788843002C0724 /* BCNMapAnnotationView.m */,
+				499AAB40187886D7002C0724 /* BCNMapAnnotationView.xib */,
+			);
+			name = Map;
+			sourceTree = "<group>";
+		};
+		4989270018E29E4300AECCF8 /* Friend Management */ = {
+			isa = PBXGroup;
+			children = (
+				4989270118E29E8300AECCF8 /* BCNManageFriendsViewController.h */,
+				4989270218E29E8300AECCF8 /* BCNManageFriendsViewController.m */,
+				4989270418E2A02600AECCF8 /* BCNManageFriendCell.h */,
+				4989270518E2A02600AECCF8 /* BCNManageFriendCell.m */,
+				4989270718E2A8DC00AECCF8 /* BCNManageFriendCell.xib */,
+			);
+			name = "Friend Management";
 			sourceTree = "<group>";
 		};
 		499A8E7918CD32B000842EA7 /* DetailView */ = {
@@ -715,9 +742,6 @@
 		49C8B0E91888B3C500400832 /* Collection View Cells */ = {
 			isa = PBXGroup;
 			children = (
-				497DB6E318E11DA100095053 /* Parallax Scroll */,
-				494BFB3A18E0939500C59D18 /* Bubbles */,
-				497F349218E07EE300B70FD4 /* Buttons */,
 				49C8B1531889F08600400832 /* BCNEventCell.h */,
 				49C8B1541889F08600400832 /* BCNEventCell.m */,
 				4954FB0918D4BD280083D07F /* BCNNewEventCell.h */,
@@ -780,19 +804,11 @@
 				49D5C9F018605960002BB1F0 /* Utils */,
 				49D5C9AE186042C2002BB1F0 /* BCNAppDelegate.h */,
 				49D5C9AF186042C2002BB1F0 /* BCNAppDelegate.m */,
-				49F524D618E21AC20019C5DF /* BCNNavigationViewController.h */,
-				49F524D718E21AC20019C5DF /* BCNNavigationViewController.m */,
 				49923ADC18727FDF0045107C /* BCNFacebookLoginDelegate.h */,
 				49923ADD18727FDF0045107C /* BCNFacebookLoginDelegate.m */,
 				4954FAFE18D3AAA40083D07F /* BCNInputPhoneViewController.h */,
 				4954FAFF18D3AAA40083D07F /* BCNInputPhoneViewController.m */,
 				4954FB0018D3AAA40083D07F /* BCNInputPhoneViewController.xib */,
-				49069B1E18651FFA003D003A /* BCN_IOSocketDelegate.h */,
-				49069B1F18651FFA003D003A /* BCN_IOSocketDelegate.m */,
-				49F524D018E1C3040019C5DF /* BCNNavigationBar.h */,
-				49F524D118E1C3040019C5DF /* BCNNavigationBar.m */,
-				49F524D918E21D450019C5DF /* BCNNullNavBar.h */,
-				49F524DA18E21D450019C5DF /* BCNNullNavBar.m */,
 				49E983ED186A5CFE00D37B2A /* MainView */,
 				49069B3E18657D14003D003A /* Login */,
 				49D5C9B1186042C2002BB1F0 /* Images.xcassets */,
@@ -828,15 +844,6 @@
 				49D5C9C1186042C2002BB1F0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		49D5C9D418604679002BB1F0 /* Connection */ = {
-			isa = PBXGroup;
-			children = (
-				49D5C9CE186042F7002BB1F0 /* BCFacebookConnection.h */,
-				49D5C9CF186042F7002BB1F0 /* BCFacebookConnection.m */,
-			);
-			name = Connection;
 			sourceTree = "<group>";
 		};
 		49D5C9DB1860470E002BB1F0 /* Internal */ = {
@@ -901,6 +908,10 @@
 				49BBF68D18945C9100292723 /* BCNObject.m */,
 				4954FB0618D3AB800083D07F /* PhoneNumberFormatter.h */,
 				4954FB0718D3AB800083D07F /* PhoneNumberFormatter.m */,
+				49069B1E18651FFA003D003A /* BCN_IOSocketDelegate.h */,
+				49069B1F18651FFA003D003A /* BCN_IOSocketDelegate.m */,
+				49F524D018E1C3040019C5DF /* BCNNavigationBar.h */,
+				49F524D118E1C3040019C5DF /* BCNNavigationBar.m */,
 				49BBF68618942B5400292723 /* BCNCoordinate.h */,
 				49BBF68718942B5400292723 /* BCNCoordinate.m */,
 				49D5C9D1186044B2002BB1F0 /* BCNUser.h */,
@@ -911,7 +922,6 @@
 				49069B2518652D58003D003A /* BCNMessage.m */,
 				49069B2118652C66003D003A /* BCNEvent.h */,
 				49069B2218652C66003D003A /* BCNEvent.m */,
-				49D5C9D418604679002BB1F0 /* Connection */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -939,13 +949,9 @@
 		49E983ED186A5CFE00D37B2A /* MainView */ = {
 			isa = PBXGroup;
 			children = (
+				4989270018E29E4300AECCF8 /* Friend Management */,
 				495E9D23187BAD83008F7CC7 /* Timeline */,
-				49E983EE186A5D1600D37B2A /* BCNMapViewController.h */,
-				49E983EF186A5D1600D37B2A /* BCNMapViewController.m */,
-				49E983F0186A5D1600D37B2A /* BCNMapViewController.xib */,
-				499AAB4218788843002C0724 /* BCNMapAnnotationView.h */,
-				499AAB4318788843002C0724 /* BCNMapAnnotationView.m */,
-				499AAB40187886D7002C0724 /* BCNMapAnnotationView.xib */,
+				498926FF18E29C5900AECCF8 /* Map */,
 			);
 			name = MainView;
 			sourceTree = "<group>";
@@ -1073,6 +1079,7 @@
 				499A8E8118CD337B00842EA7 /* BCNDetailTextCell.xib in Resources */,
 				49D5E6D418616A56002BB1F0 /* package.json in Resources */,
 				49069B4318657D3E003D003A /* BCNLoginViewController.xib in Resources */,
+				4989270818E2A8DC00AECCF8 /* BCNManageFriendCell.xib in Resources */,
 				49D5C9AA186042C2002BB1F0 /* InfoPlist.strings in Resources */,
 				4954FB0218D3AAA40083D07F /* BCNInputPhoneViewController.xib in Resources */,
 				49C8B0F31888B52500400832 /* BCNInvitedUserCell.xib in Resources */,
@@ -1135,7 +1142,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49F524DB18E21D450019C5DF /* BCNNullNavBar.m in Sources */,
 				494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */,
 				49EEEA9418D95D1200BDA605 /* BCNTimelineEventCell.m in Sources */,
 				499A8E7818CD304300842EA7 /* BCNEventDetailViewDelegate.m in Sources */,
@@ -1172,6 +1178,7 @@
 				49069B7F18661555003D003A /* SBJson4Parser.m in Sources */,
 				49D5C9B0186042C2002BB1F0 /* BCNAppDelegate.m in Sources */,
 				49069B0518651731003D003A /* NSData+SRB64Additions.m in Sources */,
+				4989270618E2A02600AECCF8 /* BCNManageFriendCell.m in Sources */,
 				4954FB0118D3AAA40083D07F /* BCNInputPhoneViewController.m in Sources */,
 				49C8B0EC1888B3F700400832 /* BCNHostCell.m in Sources */,
 				49C8B0F61888B54A00400832 /* BCNInvitedUserCell.m in Sources */,
@@ -1185,9 +1192,9 @@
 				494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */,
 				49E983F1186A5D1600D37B2A /* BCNMapViewController.m in Sources */,
 				49EEEA9118D932F000BDA605 /* BCNBackspaceResignTextField.m in Sources */,
-				49D5C9D0186042F7002BB1F0 /* BCFacebookConnection.m in Sources */,
 				49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */,
 				497DB6EF18E125E800095053 /* BCNParallaxViewController.m in Sources */,
+				4989270318E29E8300AECCF8 /* BCNManageFriendsViewController.m in Sources */,
 				49871637187D1713004C8F16 /* BCNTimelineFlowLayout.m in Sources */,
 				49D5C9DE1860471D002BB1F0 /* BCNInternalUtils.m in Sources */,
 				49C9619218D2A3DD0061A903 /* BCNMainTransitionController.m in Sources */,
@@ -1210,7 +1217,6 @@
 				49069B1A186517FE003D003A /* SocketIOJSONSerialization.m in Sources */,
 				494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */,
 				49069B7E18661555003D003A /* SBJson4StreamParser.m in Sources */,
-				49F524D818E21AC20019C5DF /* BCNNavigationViewController.m in Sources */,
 				49BBF68E18945C9100292723 /* BCNObject.m in Sources */,
 				49069B0418651731003D003A /* base64.c in Sources */,
 				49923ADE18727FDF0045107C /* BCNFacebookLoginDelegate.m in Sources */,

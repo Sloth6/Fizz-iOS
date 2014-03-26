@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BCNNavButton : UIButton
+@interface BCNNavButton : UIView
 
 typedef enum {
     kCollapsed,

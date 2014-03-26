@@ -6,6 +6,14 @@
 //  Copyright (c) 2013 Beacon. All rights reserved.
 //
 
+/*
+ 
+ Currently being used only as the ioSocketDelegate Holder, not really useful.
+ 
+ TODO phase this object out
+ 
+ */
+
 #import <Foundation/Foundation.h>
 #import "BCN_IOSocketDelegate.h"
 

@@ -8,6 +8,7 @@
 
 #import "BCNOverviewCollectionViewController.h"
 #import "BCNEventStreamViewController.h"
+#import "BCNNavButton.h"
 
 #import "BCNEventCell.h"
 
@@ -47,7 +48,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItem=nil;
+    self.navigationItem.rightBarButtonItem=nil;
+//    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -55,7 +59,7 @@
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    _esvc.viewMode = kTimeline;
+    [_esvc setViewMode:kTimeline];
     
     [_esvc.collectionView setPagingEnabled:YES];
     _esvc.selectedIndex = indexPath;
@@ -84,7 +88,7 @@
 
 - (void)burgerButtonPress:(UIButton*)button{
     [_esvc.collectionView setPagingEnabled:YES];
-    _esvc.viewMode = kTimeline;
+    [_esvc setViewMode:kTimeline];
     
     [[self navigationController] popViewControllerAnimated:YES];
     [_esvc.collectionView reloadData];

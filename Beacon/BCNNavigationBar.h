@@ -10,7 +10,4 @@
 
 @interface BCNNavigationBar : UIView
 
--(void)setLeftButton:(UIButton *)button;
--(void)setRightButton:(UIButton *)button;
-
 @end

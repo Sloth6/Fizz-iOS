@@ -41,7 +41,7 @@
            forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)performServerLogout{
+- (void)performServerLogout{ // Skip the login process and just to the interface
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [appDelegate setupNavigationController];

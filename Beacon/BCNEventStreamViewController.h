@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "BCNMapViewController.h"
+#import "BCNManageFriendsViewController.h"
 
 @class BCNChatDelegate;
 @class BCNNewEventCell;
 @class BCNBubbleViewController;
 @class BCNParallaxViewController;
+@class BCNNavButton;
 
 @interface BCNEventStreamViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
@@ -30,17 +32,21 @@
 @property BCNMapViewController *mvc;
 @property BCNBubbleViewController *bvc;
 @property BCNParallaxViewController *pvc;
+@property BCNManageFriendsViewController *mfvc;
+
+@property BCNNavButton *navIcon;
 
 typedef enum {
     kOverview,
     kTimeline,
     kInvite,
-    kChat
+    kChat,
+    kFriendManagement
 } ViewMode;
 
 @property NSIndexPath *selectedIndex;
 @property BCNNewEventCell *currentCell;
 
-@property ViewMode viewMode;
+-(void)setViewMode:(ViewMode)viewMode;
 
 @end

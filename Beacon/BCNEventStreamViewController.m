@@ -22,6 +22,8 @@
 #import "BCNOverviewCollectionViewController.h"
 #import "BCNBackspaceResignTextView.h"
 
+#import "BCNManageFriendsViewController.h"
+
 #import "BCNBubbleViewController.h"
 
 #import "BCNInteractiveBubble.h"
@@ -37,6 +39,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property BCNOverviewCollectionViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
+@property (nonatomic) UITextView *eventTextView;
 @property UISwitch *toggleSecret;
 @property UILabel  *secretLabel;
 
@@ -44,8 +47,11 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 @property UICollectionView *textCV;
 @property UIButton *burgerButton;
+@property UIButton *friendsButton;
 
 @property BOOL firstAppear;
+
+@property (nonatomic) ViewMode viewMode;
 
 @end
 
@@ -62,18 +68,45 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         _firstAppear = YES;
         _currentCell = NULL;
         
-        CGRect buttonFrame = CGRectMake(14.5, 24.5, 40, 40);
+        // Burger Button
         
-        _burgerButton = [BCNNavButton buttonWithType:UIButtonTypeSystem];
-        [_burgerButton setTintColor:[UIColor blueColor]];
-        [_burgerButton setTitle:@"TEST" forState:UIControlStateNormal];
-        [_burgerButton addTarget:self action:@selector(burgerButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+        CGRect buttonFrame = CGRectMake(14.5, 24.5, 21, 21);
+        CGRect iconFrame = CGRectMake(0, 0, buttonFrame.size.width, buttonFrame.size.height);
         
+        _burgerButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_burgerButton setFrame:buttonFrame];
+        
+        _navIcon = [[BCNNavButton alloc] initWithFrame:iconFrame];
+        
+        [_navIcon setState:kCollapsed];
+        
+        [_burgerButton addSubview:_navIcon];
+        
+        [_burgerButton addTarget:self action:@selector(burgerButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         
         BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
         
         [appDelegate.navigationBar addSubview:_burgerButton];
+        
+        
+        // Friends Button
+        
+        float xOffset = buttonFrame.origin.x;
+        float width = buttonFrame.size.width;
+        float y = buttonFrame.origin.y;
+        float x = [UIScreen mainScreen].bounds.size.width - (width + xOffset);
+        
+        CGRect button2Frame = CGRectMake(x, y, width, width);
+        
+        _friendsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_friendsButton setFrame:button2Frame];
+        
+        [_friendsButton setBackgroundColor:[UIColor blueColor]];
+        
+        [_friendsButton addTarget:self action:@selector(friendsButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [appDelegate.navigationBar addSubview:_friendsButton];
+        
         
 //        [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
         
@@ -154,6 +187,10 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(30, 200, 40, 40)];
 //        
 //        [self.view addSubview:bubble];
+        
+        // Manage Friends View Controller
+        
+        _mfvc = [[BCNManageFriendsViewController alloc] init];
         
     }
     return self;
@@ -259,6 +296,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     [cell.textView setDelegate:self];
     
+    _eventTextView = cell.textView;
     _toggleSecret = cell.toggleSecret;
     _secretLabel  = cell.label;
     
@@ -435,6 +473,10 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    self.navigationItem.leftBarButtonItem=nil;
+    self.navigationItem.rightBarButtonItem=nil;
+    self.navigationItem.hidesBackButton = YES;
+    
     if (_selectedIndex != NULL){
         [self.collectionView scrollToItemAtIndexPath:_selectedIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
         _selectedIndex = NULL;
@@ -458,10 +500,80 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    }
 //}
 
+-(void)setViewMode:(ViewMode)viewMode{
+    _viewMode = viewMode;
+    
+    switch (viewMode) {
+        case kTimeline:
+        {
+            [_navIcon setState:kCollapsed];
+        }
+            break;
+            
+        case kOverview:
+        {
+            [_navIcon setState:kExpanded];
+        }
+            break;
+            
+        case kChat:
+            
+        case kInvite:
+            
+        case kFriendManagement:
+            
+        default:
+        {
+            [_navIcon setState:kCancel];
+        }
+            break;
+    }
+}
+
+-(void)friendsButtonPress:(UIButton*)button{
+    [button setEnabled:NO];
+    [button setHidden:YES];
+    
+    // Temporarily disable the back button
+    [_burgerButton setEnabled:NO];
+    
+//    double delayInSeconds = 0.3;
+//    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//        [_burgerButton setEnabled:YES];
+//    });
+    
+    
+    [self setViewMode:kFriendManagement];
+    
+    // Present Friend Management Page
+    // presentViewController
+    
+    [self.navigationController presentViewController:_mfvc animated:YES completion:^{
+        [_burgerButton setEnabled:YES];
+    }];
+    
+//    [self.navigationController pushViewController:<#(UIViewController *)#> animated:YES];
+}
+
 - (void)burgerButtonPress:(UIButton*)button{
-    NSLog(@"BURGER!");
+    [button setEnabled:NO];
+    
+    BOOL shouldStartButtonTimer = YES;
     
     switch (_viewMode) {
+        case kFriendManagement:
+        {
+            shouldStartButtonTimer = NO;
+            
+            [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                [_burgerButton setEnabled:YES];
+                [_friendsButton setHidden:NO];
+                [_friendsButton setEnabled:YES];
+            }];
+        }
+            break;
+            
         case kOverview:
         {
             [self expandView];
@@ -495,9 +607,19 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         default:
             break;
     }
+    
+    if (shouldStartButtonTimer){
+        double delayInSeconds = 0.3;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [button setEnabled:YES];
+        });
+    }
+    
 }
 
 - (void)contractView{
+    [self exitNewEventPrompt:_eventTextView];
     
     _ocvc.lastIndex = [[self.collectionView indexPathsForVisibleItems]objectAtIndex:0];
     
@@ -507,7 +629,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
     _ocvc.useLayoutToLayoutNavigationTransitions = YES;
     
-    _viewMode = kOverview;
+    [self setViewMode:kOverview];
     
 //    [self setAutomaticallyAdjustsScrollViewInsets:NO];
 //    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];

@@ -10,6 +10,7 @@
 
 static float kGrayscale = 0.6;
 static float kAlpha = 1.0;
+static float kLineWeight = 2.0;
 
 @interface BCNNavButton ()
 
@@ -24,6 +25,8 @@ static float kAlpha = 1.0;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.userInteractionEnabled = NO;
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -35,29 +38,31 @@ static float kAlpha = 1.0;
 }
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event{
-    float minX = self.frame.origin.x;
-    float minY = self.frame.origin.y;
+    float minX = self.bounds.origin.x;
+    float minY = self.bounds.origin.y;
     
-    float maxX = minX + self.frame.size.width;
-    float maxY = minY + self.frame.size.height;
+    float maxX = minX + self.bounds.size.width;
+    float maxY = minY + self.bounds.size.height;
     
     if (point.x < maxX && point.y < maxY &&
         point.x > minX && point.y > minY){
+        NSLog(@"BUTTON INSIDE!!!!");
         return YES;
     }
     
     return NO;
 }
 
-/*- (void)drawExpandedForRect:(CGRect)rect{
+- (void)drawTwoLinesWithSpacing:(float)spacing ForRect:(CGRect)rect{
     // Get the current graphics context
     // (ie. where the drawing should appear)
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     // Set the width of the line
-    CGContextSetLineWidth(context, 1.0);
+    CGContextSetLineWidth(context, kLineWeight);
     
-    float spacing = 12;
     float halfSpace = spacing/2;
     
     float height = rect.size.height;
@@ -80,15 +85,45 @@ static float kAlpha = 1.0;
     CGContextSetRGBStrokeColor(context, kGrayscale, kGrayscale, kGrayscale, kAlpha);
     
     // Draw Path
-    CGContextDrawPath(context, kCGPathFillStroke);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)drawExpandedForRect:(CGRect)rect{
+    [self drawTwoLinesWithSpacing:9 ForRect:rect];
 }
 
 - (void)drawCollapsedForRect:(CGRect)rect{
-    
+    [self drawTwoLinesWithSpacing:6 ForRect:rect];
 }
 
 - (void)drawCancelForRect:(CGRect)rect{
+    // Get the current graphics context
+    // (ie. where the drawing should appear)
+    CGContextRef context = UIGraphicsGetCurrentContext();
     
+    // Set the width of the line
+    CGContextSetLineWidth(context, kLineWeight);
+    
+    float height = rect.size.height;
+    
+    float width = rect.size.width;
+    
+    CGContextBeginPath(context);
+    
+    // Top Line
+    CGContextMoveToPoint(context, 0, 0);
+    CGContextAddLineToPoint(context, width, height);
+    
+    // Bottom Line
+    CGContextMoveToPoint(context, 0, height);
+    CGContextAddLineToPoint(context, width, 0);
+    
+    CGContextClosePath(context);
+    
+    CGContextSetRGBStrokeColor(context, kGrayscale, kGrayscale, kGrayscale, kAlpha);
+    
+    // Draw Path
+    CGContextDrawPath(context, kCGPathStroke);
 }
 
 // Only override drawRect: if you perform custom drawing.
@@ -100,26 +135,26 @@ static float kAlpha = 1.0;
     switch (_buttonState) {
         case kExpanded:
         {
-            
+            [self drawExpandedForRect:rect];
         }
             break;
             
         case kCollapsed:
         {
-            
+            [self drawCollapsedForRect:rect];
         }
             break;
             
         case kCancel:
         {
-            
+            [self drawCancelForRect:rect];
         }
             break;
             
         default:
             break;
     }
-}*/
+}
 
 
 @end
