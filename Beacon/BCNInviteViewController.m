@@ -310,6 +310,8 @@ static NSMutableArray *instances;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         // Configure the cell...
         
         [self setTopCellSubviews:cell];

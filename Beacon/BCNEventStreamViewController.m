@@ -342,6 +342,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
+        
         [cell setupNewEventCell];
         cell = [self setupNewEventCell:cell];
         
