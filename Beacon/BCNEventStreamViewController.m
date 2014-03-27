@@ -188,7 +188,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         
-        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(30, 200, 96, 96)];
+        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(230, 200, 50, 50)];
 //
         [self.view addSubview:bubble];
         
