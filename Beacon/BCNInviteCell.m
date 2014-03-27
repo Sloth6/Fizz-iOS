@@ -40,7 +40,7 @@
     isSelected = selection;
     
     if (isSelected) {
-        _label.textColor = [UIColor lightGrayColor];
+        _label.textColor = [UIColor blueColor];
     } else {
         _label.textColor = [UIColor blackColor];
     }

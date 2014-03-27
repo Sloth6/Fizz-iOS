@@ -153,7 +153,7 @@ static NSString *BCN_REQUEST = @"request";
 - (BOOL)removeSeat{
     [self restartTimer];
     
-    int numOccupiedSeats = 0;
+    int numOccupiedSeats = [attendees count];
     
     if (_pendingNumSeats > numOccupiedSeats){
         _haveSeatsChanged = YES;

@@ -188,9 +188,9 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         
-//        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(30, 200, 40, 40)];
-//        
-//        [self.view addSubview:bubble];
+        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(30, 200, 96, 96)];
+//
+        [self.view addSubview:bubble];
         
         // Manage Friends View Controller
         
@@ -516,6 +516,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     switch (viewMode) {
         case kTimeline:
         {
+            [_friendsButton setHidden:YES];
             [_navIcon setState:kCollapsed];
         }
             break;
@@ -918,20 +919,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             textView.textColor = [UIColor lightGrayColor];
             textView.text = kBCNPlaceholderText;
             
-            BCNNewEventCell *nec = (BCNNewEventCell *)[self getNewEventCell];
-            
 //            UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:nec action:@selector(sendInvitations)];
-            
-            CGRect buttonFrame = CGRectMake(60, 10, 100, 100);
-            
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-            [button setTitle:@"Send" forState:UIControlStateNormal];
-            [button addTarget:nec action:@selector(sendInvitations) forControlEvents:UIControlEventTouchUpInside];
-            [button setFrame:buttonFrame];
-            
-            BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
-            
-            [appDelegate.navigationBar addSubview:button];
             
 //            [self.navigationItem setRightBarButtonItem:button animated:YES];
             [self.collectionView setScrollEnabled:YES];

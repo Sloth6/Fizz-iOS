@@ -16,6 +16,7 @@
 @interface BCNNewEventCell ()
 
 @property (strong, nonatomic) BCNEvent *event;
+@property (strong, nonatomic) UIButton *sendInviteButton;
 
 @end
 
@@ -67,6 +68,15 @@
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
+    CGRect sendInviteFrame = CGRectMake(240, 22, 70, 40);
+    
+    _sendInviteButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_sendInviteButton setTitle:@"SEND!" forState:UIControlStateNormal];
+    [_sendInviteButton setFrame:sendInviteFrame];
+    [_sendInviteButton addTarget:self action:@selector(sendInvitations) forControlEvents:UIControlEventTouchUpInside];
+    
+    [appDelegate.navigationBar addSubview:_sendInviteButton];
+    
     // Disable Main Scroll
     [appDelegate.esvc enterCellDetail];
     appDelegate.esvc.viewMode = kInvite;
@@ -115,6 +125,9 @@
     [_chatButton setEnabled:YES];
     [_chatButton setHidden:NO];
     
+    [_sendInviteButton removeFromSuperview];
+    _sendInviteButton = NULL;
+    
     [self hideCommitInvites];
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -135,6 +148,8 @@
                           atScrollPosition:UITableViewScrollPositionTop
                                   animated:YES];
     [_ivc.tableView setScrollEnabled:NO];
+    
+    [appDelegate.esvc.collectionView setScrollEnabled:YES];
     
 //    [_ivc.tableView reloadData];
 }

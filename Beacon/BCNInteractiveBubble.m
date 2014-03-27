@@ -36,6 +36,9 @@ static const int kVelocityThreshhold = 18;
         // Initialization code
         _isEmpty = YES;
         _isOriginalPositionSet = NO;
+        
+        self.opaque = NO;
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -49,42 +52,39 @@ static const int kVelocityThreshhold = 18;
     }
 }
 
+- (void)drawSeat:(CGRect)rect{
+    float strokeWidth = 1.0;
+    
+    float minX = rect.origin.x + strokeWidth;
+    float minY = rect.origin.y + strokeWidth;
+    float width = rect.size.width - (2*strokeWidth);
+    float height = rect.size.height - (2*strokeWidth);
+    
+    CGRect circleRect = CGRectMake(minX, minY, width, height);
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:circleRect];
+    
+    float dashLengths[] = {6, 6};
+    
+    UIColor *fillColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+    [fillColor setFill];
+    UIColor *strokeColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    [strokeColor setStroke];
+    
+    [path setLineDash:dashLengths count:2 phase:0.0];
+    [path setLineWidth:strokeWidth];
+    
+    [path closePath];
+    
+    [path fill];
+    [path stroke];
+}
+
 - (void)drawRect:(CGRect)rect
 {
-    // Get the current graphics context
-    // (ie. where the drawing should appear)
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    // Set the width of the line
-    CGContextSetLineWidth(context, 1.0);
-    
-    float radius = (self.bounds.size.width/2.0) - 2;
-    
-    float plusLength = (1.0/3.0) * self.bounds.size.width;
-    
-    CGContextBeginPath(context);
-    
-    // Circle
-    CGContextAddArc(context, radius, radius, radius - 2, 0, 2*M_PI, YES);
-    
-    // Horizontal Line
-    CGContextMoveToPoint(context, radius, radius - (plusLength/2.0));
-    CGContextAddLineToPoint(context, radius, radius + (plusLength/2.0));
-    
-    // Vertical Line
-    CGContextMoveToPoint(context, radius - (plusLength/2.0), radius);
-    CGContextAddLineToPoint(context, radius + (plusLength/2.0), radius);
-    
-    float kGrayscale = 0.6;
-    float kAlpha = 1.0;
-    
-    CGContextClosePath(context);
-    
-    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
-    CGContextSetRGBStrokeColor(context, kGrayscale, kGrayscale, kGrayscale, kAlpha);
-    
-    // Draw Path
-    CGContextDrawPath(context, kCGPathFillStroke);
+    if (_isEmpty){
+        [self drawSeat:rect];
+    }
 }
 
 -(void)setIsEmpty:(BOOL)isEmpty{

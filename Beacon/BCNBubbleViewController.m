@@ -109,56 +109,132 @@ static const int kMinInviteSize = 33;
     return [self layoutNumBubbles:numSeats InFrame:rect ForSeats:NO];
 }
 
+// Layout bubbles in a grid, fit all the bubbles you can
+
 - (NSMutableArray *)layoutNumBubbles:(int)numBubbles InFrame:(CGRect)rect ForSeats:(BOOL)isForSeats{
-    int tries = 0;
-    int maxTries = 20;
     
-    int numBubblesPlaced = 0;
-    int expectedNumSuccesses = 10;
+    float topInset = 54;
+    float bottomInset = 50;
     
-    int initialCapacity = MIN(numBubbles + 1, expectedNumSuccesses);
-    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:initialCapacity];
+    float width = rect.size.width;
+    float height = rect.size.height - topInset - bottomInset;
     
-    [points addObject:[NSValue valueWithCGPoint:_addSeatPoint]];
+    float spacing = 3;
     
-    float diameter;
+    float leftInset = 20;
+    float rightInset = leftInset;
     
-    if (isForSeats){
-        diameter = kMinSeatSize;
-    } else {
-        diameter = kMinInviteSize;
+    int numRows = 4;
+    
+    float diameter = (height - (spacing * numRows))/numRows;
+    
+    float remainingWidth = width - leftInset - rightInset;
+    
+    int numCols = -1;
+    
+    while (remainingWidth > 0){
+        numCols += 1;
+        remainingWidth -= (spacing + diameter);
     }
     
-    float spacing = 5;
     
-    float minDistance = diameter + spacing;
-    
-    // Try placing all the bubbles
-    while (numBubblesPlaced < numBubbles && (tries < maxTries)){
-        
-        int x = arc4random() % (int)rect.size.width;
-        int y = arc4random() % (int)rect.size.height;
-        
-        CGPoint point = CGPointMake(x, y);
-        
-        if ([self canFitBubbleAtPoint:point WithPoints:points AndMinDistance:minDistance]){
-            [points addObject:[NSValue valueWithCGPoint:point]];
-            numBubblesPlaced++;
-            tries = 0;
-        }
-        
-        tries++;
-    }
-    
-    BOOL truncated = NO;
-    
-    // If the max number that fit was not all of them, truncate bubbles
-    if (numBubblesPlaced < numBubbles){
-        truncated = YES;
-    }
-    
-    return points;
+    return NULL;
+//    
+//    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:numBubbles];
+//    
+//    [points addObject:[NSValue valueWithCGPoint:_addSeatPoint]];
+//    
+//    float diameter;
+//    
+//    if (isForSeats){
+//        diameter = kMinSeatSize;
+//    } else {
+//        diameter = kMinInviteSize;
+//    }
+//    
+//    float spacing = 5;
+//    
+//    float minDistance = diameter + spacing;
+//    
+//    // Try placing all the bubbles
+//    while (numBubblesPlaced < numBubbles && (tries < maxTries)){
+//        
+//        int x = arc4random() % (int)rect.size.width;
+//        int y = arc4random() % (int)rect.size.height;
+//        
+//        CGPoint point = CGPointMake(x, y);
+//        
+//        if ([self canFitBubbleAtPoint:point WithPoints:points AndMinDistance:minDistance]){
+//            [points addObject:[NSValue valueWithCGPoint:point]];
+//            numBubblesPlaced++;
+//            tries = 0;
+//        }
+//        
+//        tries++;
+//    }
+//    
+//    BOOL truncated = NO;
+//    
+//    // If the max number that fit was not all of them, truncate bubbles
+//    if (numBubblesPlaced < numBubbles){
+//        truncated = YES;
+//    }
+//    
+//    return points;
 }
+
+// Layout Bubbles in a random fashion, fitting as many as possible
+
+//- (NSMutableArray *)layoutNumBubbles:(int)numBubbles InFrame:(CGRect)rect ForSeats:(BOOL)isForSeats{
+//    int tries = 0;
+//    int maxTries = 20;
+//    
+//    int numBubblesPlaced = 0;
+//    int expectedNumSuccesses = 10;
+//    
+//    int initialCapacity = MIN(numBubbles + 1, expectedNumSuccesses);
+//    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:initialCapacity];
+//    
+//    [points addObject:[NSValue valueWithCGPoint:_addSeatPoint]];
+//    
+//    float diameter;
+//    
+//    if (isForSeats){
+//        diameter = kMinSeatSize;
+//    } else {
+//        diameter = kMinInviteSize;
+//    }
+//    
+//    float spacing = 5;
+//    
+//    float minDistance = diameter + spacing;
+//    
+//    // Try placing all the bubbles
+//    while (numBubblesPlaced < numBubbles && (tries < maxTries)){
+//        
+//        int x = arc4random() % (int)rect.size.width;
+//        int y = arc4random() % (int)rect.size.height;
+//        
+//        CGPoint point = CGPointMake(x, y);
+//        
+//        if ([self canFitBubbleAtPoint:point WithPoints:points AndMinDistance:minDistance]){
+//            [points addObject:[NSValue valueWithCGPoint:point]];
+//            numBubblesPlaced++;
+//            tries = 0;
+//        }
+//        
+//        tries++;
+//    }
+//    
+//    BOOL truncated = NO;
+//    
+//    // If the max number that fit was not all of them, truncate bubbles
+//    if (numBubblesPlaced < numBubbles){
+//        truncated = YES;
+//    }
+//    
+//    return points;
+//}
 
 - (void)fillSeatsForEvent:(BCNEvent *)event AtIndex:(int)index{
     int extra = 0;
