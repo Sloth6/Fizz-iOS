@@ -48,9 +48,14 @@
 -(void)addSeat;
 -(BOOL)removeSeat;
 
+-(void)updateInvites:(NSArray *)invites;
+-(void)updateRemoveGuest:(BCNUser *)guest;
+-(void)updateNumberOfSeats:(NSNumber *)numSeats;
+-(void)updateAddMessage:(BCNMessage *)message;
+-(void)updateAddGuest:(BCNUser *)guest;
+
 -(BOOL)haveSeatsChangedSinceLastCheck;
 
--(void)addGuest:(BCNUser *)guest;
 
 // Most recent new thing, used for sorting
 -(NSDate *)lastUpdate;

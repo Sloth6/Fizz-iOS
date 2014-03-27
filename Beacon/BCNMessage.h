@@ -13,9 +13,11 @@
 
 @interface BCNMessage : NSObject
 
+-(BCNEvent *)event;
 -(BCNUser *)user;
 -(NSString *)text;
 -(NSDate *)timestamp;
+-(NSNumber *)messageID;
 
 -(id)initWithMID:(NSNumber *)mID User:(BCNUser *)inputUser AndText:(NSString *)inputText ForEvent:(BCNEvent *)inputEvent;
 

@@ -279,7 +279,6 @@
 }
 
 - (void)updateEvents:(NSArray *)events{
-    NSLog(@"\nUpdating Events!!\n");
     [_esvc updateEvents:[events mutableCopy]];
 }
 

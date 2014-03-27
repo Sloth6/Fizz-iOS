@@ -23,7 +23,7 @@ static NSMutableArray *instances;
 
 @interface BCNInviteViewController ()
 
-@property NSArray *friends;
+@property NSArray *invitableFriends;
 @property NSMutableArray *phoneNumbers;
 @property NSMutableSet *selected;
 
@@ -56,7 +56,6 @@ static NSMutableArray *instances;
         UINib *phoneNib = [UINib nibWithNibName:@"BCNPhoneInputCell" bundle:nil];
         [[self tableView] registerNib:phoneNib forCellReuseIdentifier:@"PhoneInputCell"];
         
-        //_friends = [[NSMutableArray alloc] init];
         _phoneNumbers = [[NSMutableArray alloc] init];
         _selected = [[NSMutableSet alloc] init];
     }
@@ -233,7 +232,7 @@ static NSMutableArray *instances;
             [phoneInvites addObject:phoneNumber];
         } else {
             index -= [_phoneNumbers count];
-            BCNUser *friend = [_friends objectAtIndex:index];
+            BCNUser *friend = [_invitableFriends objectAtIndex:index];
             [userInvites addObject:friend];
         }
     }
@@ -246,7 +245,7 @@ static NSMutableArray *instances;
 }
 
 - (int)lengthOfOptions{
-    return [_friends count] + [_phoneNumbers count];
+    return [_invitableFriends count] + [_phoneNumbers count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -278,7 +277,10 @@ static NSMutableArray *instances;
     // OR simply remove everything from the selection. That'll do for now
     _selected = [[NSMutableSet alloc] init];
     
-    _friends = [BCNUser getFriends];
+    NSMutableArray *friends = [[BCNUser getFriends] mutableCopy];
+    [friends removeObjectsInArray:[_event invitees]];
+    
+    _invitableFriends = friends;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
@@ -382,7 +384,7 @@ static NSMutableArray *instances;
     } else {
         int index = indexPath.row - [_phoneNumbers count];
         
-        [cell.label setText:[[_friends objectAtIndex:index] name]];
+        [cell.label setText:[[_invitableFriends objectAtIndex:index] name]];
     }
     
     return cell;

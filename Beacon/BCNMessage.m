@@ -46,7 +46,7 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
 }
 
 -(NSString *)text{
-    return text;
+    return [text copy];
 }
 
 +(void)socketIONewMessage:(NSString *)message
@@ -138,6 +138,14 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
 
 -(NSDate *)timestamp{
     return self.creationTime;
+}
+
+-(BCNEvent *)event{
+    return event;
+}
+
+-(NSNumber *)messageID{
+    return [messageID copy];
 }
 
 @end

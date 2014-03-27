@@ -14,6 +14,7 @@ static NSMutableDictionary *users;
 static int kBCNProfilePictureDimension = 50;
 
 static NSMutableArray *friends;
+static NSMutableArray *blackList;
 
 static NSString *BCN_NEW_USER_LOCATION = @"newUserLocation";
 static NSString *BCN_ADD_FRIEND_LIST = @"addFriendList";
@@ -61,6 +62,10 @@ static BCNUser *currentUser = nil;
 
 +(NSArray *)getFriends{
     return friends;
+}
+
++(NSArray *)getBlackList{
+    return blackList;
 }
 
 -(void)dealloc {
@@ -452,19 +457,37 @@ static BCNUser *currentUser = nil;
     return result;
 }
 
-+(NSArray *)parseUserJSONList:(NSArray *)friendListJSON{
-    if (friendListJSON == NULL){
++(NSMutableArray *)parseUserJSONList:(NSArray *)userListJSON{
+    if (userListJSON == NULL){
         return NULL;
     }
     
-    NSMutableArray *result = [[NSMutableArray alloc] initWithArray:friendListJSON];
+    NSMutableArray *result = [[NSMutableArray alloc] initWithArray:userListJSON];
     
-    [friendListJSON enumerateObjectsUsingBlock:^(id userJSON, NSUInteger index, BOOL *stop) {
+    [userListJSON enumerateObjectsUsingBlock:^(id userJSON, NSUInteger index, BOOL *stop) {
         BCNUser *user = [BCNUser parseJSON:userJSON];
         [result setObject:user atIndexedSubscript:index];
     }];
     
-    friends = result;
+    return result;
+}
+
++(NSArray *)parseUserJSONFriendList:(NSArray *)friendListJSON{
+    NSMutableArray *result = [BCNUser parseUserJSONList:friendListJSON];
+    
+    if (result){
+        friends = result;
+    }
+    
+    return result;
+}
+
++(NSArray *)parseUserJSONBlackList:(NSArray *)blackListJSON{
+    NSMutableArray *result = [BCNUser parseUserJSONList:blackListJSON];
+    
+    if (result){
+        blackList = result;
+    }
     
     return result;
 }

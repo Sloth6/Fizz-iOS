@@ -935,8 +935,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     return YES;
 }
 
-
 - (void)updateEvents:(NSMutableArray *)incomingEvents{
+    NSLog(@"%dxx!", [incomingEvents count]);
     
     // Resort current Events because of messaging activity
     if (incomingEvents == NULL){
@@ -947,12 +947,14 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     // Incoming events are unsorted
     NSMutableArray *updatedEvents = [incomingEvents mutableCopy];
     
-    [_events removeObjectsInArray:incomingEvents];
-    [updatedEvents addObjectsFromArray:_events];
-    
-    [self sortEvents:updatedEvents];
-    
-    _events = updatedEvents;
+    @synchronized(_events){
+        [_events removeObjectsInArray:incomingEvents];
+        [updatedEvents addObjectsFromArray:_events];
+        
+        [self sortEvents:updatedEvents];
+        
+        _events = updatedEvents;
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
@@ -960,6 +962,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     });
     
     int numIncomingEvents = [incomingEvents count];
+    
+    NSLog(@"%d!!!", [_events count]);
     
     for (int i = 0; i < [_events count]; ++i){
         BCNEvent *event = [_events objectAtIndex:i];

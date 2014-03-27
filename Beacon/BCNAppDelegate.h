@@ -47,9 +47,12 @@ static float const kBCNInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) NSString *userPhoneNumber;
 
 + (BOOL)isRetinaDisplay;
-- (void)updateEvents:(NSArray *)events;
 - (void)sessionStateChanged:(FBSession *)session state:(FBSessionState)state error:(NSError *)error;
 - (void)setupNavigationController;
 - (void)promptForNewFacebookToken;
+
+// Server Handlers, recieving and handing out information
+- (void)updateEvents:(NSArray *)events;
+
 
 @end

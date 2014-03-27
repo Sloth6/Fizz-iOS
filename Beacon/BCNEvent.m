@@ -74,6 +74,8 @@ static NSString *BCN_REQUEST = @"request";
     self = [super init];
     
     if (self){
+        _haveSeatsChanged = YES;
+        self.eventID = eID;
         [events setObject:self forKey:eID];
     }
     
@@ -122,6 +124,10 @@ static NSString *BCN_REQUEST = @"request";
 +(BCNEvent *)eventWithEID:(NSNumber *)eID{
     BCNEvent *event = [events objectForKey:eID];
     
+    if (event == NULL){
+        event = [[BCNEvent alloc] initWithEID:eID];
+    }
+    
     return event;
 }
 
@@ -149,6 +155,41 @@ static NSString *BCN_REQUEST = @"request";
     _pendingNumSeats++;
 }
 
+-(void)updateNumberOfSeats:(NSNumber *)numSeats{
+    @synchronized(self){
+        _haveSeatsChanged = YES;
+        _numSeats = [numSeats integerValue];
+    }
+}
+
+-(void)updateRemoveGuest:(BCNUser *)guest{
+    @synchronized(self){
+        [attendees removeObject:guest];
+    }
+}
+
+-(void)updateInvites:(NSArray *)invites{
+    @synchronized(self){
+        // Ensure no duplicates
+        [_invitees removeObjectsInArray:invites];
+        [_invitees addObjectsFromArray:invites];
+    }
+}
+
+-(void)updateAddMessage:(BCNMessage *)message{
+    @synchronized(self){
+        [_messages removeObject:message];
+        [_messages addObject:message];
+        
+        [_messages sortWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(id obj1, id obj2) {
+            BCNMessage *m1 = obj1;
+            BCNMessage *m2 = obj2;
+            
+            return [[m1 messageID] compare:[m2 messageID]];
+        }];
+    }
+}
+
 // Attempt to subtract an empty seat. If no empty seats, no subtraction
 - (BOOL)removeSeat{
     [self restartTimer];
@@ -165,9 +206,11 @@ static NSString *BCN_REQUEST = @"request";
     }
 }
 
--(void)addGuest:(BCNUser *)guest{
-    if (![_invitees containsObject:guest]){
-        [_invitees addObject:guest];
+-(void)updateAddGuest:(BCNUser *)guest{
+    @synchronized(self){
+        if (![_invitees containsObject:guest]){
+            [_invitees addObject:guest];
+        }
     }
 }
 
@@ -455,8 +498,7 @@ static NSString *BCN_REQUEST = @"request";
     NSNumber *inviteOnly = [eventJSON objectForKey:@"inviteOnly"];
     
     /* Allocate Memory and Assign Values */
-    BCNEvent *event = [[BCNEvent alloc] init];
-    event.eventID = eid;
+    BCNEvent *event = [BCNEvent eventWithEID:eid];
     event.creator = creator;
     event.attendees = mutGuestList;
     event.invitees = mutInviteList;

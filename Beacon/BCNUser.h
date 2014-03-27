@@ -48,13 +48,16 @@
 +(BCNUser *)currentUser;
 +(NSArray *)getUsers;
 +(NSArray *)getFriends;
++(NSArray *)getBlackList;
 
 +(void)setMeAs:(BCNUser *)me;
 +(BCNUser *)me;
 
 +(BCNUser *)parseJSON:(NSDictionary *)userJSON;
 
-+(NSArray *)parseUserJSONList:(NSArray *)friendListJSON;
++(NSArray *)parseUserJSONFriendList:(NSArray *)friendListJSON;
++(NSArray *)parseUserJSONBlackList:(NSArray *)blackListJSON;
++(NSMutableArray *)parseUserJSONList:(NSArray *)userListJSON;
 
 +(NSArray *)getUserIDsFromUsers:(NSArray *)users;
 

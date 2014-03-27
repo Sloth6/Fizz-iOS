@@ -19,7 +19,9 @@
 @interface BCNEventStreamViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
 
+// Server handlers
 - (void)updateEvents:(NSMutableArray *)incomingEvents;
+
 - (void)expandView;
 - (void)enterCellDetail;
 - (void)exitNewEventPrompt:(UITextView *)textView;

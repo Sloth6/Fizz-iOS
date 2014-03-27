@@ -398,6 +398,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     
     NSDictionary *userJSON = [json objectForKey:@"me"];
     NSArray *friendListJSON = [json objectForKey:@"friendList"];
+    NSArray *blackListJSON = [json objectForKey:@"blackList"];
     NSArray *eventListJSON = [json objectForKey:@"eventList"];
     NSString *fbAccessToken = [json objectForKey:@"fbToken"];
     
@@ -407,7 +408,9 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     [BCNUser setMeAs:me];
     
     // User Array (friends)
-    NSArray *friends = [BCNUser parseUserJSONList:friendListJSON];
+    NSArray *friends = [BCNUser parseUserJSONFriendList:friendListJSON];
+    
+    NSArray *blackList = [BCNUser parseUserJSONBlackList:blackListJSON];
     
     [BCNInviteViewController updateFriends];
     
@@ -417,6 +420,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [appDelegate updateEvents:events];
+//    [appDelegate updateFriendsWithFriendsList:friends AndBlackList:blackList];
     
     // Facebook Access Token
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
@@ -450,9 +454,9 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     // User (guest)
     BCNUser  *user  = [BCNUser userWithUID:userID];
     
-    [event addGuest:user];
+    [event updateAddGuest:user];
 }
-                                                              
+
 - (void)incomingNewFriend:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
     
@@ -467,10 +471,14 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     
     // Event ID
     NSNumber *eventID = [json objectForKey:@"eid"];
-    NSArray *friendListJSON = [json objectForKey:@"friendList"];
+    NSArray *inviteListJSON = [json objectForKey:@"inviteList"];
     
     // Friends
-    NSArray *friends = [BCNUser parseUserJSONList:friendListJSON];
+    NSArray *invited = [BCNUser parseUserJSONList:inviteListJSON];
+    
+    BCNEvent *event = [BCNEvent eventWithEID:eventID];
+    
+    [event updateInvites:invited];
 }
                                                               
 - (void)incomingSetSeatCapacity:(NSArray *)args{
@@ -481,6 +489,10 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     
     // Num Seats
     NSNumber *numSeats = [json objectForKey:@"seats"];
+    
+    BCNEvent *event = [BCNEvent eventWithEID:eventID];
+    
+    [event updateNumberOfSeats:numSeats];
 }
 
 - (void)incomingRemoveGuest:(NSArray *)args{
@@ -494,6 +506,8 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     
     // User to remove
     BCNUser  *user  = [BCNUser userWithUID:userID];
+    
+    [event updateRemoveGuest:user];
 }
 
 - (void)incomingNewMessage:(NSArray *)args{
@@ -503,6 +517,8 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     
     // New Message
     BCNMessage *message = [BCNMessage parseJSON:messageJSON];
+    
+    [[message event] updateAddMessage:message];
 }
 
 //- (void)incomingNewUserLocationList:(NSArray *)args{
