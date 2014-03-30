@@ -234,6 +234,9 @@
     return [token copy];
 }
 
+- (void)reclaimBubbleView{
+    [self.window addSubview:(UIView *)_bvc.bubbleView];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {

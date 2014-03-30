@@ -428,10 +428,21 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    [self.view addSubview:_chatDelegate.viewForm];
 //}
 
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section != 0){
+        return YES;
+    }
+    
+    return NO;
+}
+
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"SELECTING: %u", _viewMode);
     if (_viewMode == kTimeline){
+        NSLog(@"selected");
+        NSLog(@"%@", _currentCell);
         [_currentCell enterChatMode];
     }
     

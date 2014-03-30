@@ -163,6 +163,14 @@ static NSMutableArray *instances;
 }
 
 -(void)inviteButtonPress{
+    NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [cell addSubview:(UIView *)appDelegate.bvc.bubbleView];
+    
     [_eventCell enterInviteMode];
 }
 

@@ -10,6 +10,8 @@
 #import "BCNInviteViewController.h"
 #import "BCNAppDelegate.h"
 #import "BCNChatDelegate.h"
+#import "BCNBubbleViewController.h"
+#import "BCNBubbleView.h"
 
 #import "BCNBackspaceResignTextView.h"
 
@@ -140,9 +142,18 @@
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    [_ivc.tableView scrollToRowAtIndexPath:indexPath
-                          atScrollPosition:UITableViewScrollPositionTop
-                                  animated:YES];
+//    [_ivc.tableView scrollToRowAtIndexPath:indexPath
+//                          atScrollPosition:UITableViewScrollPositionTop
+//                                  animated:YES];
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        [_ivc.tableView scrollToRowAtIndexPath:indexPath
+                              atScrollPosition:UITableViewScrollPositionTop
+                                      animated:NO];
+    } completion:^(BOOL finished){
+        [appDelegate reclaimBubbleView];
+    }];
+    
     [_ivc.tableView setScrollEnabled:NO];
     
     [appDelegate.esvc.collectionView setScrollEnabled:YES];
