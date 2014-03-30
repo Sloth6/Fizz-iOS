@@ -162,7 +162,7 @@ static NSMutableArray *instances;
             forControlEvents:UIControlEventTouchUpInside];
 }
 
--(void)inviteButtonPress{
+-(void)takeBubbleView{
     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];
     
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
@@ -170,6 +170,10 @@ static NSMutableArray *instances;
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [cell addSubview:(UIView *)appDelegate.bvc.bubbleView];
+}
+
+-(void)inviteButtonPress{
+    [self takeBubbleView];
     
     [_eventCell enterInviteMode];
 }

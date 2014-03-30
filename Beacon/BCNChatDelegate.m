@@ -202,8 +202,8 @@ static int kBCNNumCellsBeforeMessages = 1;
 	_ivc.tableView.frame = tableFrame;
 	viewForm.frame = formFrame;
     
-    int numMessages = [[_event messages] count];
     int numSections = [_ivc.tableView numberOfSections];
+    int numMessages = [_ivc.tableView numberOfRowsInSection:numSections - 1];
     
     NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:numSections - 1];
     

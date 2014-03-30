@@ -146,10 +146,8 @@
 //                          atScrollPosition:UITableViewScrollPositionTop
 //                                  animated:YES];
     
-    [UIView animateWithDuration:0.2 animations:^{
-        [_ivc.tableView scrollToRowAtIndexPath:indexPath
-                              atScrollPosition:UITableViewScrollPositionTop
-                                      animated:NO];
+    [UIView animateWithDuration:0.3 animations:^{
+        [appDelegate.bvc.bubbleView setFrame:self.frame];
     } completion:^(BOOL finished){
         [appDelegate reclaimBubbleView];
     }];
@@ -176,6 +174,8 @@
     [_ivc.inviteButton setHidden:NO];
     
     [self hideCommitInvites];
+    
+    [_ivc takeBubbleView];
     
     // Disable Main Scroll
     [appDelegate.esvc enterCellDetail];
@@ -220,12 +220,16 @@
     
     _chatDelegate.numSectionsDeleted = [sectionsToDelete count];
     
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
     [_ivc.tableView deleteSections:sectionsToDelete
                   withRowAnimation:UITableViewRowAnimationFade];
     
-    _chatDelegate.numSectionsDeleted = 0;
+//    CGRect rect = appDelegate.bvc.bubbleView.frame;
+//    
+//    rect = CGRectMake(0, -rect.size.height, rect.size.width, rect.size.height);
     
-    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    _chatDelegate.numSectionsDeleted = 0;
     
     appDelegate.esvc.viewMode = kTimeline;
     appDelegate.esvc.currentCell = NULL;
@@ -245,7 +249,7 @@
  
     [_ivc.tableView setScrollEnabled:NO];
     
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
 //
 //    [_ivc.tableView scrollToRowAtIndexPath:indexPath
 //                          atScrollPosition:UITableViewScrollPositionTop
