@@ -14,14 +14,18 @@
 
 #import "BCNAppDelegate.h"
 
-static const int kMaxSeatSize = 96;
-static const int kMinSeatSize = 66;
+static float SEAT_SIZE;
+static float INVITE_SIZE;
 
-static const int kMaxInviteSize = 44;
-static const int kMinInviteSize = 33;
+//static const int kMaxSeatSize = 96;
+//static const int kMinSeatSize = 66;
+//
+//static const int kMaxInviteSize = 44;
+//static const int kMinInviteSize = 33;
 
 @interface BCNBubbleViewController ()
 
+@property BCNEvent *event;
 @property (nonatomic) int currentIndex;
 
 // Full and empty seats
@@ -38,6 +42,9 @@ static const int kMinInviteSize = 33;
 @property CGRect seatFrame;
 @property CGRect inviteFrame;
 
+@property NSMutableArray *seatBubbles;
+@property NSMutableArray *inviteBubbles;
+
 @end
 
 @implementation BCNBubbleViewController
@@ -52,6 +59,9 @@ static const int kMinInviteSize = 33;
         float y = 10;
         
         _addSeatPoint = CGPointMake(x, y);
+        
+        _seatBubbles = [[NSMutableArray alloc] init];
+        _inviteBubbles = [[NSMutableArray alloc] init];
         
         float screenHeight = [UIScreen mainScreen].bounds.size.height;
         
@@ -68,6 +78,12 @@ static const int kMinInviteSize = 33;
         
         [appDelegate.esvc.collectionView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
         
+        _seatPointsArray = [NSMutableArray arrayWithObject:
+                            [self layoutNumSeats:1 InFrame:_seatFrame]];
+        _invitePointsArray = [NSMutableArray arrayWithObject:
+                              [self layoutNumInvites:1 InFrame:_inviteFrame]];
+        
+        [_bubbleView setUserInteractionEnabled:YES];
     }
     return self;
 }
@@ -101,6 +117,11 @@ static const int kMinInviteSize = 33;
     return YES;
 }
 
+- (void)trashBubble:(BCNInteractiveBubble *)bubble{
+    [_event removeSeat];
+    [self updateBubblesForEvent:_event Animated:YES];
+}
+
 - (NSMutableArray *)layoutNumSeats:(int)numSeats InFrame:(CGRect)rect{
     return [self layoutNumBubbles:numSeats InFrame:rect ForSeats:YES];
 }
@@ -113,32 +134,53 @@ static const int kMinInviteSize = 33;
 
 - (NSMutableArray *)layoutNumBubbles:(int)numBubbles InFrame:(CGRect)rect ForSeats:(BOOL)isForSeats{
     
-    float topInset = 54;
-    float bottomInset = 50;
+    float topInset = 54 + rect.origin.y;
+    float bottomInset = 180 - rect.origin.y;
+    int numRows = 3;
+    
+    if (!isForSeats){
+        topInset = 35 + rect.origin.y;
+        bottomInset = 35 - rect.origin.y;
+        numRows = 3;
+    }
     
     float width = rect.size.width;
     float height = rect.size.height - topInset - bottomInset;
     
-    float spacing = 3;
+    float spacing = 5;
     
-    float leftInset = 20;
+    float leftInset = 10;
     float rightInset = leftInset;
-    
-    int numRows = 4;
     
     float diameter = (height - (spacing * numRows))/numRows;
     
-    float remainingWidth = width - leftInset - rightInset;
+    if (isForSeats) SEAT_SIZE = diameter;
+    else INVITE_SIZE = diameter;
     
-    int numCols = -1;
+    float radius = diameter / 2.0;
     
-    while (remainingWidth > 0){
-        numCols += 1;
-        remainingWidth -= (spacing + diameter);
+    float remainingWidth = width - leftInset - rightInset + spacing;
+    
+    int numCols = remainingWidth / (spacing + diameter);
+    
+    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:numRows * numCols];
+    
+    for (int i = 0; i < numRows; ++i){
+        for (int j = 0; j < numCols; ++j){
+            float x = leftInset + (j * (diameter + spacing));
+            float y = topInset + (i * (diameter + spacing));
+            
+            CGPoint point = CGPointMake(x + radius, y + radius);
+            
+            // Set points
+            [points addObject:[NSValue valueWithCGPoint:point]];
+            
+            // Set rects
+            //[rects addObject:[NSValue valueWithCGRect:rect]];
+        }
     }
     
-    
-    return NULL;
+    return points;
 //    
 //    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:numBubbles];
 //    
@@ -236,25 +278,43 @@ static const int kMinInviteSize = 33;
 //    return points;
 //}
 
-- (void)fillSeatsForEvent:(BCNEvent *)event AtIndex:(int)index{
+- (void)fillSeatsAtIndex:(int)index{
     int extra = 0;
+    int numExtra = 0;
     
-    NSArray *attendees = [event attendees];
+    NSArray *attendees;
     
-    NSMutableArray *seatPoints = [_seatPointsArray objectAtIndex:index];
-    
-    if ([seatPoints count] < [attendees count]){
-        extra = 1;
+    if (_event == NULL){
+        attendees = [[NSArray alloc] init];
+    } else{
+        attendees = [_event attendees];
     }
     
-    float diameter = kMinSeatSize;
-    float radius = diameter / 2.0;
+    NSArray *seatPoints = [self getPointsForSeatsAtIndex:index];
+    
+    int numAttendingSlots = [seatPoints count] / 2;
     
     int numAttendees = [attendees count];
-    int limit = [seatPoints count] - extra;
     
-    for (int i = 0; i < limit; i++){
-        if (i < numAttendees){
+    if (numAttendingSlots < numAttendees){
+        extra = 1;
+        numExtra = numAttendees - numAttendingSlots;
+    }
+    
+    float diameter = SEAT_SIZE;
+    float radius = diameter / 2.0;
+    
+    int limit = numAttendingSlots - extra;
+    
+    for (int j = 0; j < [_seatBubbles count]; ++j){
+        BCNInteractiveBubble *bubble = [_seatBubbles objectAtIndex:j];
+        [bubble removeFromSuperview];
+    }
+    
+    [_seatBubbles removeAllObjects];
+    
+    for (int i = 0; i < numAttendees; ++i){
+        if (i < limit){
             
             BCNUser *user = [attendees objectAtIndex:i];
             CGPoint point = [(NSValue *)[seatPoints objectAtIndex:i] CGPointValue];
@@ -262,25 +322,161 @@ static const int kMinInviteSize = 33;
             [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
                 UIImageView *imageView;
                 
+                float x = point.x;
+                float y = point.y;
+                
+                CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
+                
                 if (image){
-                    imageView = [user circularImage:diameter];
+                    imageView = [user circularImageForRect:frame];
                 } else {
-                    imageView = [user formatImageView:[user circularImage:diameter]
-                                ForInitialsWithScalar:1.0];
+                    imageView = [user formatImageView:[user circularImageForRect:frame] ForInitialsForRect:frame];
                 }
                 
-                float centerX = point.x;
-                float centerY = point.y;
-                
-                CGRect frame = CGRectMake(centerX - radius, centerY - radius,
-                                          diameter, diameter);
+                [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
                 
                 BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
                 
+                [bubble setCenter:point];
+                
                 [bubble setImageView:imageView];
+                [bubble setIsEmpty:NO];
+                
+                NSLog(@"(%f, %f)", x, y);
                 
                 [bubble setCenter:point];
-                [self.view addSubview:imageView];
+                [self.bubbleView addSubview:bubble];
+                
+                [_seatBubbles addObject:bubble];
+            }];
+        } else {
+            //            BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
+            //
+            //            [bubble setImageView:imageView];
+            //
+            //            [bubble setCenter:point];
+        }
+    }
+    
+    int numSlotsTaken = numAttendees - numExtra + extra;
+    
+    int numSeatSlots = [seatPoints count] - numSlotsTaken;
+    int numSeats = [_event pendingNumEmptySeats];
+    
+    extra = 0;
+    
+    if (numSeatSlots < numSeats){
+        extra = 1;
+        numExtra = numSeats - numSeatSlots;
+    }
+    
+    limit = numSeatSlots - extra;
+    
+    for (int i = 0; i < numSeats; ++i){
+        if (i < limit){
+            
+            CGPoint point = [(NSValue *)[seatPoints objectAtIndex:numSlotsTaken+i] CGPointValue];
+            
+            float x = point.x;
+            float y = point.y;
+            
+            CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
+            
+            BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
+            //
+            
+            [bubble setCenter:point];
+            [self.bubbleView addSubview:bubble];
+            
+            [bubble setIsEmpty:YES];
+            [_seatBubbles addObject:bubble];
+        } else {
+            //            BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
+            //
+            //            [bubble setImageView:imageView];
+            //
+            //            [bubble setCenter:point];
+        }
+    }
+    
+    
+    if (extra > 0){ // Fill a bubble with "+4" to show for more friends or whatever
+        // Consider the "too many empty seats and too many full seats" case
+        
+        NSLog(@"Couldn't fit all");
+    }
+}
+
+- (void)fillInvitesAtIndex:(int)index{
+    int extra = 0;
+    int numExtra = 0;
+    
+    NSArray *invitees;
+    
+    if (_event == NULL){
+        invitees = [[NSArray alloc] init];
+    } else{
+        invitees = [_event notYetAttending];
+    }
+
+    NSArray *invitePoints = [self getPointsForInvitesAtIndex:index];
+    
+    int numInviteSlots = [invitePoints count];
+    
+    int numInvites = [invitees count];
+    
+    if (numInviteSlots < numInvites){
+        extra = 1;
+        numExtra = numInvites - numInviteSlots;
+    }
+    
+    float diameter = INVITE_SIZE;
+    float radius = diameter / 2.0;
+    
+    int limit = numInviteSlots - extra;
+    
+    for (int j = 0; j < [_inviteBubbles count]; ++j){
+        BCNInteractiveBubble *bubble = [_inviteBubbles objectAtIndex:j];
+        [bubble removeFromSuperview];
+    }
+    
+    [_inviteBubbles removeAllObjects];
+    
+    for (int i = 0; i < numInvites; ++i){
+        if (i < limit){
+            
+            BCNUser *user = [invitees objectAtIndex:i];
+            CGPoint point = [(NSValue *)[invitePoints objectAtIndex:i] CGPointValue];
+            
+            [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
+                UIImageView *imageView;
+                
+                float x = point.x;
+                float y = point.y;
+                
+                CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
+                
+                if (image){
+                    imageView = [user circularImageForRect:frame];
+                } else {
+                    imageView = [user formatImageView:[user circularImageForRect:frame] ForInitialsForRect:frame];
+                }
+                
+                
+                
+                [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
+                
+                BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
+                
+                [bubble setCenter:point];
+                
+                [bubble setImageView:imageView];
+                [bubble setIsEmpty:NO];
+                
+                [bubble setCenter:point];
+                [self.bubbleView addSubview:bubble];
+                
+                [_inviteBubbles addObject:bubble];
             }];
         } else {
 //            BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
@@ -298,32 +494,58 @@ static const int kMinInviteSize = 33;
     }
 }
 
+// Points are all the same for Carnival MVP
+- (NSArray *)getPointsForSeatsAtIndex:(int)index{
+    return [_seatPointsArray objectAtIndex:0];
+}
+
+// Points are all the same for Carnival MVP
+- (NSArray *)getPointsForInvitesAtIndex:(int)index{
+    return [_invitePointsArray objectAtIndex:0];
+}
+
+// Animate update bubbles if this is happening on screen
+// NOTE this is not for transition between sets of bubbles, but updating one set
+- (void)updateBubblesForEvent:(BCNEvent *)event
+                     Animated:(BOOL)isAnimated{
+    
+    _event = event;
+    
+    [self fillSeatsAtIndex:_currentIndex];
+    [self fillInvitesAtIndex:_currentIndex];
+}
+
 // Animate update bubbles if this is happening on screen
 // NOTE this is not for transition between sets of bubbles, but updating one set
 - (void)updateBubblesForEvent:(BCNEvent *)event
                       AtIndex:(NSIndexPath *)indexPath
                      Animated:(BOOL)isAnimated{
     
-    int index = indexPath.item;
+    _event = event;
     
-    if (index > [_seatPointsArray count]){
-        for (int i = index; i > [_seatPointsArray count]; --i){
-            [_seatPointsArray addObject:[[NSMutableArray alloc] init]];
-        }
-        
-        [_seatPointsArray addObject:[[NSMutableArray alloc] init]];
-    }
+    [self fillSeatsAtIndex:indexPath.item];
+    [self fillInvitesAtIndex:indexPath.item];
     
-    NSMutableArray *seatPoints = [_seatPointsArray objectAtIndex:index];
-    
-    if ([event haveSeatsChangedSinceLastCheck]){ // the number of seats have changed
-        seatPoints = [self layoutNumSeats:[_seats count] InFrame:_inviteFrame];
-        [_seatPointsArray setObject:seatPoints atIndexedSubscript:index];
-        
-        NSLog(@"At Index: %d", index);
-        
-        [self fillSeatsForEvent:event AtIndex:index];
-    }
+//    int index = indexPath.item;
+//    
+//    if (index > [_seatPointsArray count]){
+//        for (int i = index; i > [_seatPointsArray count]; --i){
+//            [_seatPointsArray addObject:[[NSMutableArray alloc] init]];
+//        }
+//        
+//        [_seatPointsArray addObject:[[NSMutableArray alloc] init]];
+//    }
+//    
+//    NSMutableArray *seatPoints = [_seatPointsArray objectAtIndex:index];
+//    
+//    if ([event haveSeatsChangedSinceLastCheck]){ // the number of seats have changed
+//        seatPoints = [self layoutNumSeats:[_seats count] InFrame:_inviteFrame];
+//        [_seatPointsArray setObject:seatPoints atIndexedSubscript:index];
+//        
+//        NSLog(@"At Index: %d", index);
+//        
+//        [self fillSeatsForEvent:event AtIndex:index];
+//    }
     
 //    if ([event haveInvitesChangedSinceLastCheck]){ // number of people invited have changed
 //        
@@ -364,10 +586,26 @@ static const int kMinInviteSize = 33;
         float offsetY = fmod(offset.y, screenY);
         
         // Use itemNum to know which cell you're looking at
-        int itemNum = offset.y / screenY - 1; //(NewEvent cell is index - 1), has no bubbles
+        int itemNum = floor(offset.y / screenY) - 1; //(NewEvent cell is index - 1), has no bubbles
         
-        if (itemNum != _currentIndex){ // Handle changed page
+        if (itemNum != _currentIndex && offsetY < 0.9){ // Handle changed page
+            BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+            
             [self setCurrentIndex:itemNum];
+            
+            NSIndexPath *path = [NSIndexPath indexPathForRow:itemNum inSection:0];
+            
+            if (itemNum >= 0){
+                
+                NSLog(@"UPDATE BUBBLES FOR [%d]", itemNum);
+                
+                if (itemNum < [appDelegate.esvc.events count]){
+                    BCNEvent *event = [appDelegate.esvc.events objectAtIndex:itemNum];
+                    [self updateBubblesForEvent:event AtIndex:path Animated:YES];
+                }
+            } else {
+                [self updateBubblesForEvent:NULL AtIndex:path Animated:YES];
+            }
         }
         
         // Use progress variable to do animation
@@ -381,7 +619,6 @@ static const int kMinInviteSize = 33;
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
-
 
 - (void)didReceiveMemoryWarning
 {

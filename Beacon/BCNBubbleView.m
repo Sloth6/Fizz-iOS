@@ -23,7 +23,22 @@
     for (int i = 0; i < [[self subviews] count]; ++i){
         UIView *subview = [[self subviews] objectAtIndex:i];
         
-        if ([subview pointInside:point withEvent:event]){
+        float minX = subview.frame.origin.x;
+        float minY = subview.frame.origin.y;
+        
+        float width = subview.frame.size.width;
+        
+        float radius = width / 2.0;
+        
+        float x = minX + radius;
+        float y = minY + radius;
+        
+        // a^2 + b^2 <= c^2
+        CGFloat xDist = (x - point.x);
+        CGFloat yDist = (y - point.y);
+        CGFloat distance = sqrt((xDist * xDist) + (yDist * yDist));
+        
+        if (distance <= radius){
             return YES;
         }
     }

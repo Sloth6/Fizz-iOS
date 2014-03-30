@@ -14,6 +14,7 @@
 #import "BCNEventStreamViewController.h"
 #import "BCNAppDelegate.h"
 #import "BCNNewEventCell.h"
+#import "BCNBubbleViewController.h"
 
 #import "BCNInviteGuestButton.h"
 
@@ -71,11 +72,9 @@ static NSMutableArray *instances;
 }
 
 - (void)updateSeatUI{
-    if ([_event pendingNumSeats] == 1){
-        [_seatsLabel setText:@"1 Seat"];
-    } else {
-        [_seatsLabel setText:[NSString stringWithFormat:@"%d Seats", [_event pendingNumSeats]]];
-    }
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.bvc updateBubblesForEvent:_event Animated:YES];
 }
 
 // You can always add a seat
@@ -97,49 +96,42 @@ static NSMutableArray *instances;
     float textXEnd = _textView.frame.size.width + textX;
     
     float textY = _textView.frame.origin.y;
-    float textYEnd = textY + _textView.frame.size.height;
+//    float textYEnd = textY + _textView.frame.size.height;
     
     float midX = (textX + textXEnd)/2;
     
-    // Seats
-    float seatsWidth = 80;
-    float seatsX = midX - (seatsWidth/2);
-    float seatsY = textYEnd - 140;
-    float seatsHeight = 40;
-    CGRect seatsLabelFrame = CGRectMake(seatsX, seatsY, seatsWidth, seatsHeight);
+    // AddSeatButton
+    float addSeatWidth = 44;
+    float addSeatX = midX + 110;
+    float addSeatY = textY - 160;
+    float addSeatHeight = addSeatWidth;
+    CGRect addSeatFrame = CGRectMake(addSeatX, addSeatY, addSeatWidth, addSeatHeight);
     
-    // Seat Buttons
-    float buttonWidth = seatsHeight;
-    float buttonHeight = buttonWidth;
+    _addSeatButton = [BCNInviteGuestButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
     
-    float buttonY = seatsY;
-    float buttonMinusX = 5;// + seatsWidth + seatsX;
-    float buttonPlusX = buttonMinusX + 8 + buttonWidth;
+    [_addSeatButton setFrame:addSeatFrame];
     
-    CGRect seatsMinusFrame = CGRectMake(buttonMinusX, buttonY, buttonWidth, buttonHeight);
-    CGRect seatsPlusFrame  = CGRectMake(buttonPlusX,  buttonY, buttonWidth, buttonHeight);
+    //[_inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
     
-    //    CGRect attendeeFrame =
+    [_addSeatButton addTarget:self
+                      action:@selector(addSeat)
+            forControlEvents:UIControlEventTouchUpInside];
     
-    //    _attendeesLabel = [[UILabel alloc] initWithFrame:attendeeFrame];
-    _seatsLabel = [[UILabel alloc] initWithFrame:seatsLabelFrame];
-    
-    [_seatsLabel setText:@"0 Seats"];
-    
-    _addSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
-    _removeSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    
-    [_addSeatButton setFrame:seatsPlusFrame];
-    [_removeSeatButton setFrame:seatsMinusFrame];
-    
-    [_addSeatButton setTitle:@"ADD" forState:UIControlStateNormal];
-    [_removeSeatButton setTitle:@"DEL" forState:UIControlStateNormal];
-    
-    [_addSeatButton addTarget:self action:@selector(addSeat)
-             forControlEvents:UIControlEventTouchUpInside];
-    
-    [_removeSeatButton addTarget:self action:@selector(removeSeat)
-             forControlEvents:UIControlEventTouchUpInside];
+//    
+//    _addSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
+//    _removeSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    
+//    [_addSeatButton setFrame:seatsPlusFrame];
+//    [_removeSeatButton setFrame:seatsMinusFrame];
+//    
+//    [_addSeatButton setTitle:@"ADD" forState:UIControlStateNormal];
+//    [_removeSeatButton setTitle:@"DEL" forState:UIControlStateNormal];
+//    
+//    [_addSeatButton addTarget:self action:@selector(addSeat)
+//             forControlEvents:UIControlEventTouchUpInside];
+//    
+//    [_removeSeatButton addTarget:self action:@selector(removeSeat)
+//             forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setupInvite{
@@ -154,8 +146,8 @@ static NSMutableArray *instances;
     
     // InviteButton
     float inviteWidth = 44;
-    float inviteX = midX + 20;
-    float inviteY = textYEnd + 40;
+    float inviteX = midX + 110;
+    float inviteY = textYEnd + 60;
     float inviteHeight = inviteWidth;
     CGRect inviteFrame = CGRectMake(inviteX, inviteY, inviteWidth, inviteHeight);
     
@@ -290,16 +282,8 @@ static NSMutableArray *instances;
 }
 
 - (void)setTopCellSubviews:(UITableViewCell *)cell{
-    [_textView removeFromSuperview];
-    [_seatsLabel removeFromSuperview];
-    [_addSeatButton removeFromSuperview];
-    [_removeSeatButton removeFromSuperview];
-    [_inviteButton removeFromSuperview];
-    
     [cell addSubview:_textView];
-    [cell addSubview:_seatsLabel];
     [cell addSubview:_addSeatButton];
-    [cell addSubview:_removeSeatButton];
     [cell addSubview:_inviteButton];
 }
 

@@ -44,6 +44,7 @@
 
 -(int)pendingNumSeats;
 -(int)numSeats;
+-(int)pendingNumEmptySeats;
 -(int)numEmptySeats;
 -(void)addSeat;
 -(BOOL)removeSeat;

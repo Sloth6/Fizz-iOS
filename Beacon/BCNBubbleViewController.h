@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class BCNInteractiveBubble;
 @class BCNBubbleView;
 @class BCNEvent;
 
@@ -19,7 +20,12 @@
                       AtIndex:(NSIndexPath *)indexPath
                      Animated:(BOOL)isAnimated;
 
+- (void)updateBubblesForEvent:(BCNEvent *)event
+                     Animated:(BOOL)isAnimated;
+
 - (void)transitionToEvent:(BCNEvent *)event
                   AtIndex:(NSIndexPath *)indexPath;
+
+- (void)trashBubble:(BCNInteractiveBubble *)bubble;
 
 @end

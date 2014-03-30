@@ -207,7 +207,7 @@ static BCNUser *currentUser = nil;
 
     UIImage *image2 = [bubble imageFromBubble];
     [imageView setImage:image2];
-    [BCNUser formatImageViewToCircular:imageView withScalar:1.0];
+    imageView = [BCNUser formatImageViewToCircular:imageView withScalar:1.0];
 
     UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
     UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
@@ -220,6 +220,55 @@ static BCNUser *currentUser = nil;
     return imageView;
 }
 
++(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
+                                  forRect:(CGRect)rect{
+    float x = imageView.frame.origin.x;
+    float y = imageView.frame.origin.y;
+    
+    CGSize imageSize = rect.size;
+    
+    CGRect imageRect;
+    
+    float cornerRadius;
+    
+    imageRect = CGRectMake(x, y, imageSize.width, imageSize.height);
+    cornerRadius = MAX(imageSize.width/2.0, imageSize.height/2.0);
+    
+    imageView.frame = imageRect;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.layer.cornerRadius = cornerRadius;
+    imageView.layer.masksToBounds = YES;
+    //    imageView.layer.borderColor = [UIColor blackColor].CGColor;
+    //    imageView.layer.borderWidth = 1.0;
+    
+    return imageView;
+}
+
+-(UIImageView *)formatImageView:(UIImageView *)imageView
+             ForInitialsForRect:(CGRect)rect{
+    NSArray *subviews = [imageView subviews];
+    
+    for (int i = 0; i < [subviews count]; ++i){
+        UIView *subview = [subviews objectAtIndex:i];
+        [subview removeFromSuperview];
+    }
+    
+    BCNDefaultBubble *bubble = [[BCNDefaultBubble alloc] initWithFrame:rect];
+    
+    UIImage *image2 = [bubble imageFromBubble];
+    [imageView setImage:image2];
+    imageView = [BCNUser formatImageViewToCircular:imageView forRect:rect];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
+    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
+    
+    [label setFont:font];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setText:[self initials]];
+    label.textAlignment = NSTextAlignmentCenter;
+    [imageView addSubview:label];
+    return imageView;
+}
 
 -(UIImageView *)circularImage:(float)scalar{
     
@@ -228,6 +277,15 @@ static BCNUser *currentUser = nil;
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     
     return [BCNUser formatImageViewToCircular:imageView withScalar:scalar];
+}
+
+-(UIImageView *)circularImageForRect:(CGRect)rect{
+    
+    if (image == NULL) return NULL;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    
+    return [BCNUser formatImageViewToCircular:imageView forRect:rect];
 }
 
 -(NSString *)name{

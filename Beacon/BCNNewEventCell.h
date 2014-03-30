@@ -22,9 +22,7 @@
 
 @property UILabel *attendeesLabel;
 
-@property UILabel *seatsLabel;
 @property UIButton *addSeatButton;
-@property UIButton *removeSeatButton;
 
 @property UIButton *chatButton;
 @property BCNChatDelegate *chatDelegate;

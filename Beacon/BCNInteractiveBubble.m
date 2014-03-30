@@ -7,6 +7,7 @@
 //
 
 #import "BCNInteractiveBubble.h"
+#import "BCNAppDelegate.h"
 
 static const int kVelocityThreshhold = 18;
 
@@ -92,8 +93,9 @@ static const int kVelocityThreshhold = 18;
 }
 
 -(void)setImageView:(UIImageView *)imageView{
+    [_imageView removeFromSuperview];
     _imageView = imageView;
-    [_imageView setFrame:self.frame];
+    [self addSubview:_imageView];
     [_imageView setNeedsDisplay];
 }
 
@@ -110,9 +112,9 @@ static const int kVelocityThreshhold = 18;
     
     CGPoint centerOfCircle = CGPointMake(radius, radius);
     
-    CGFloat distance = [self distanceSquaredWithCenter:centerOfCircle with:point];
-        
-    return distance <= (radius * radius);
+    CGFloat distanceSquared = [self distanceSquaredWithCenter:centerOfCircle with:point];
+    
+    return distanceSquared <= (radius * radius);
 }
 
 /*
@@ -280,7 +282,11 @@ static const int kVelocityThreshhold = 18;
                          self.center = endPoint;
                      }
                      completion:^(BOOL finished) {
-                         self.center = _originalPosition;
+                         [self removeFromSuperview];
+                        
+                         BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+                         
+                         [appDelegate.bvc trashBubble:self];
                      }];
 }
 
@@ -313,6 +319,7 @@ static const int kVelocityThreshhold = 18;
             velocity > kVelocityThreshhold){
             
             [self trashBubbleWithVector:vector];
+            
             return;
         }
     }

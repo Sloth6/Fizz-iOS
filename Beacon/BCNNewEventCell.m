@@ -39,13 +39,9 @@
 - (void)setupNewEventCell{
     [self setupNewEventTextView];
     
-    _seatsLabel = _ivc.seatsLabel;
     _addSeatButton = _ivc.addSeatButton;
-    _removeSeatButton = _ivc.removeSeatButton;
     
-    [_seatsLabel setHidden:YES];
     [_addSeatButton setHidden:YES];
-    [_removeSeatButton setHidden:YES];
     
     [_chatButton setHidden:YES];
     
@@ -396,6 +392,7 @@
     [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
     [_textView setEditable:NO];
     [_textView setScrollEnabled:NO];
+    [_textView setUserInteractionEnabled:NO];
 }
 
 

@@ -19,9 +19,7 @@
 
 @property BCNEvent *event;
 
-@property UILabel *seatsLabel;
 @property UIButton *addSeatButton;
-@property UIButton *removeSeatButton;
 
 @property BCNNewEventCell *eventCell;
 

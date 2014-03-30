@@ -31,7 +31,7 @@
 @property NSMutableArray *events;
 
 @property BCNChatDelegate *chatDelegate;
-@property BCNMapViewController *mvc;
+//@property BCNMapViewController *mvc;
 @property BCNBubbleViewController *bvc;
 @property BCNParallaxViewController *pvc;
 @property BCNManageFriendsViewController *mfvc;

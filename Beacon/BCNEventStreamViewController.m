@@ -188,10 +188,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         
-        BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:CGRectMake(230, 200, 50, 50)];
-//
-        [self.view addSubview:bubble];
-        
         // Manage Friends View Controller
         
         _mfvc = [[BCNManageFriendsViewController alloc] init];
@@ -346,6 +342,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [cell setupNewEventCell];
         cell = [self setupNewEventCell:cell];
         
+        [cell.textView setUserInteractionEnabled:YES];
+        
         cell.chatDelegate = _chatDelegate;
         
         return cell;
@@ -361,14 +359,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [cell setEvent:event];
         
         [self setupEventCell:cell withEvent:event];
-        
-//        int numSeats = [event numSeats];
-//        
-//        if (numSeats == 1){
-//            [cell.seatsLabel setText:@"1 Seat"];
-//        } else {
-//            [cell.seatsLabel setText:[NSString stringWithFormat:@"%d Seats", numSeats]];
-//        }
         
         cell.chatDelegate = _chatDelegate;
         
@@ -441,6 +431,10 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_viewMode == kTimeline){
+        [_currentCell enterChatMode];
+    }
+    
     return;
 }
 
@@ -832,7 +826,14 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         UITextRange *textRange;
         
         if (textView.selectedTextRange.empty) {
-            textRange = [textView selectedTextRange];
+            UITextPosition *pos = [textView positionFromPosition:textRange.start
+                                                     inDirection:UITextLayoutDirectionLeft
+                                                          offset:1];
+            
+            //make a 0 length range at position
+            textRange = [textView textRangeFromPosition:pos
+                                             toPosition:pos];
+            
         }
         
         [textView setText:_lastInputString];

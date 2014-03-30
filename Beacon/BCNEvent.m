@@ -99,7 +99,8 @@ static NSString *BCN_REQUEST = @"request";
 }
 
 -(NSArray *)notYetAttending{
-    NSMutableArray *notAttending = [_invitees copy];
+    NSMutableArray *notAttending = [_invitees mutableCopy];
+    
     [notAttending removeObjectsInArray:attendees];
     
     return [NSArray arrayWithArray:notAttending];
@@ -117,8 +118,12 @@ static NSString *BCN_REQUEST = @"request";
     return _pendingNumSeats;
 }
 
+-(int)pendingNumEmptySeats{
+    return MAX(_pendingNumSeats - [attendees count], 0);
+}
+
 -(int)numEmptySeats{
-    return _numSeats - [attendees count];
+    return MAX(_numSeats - [attendees count], 0);
 }
 
 +(BCNEvent *)eventWithEID:(NSNumber *)eID{

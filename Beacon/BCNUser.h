@@ -27,12 +27,19 @@
 // Only call circularImage inside a fetchProfilePictureIfNeeded call
 // Also check if (void(^)(UIImage *image)) is NULL before doing anything
 -(UIImageView *)circularImage:(float)scalar;
+-(UIImageView *)circularImageForRect:(CGRect)rect;
 
 +(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
                                withScalar:(float)scalar;
 
 -(UIImageView *)formatImageView:(UIImageView *)imageView
           ForInitialsWithScalar:(float)scalar;
+
++(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
+                                  forRect:(CGRect)rect;
+
+-(UIImageView *)formatImageView:(UIImageView *)imageView
+             ForInitialsForRect:(CGRect)rect;
 
 -(void)updateCoordinates:(BCNCoordinate *)coord;
 -(void)setFacebookID:(NSNumber *)fbID;
