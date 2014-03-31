@@ -17,6 +17,8 @@
 #import "BCNEvent.h"
 
 #import "BCNDetailTextCell.h"
+#import "BCNServerMessageCell.h"
+
 #import "BCNMessage.h"
 #import "BCNUser.h"
 #import "BCNEvent.h"
@@ -43,7 +45,6 @@ static int kBCNNumCellsBeforeMessages = 1;
 
 @synthesize viewForm;
 @synthesize chatBox;
-@synthesize chatButton;
 
 - (id)init
 {
@@ -105,21 +106,17 @@ static int kBCNNumCellsBeforeMessages = 1;
     BCNTestViewController *tvc = [[BCNTestViewController alloc] initWithNibName:@"BCNTestViewController" bundle:nil];
     viewForm   = tvc.view;
     chatBox    = tvc.textView;
-    chatButton = tvc.rightButton;
     
     chatBox.delegate = self;
     
     //turn off scrolling and set the font details.
     chatBox.font = [UIFont fontWithName:@"Helvetica" size:14];
     chatBox.returnKeyType = UIReturnKeySend;
+    chatBox.enablesReturnKeyAutomatically = YES;
     
     //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     [tvc.view setFrame:viewFormRect];
-    
-    [chatButton addTarget:self
-                   action:@selector(chatButtonClick)
-         forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setupKeyboard{
@@ -249,7 +246,8 @@ static int kBCNNumCellsBeforeMessages = 1;
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
     if ([[textView text] length] > 0){
-        if([text isEqualToString:@"\n"]){ // Send message
+        if([text isEqualToString:@"\n"]){
+            [self sendMessage];
             return NO;
         }
     }
@@ -294,7 +292,12 @@ static int kBCNNumCellsBeforeMessages = 1;
         text = @"i";
     }
     
-    CGFloat width = [chatBox bounds].size.width - 19;
+    [chatBox.layoutManager ensureLayoutForTextContainer:chatBox.textContainer];
+    CGRect textBounds = [chatBox.layoutManager usedRectForTextContainer:chatBox.textContainer];
+    CGFloat width = (CGFloat)(textBounds.size.width + chatBox.textContainerInset.left + chatBox.textContainerInset.right);
+    
+    
+//    CGFloat width = [chatBox textContainer].size.width;
     NSAttributedString *attributedText =
     [[NSAttributedString alloc]
      initWithString:text
@@ -379,7 +382,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     _ivc.tableView.frame = tableFrame;
 }
 
-- (void)chatButtonClick{
+- (void)sendMessage{
     [BCNMessage socketIONewMessage:chatBox.text
                           ForEvent:_event
                    WithAcknowledge:nil];
@@ -451,10 +454,13 @@ static int kBCNNumCellsBeforeMessages = 1;
 	_ivc.tableView.frame = tableFrame;
 	viewForm.frame = formFrame;
     
-    int numMessages = [[_event messages] count];
     int numSections = [_ivc.tableView numberOfSections];
     
-    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:numSections - 1];
+    int section = numSections - 1;
+    
+    int numMessages = [_ivc.tableView numberOfRowsInSection:section];
+    
+    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:section];
     
     [_ivc.tableView scrollToRowAtIndexPath:lastPath
                           atScrollPosition:UITableViewScrollPositionBottom
@@ -520,11 +526,11 @@ static int kBCNNumCellsBeforeMessages = 1;
         return [_ivc tableView:tableView heightForRowAtIndexPath:indexPath];
     }
     
-    int index = [indexPath item];// - kBCNNumCellsBeforeMessages
+    BCNMessage *message = [self getMessageAtIndexPath:indexPath];
     
-    BCNMessage *message = [[_event messages] objectAtIndex:index];
-    
-    NSLog(@"\n%@\n%d", [_event messages], index);
+    if ([message isServerMessage]){
+        return 24;
+    }
     
     NSString *text = [message text];
     
@@ -540,20 +546,46 @@ static int kBCNNumCellsBeforeMessages = 1;
     return height + 14;
 }
 
+-(BCNMessage *)getMessageAtIndexPath:(NSIndexPath *)indexPath{
+    int index = [indexPath item]; // - kBCNNumCellsBeforeMessages;
+    return [[_event messages] objectAtIndex:index];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0){
         return [_ivc tableView:tableView cellForRowAtIndexPath:indexPath];
     }
     
-    NSString *cellID = @"TextCell";
     
     if(![_nibTextCellLoaded containsObject:tableView])
     {
+        NSString *cellID = @"TextCell";
+        
         UINib *nib = [UINib nibWithNibName:@"BCNDetailTextCell" bundle: nil];
+        [tableView registerNib:nib forCellReuseIdentifier:cellID];
+        
+        cellID = @"ServerCell";
+        
+        nib = [UINib nibWithNibName:@"BCNServerMessageCell" bundle: nil];
         [tableView registerNib:nib forCellReuseIdentifier:cellID];
         [_nibTextCellLoaded addObject:tableView];
     }
+    
+    BCNMessage *message = [self getMessageAtIndexPath:indexPath];
+    
+    if ([message isServerMessage]){
+        NSString *cellID = @"ServerCell";
+        
+        BCNServerMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID
+                                                                     forIndexPath:indexPath];
+        
+        [cell.serverLabel setText:[message text]];
+        
+        return cell;
+    }
+    
+    NSString *cellID = @"TextCell";
     
     BCNDetailTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID
                                                               forIndexPath:indexPath];
@@ -564,8 +596,6 @@ static int kBCNNumCellsBeforeMessages = 1;
         _pictureDimension = cell.profileImageView.bounds.size.width;
     }
     
-    int index = [indexPath item];// - kBCNNumCellsBeforeMessages
-    
     float x = cell.bounds.origin.x;
     float y = cell.bounds.origin.y;
     
@@ -574,7 +604,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     
     cell.bounds = CGRectMake(x, y, width, height);
     
-    BCNMessage *message = [[_event messages] objectAtIndex:index];
+    
     
     NSString *text = [message text];
     BCNUser  *user = [message user];

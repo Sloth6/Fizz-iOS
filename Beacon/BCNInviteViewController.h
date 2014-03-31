@@ -25,6 +25,8 @@
 
 @property UIButton *inviteButton;
 
+@property BOOL canBeSelected;
+
 +(void)setupClass;
 
 +(void)updateFriends;

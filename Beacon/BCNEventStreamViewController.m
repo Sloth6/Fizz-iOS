@@ -23,6 +23,8 @@
 #import "BCNOverviewCollectionViewController.h"
 #import "BCNBackspaceResignTextView.h"
 
+#import "BCNInviteViewController.h"
+
 #import "BCNManageFriendsViewController.h"
 
 #import "BCNBubbleViewController.h"
@@ -53,8 +55,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property UIButton *friendsButton;
 
 @property BOOL firstAppear;
-
-@property (nonatomic) ViewMode viewMode;
 
 @end
 
@@ -343,6 +343,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         cell = [self setupNewEventCell:cell];
         
         [cell.textView setUserInteractionEnabled:YES];
+        cell.ivc.canBeSelected = NO;
         
         cell.chatDelegate = _chatDelegate;
         
@@ -355,6 +356,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         BCNNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
         BCNEvent *event = [_events objectAtIndex:eventNum];
+        
+        cell.ivc.canBeSelected = YES;
         
         [cell setEvent:event];
         
@@ -429,22 +432,22 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //}
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section != 0){
-        return YES;
+    if (indexPath.section == 0){
+        return NO;
     }
     
-    return NO;
+    return YES;
 }
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"SELECTING: %u", _viewMode);
-    if (_viewMode == kTimeline){
-        NSLog(@"selected");
-        NSLog(@"%@", _currentCell);
-        [_currentCell enterChatMode];
-    }
+//    NSLog(@"SELECTING: %u", _viewMode);
+//    if (_viewMode == kTimeline){
+//        NSLog(@"selected");
+//        NSLog(@"%@", _currentCell);
+//        [_currentCell enterChatMode];
+//    }
     
     return;
 }
@@ -716,7 +719,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 - (BOOL) textViewShouldBeginEditing:(UITextView *)textView
 {
-    
     if (textView.textColor == [UIColor lightGrayColor]) {
         
         [self enterCellDetail];
@@ -808,15 +810,14 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 // Call when TextView will resign First Responder status
 - (void)exitNewEventPrompt:(UITextView *)textView{
-    textView.textColor = [UIColor lightGrayColor];
-    textView.text = kBCNPlaceholderText;
+    [textView setText:@""];
     [textView resignFirstResponder];
     
     [self.collectionView setScrollEnabled:YES];
     
     // Hide secret event toggle
-    [_toggleSecret setAlpha:0.0];
-    [_secretLabel setAlpha:0.0];
+//    [_toggleSecret setAlpha:0.0];
+//    [_secretLabel setAlpha:0.0];
     
     [self textViewDidChange:textView];
 }

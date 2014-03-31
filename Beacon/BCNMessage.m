@@ -45,6 +45,10 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
     return user;
 }
 
+-(BOOL)isServerMessage{
+    return user == NULL;
+}
+
 -(NSString *)text{
     return [text copy];
 }
@@ -82,9 +86,19 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
     
     // User ID of the message poster
     BCNUser *user;
+    
     {
         NSNumber *uid = [messageJSON objectForKey:@"uid"];
-        user = [BCNUser userWithUID:uid];
+        
+        switch ([uid integerValue]) {
+            case -1:
+                user = NULL;
+                break;
+                
+            default:
+                user = [BCNUser userWithUID:uid];
+                break;
+        }
     }
     
     // Text of the message sent
@@ -104,15 +118,15 @@ static NSString *BCN_NEW_MESSAGE = @"newMessage";
     
     message.creationTime = creationTime;
     
-    /* Optional Marker can be attached to a message to put it on the map */
-    NSDictionary *markerJSON = [messageJSON objectForKey:@"marker"];
-    
-    if (markerJSON){
-        BCNMarker *marker = [BCNMarker parseJSON:markerJSON];
-        message.marker = marker;
-    }
-    
-    //[messageJSON objectForKey:@"deletePastMarker"];
+//    /* Optional Marker can be attached to a message to put it on the map */
+//    NSDictionary *markerJSON = [messageJSON objectForKey:@"marker"];
+//    
+//    if (markerJSON){
+//        BCNMarker *marker = [BCNMarker parseJSON:markerJSON];
+//        message.marker = marker;
+//    }
+//    
+//    //[messageJSON objectForKey:@"deletePastMarker"];
     
     return message;
 }

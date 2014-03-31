@@ -403,6 +403,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     NSString *fbAccessToken = [json objectForKey:@"fbToken"];
     
     // User (me)
+    
     BCNUser *me = [BCNUser parseJSON:userJSON];
     
     [BCNUser setMeAs:me];
@@ -463,6 +464,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     NSDictionary *userJSON = [json objectForKey:@"user"];
     
     // User (new friend)
+    
     BCNUser *user = [BCNUser parseJSON:userJSON];
 }
                                                               

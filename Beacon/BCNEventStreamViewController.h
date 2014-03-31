@@ -48,6 +48,7 @@ typedef enum {
 
 @property NSIndexPath *selectedIndex;
 @property BCNNewEventCell *currentCell;
+@property (nonatomic) ViewMode viewMode;
 
 -(void)setViewMode:(ViewMode)viewMode;
 

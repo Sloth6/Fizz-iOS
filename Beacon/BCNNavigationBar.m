@@ -34,8 +34,6 @@
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    NSLog(@"CHECKING");
-    
     for (int i = 0; i < [[self subviews] count]; ++i){
         UIView *subview = [[self subviews] objectAtIndex:i];
         

@@ -461,6 +461,7 @@ static BCNUser *currentUser = nil;
     /* Parse the JSON object */
     
     // User ID Number
+
     NSNumber *uid = [userJSON objectForKey:@"uid"];
     
     // User Type ("Member", "Guest", "Phone", "Incomplete")

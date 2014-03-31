@@ -104,7 +104,6 @@ static int kBCNNumCellsBeforeMessages = 1;
     BCNTestViewController *tvc = [[BCNTestViewController alloc] initWithNibName:@"BCNTestViewController" bundle:nil];
     viewForm   = tvc.view;
     chatBox    = tvc.textView;
-    chatButton = tvc.rightButton;
     
 //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     

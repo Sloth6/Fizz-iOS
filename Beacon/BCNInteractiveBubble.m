@@ -24,6 +24,9 @@ static const int kVelocityThreshhold = 18;
 @property CGPoint point2;
 @property CGPoint point3;
 
+@property BOOL isButtonClick;
+@property float buttonDelta;
+
 @property (nonatomic) BOOL isEmpty;
 
 @end
@@ -140,6 +143,9 @@ static const int kVelocityThreshhold = 18;
     _point1 = self.center;
     _point2 = _point1;
     _point3 = _point2;
+    
+    _buttonDelta = 0;
+    _isButtonClick = YES;
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -152,6 +158,14 @@ static const int kVelocityThreshhold = 18;
     _point3 = _point2;
     _point2 = _point1;
     _point1 = self.center;
+    
+    if (_isButtonClick){
+        _buttonDelta += [self distanceSquaredWithCenter:_point2 with:_point1];
+        
+        if (_buttonDelta > 6){
+            _isButtonClick = NO;
+        }
+    }
     
 //    CGPoint currentPoint = [touch locationInView:self];
 //    CGPoint lastPoint = [touch previousLocationInView:self];
@@ -349,6 +363,10 @@ static const int kVelocityThreshhold = 18;
                          _point3 = self.center;
                          _point2 = self.center;
                          _point1 = self.center;
+                         
+                         if (_isButtonClick){ // Button press
+                             NSLog(@"\nCLICK!!\n");
+                         }
                      }];
 }
 

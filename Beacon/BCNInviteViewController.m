@@ -180,8 +180,7 @@ static NSMutableArray *instances;
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.section == 0) return NO;
-    else if (indexPath.section == 1) return NO;
+    if (indexPath.section == 1) return NO;
     
     return YES;
 }
@@ -217,7 +216,7 @@ static NSMutableArray *instances;
 }
 
 -(void)sendInvitations{
-    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+//    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [_eventCell exitInviteMode];
     
@@ -501,6 +500,12 @@ static NSMutableArray *instances;
         {
             [_selected addObject:cellReference];
             [cell setIsSelected:YES];
+        }
+    } else {
+        if (_canBeSelected){
+            [cell setSelected:NO];
+            [cell setHighlighted:NO];
+            [_eventCell enterChatMode];
         }
     }
 }

@@ -147,7 +147,9 @@
 //                                  animated:YES];
     
     [UIView animateWithDuration:0.3 animations:^{
-        [appDelegate.bvc.bubbleView setFrame:self.frame];
+        [_ivc.tableView scrollToRowAtIndexPath:indexPath
+                              atScrollPosition:UITableViewScrollPositionTop
+                                      animated:NO];
     } completion:^(BOOL finished){
         [appDelegate reclaimBubbleView];
     }];
@@ -222,17 +224,40 @@
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
+    [_ivc.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO];
+    
+//    [_ivc.tableView deleteSections:sectionsToDelete
+//                  withRowAnimation:UITableViewRowAnimationFade];
+    
+    
+    NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        [_ivc.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        
+    } completion:^(BOOL finished){
+        [appDelegate reclaimBubbleView];
+    }];
+    
     [_ivc.tableView deleteSections:sectionsToDelete
                   withRowAnimation:UITableViewRowAnimationFade];
     
-//    CGRect rect = appDelegate.bvc.bubbleView.frame;
-//    
-//    rect = CGRectMake(0, -rect.size.height, rect.size.width, rect.size.height);
+    //    CGRect rect = appDelegate.bvc.bubbleView.frame;
+    //
+    //    rect = CGRectMake(0, -rect.size.height, rect.size.width, rect.size.height);
     
     _chatDelegate.numSectionsDeleted = 0;
     
     appDelegate.esvc.viewMode = kTimeline;
     appDelegate.esvc.currentCell = NULL;
+    
+    //
+    //    [_ivc.tableView scrollToRowAtIndexPath:indexPath
+    //                          atScrollPosition:UITableViewScrollPositionTop
+    //                                  animated:YES];
+    
+    //    _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
+    //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
     
     // Add chatbox to screen
     [_chatDelegate.viewForm removeFromSuperview];
@@ -240,23 +265,17 @@
     _chatDelegate.ivc = NULL;
     _chatDelegate.event = NULL;
     
+    _ivc.tableView.dataSource = _ivc;
+    _ivc.tableView.delegate   = _ivc;
+    
     CGRect frame = [UIScreen mainScreen].bounds;
     
     [_ivc.tableView setFrame:frame];
     //[_ivc.tableView reloadData];
     
     //[_ivc.tableView reloadData];
- 
+    
     [_ivc.tableView setScrollEnabled:NO];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//
-//    [_ivc.tableView scrollToRowAtIndexPath:indexPath
-//                          atScrollPosition:UITableViewScrollPositionTop
-//                                  animated:YES];
-    
-    //    _burgerButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
-    //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
 }
 
 - (void)chatButtonPress{
@@ -385,6 +404,7 @@
     [_textView setFrame:CGRectMake(x, y, width, height)];
     [_textView setText:@""];
     [_textView deleteBackward];
+    [_textView setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)setupTextView{
@@ -408,6 +428,7 @@
     [_textView setEditable:NO];
     [_textView setScrollEnabled:NO];
     [_textView setUserInteractionEnabled:NO];
+    [_textView setBackgroundColor:[UIColor clearColor]];
 }
 
 

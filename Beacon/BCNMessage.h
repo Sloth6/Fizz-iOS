@@ -19,6 +19,8 @@
 -(NSDate *)timestamp;
 -(NSNumber *)messageID;
 
+-(BOOL)isServerMessage;
+
 -(id)initWithMID:(NSNumber *)mID User:(BCNUser *)inputUser AndText:(NSString *)inputText ForEvent:(BCNEvent *)inputEvent;
 
 +(void)socketIONewMessage:(NSString *)message

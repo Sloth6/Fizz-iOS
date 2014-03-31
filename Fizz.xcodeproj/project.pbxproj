@@ -76,6 +76,8 @@
 		49A31F5C18CF5E3A001214B9 /* BCNTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F5A18CF5E3A001214B9 /* BCNTestViewController.m */; };
 		49A31F5D18CF5E3A001214B9 /* BCNTestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49A31F5B18CF5E3A001214B9 /* BCNTestViewController.xib */; };
 		49A31F6318CF9D46001214B9 /* BCNMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F6218CF9D46001214B9 /* BCNMessageTextView.m */; };
+		49AA439018E8FBEC006D6830 /* BCNServerMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA438F18E8FBEC006D6830 /* BCNServerMessageCell.m */; };
+		49AA439218E8FBFE006D6830 /* BCNServerMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA439118E8FBFE006D6830 /* BCNServerMessageCell.xib */; };
 		49B1C17818E4C6F2007C5D44 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */; };
 		49B1C17B18E4C6F8007C5D44 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */; };
 		49BBF68818942B5400292723 /* BCNCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BBF68718942B5400292723 /* BCNCoordinate.m */; };
@@ -111,8 +113,6 @@
 		49D5E6D418616A56002BB1F0 /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 49D5E6CA18616A56002BB1F0 /* package.json */; };
 		49D5E6D518616A56002BB1F0 /* run.js in Resources */ = {isa = PBXBuildFile; fileRef = 49D5E6CB18616A56002BB1F0 /* run.js */; };
 		49D5E6D618616A56002BB1F0 /* gen_ssl_cert.sh in Resources */ = {isa = PBXBuildFile; fileRef = 49D5E6CD18616A56002BB1F0 /* gen_ssl_cert.sh */; };
-		49D8661418CE6D7200B208CF /* BCNTextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49D8661318CE6D7200B208CF /* BCNTextInputView.xib */; };
-		49D8661A18CE71CE00B208CF /* BCNTextInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D8661918CE71CE00B208CF /* BCNTextInputView.m */; };
 		49DD371418D1062A002ECF93 /* BCNTitleFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DD371318D1062A002ECF93 /* BCNTitleFlowLayout.m */; };
 		49E983E4186A5C4D00D37B2A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E3186A5C4D00D37B2A /* CoreLocation.framework */; };
 		49E983E6186A5C5700D37B2A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E5186A5C5700D37B2A /* QuartzCore.framework */; };
@@ -320,6 +320,9 @@
 		49A31F5B18CF5E3A001214B9 /* BCNTestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNTestViewController.xib; sourceTree = "<group>"; };
 		49A31F6118CF9D46001214B9 /* BCNMessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNMessageTextView.h; sourceTree = "<group>"; };
 		49A31F6218CF9D46001214B9 /* BCNMessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNMessageTextView.m; sourceTree = "<group>"; };
+		49AA438E18E8FBEC006D6830 /* BCNServerMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNServerMessageCell.h; sourceTree = "<group>"; };
+		49AA438F18E8FBEC006D6830 /* BCNServerMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNServerMessageCell.m; sourceTree = "<group>"; };
+		49AA439118E8FBFE006D6830 /* BCNServerMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNServerMessageCell.xib; sourceTree = "<group>"; };
 		49AAFC2B18CBD3260029A07C /* MapView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MapView.xcodeproj; path = "/Users/Andrew/Beacon App/Beacon/MapView/mapbox-ios-example/MapBox-iOS-SDK/MapView/MapView.xcodeproj"; sourceTree = "<absolute>"; };
 		49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -374,9 +377,6 @@
 		49D5E6CA18616A56002BB1F0 /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		49D5E6CB18616A56002BB1F0 /* run.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = run.js; sourceTree = "<group>"; };
 		49D5E6CD18616A56002BB1F0 /* gen_ssl_cert.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = gen_ssl_cert.sh; sourceTree = "<group>"; };
-		49D8661318CE6D7200B208CF /* BCNTextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNTextInputView.xib; sourceTree = "<group>"; };
-		49D8661818CE71CE00B208CF /* BCNTextInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTextInputView.h; sourceTree = "<group>"; };
-		49D8661918CE71CE00B208CF /* BCNTextInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTextInputView.m; sourceTree = "<group>"; };
 		49DD371218D1062A002ECF93 /* BCNTitleFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTitleFlowLayout.h; sourceTree = "<group>"; };
 		49DD371318D1062A002ECF93 /* BCNTitleFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTitleFlowLayout.m; sourceTree = "<group>"; };
 		49E983E3186A5C4D00D37B2A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -729,9 +729,9 @@
 				499A8E7D18CD336800842EA7 /* BCNDetailTextCell.h */,
 				499A8E7E18CD336800842EA7 /* BCNDetailTextCell.m */,
 				499A8E8018CD337B00842EA7 /* BCNDetailTextCell.xib */,
-				49D8661818CE71CE00B208CF /* BCNTextInputView.h */,
-				49D8661918CE71CE00B208CF /* BCNTextInputView.m */,
-				49D8661318CE6D7200B208CF /* BCNTextInputView.xib */,
+				49AA438E18E8FBEC006D6830 /* BCNServerMessageCell.h */,
+				49AA438F18E8FBEC006D6830 /* BCNServerMessageCell.m */,
+				49AA439118E8FBFE006D6830 /* BCNServerMessageCell.xib */,
 				49A31F5918CF5E3A001214B9 /* BCNTestViewController.h */,
 				49A31F5A18CF5E3A001214B9 /* BCNTestViewController.m */,
 				49A31F5B18CF5E3A001214B9 /* BCNTestViewController.xib */,
@@ -1087,7 +1087,6 @@
 				4954FB1D18D4F0A30083D07F /* BCNInviteCell.xib in Resources */,
 				49D5E6D318616A56002BB1F0 /* datakit.js in Resources */,
 				49D5E6D518616A56002BB1F0 /* run.js in Resources */,
-				49D8661418CE6D7200B208CF /* BCNTextInputView.xib in Resources */,
 				49E983F2186A5D1600D37B2A /* BCNMapViewController.xib in Resources */,
 				499A8E8118CD337B00842EA7 /* BCNDetailTextCell.xib in Resources */,
 				49D5E6D418616A56002BB1F0 /* package.json in Resources */,
@@ -1097,6 +1096,7 @@
 				4954FB0218D3AAA40083D07F /* BCNInputPhoneViewController.xib in Resources */,
 				49C8B0F31888B52500400832 /* BCNInvitedUserCell.xib in Resources */,
 				49D5C9B2186042C2002BB1F0 /* Images.xcassets in Resources */,
+				49AA439218E8FBFE006D6830 /* BCNServerMessageCell.xib in Resources */,
 				49D5E6D618616A56002BB1F0 /* gen_ssl_cert.sh in Resources */,
 				49C8B0E81888B3AA00400832 /* BCNHostCell.xib in Resources */,
 				49A31F5D18CF5E3A001214B9 /* BCNTestViewController.xib in Resources */,
@@ -1181,8 +1181,8 @@
 				494BFB3518E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m in Sources */,
 				4954FB0B18D4BD280083D07F /* BCNNewEventCell.m in Sources */,
 				494BFB4018E0B88400C59D18 /* BCNInteractiveBubble.m in Sources */,
+				49AA439018E8FBEC006D6830 /* BCNServerMessageCell.m in Sources */,
 				49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */,
-				49D8661A18CE71CE00B208CF /* BCNTextInputView.m in Sources */,
 				49A31F5C18CF5E3A001214B9 /* BCNTestViewController.m in Sources */,
 				494BFB3D18E093B400C59D18 /* BCNBubbleViewController.m in Sources */,
 				49D5C9E218604973002BB1F0 /* BCN_Reachability.m in Sources */,

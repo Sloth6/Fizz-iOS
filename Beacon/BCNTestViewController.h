@@ -10,9 +10,7 @@
 
 @interface BCNTestViewController : UIViewController
 
-@property IBOutlet UIButton *leftButton;
 @property IBOutlet UITextView *textView;
-@property IBOutlet UIButton *rightButton;
 
 
 @end

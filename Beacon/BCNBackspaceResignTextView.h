@@ -13,5 +13,6 @@
 @interface BCNBackspaceResignTextView : UITextView
 
 -(void)setESVC:(BCNEventStreamViewController *)esvc;
+-(void)setPlaceholderText:(NSString *)placeholderText;
 
 @end

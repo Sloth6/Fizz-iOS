@@ -294,10 +294,10 @@ static NSString *BCN_REQUEST = @"request";
                      AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
-    /* inviteList : user.uid array */
+    /* inviteList : user array */
     {
-        NSArray *uids = [BCNUser getUserIDsFromUsers:inviteList];
-        [json setObject:uids forKey:@"inviteList"];
+        NSArray *userArray = inviteList;
+        [json setObject:userArray forKey:@"inviteList"];
     }
     
     /* invitePnList : string array */
@@ -472,6 +472,8 @@ static NSString *BCN_REQUEST = @"request";
     NSArray *inviteJSONList = [eventJSON objectForKey:@"inviteList"];
     
     mutInviteList = [inviteJSONList mutableCopy];
+    
+    NSLog(@"\n\n%@\n\n", mutInviteList);
     
     // Map JSON Parsing
     [inviteJSONList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

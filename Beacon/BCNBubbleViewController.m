@@ -335,14 +335,14 @@ static float INVITE_SIZE;
                 
                 [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
                 
+                NSLog(@"\n\nuser(3): %@\n\n", user);
+                
                 BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
                 
                 [bubble setCenter:point];
                 
                 [bubble setImageView:imageView];
                 [bubble setIsEmpty:NO];
-                
-                NSLog(@"(%f, %f)", x, y);
                 
                 [bubble setCenter:point];
                 [self.bubbleView addSubview:bubble];
@@ -381,6 +381,8 @@ static float INVITE_SIZE;
             float y = point.y;
             
             CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
+            
+            NSLog(@"\n\nuser(2): %f\n\n", frame.size.width);
             
             BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
             //
@@ -465,6 +467,8 @@ static float INVITE_SIZE;
                 
                 
                 [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
+                
+                NSLog(@"\n\nuser(1): %@\n\n", user);
                 
                 BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
                 
