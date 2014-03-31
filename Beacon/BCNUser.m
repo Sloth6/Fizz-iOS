@@ -551,6 +551,29 @@ static BCNUser *currentUser = nil;
     return result;
 }
 
+-(NSDictionary *)toJson{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    [dict setObject:_userID forKey:@"uid"];
+    [dict setObject:userType forKey:@"type"];
+    [dict setObject:facebookID forKey:@"fbid"];
+    [dict setObject:phoneNumber forKey:@"pn"];
+    [dict setObject:name forKey:@"name"];
+    
+    return dict;
+}
+
++(NSArray *)usersToJSONUsers:(NSArray *)users{
+    NSMutableArray *result = [[NSMutableArray alloc] initWithArray:users];
+    
+    [users enumerateObjectsUsingBlock:^(id user, NSUInteger index, BOOL *stop) {
+        NSDictionary *dict = [user toJson];
+        [result setObject:dict atIndexedSubscript:index];
+    }];
+    
+    return result;
+}
+
 +(void)socketIONewUserLocation:(BCNCoordinate *)coord
                 ForUserWithUID:(NSNumber *)uid
                WithAcknowledge:(SocketIOCallback)function{

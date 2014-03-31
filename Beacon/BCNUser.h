@@ -61,6 +61,8 @@
 +(BCNUser *)me;
 
 +(BCNUser *)parseJSON:(NSDictionary *)userJSON;
+-(NSDictionary *)toJson;
++(NSArray *)usersToJSONUsers:(NSArray *)users;
 
 +(NSArray *)parseUserJSONFriendList:(NSArray *)friendListJSON;
 +(NSArray *)parseUserJSONBlackList:(NSArray *)blackListJSON;

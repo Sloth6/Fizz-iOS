@@ -296,7 +296,7 @@ static NSString *BCN_REQUEST = @"request";
     
     /* inviteList : user array */
     {
-        NSArray *userArray = inviteList;
+        NSArray *userArray = [BCNUser usersToJSONUsers:inviteList];
         [json setObject:userArray forKey:@"inviteList"];
     }
     
