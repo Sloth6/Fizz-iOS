@@ -60,10 +60,10 @@
 {
     _hasLoggedIn = NO;
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs removeObjectForKey:@"phoneNumber"];
-    [prefs removeObjectForKey:@"registered"];
-    [prefs synchronize];
+//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//    [prefs removeObjectForKey:@"phoneNumber"];
+//    [prefs removeObjectForKey:@"registered"];
+//    [prefs synchronize];
     
     // Create a flow layout for the collection view that scrolls
     // vertically and has no space between items
