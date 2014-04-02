@@ -15,6 +15,7 @@ static float kLineWeight = 2.0;
 @interface BCNNavButton ()
 
 @property ButtonState buttonState;
+@property (nonatomic)  BOOL textEditing;
 
 @end
 
@@ -27,6 +28,7 @@ static float kLineWeight = 2.0;
         // Initialization code
         self.userInteractionEnabled = NO;
         self.backgroundColor = [UIColor clearColor];
+        _textEditing = NO;
     }
     return self;
 }
@@ -51,6 +53,16 @@ static float kLineWeight = 2.0;
     }
     
     return NO;
+}
+
+-(void)setIsEditingText:(BOOL)isEditingText{
+    _textEditing = isEditingText;
+    
+    [self setNeedsDisplay];
+}
+
+-(BOOL)isEditingText{
+    return _textEditing;
 }
 
 - (void)drawTwoLinesWithSpacing:(float)spacing ForRect:(CGRect)rect{
@@ -131,6 +143,11 @@ static float kLineWeight = 2.0;
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    
+    if (_textEditing) {
+        [self drawCancelForRect:rect];
+        return;
+    }
     
     switch (_buttonState) {
         case kExpanded:

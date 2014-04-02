@@ -27,6 +27,8 @@
 
 #import "BCNTestViewController.h"
 
+#import "BCNNavButton.h"
+
 static int kBCNNumCellsBeforeMessages = 1;
 
 @interface BCNChatDelegate ()
@@ -36,6 +38,9 @@ static int kBCNNumCellsBeforeMessages = 1;
 @property float textLabelWidth;
 @property BOOL didGetDimensionsFromCell;
 @property CGRect keyboardRect;
+
+// Whether or nor placeholder text is showing
+@property BOOL placeholder;
 
 @property BOOL lastTextBoxTooBig;
 
@@ -52,6 +57,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     if (self) {
         // Custom initialization
         
+        _placeholder = YES;
         _nibTextCellLoaded = [[NSMutableSet alloc] init];
         
         _didGetDimensionsFromCell = NO;
@@ -104,15 +110,17 @@ static int kBCNNumCellsBeforeMessages = 1;
     CGRect viewFormRect = CGRectMake(x, y, width, height);
     
     BCNTestViewController *tvc = [[BCNTestViewController alloc] initWithNibName:@"BCNTestViewController" bundle:nil];
-    viewForm   = tvc.view;
-    chatBox    = tvc.textView;
+    viewForm = tvc.view;
+    chatBox  = tvc.textView;
     
-    chatBox.delegate = self;
+    [chatBox setDelegate:self];
+    
+    [tvc setFont:[UIFont fontWithName:@"Helvetica" size:14]];
     
     //turn off scrolling and set the font details.
-    chatBox.font = [UIFont fontWithName:@"Helvetica" size:14];
-    chatBox.returnKeyType = UIReturnKeySend;
-    chatBox.enablesReturnKeyAutomatically = YES;
+    [chatBox setReturnKeyType:UIReturnKeySend];
+    [chatBox setEnablesReturnKeyAutomatically:YES];
+    [chatBox setUserInteractionEnabled:YES];
     
     //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
@@ -130,19 +138,18 @@ static int kBCNNumCellsBeforeMessages = 1;
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+    
+    
+    
 //    //set notification for when a key is pressed.
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector: @selector(keyPressed:)
 //                                                 name: UITextViewTextDidChangeNotification
 //                                               object: nil];
-}
-
-
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    if (scrollView != chatBox){
-        [chatBox resignFirstResponder];
-    }
 }
 
 //- (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
@@ -159,11 +166,42 @@ static int kBCNNumCellsBeforeMessages = 1;
     return CGRectMake(0, 0, 0, _keyboardEndFrame.size.height);
 }
 
+- (void)addIncomingMessage{
+    CGPoint offset = _ivc.tableView.contentOffset;
+    CGRect bounds = _ivc.tableView.bounds;
+    CGSize size = _ivc.tableView.contentSize;
+    
+    int lastSection = [_ivc.tableView numberOfSections] - 1;
+    int nextRow = [_ivc.tableView numberOfRowsInSection:lastSection];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nextRow inSection:lastSection];
+    NSArray *paths = [NSArray arrayWithObject:indexPath];
+    
+    float threshold = 30;
+    
+    
+    if (offset.y + bounds.size.height > size.height - threshold){
+        [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
+        [_ivc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    } else {
+        [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+    }
+    
+    CGFloat newCellHeight = [self tableView:_ivc.tableView heightForRowAtIndexPath:indexPath];
+    CGSize newContentSize = CGSizeMake(_ivc.tableView.contentSize.width, _ivc.tableView.contentSize.height + newCellHeight);
+    
+    [_ivc.tableView setContentSize:newContentSize];
+    
+    [_ivc.tableView layoutIfNeeded];
+}
+
 -(void) keyboardWillShow:(NSNotification *)note{
     
     if (![chatBox isFirstResponder]) {
         return;
     }
+    
+    [_esvc.navIcon setIsEditingText:YES];
     
     //    [UIView beginAnimations:nil context:NULL];
     //    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
@@ -282,19 +320,28 @@ static int kBCNNumCellsBeforeMessages = 1;
     float screenY = [UIScreen mainScreen].bounds.size.height;
     
 	// get the size of the text block so we can work our magic
-	
+    
     UIFont *font = chatBox.font;
     
     NSString *text = chatBox.text;
     
     /* Space the empty one as if it had some text */
     if ([text isEqualToString:@""]){
+        if (!_placeholder){
+            _placeholder = YES;
+            [chatBox setBackgroundColor:[UIColor clearColor]];
+        }
         text = @"i";
+    } else {
+        if (_placeholder){
+            _placeholder = NO;
+            [chatBox setBackgroundColor:[UIColor whiteColor]];
+        }
     }
     
     [chatBox.layoutManager ensureLayoutForTextContainer:chatBox.textContainer];
     CGRect textBounds = [chatBox.layoutManager usedRectForTextContainer:chatBox.textContainer];
-    CGFloat width = (CGFloat)(textBounds.size.width + chatBox.textContainerInset.left + chatBox.textContainerInset.right);
+    CGFloat width = (CGFloat)(textBounds.size.width + chatBox.textContainerInset.left + chatBox.textContainerInset.right) - 10;
     
     
 //    CGFloat width = [chatBox textContainer].size.width;
@@ -362,7 +409,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     NSInteger chatBoxW = chatBoxFrame.size.width;
     //NSLog(@"CHAT BOX SIZE : %d X %d", chatBoxW, chatBoxH);
     chatBoxFrame.size.height = newSizeH + 12;
-    chatBox.frame = chatBoxFrame;
+    [chatBox setFrame:chatBoxFrame];
     
     // form view
     CGRect formFrame = viewForm.frame;
@@ -389,14 +436,15 @@ static int kBCNNumCellsBeforeMessages = 1;
     
 	// hide the keyboard, we are done with it.
 	[chatBox resignFirstResponder];
-	chatBox.text = @"";
+	[chatBox setText:@""];
+    [self keyPressed];
     
     float screenY = [UIScreen mainScreen].bounds.size.height;
     
 	// chatbox
 	CGRect chatBoxFrame = chatBox.frame;
 	chatBoxFrame.size.height = 20;
-	chatBox.frame = chatBoxFrame;
+	[chatBox setFrame:chatBoxFrame];
 	// form view
 	CGRect formFrame = viewForm.frame;
 	formFrame.size.height = 30 + 6; // Helvetica font line height is 6
@@ -454,17 +502,17 @@ static int kBCNNumCellsBeforeMessages = 1;
 	_ivc.tableView.frame = tableFrame;
 	viewForm.frame = formFrame;
     
-    int numSections = [_ivc.tableView numberOfSections];
+//    int numSections = [_ivc.tableView numberOfSections];
     
-    int section = numSections - 1;
+//    int section = numSections - 1;
     
-    int numMessages = [_ivc.tableView numberOfRowsInSection:section];
+//    int numMessages = [_ivc.tableView numberOfRowsInSection:section];
     
-    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:section];
+//    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:section];
     
-    [_ivc.tableView scrollToRowAtIndexPath:lastPath
-                          atScrollPosition:UITableViewScrollPositionBottom
-                                  animated:YES];
+//    [_ivc.tableView scrollToRowAtIndexPath:lastPath
+//                          atScrollPosition:UITableViewScrollPositionBottom
+//                                  animated:YES];
     
 	// commit animations
 	[UIView commitAnimations];
@@ -498,6 +546,92 @@ static int kBCNNumCellsBeforeMessages = 1;
     //	// commit animations
     //	[UIView commitAnimations];
 }
+
+-(void) keyboardDidHide:(NSNotification *)note{
+    if (![chatBox isFirstResponder]) {
+        return;
+    }
+    
+    //    [UIView beginAnimations:nil context:NULL];
+    //    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    //    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    //    [UIView setAnimationBeginsFromCurrentState:YES];
+    //
+    //    // work
+    //
+    //    [UIView commitAnimations];
+    
+    // get keyboard size and loction
+    
+	CGRect keyboardBounds;
+    
+    keyboardBounds = [self getKeyboardBoundsFromNote:note];
+    
+	// get the height since this is the main value that we need.
+	NSInteger kbSizeH = keyboardBounds.size.height;
+    
+	// get a rect for the table/main frame
+	CGRect tableFrame = _ivc.tableView.frame;
+	tableFrame.size.height += kbSizeH;
+    
+	// get a rect for the form frame
+	CGRect formFrame = viewForm.frame;
+	formFrame.origin.y += kbSizeH;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[note.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[note.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+	// set views with new info
+	_ivc.tableView.frame = tableFrame;
+	viewForm.frame = formFrame;
+    
+    //    int numSections = [_ivc.tableView numberOfSections];
+    
+    //    int section = numSections - 1;
+    
+    //    int numMessages = [_ivc.tableView numberOfRowsInSection:section];
+    
+    //    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:section];
+    
+    //    [_ivc.tableView scrollToRowAtIndexPath:lastPath
+    //                          atScrollPosition:UITableViewScrollPositionBottom
+    //                                  animated:YES];
+    
+	// commit animations
+	[UIView commitAnimations];
+    
+    //    // get keyboard size and loction
+    //
+    //	CGRect keyboardBounds;
+    //
+    //    keyboardBounds = [self getKeyboardBoundsFromNote:note];
+    //
+    //	// get the height since this is the main value that we need.
+    //	NSInteger kbSizeH = keyboardBounds.size.height;
+    //
+    //	// get a rect for the table/main frame
+    //	CGRect tableFrame = self.collectionView.frame;
+    //	tableFrame.size.height += kbSizeH;
+    //
+    //	// get a rect for the form frame
+    //	CGRect formFrame = viewForm.frame;
+    //	formFrame.origin.y += kbSizeH;
+    //
+    //	// animations settings
+    //	[UIView beginAnimations:nil context:NULL];
+    //	[UIView setAnimationBeginsFromCurrentState:YES];
+    //    [UIView setAnimationDuration:0.3f];
+    //
+    //	// set views with new info
+    //	self.collectionView.frame = tableFrame;
+    //	viewForm.frame = formFrame;
+    //
+    //	// commit animations
+    //	[UIView commitAnimations];
+}
+
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0){

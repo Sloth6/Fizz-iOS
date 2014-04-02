@@ -28,6 +28,8 @@
 
 - (void)setupViewForm;
 - (void)setupKeyboard;
+- (void)addIncomingMessage;
+
 //- (void)popView;
 
 @end

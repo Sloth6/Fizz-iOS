@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface BCNTestViewController : UIViewController
 
 @property IBOutlet UITextView *textView;
+@property IBOutlet UITextView *placeholderTV;
 
+-(void)setFont:(UIFont *)font;
 
 @end

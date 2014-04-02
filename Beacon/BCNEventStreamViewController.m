@@ -42,7 +42,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property BCNOverviewCollectionViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
-@property (nonatomic) UITextView *eventTextView;
+@property (nonatomic) BCNBackspaceResignTextView *eventTextView;
 @property UISwitch *toggleSecret;
 @property UILabel  *secretLabel;
 
@@ -55,6 +55,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 @property UIButton *friendsButton;
 
 @property BOOL firstAppear;
+
+@property UITextView *activeTextView;
 
 @end
 
@@ -278,28 +280,28 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     
     [cell setupToggle];
-    cell.textView.enablesReturnKeyAutomatically = YES;
-    [cell.textView setReturnKeyType:UIReturnKeySend];
-    [cell.textView setTextColor:[UIColor lightGrayColor]];
-    [cell.textView setEditable:YES];
+    [cell.resignTextViewer setPlaceholderText:kBCNPlaceholderText];
+    [cell.resignTextViewer setEnablesReturnKeyAutomatically:YES];
+    [cell.resignTextViewer setReturnKeyType:UIReturnKeySend];
+    [cell.resignTextViewer setEditable:YES];
     
-    [cell.textView setESVC:self];
+    [cell.resignTextViewer setESVC:self];
     
     if (_lineHeight == -1) {
         
-        [cell.textView setText:@"."];
+        [cell.resignTextViewer setText:@"."];
         
-        _lineHeight = [self measureHeightOfUITextView:cell.textView];
+        _lineHeight = [self measureHeightOfUITextView:cell.resignTextViewer.textView];
         
-        [cell.textView setText:@""];
-        [cell.textView deleteBackward];
+        [cell.resignTextViewer setText:@""];
+        [cell.resignTextViewer deleteBackward];
     }
     
-    [self setupTextView:cell.textView];
+    [self setupResignTextView:cell.resignTextViewer];
     
-    [cell.textView setDelegate:self];
+    [cell.resignTextViewer setDelegate:self];
     
-    _eventTextView = cell.textView;
+    _eventTextView = cell.resignTextViewer;
     _toggleSecret = cell.toggleSecret;
     _secretLabel  = cell.label;
     
@@ -314,20 +316,20 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     if (_lineHeight == -1) {
         
-        [cell.textView setText:@"."];
+        [cell.resignTextViewer setText:@"."];
         
-        _lineHeight = [self measureHeightOfUITextView:cell.textView];
+        _lineHeight = [self measureHeightOfUITextView:cell.resignTextViewer.textView];
         
-        [cell.textView setText:@""];
-        [cell.textView deleteBackward];
+        [cell.resignTextViewer setText:@""];
+        [cell.resignTextViewer deleteBackward];
     }
     
-    [self setupTextView:cell.textView];
+    [self setupResignTextView:cell.resignTextViewer];
     
     BCNMessage *message = [event firstMessage];
     
-    [cell.textView setEditable:NO];
-    [cell.textView setText:message.text];
+    [cell.resignTextViewer setEditable:NO];
+    [cell.resignTextViewer setText:message.text];
     
     return cell;
 }
@@ -342,7 +344,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         [cell setupNewEventCell];
         cell = [self setupNewEventCell:cell];
         
-        [cell.textView setUserInteractionEnabled:YES];
+        [cell.resignTextViewer setUserInteractionEnabled:YES];
         cell.ivc.canBeSelected = NO;
         
         cell.chatDelegate = _chatDelegate;
@@ -426,8 +428,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    _chatDelegate.event = event;
 //    
 //    // Add Chat Box on bottom of screen
-//    [_chatDelegate.viewForm removeFromSuperview];
-//    
 //    [self.view addSubview:_chatDelegate.viewForm];
 //}
 
@@ -520,6 +520,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //}
 
 -(void)setViewMode:(ViewMode)viewMode{
+    
     _viewMode = viewMode;
     
     switch (viewMode) {
@@ -581,7 +582,16 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     
     BOOL shouldStartButtonTimer = YES;
     
-    switch (_viewMode) {
+    if ([_navIcon isEditingText]){
+        if (_activeTextView){
+            [_activeTextView resignFirstResponder];
+        } else {
+            [[_chatDelegate chatBox] resignFirstResponder];
+        }
+        
+        [_navIcon setIsEditingText:NO];
+        [self.collectionView setScrollEnabled:YES];
+    } else switch (_viewMode) {
         case kFriendManagement:
         {
             shouldStartButtonTimer = NO;
@@ -714,29 +724,51 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 }
 
 
+-(void)addIncomingMessage{
+    [_chatDelegate addIncomingMessage];
+}
+
 #pragma mark -
 #pragma mark TextView Delegate methods
 
 - (BOOL) textViewShouldBeginEditing:(UITextView *)textView
 {
-    if (textView.textColor == [UIColor lightGrayColor]) {
+    [_navIcon setIsEditingText:YES];
+    
+//    if ([textView.text isEqualToString:@""]) {
+    
+    [self enterCellDetail];
+    
+    _activeTextView = textView;
+    
+    [_toggleSecret setHidden:NO];
+    [_secretLabel setHidden:NO];
+    
+    [UIView animateWithDuration:0.25 animations:^{
         
-        [self enterCellDetail];
+        [_toggleSecret setAlpha:1.0];
+        [_secretLabel setAlpha:1.0];
         
-        UITextPosition *newCursorPosition = [textView positionFromPosition:textView.beginningOfDocument offset:0];
-        UITextRange *newSelectedRange = [textView textRangeFromPosition:newCursorPosition toPosition:newCursorPosition];
-        [textView setSelectedTextRange:newSelectedRange];
+    } completion:^(BOOL finished) {
+    }];
+//    }
+    
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView{
+    _activeTextView = NULL;
+    
+    [UIView animateWithDuration:0.25 animations:^{
         
-        [UIView animateWithDuration:0.25 animations:^{
-            [_toggleSecret setAlpha:1.0];
-            [_secretLabel setAlpha:1.0];
-            [textView setAlpha:0.0];
-        } completion:^(BOOL finished) {
-            [textView setAlpha:1.0];
-            textView.text = @"";
-            textView.textColor = [UIColor blackColor];
-        }];
-    }
+        [_toggleSecret setAlpha:0.0];
+        [_secretLabel setAlpha:0.0];
+        
+    } completion:^(BOOL finished) {
+        [_toggleSecret setOn:NO animated:NO];
+        [_toggleSecret setHidden:YES];
+        [_secretLabel setHidden:YES];
+    }];
     
     return YES;
 }
@@ -784,6 +816,30 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     return measuredHeight;
 }
 
+-(void) setupResignTextView:(BCNBackspaceResignTextView *)resignTextView
+{
+    float endY = resignTextView.frame.origin.y + resignTextView.frame.size.height;
+    
+    //    UIEdgeInsets inset = textView.contentInset;
+    
+    float minHeight = 2 * _lineHeight;
+    float maxHeight = 3 * _lineHeight;
+    
+    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:resignTextView.textView]),
+                       maxHeight) + 20;
+    
+    //float height = textView.frame.size.height-insetDelta;
+    
+    float y = endY - height;
+    
+    float x = resignTextView.frame.origin.x;
+    float width = resignTextView.frame.size.width;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [resignTextView setFrame:CGRectMake(x, y, width, height)];
+    });
+}
+
 -(void) setupTextView:(UITextView *)textView
 {
     float endY = textView.frame.origin.y + textView.frame.size.height;
@@ -809,9 +865,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 }
 
 // Call when TextView will resign First Responder status
-- (void)exitNewEventPrompt:(UITextView *)textView{
-    [textView setText:@""];
-    [textView resignFirstResponder];
+- (void)exitNewEventPrompt:(BCNBackspaceResignTextView *)resignTextView{
+    [resignTextView setText:@""];
     
     [self.collectionView setScrollEnabled:YES];
     
@@ -819,7 +874,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    [_toggleSecret setAlpha:0.0];
 //    [_secretLabel setAlpha:0.0];
     
-    [self textViewDidChange:textView];
+    [self textViewDidChange:resignTextView.textView];
 }
 
 -(void) textViewDidChange:(UITextView *)textView

@@ -7,6 +7,7 @@
 //
 
 #import "BCNTestViewController.h"
+#import "BCNBackspaceResignTextView.h"
 
 @interface BCNTestViewController ()
 
@@ -19,6 +20,13 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+//        [_textView setBackgroundColor:[UIColor clearColor]];
+//        [_textView setOpaque:NO];
+//        [_placeholderTV setBackgroundColor:[UIColor clearColor]];
+//        [_placeholderTV setOpaque:NO];
+//        [_placeholderTV setText:@"Haaave you met ted?"];
+//        [_placeholderTV setUserInteractionEnabled:NO];
+//        [_placeholderTV setTextColor:[UIColor lightGrayColor]];
     }
     return self;
 }
@@ -33,6 +41,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)setFont:(UIFont *)font{
+    [_placeholderTV setFont:font];
+    [_textView setFont:font];
 }
 
 @end

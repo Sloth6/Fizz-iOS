@@ -521,6 +521,11 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     BCNMessage *message = [BCNMessage parseJSON:messageJSON];
     
     [[message event] updateAddMessage:message];
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate
+    ;
+    
+    [appDelegate.esvc addIncomingMessage];
 }
 
 //- (void)incomingNewUserLocationList:(NSArray *)args{

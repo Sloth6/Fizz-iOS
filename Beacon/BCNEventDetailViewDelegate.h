@@ -16,7 +16,6 @@
 
 @property (nonatomic, retain) UIView *viewForm;
 @property (nonatomic, retain) UITextView *chatBox;
-@property (nonatomic, retain) UIButton *chatButton;
 
 @property (strong, nonatomic) BCNEvent *event;
 @property (strong, nonatomic) BCNEventStreamViewController *esvc;

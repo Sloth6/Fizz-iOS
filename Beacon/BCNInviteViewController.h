@@ -13,7 +13,7 @@
 
 @interface BCNInviteViewController : UITableViewController <UITextFieldDelegate>
 
-@property UITextView *textView;
+@property UIView *textView;
 @property UITextField *phoneTextField;
 @property UIButton *confirmPhoneButton;
 

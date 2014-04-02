@@ -39,7 +39,6 @@ static int kBCNNumCellsBeforeMessages = 1;
 
 @synthesize viewForm;
 @synthesize chatBox;
-@synthesize chatButton;
 
 - (id)init
 {
@@ -102,16 +101,12 @@ static int kBCNNumCellsBeforeMessages = 1;
     CGRect viewFormRect = CGRectMake(x, y, width, height);
     
     BCNTestViewController *tvc = [[BCNTestViewController alloc] initWithNibName:@"BCNTestViewController" bundle:nil];
-    viewForm   = tvc.view;
-    chatBox    = tvc.textView;
+    viewForm  = tvc.view;
+    chatBox   = (UITextView *)tvc.textView;
     
 //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     [tvc.view setFrame:viewFormRect];
-    
-    [chatButton addTarget:self
-                   action:@selector(chatButtonClick)
-         forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setupKeyboard{
@@ -322,7 +317,7 @@ static int kBCNNumCellsBeforeMessages = 1;
     NSInteger chatBoxW = chatBoxFrame.size.width;
     //NSLog(@"CHAT BOX SIZE : %d X %d", chatBoxW, chatBoxH);
     chatBoxFrame.size.height = newSizeH + 12;
-    chatBox.frame = chatBoxFrame;
+    [chatBox setFrame:chatBoxFrame];
     
     // form view
     CGRect formFrame = viewForm.frame;
@@ -340,33 +335,6 @@ static int kBCNNumCellsBeforeMessages = 1;
     tableFrame.size.height = formFrame.origin.y;
     //tableFrame.size.height = 199 - (newSizeH - 18);
     _esvc.collectionView.frame = tableFrame;
-}
-
-- (void)chatButtonClick{
-    [BCNMessage socketIONewMessage:chatBox.text
-                          ForEvent:_event
-                   WithAcknowledge:nil];
-    
-	// hide the keyboard, we are done with it.
-	[chatBox resignFirstResponder];
-	chatBox.text = @"";
-    
-    float screenY = [UIScreen mainScreen].bounds.size.height;
-    
-	// chatbox
-	CGRect chatBoxFrame = chatBox.frame;
-	chatBoxFrame.size.height = 20;
-	chatBox.frame = chatBoxFrame;
-	// form view
-	CGRect formFrame = viewForm.frame;
-	formFrame.size.height = 30 + 6; // Helvetica font line height is 6
-	formFrame.origin.y = screenY - formFrame.size.height;
-	viewForm.frame = formFrame;
-    
-	// table view
-	CGRect tableFrame = _esvc.collectionView.frame;
-	tableFrame.size.height = formFrame.origin.y;
-	_esvc.collectionView.frame = tableFrame;
 }
 
 + (CGRect) convertRect:(CGRect)rect toView:(UIView *)view {

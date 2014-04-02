@@ -15,7 +15,7 @@
 
 @interface BCNNewEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property BCNBackspaceResignTextView *textView;
+@property BCNBackspaceResignTextView *resignTextViewer;
 @property float lineHeight;
 @property UISwitch *toggleSecret;
 @property UILabel *label;
@@ -24,7 +24,6 @@
 
 @property UIButton *addSeatButton;
 
-@property UIButton *chatButton;
 @property BCNChatDelegate *chatDelegate;
 
 @property BCNInviteViewController *ivc;

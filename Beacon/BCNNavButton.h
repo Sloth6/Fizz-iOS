@@ -18,4 +18,7 @@ typedef enum {
 
 -(void)setState:(ButtonState)state;
 
+-(void)setIsEditingText:(BOOL)isEditingText;
+-(BOOL)isEditingText;
+
 @end

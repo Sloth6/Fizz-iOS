@@ -15,6 +15,7 @@
 @class BCNBubbleViewController;
 @class BCNParallaxViewController;
 @class BCNNavButton;
+@class BCNBackspaceResignTextView;
 
 @interface BCNEventStreamViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
@@ -24,7 +25,7 @@
 
 - (void)expandView;
 - (void)enterCellDetail;
-- (void)exitNewEventPrompt:(UITextView *)textView;
+- (void)exitNewEventPrompt:(BCNBackspaceResignTextView *)textView;
 
 + (CGRect)makeBurgerButtonFrame;
 
@@ -43,7 +44,7 @@ typedef enum {
     kTimeline,
     kInvite,
     kChat,
-    kFriendManagement
+    kFriendManagement,
 } ViewMode;
 
 @property NSIndexPath *selectedIndex;
@@ -51,5 +52,6 @@ typedef enum {
 @property (nonatomic) ViewMode viewMode;
 
 -(void)setViewMode:(ViewMode)viewMode;
+-(void)addIncomingMessage;
 
 @end

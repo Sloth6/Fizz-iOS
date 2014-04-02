@@ -32,8 +32,6 @@
         [self setupTextView];
         
         [self setupTableview];
-        
-        [self setupChat];
     }
     return self;
 }
@@ -45,8 +43,6 @@
     
     [_addSeatButton setHidden:YES];
     
-    [_chatButton setHidden:YES];
-    
     [_ivc.inviteButton setHidden:YES];
 }
 
@@ -54,15 +50,11 @@
     [self setupTextView];
     
     [self setupTableview];
-    
-    [self setupChat];
 }
 
 - (void)enterInviteMode{
     [_ivc.inviteButton setEnabled:NO];
     [_ivc.inviteButton setHidden:YES];
-    [_chatButton setEnabled:YES];
-    [_chatButton setHidden:NO];
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
@@ -120,8 +112,6 @@
 - (void)exitInviteMode{
     [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
-    [_chatButton setEnabled:YES];
-    [_chatButton setHidden:NO];
     
     [_sendInviteButton removeFromSuperview];
     _sendInviteButton = NULL;
@@ -169,9 +159,6 @@
 - (void)enterChatMode{
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [_chatButton setEnabled:NO];
-    [_chatButton setHidden:YES];
-    
     [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
     
@@ -185,7 +172,6 @@
     appDelegate.esvc.currentCell = self;
     
     // Add chatbox to screen
-    [_chatDelegate.viewForm removeFromSuperview];
     [self.contentView addSubview:_chatDelegate.viewForm];
     
     _chatDelegate.ivc = _ivc;
@@ -210,9 +196,6 @@
 }
 
 - (void)exitChatMode{
-    [_chatButton setEnabled:YES];
-    [_chatButton setHidden:NO];
-    
     [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
     
@@ -278,36 +261,6 @@
     [_ivc.tableView setScrollEnabled:NO];
 }
 
-- (void)chatButtonPress{
-    [self enterChatMode];
-}
-
-- (void)setupChat{
-    // Chat Button
-    float screenY = [UIScreen mainScreen].bounds.size.height;
-    float screenX = [UIScreen mainScreen].bounds.size.width;
-    float chatHeight = 30;
-    float chatMarginY = 10;
-    float chatY = screenY - (chatMarginY + chatHeight);
-    float chatWidth = 50;
-    float chatMarginX = 10;
-    float chatX = screenX - (chatWidth + chatMarginX);
-    
-    CGRect chatFrame  = CGRectMake(chatX, chatY, chatWidth, chatHeight);
-    
-    _chatButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_chatButton setFrame:chatFrame];
-    [_chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-    
-    
-    
-    [_chatButton addTarget:self action:@selector(chatButtonPress)
-          forControlEvents:UIControlEventTouchUpInside];
-    
-    NSLog(@"\nBUTTONHERE\n");
-    [self.contentView addSubview:_chatButton];
-}
-
 - (void)updateFriends{
     [_ivc updateFriends];
 }
@@ -318,7 +271,7 @@
     _ivc.eventCell = self;
     [_ivc updateFriends];
     
-    _ivc.textView = _textView;
+    _ivc.textView = _resignTextViewer;
     [_ivc setupInterface];
     
     [_ivc.tableView setFrame:self.bounds];
@@ -346,8 +299,8 @@
 }
 
 - (void)setupToggle{
-    float y = _textView.frame.origin.y + _textView.frame.size.height;
-    float endX = _textView.frame.origin.x + _textView.frame.size.width;
+    float y = _resignTextViewer.frame.origin.y + _resignTextViewer.frame.size.height;
+    float endX = _resignTextViewer.frame.origin.x + _resignTextViewer.frame.size.width;
     
     float ySpace = 5;
     float xSpace = 10;
@@ -362,7 +315,7 @@
     CGRect switchRect = CGRectMake(switchX, switchY, switchWidth, switchHeight);
     
     
-    float labelX = _textView.frame.origin.x;
+    float labelX = _resignTextViewer.frame.origin.x;
     float labelWidth = switchX - labelX - xSpace;
     float labelY = switchY;
     float labelHeight = switchHeight;
@@ -374,6 +327,9 @@
     
     _label = [[UILabel alloc] initWithFrame:labelRect];
     [_label setHidden:YES];
+    
+    [_toggleSecret setAlpha:0.0];
+    [_label setAlpha:0.0];
     
     [_label setTextAlignment:NSTextAlignmentRight];
     [_label setText:@"Secret Event"];
@@ -400,11 +356,11 @@
     float y = vInset;
     float height = sHeight - y - vOutset;
     
-    _textView.textContainer.maximumNumberOfLines = 3;
-    [_textView setFrame:CGRectMake(x, y, width, height)];
-    [_textView setText:@""];
-    [_textView deleteBackward];
-    [_textView setBackgroundColor:[UIColor clearColor]];
+    [_resignTextViewer textContainer].maximumNumberOfLines = 3;
+    [_resignTextViewer setFrame:CGRectMake(x, y, width, height)];
+    [_resignTextViewer setText:@""];
+    [_resignTextViewer deleteBackward];
+    [_resignTextViewer setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)setupTextView{
@@ -422,13 +378,13 @@
     float y = vInset;
     float height = sHeight - y - vOutset;
     
-    _textView = [[BCNBackspaceResignTextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
+    _resignTextViewer = [[BCNBackspaceResignTextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
     
-    [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
-    [_textView setEditable:NO];
-    [_textView setScrollEnabled:NO];
-    [_textView setUserInteractionEnabled:NO];
-    [_textView setBackgroundColor:[UIColor clearColor]];
+    [_resignTextViewer setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
+    [_resignTextViewer setEditable:NO];
+    [_resignTextViewer setScrollEnabled:NO];
+    [_resignTextViewer setUserInteractionEnabled:NO];
+    [_resignTextViewer setBackgroundColor:[UIColor clearColor]];
 }
 
 
