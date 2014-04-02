@@ -138,15 +138,11 @@
     
     // Change the background color
     if (_isPlaceholder){ // Placeholder is already on
-        NSLog(@"It's on");
         if ([_textView.text length] > 0){
-            NSLog(@"TURN IT OFF");
             [self showPlaceholder:NO];
         }
     } else { // Placeholder is off
-        NSLog(@"It's off");
         if ([_textView.text length] == 0){
-            NSLog(@"TURN IT ON");
             [self showPlaceholder:YES];
         }
     }

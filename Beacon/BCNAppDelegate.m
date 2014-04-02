@@ -60,6 +60,11 @@
 {
     _hasLoggedIn = NO;
     
+//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//    [prefs removeObjectForKey:@"phoneNumber"];
+//    [prefs removeObjectForKey:@"registered"];
+//    [prefs synchronize];
+    
     // Create a flow layout for the collection view that scrolls
     // vertically and has no space between items
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -98,6 +103,7 @@
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     NSNumber *registered = [pref objectForKey:@"registered"];
+    [pref synchronize];
     
     BOOL hasRegistered;
     
@@ -259,7 +265,9 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        
+    
+    _gotAddressBook = NO;
+    
     if ((![ioSocketDelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
 //    if ((![ioSocketDelegate isConnectionOpen]) && !_hasLoggedIn){
         NSLog(@"Connection is not open");

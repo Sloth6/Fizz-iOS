@@ -56,8 +56,6 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 
 @property BOOL firstAppear;
 
-@property UITextView *activeTextView;
-
 @end
 
 @implementation BCNEventStreamViewController
@@ -585,6 +583,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     if ([_navIcon isEditingText]){
         if (_activeTextView){
             [_activeTextView resignFirstResponder];
+        } else if (_activeTextField){
+            [_activeTextField resignFirstResponder];
         } else {
             [[_chatDelegate chatBox] resignFirstResponder];
         }

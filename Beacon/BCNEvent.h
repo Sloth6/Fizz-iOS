@@ -18,7 +18,7 @@
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOInviteWithInviteList:(NSArray *)inviteList
-                    InvitePhoneList:(NSArray *)phoneList
+                    InviteContactList:(NSArray *)contactList
                      AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIORequestEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOSetSeatCapacityToCapacity:(int)capacity

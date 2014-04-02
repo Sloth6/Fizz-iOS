@@ -15,6 +15,9 @@
 #import "BCNAppDelegate.h"
 #import "BCNNewEventCell.h"
 #import "BCNBubbleViewController.h"
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+#import "BCNNavButton.h"
 
 #import "BCNInviteGuestButton.h"
 
@@ -27,6 +30,10 @@ static NSMutableArray *instances;
 @property NSArray *invitableFriends;
 @property NSMutableArray *phoneNumbers;
 @property NSMutableSet *selected;
+
+@property BOOL needsUpdateFriends;
+
+@property NSMutableArray *contacts;
 
 @property NSString *country;
 
@@ -46,6 +53,7 @@ static NSMutableArray *instances;
     if (self) {
         // Custom initialization
         
+        _needsUpdateFriends = NO;
         _phoneNumberFormat = [[PhoneNumberFormatter alloc] init];
         _country = @"us";
         
@@ -176,6 +184,9 @@ static NSMutableArray *instances;
     [self takeBubbleView];
     
     [_eventCell enterInviteMode];
+    
+    [self getContacts];
+    [self filterInvitables];
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -198,6 +209,10 @@ static NSMutableArray *instances;
 
 // Need to override in order to avoid awkward forced scroll on textField selection
 - (void)viewWillAppear:(BOOL)animated{
+    if (_needsUpdateFriends){
+        [self updateFriends];
+    }
+    
     return;
 }
 
@@ -224,31 +239,51 @@ static NSMutableArray *instances;
     NSMutableArray *userInvites = [[NSMutableArray alloc] init];
     NSMutableArray *phoneInvites = [[NSMutableArray alloc] init];
     
+    int numPhoneNumbers = [_phoneNumbers count];
+    int numInvitableFriends = [_invitableFriends count];
+    
     for (int i = 0; i < [inviteRefs count]; ++i){
         int index = [self lengthOfOptions] -
                     [(NSNumber *)[inviteRefs objectAtIndex:i] integerValue];
         
-        if (index < [_phoneNumbers count]){
+        if (index < numPhoneNumbers){
             NSString *phoneNumber = [_phoneNumbers objectAtIndex:index];
             NSString *stripped = [_phoneNumberFormat strip:phoneNumber];
             phoneNumber = [NSString stringWithFormat:@"+%@", stripped];
-            [phoneInvites addObject:phoneNumber];
-        } else {
-            index -= [_phoneNumbers count];
+            
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            [dict setObject:phoneNumber forKey:@"pn"];
+            [dict setObject:@"" forKey:@"name"];
+            
+            [phoneInvites addObject:dict];
+        } else if (index < numPhoneNumbers + numInvitableFriends){
+            index -= numPhoneNumbers;
             BCNUser *friend = [_invitableFriends objectAtIndex:index];
             [userInvites addObject:friend];
+        } else {
+            index -= numPhoneNumbers + numInvitableFriends;
+            NSDictionary *contact = [_contacts objectAtIndex:index];
+            NSString *phoneNumber = [contact objectForKey:@"pn"];
+            
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            [dict setObject:phoneNumber forKey:@"pn"];
+            [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
+            
+            [phoneInvites addObject:dict];
         }
     }
     
+    NSLog(@"\n\n%@\n%@\n\n", userInvites, phoneInvites);
+    
     if ([userInvites count] > 0 || [phoneInvites count] > 0){
         [_event socketIOInviteWithInviteList:userInvites
-                             InvitePhoneList:phoneInvites
+                             InviteContactList:phoneInvites
                               AndAcknowledge:nil];
     }
 }
 
 - (int)lengthOfOptions{
-    return [_invitableFriends count] + [_phoneNumbers count];
+    return [_invitableFriends count] + [_phoneNumbers count] + [_contacts count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -271,17 +306,27 @@ static NSMutableArray *instances;
 
 +(void)updateFriends{
     for (int i = 0; i < [instances count]; ++i){
-        [((BCNInviteViewController *)[instances objectAtIndex:0]) updateFriends];
+        BCNInviteViewController *ivc = (BCNInviteViewController *)[instances objectAtIndex:i];
+        [ivc setNeedsUpdateFriends];
     }
 }
 
+-(void)setNeedsUpdateFriends{
+    _needsUpdateFriends = YES;
+}
+
 -(void)updateFriends{
+    _needsUpdateFriends = NO;
     // Worry about selected indices when this happens
     // OR simply remove everything from the selection. That'll do for now
     _selected = [[NSMutableSet alloc] init];
     
     NSMutableArray *friends = [[BCNUser getFriends] mutableCopy];
     [friends removeObjectsInArray:[_event invitees]];
+    
+    NSLog(@"PENISS\n\n%@\n\n%@", _event, [_event invitees]);
+    
+    NSLog(@"\n\n%@", friends);
     
     _invitableFriends = friends;
     
@@ -371,15 +416,30 @@ static NSMutableArray *instances;
     
     [cell setIsSelected:[_selected containsObject:cellReference]];
     
+    int numPhoneNumbers = [_phoneNumbers count];
+    int numInvitableFriends = [_invitableFriends count];
+    
     // Configure the cell...
-    if (indexPath.row < [_phoneNumbers count]){
+    if (indexPath.row < numPhoneNumbers){
         int index = indexPath.row;
         
         [cell.label setText:[_phoneNumbers objectAtIndex:index]];
-    } else {
-        int index = indexPath.row - [_phoneNumbers count];
+    } else if ((indexPath.row - numPhoneNumbers) < numInvitableFriends) {
+        int index = indexPath.row - numPhoneNumbers;
         
         [cell.label setText:[[_invitableFriends objectAtIndex:index] name]];
+    } else {
+        int index = indexPath.row - numPhoneNumbers - numInvitableFriends;
+        
+        NSDictionary *contact = [_contacts objectAtIndex:index];
+        
+        NSString *name = [contact objectForKey:@"name"];
+        
+        if ([name isEqualToString:@""]){
+            [cell.label setText:[contact objectForKey:@"pn"]];
+        } else {
+            [cell.label setText:name];
+        }
     }
     
     return cell;
@@ -453,15 +513,21 @@ static NSMutableArray *instances;
 }
 
 -(void)phoneStartEdit{
-    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height - 190);
+//    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height - 190);
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.esvc.navIcon setIsEditingText:YES];
+    [appDelegate.esvc setActiveTextField:_phoneTextField];
     
     NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:1];
     
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 -(void)phoneStopEdit{
-    self.tableView.frame = [UIScreen mainScreen].bounds;
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.esvc.navIcon setIsEditingText:NO];
+    [appDelegate.esvc setActiveTextField:NULL];
+//    self.tableView.frame = [UIScreen mainScreen].bounds;
 }
 
 -(void)phoneChange{
@@ -520,6 +586,169 @@ static NSMutableArray *instances;
     }
     
     return 65;
+}
+
+-(void)getContacts{
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    _contacts = [pref objectForKey:@"contacts"];
+    [self.tableView reloadData];
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    if (appDelegate.gotAddressBook) return;
+    
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);//&err);
+    
+    NSMutableArray *contacts = [[NSMutableArray alloc] init];
+    
+    ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+        if (granted){
+            NSArray *allContacts = (__bridge_transfer NSArray*)ABAddressBookCopyArrayOfAllPeople(addressBook);
+            
+            ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, NULL, kABPersonSortByLastName);
+            
+            NSLog(@"\n\nADDRESSBOOK\n\n%@\n\n", allContacts);
+            
+            for (int i = 0; i < [allContacts count]; ++i){
+                ABRecordRef person = (__bridge ABRecordRef)([allContacts objectAtIndex:i]);
+                
+                NSString * firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+                NSString * lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+                
+                NSString * nickname = (__bridge NSString *)ABRecordCopyValue(person, kABPersonNicknameProperty);
+                
+                NSString * organization = (__bridge NSString *)ABRecordCopyValue(person, kABPersonOrganizationProperty);
+                
+                NSString *name = @"";
+                
+                BOOL hasFirstName = !(firstName == NULL || [firstName isEqualToString:@""]);
+                BOOL hasLastName  = !(lastName == NULL || [lastName isEqualToString:@""]);
+                BOOL hasNickname  = !(nickname == NULL || [nickname isEqualToString:@""]);
+                BOOL hasOrganization = !(organization == NULL || [organization isEqualToString:@""]);
+                
+                if (hasFirstName & hasLastName){
+                    name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+                } else if (hasFirstName){
+                    name = firstName;
+                } else if (hasNickname){
+                    name = nickname;
+                } else if (hasLastName){
+                    name = lastName;
+                } else if (hasOrganization){
+                    name = organization;
+                }
+                
+                NSString *phoneNumber = [self handlePhones:person];
+                
+//                NSLog(@"%@: (%@)", name, phoneNumber);
+                
+                if (phoneNumber != NULL && ![phoneNumber isEqualToString:@""]){
+                    NSMutableDictionary *contact = [[NSMutableDictionary alloc] init];
+                    [contact setObject:name forKey:@"name"];
+                    [contact setObject:phoneNumber forKey:@"pn"];
+                    
+                    if (![contacts containsObject:contact]){
+                        [contacts addObject:contact];
+                    }
+                }
+            }
+        }
+        
+        NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name"
+                                                                     ascending:YES];
+        NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
+        _contacts = [[contacts sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
+        
+//        [_contacts sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+//            NSDictionary *d1 = obj1;
+//            NSDictionary *d2 = obj2;
+//            
+//            NSString *name1 = [d1 objectForKey:@"name"];
+//            NSString *name2 = [d1 objectForKey:@"name"];
+//            
+//            if ([name1 isEqualToString:@""]){
+//                name1 = [d1 objectForKey:@"pn"];
+//            }
+////            } else {
+////                NSArray *terms = [name1 componentsSeparatedByString: @" "];
+////                name1 = [terms lastObject];
+////            }
+//            
+//            if ([name2 isEqualToString:@""]){
+//                name2 = [d2 objectForKey:@"pn"];
+//            }
+////            } else {
+////                NSArray *terms = [name2 componentsSeparatedByString: @" "];
+////                name2 = [terms lastObject];
+////            }
+//            
+//            return [name1 compare:name2];
+//        }];
+        
+        [pref setObject:_contacts forKey:@"contacts"];
+        [pref synchronize];
+        
+        appDelegate.gotAddressBook = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    });
+}
+
+// Remove anybody who's already invited to the event
+-(void)filterInvitables{
+//    @property NSArray *invitableFriends;
+//    @property NSMutableArray *phoneNumbers;
+//    
+//    @property NSMutableArray *contacts;
+}
+
+-(NSString *)handlePhones:(ABRecordRef)person{
+    ABMultiValueRef phones = (ABMultiValueRef)ABRecordCopyValue(person, kABPersonPhoneProperty);
+    NSString* phoneNumber = NULL;
+    NSString* mobileLabel;
+    
+    int savedPriority = -1;
+    
+    for (int i=0; i < ABMultiValueGetCount(phones); i++) {
+        //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
+        //NSLog(@"%@", phone);
+        int priority = -1;
+        
+        mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
+        if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel]) {
+            NSLog(@"iphone:");
+            priority = 5;
+        } else if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel]) {
+            NSLog(@"mobile:");
+            priority = 4;
+        } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
+            NSLog(@"main:");
+            priority = 3;
+        } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneHomeFAXLabel]) {
+            NSLog(@"home:");
+            priority = 2;
+        } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneWorkFAXLabel]) {
+            NSLog(@"work:");
+            priority = 1;
+        } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneOtherFAXLabel]) {
+            NSLog(@"other:");
+            priority = 0;
+        }
+        
+        if (priority > savedPriority){
+            savedPriority = priority;
+            phoneNumber = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+        }
+    }
+    
+    if (phoneNumber == NULL) return NULL;
+    
+    phoneNumber = [_phoneNumberFormat strip:phoneNumber];
+    
+    return [NSString stringWithFormat:@"+%@", phoneNumber];
 }
 
 

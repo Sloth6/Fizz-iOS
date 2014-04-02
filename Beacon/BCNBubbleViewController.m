@@ -335,7 +335,7 @@ static float INVITE_SIZE;
                 
                 [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
                 
-                NSLog(@"\n\nuser(3): %@\n\n", user);
+//                NSLog(@"\n\nuser(3): %@\n\n", user);
                 
                 BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
                 
@@ -382,7 +382,7 @@ static float INVITE_SIZE;
             
             CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
             
-            NSLog(@"\n\nuser(2): %f\n\n", frame.size.width);
+//            NSLog(@"\n\nuser(2): %f\n\n", frame.size.width);
             
             BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
             //
@@ -461,14 +461,14 @@ static float INVITE_SIZE;
                 if (image){
                     imageView = [user circularImageForRect:frame];
                 } else {
+                    NSLog(@"CTRL DEL!!");
                     imageView = [user formatImageView:[user circularImageForRect:frame] ForInitialsForRect:frame];
                 }
                 
                 
-                
                 [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
                 
-                NSLog(@"\n\nuser(1): %@\n\n", user);
+//                NSLog(@"\n\nuser(1): %@\n\n", user);
                 
                 BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
                 
@@ -601,7 +601,7 @@ static float INVITE_SIZE;
             
             if (itemNum >= 0){
                 
-                NSLog(@"UPDATE BUBBLES FOR [%d]", itemNum);
+//                NSLog(@"UPDATE BUBBLES FOR [%d]", itemNum);
                 
                 if (itemNum < [appDelegate.esvc.events count]){
                     BCNEvent *event = [appDelegate.esvc.events objectAtIndex:itemNum];
@@ -615,7 +615,7 @@ static float INVITE_SIZE;
         // Use progress variable to do animation
         float progress = offsetY / screenY;
         
-        NSLog(@"%d : %f", _currentIndex, progress);
+//        NSLog(@"%d : %f", _currentIndex, progress);
         
         isObservingContentOffsetChange = NO;
         return;

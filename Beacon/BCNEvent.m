@@ -290,7 +290,7 @@ static NSString *BCN_REQUEST = @"request";
 }
 
 -(void)socketIOInviteWithInviteList:(NSArray *)inviteList
-                    InvitePhoneList:(NSArray *)phoneList
+                    InviteContactList:(NSArray *)contactList
                      AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
@@ -302,7 +302,7 @@ static NSString *BCN_REQUEST = @"request";
     
     /* invitePnList : string array */
     // Any user without a UID, send their phone number
-    [json setObject:phoneList forKey:@"invitePnList"];
+    [json setObject:contactList forKey:@"invitePnList"];
     
     /* id : int */
     [json setObject:eventID forKey:@"eid"];

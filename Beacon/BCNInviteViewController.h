@@ -33,8 +33,9 @@
 -(void)updateFriends;
 -(void)sendInvitations;
 
+-(void)setNeedsUpdateFriends;
 -(void)takeBubbleView;
 
-- (void)setupInterface;
+-(void)setupInterface;
 
 @end

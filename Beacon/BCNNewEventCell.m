@@ -284,6 +284,7 @@
 - (void)setEvent:(BCNEvent *)event{
     _event = event;
     _ivc.event = event;
+    [_ivc updateFriends];
 }
 
 - (void)sendInvitations{

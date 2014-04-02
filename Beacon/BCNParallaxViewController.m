@@ -172,7 +172,7 @@ static float parallaxOffset;
         }
         
 //        NSLog(@"%d : %f", _currentIndex, progress);
-        NSLog(@"[%f]", progress);
+//        NSLog(@"[%f]", progress);
         
         isObservingContentOffsetChange = NO;
         return;

@@ -260,7 +260,9 @@ static BCNUser *currentUser = nil;
     imageView = [BCNUser formatImageViewToCircular:imageView forRect:rect];
     
     UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
-    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
+//    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
+    
+    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:(5*rect.size.width)/9];
     
     [label setFont:font];
     [label setTextColor:[UIColor whiteColor]];
@@ -280,8 +282,6 @@ static BCNUser *currentUser = nil;
 }
 
 -(UIImageView *)circularImageForRect:(CGRect)rect{
-    
-    if (image == NULL) return NULL;
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     
@@ -391,6 +391,11 @@ static BCNUser *currentUser = nil;
 }
 
 -(void)getAndSetUserDataSynchronously{
+    if (facebookID == NULL || [facebookID isEqualToNumber:[NSNumber numberWithInt:0]]){
+        image = NULL;
+        return;
+    }
+    
     int dimension;
     
     if ([BCNAppDelegate isRetinaDisplay]){
@@ -408,6 +413,20 @@ static BCNUser *currentUser = nil;
     // NOTE: copying the completion handler is very important
     // if you'll call the callback asynchronously,
     // even with garbage collection!
+    
+    if ([userType isEqualToString:@"Phone"]){
+        _completionHandler = [handler copy];
+        if (_completionHandler != NULL){
+            
+            // Call completion handler.
+            _completionHandler(NULL);
+            
+            // Clean up.
+            _completionHandler = nil;
+        }
+        
+        return;
+    }
     
     if (image == NULL){
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -441,8 +460,8 @@ static BCNUser *currentUser = nil;
             }
         });
     } else {
-        if (handler != NULL){
-            _completionHandler = [handler copy];
+        _completionHandler = [handler copy];
+        if (_completionHandler != NULL){
             
             // Call completion handler.
             _completionHandler(image);

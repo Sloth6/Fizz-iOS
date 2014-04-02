@@ -51,6 +51,9 @@ typedef enum {
 @property BCNNewEventCell *currentCell;
 @property (nonatomic) ViewMode viewMode;
 
+@property UITextView *activeTextView;
+@property UITextField *activeTextField;
+
 -(void)setViewMode:(ViewMode)viewMode;
 -(void)addIncomingMessage;
 
