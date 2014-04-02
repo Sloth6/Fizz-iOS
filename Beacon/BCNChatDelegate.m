@@ -167,32 +167,34 @@ static int kBCNNumCellsBeforeMessages = 1;
 }
 
 - (void)addIncomingMessage{
-    CGPoint offset = _ivc.tableView.contentOffset;
-    CGRect bounds = _ivc.tableView.bounds;
-    CGSize size = _ivc.tableView.contentSize;
-    
-    int lastSection = [_ivc.tableView numberOfSections] - 1;
-    int nextRow = [_ivc.tableView numberOfRowsInSection:lastSection];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nextRow inSection:lastSection];
-    NSArray *paths = [NSArray arrayWithObject:indexPath];
-    
-    float threshold = 30;
-    
-    
-    if (offset.y + bounds.size.height > size.height - threshold){
-        [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
-        [_ivc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    } else {
-        [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+    if (_esvc.viewMode == kChat){
+        CGPoint offset = _ivc.tableView.contentOffset;
+        CGRect bounds = _ivc.tableView.bounds;
+        CGSize size = _ivc.tableView.contentSize;
+        
+        int lastSection = [_ivc.tableView numberOfSections] - 1;
+        int nextRow = [_ivc.tableView numberOfRowsInSection:lastSection];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nextRow inSection:lastSection];
+        NSArray *paths = [NSArray arrayWithObject:indexPath];
+        
+        float threshold = 30;
+        
+        
+        if (offset.y + bounds.size.height > size.height - threshold){
+            [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
+            [_ivc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        } else {
+            [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+        }
+        
+        CGFloat newCellHeight = [self tableView:_ivc.tableView heightForRowAtIndexPath:indexPath];
+        CGSize newContentSize = CGSizeMake(_ivc.tableView.contentSize.width, _ivc.tableView.contentSize.height + newCellHeight);
+        
+        [_ivc.tableView setContentSize:newContentSize];
+        
+        [_ivc.tableView layoutIfNeeded];
     }
-    
-    CGFloat newCellHeight = [self tableView:_ivc.tableView heightForRowAtIndexPath:indexPath];
-    CGSize newContentSize = CGSizeMake(_ivc.tableView.contentSize.width, _ivc.tableView.contentSize.height + newCellHeight);
-    
-    [_ivc.tableView setContentSize:newContentSize];
-    
-    [_ivc.tableView layoutIfNeeded];
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{
@@ -434,6 +436,8 @@ static int kBCNNumCellsBeforeMessages = 1;
                           ForEvent:_event
                    WithAcknowledge:nil];
     
+    [_esvc.navIcon setIsEditingText:NO];
+    
 	// hide the keyboard, we are done with it.
 	[chatBox resignFirstResponder];
 	[chatBox setText:@""];
@@ -466,6 +470,8 @@ static int kBCNNumCellsBeforeMessages = 1;
     if (![chatBox isFirstResponder]) {
         return;
     }
+    
+    [_esvc.navIcon setIsEditingText:NO];
     
     //    [UIView beginAnimations:nil context:NULL];
     //    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
