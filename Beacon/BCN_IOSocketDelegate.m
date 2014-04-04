@@ -153,9 +153,6 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
             [objects addObject:iosToken];
             
             NSLog(@"iosToken: %@", iosToken);
-        } else { // add a fake token for testing
-            [keys addObject:@"iosToken"];
-            [objects addObject:@"fakeToken"];
         }
         
         // Version Number
