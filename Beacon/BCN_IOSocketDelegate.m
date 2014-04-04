@@ -466,6 +466,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     // User (new friend)
     
     BCNUser *user = [BCNUser parseJSON:userJSON];
+    [BCNUser addFriends:[NSArray arrayWithObject:user]];
 }
                                                               
 - (void)incomingNewInviteList:(NSArray *)args{
@@ -481,6 +482,9 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     BCNEvent *event = [BCNEvent eventWithEID:eventID];
     
     [event updateInvites:invited];
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.esvc updateEvent:event];
 }
                                                               
 - (void)incomingSetSeatCapacity:(NSArray *)args{
@@ -514,6 +518,9 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     BCNUser  *user  = [BCNUser userWithUID:userID];
     
     [event updateRemoveGuest:user];
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.esvc updateEvent:event];
 }
 
 - (void)incomingNewMessage:(NSArray *)args{
@@ -528,7 +535,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [appDelegate.esvc addIncomingMessage];
+    [appDelegate.esvc addIncomingMessageForEvent:[message event]];
 }
 
 //- (void)incomingNewUserLocationList:(NSArray *)args{

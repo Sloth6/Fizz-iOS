@@ -28,7 +28,7 @@
 
 - (void)setupViewForm;
 - (void)setupKeyboard;
-- (void)addIncomingMessage;
+- (void)addIncomingMessageForEvent:(BCNEvent *)event;
 
 //- (void)popView;
 

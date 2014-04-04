@@ -166,8 +166,12 @@ static int kBCNNumCellsBeforeMessages = 1;
     return CGRectMake(0, 0, 0, _keyboardEndFrame.size.height);
 }
 
-- (void)addIncomingMessage{
+- (void)addIncomingMessageForEvent:(BCNEvent *)event{
     if (_esvc.viewMode == kChat){
+        if (_ivc.event != event){
+            return;
+        }
+        
         CGPoint offset = _ivc.tableView.contentOffset;
         CGRect bounds = _ivc.tableView.bounds;
         CGSize size = _ivc.tableView.contentSize;

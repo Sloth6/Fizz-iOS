@@ -729,8 +729,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 }
 
 
--(void)addIncomingMessage{
-    [_chatDelegate addIncomingMessage];
+-(void)addIncomingMessageForEvent:(BCNEvent *)event{
+    [_chatDelegate addIncomingMessageForEvent:event];
 }
 
 -(void)updateEvent:(BCNEvent *)event{

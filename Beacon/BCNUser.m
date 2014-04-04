@@ -72,6 +72,14 @@ static BCNUser *currentUser = nil;
     [users removeObjectForKey:self.userID];
 }
 
++(void)addFriends:(NSArray *)incomingFriends{
+    if (!friends){
+        friends = [[NSMutableArray alloc] init];
+    }
+    
+    [friends addObjectsFromArray:incomingFriends];
+}
+
 //-(id)initWithUserID:(NSNumber *)uID{
 //    BCNUser *user = [users objectForKey:uID];
 //    

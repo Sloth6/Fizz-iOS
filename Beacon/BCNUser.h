@@ -60,6 +60,8 @@
 +(void)setMeAs:(BCNUser *)me;
 +(BCNUser *)me;
 
++(void)addFriends:(NSArray *)friends;
+
 +(BCNUser *)parseJSON:(NSDictionary *)userJSON;
 -(NSDictionary *)toJson;
 +(NSArray *)usersToJSONUsers:(NSArray *)users;

@@ -56,7 +56,7 @@ typedef enum {
 @property UITextField *activeTextField;
 
 -(void)setViewMode:(ViewMode)viewMode;
--(void)addIncomingMessage;
+-(void)addIncomingMessageForEvent:(BCNEvent *)event;
 -(void)updateEvent:(BCNEvent *)event;
 
 @end
