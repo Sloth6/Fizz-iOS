@@ -25,7 +25,7 @@ static float INVITE_SIZE;
 
 @interface BCNBubbleViewController ()
 
-@property BCNEvent *event;
+@property (nonatomic)  BCNEvent *event;
 @property (nonatomic) int currentIndex;
 
 // Full and empty seats
@@ -347,6 +347,8 @@ static float INVITE_SIZE;
                 [bubble setCenter:point];
                 [self.bubbleView addSubview:bubble];
                 
+                
+//             TODO XXX CRASHES HERE
                 [_seatBubbles addObject:bubble];
             }];
         } else {
@@ -461,10 +463,8 @@ static float INVITE_SIZE;
                 if (image){
                     imageView = [user circularImageForRect:frame];
                 } else {
-                    NSLog(@"CTRL DEL!!");
                     imageView = [user formatImageView:[user circularImageForRect:frame] ForInitialsForRect:frame];
                 }
-                
                 
                 [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
                 
@@ -515,8 +515,15 @@ static float INVITE_SIZE;
     
     _event = event;
     
+    NSLog(@"\n\nHARDCORE %d\n\n", event.numEmptySeats);
+    
     [self fillSeatsAtIndex:_currentIndex];
     [self fillInvitesAtIndex:_currentIndex];
+}
+
+
+- (BCNEvent *)event{
+    return _event;
 }
 
 // Animate update bubbles if this is happening on screen

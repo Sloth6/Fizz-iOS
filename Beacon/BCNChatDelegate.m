@@ -200,6 +200,7 @@ static int kBCNNumCellsBeforeMessages = 1;
 -(void) keyboardWillShow:(NSNotification *)note{
     
     if (![chatBox isFirstResponder]) {
+        NSLog(@"TRAGDOR!!");
         return;
     }
     

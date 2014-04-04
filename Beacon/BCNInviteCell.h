@@ -16,4 +16,7 @@
 - (void)setIsSelected:(BOOL)selection;
 - (BOOL)isSelected;
 
+- (void)setHasFriend:(BOOL)hasFriend;
+- (BOOL)hasFriend;
+
 @end

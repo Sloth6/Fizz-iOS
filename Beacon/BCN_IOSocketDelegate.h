@@ -11,7 +11,7 @@
 #import "SocketIOPacket.h"
 
 /* Server Info */
-static NSString * const kBCNSocketHost = @"localhost";//@"128.237.192.53";
+static NSString * const kBCNSocketHost = @"localhost";//@"128.237.214.9";//@"54.85.14.197";//@"localhost";//@"128.237.214.9";//
 static int const kBCNSocketPort = 9001;
 
 static int const kBCNDefaultReconnectDelay = 5; // 5 seconds

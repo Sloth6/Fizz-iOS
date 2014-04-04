@@ -28,8 +28,12 @@ static NSMutableArray *instances;
 @interface BCNInviteViewController ()
 
 @property NSArray *invitableFriends;
-@property NSMutableArray *phoneNumbers;
-@property NSMutableSet *selected;
+
+@property NSArray *filteredFriends; // Fizz Friends
+@property NSArray *filteredContacts;
+
+@property NSMutableSet *selectedFriends;
+@property NSMutableSet *selectedContacts;
 
 @property BOOL needsUpdateFriends;
 
@@ -65,8 +69,8 @@ static NSMutableArray *instances;
         UINib *phoneNib = [UINib nibWithNibName:@"BCNPhoneInputCell" bundle:nil];
         [[self tableView] registerNib:phoneNib forCellReuseIdentifier:@"PhoneInputCell"];
         
-        _phoneNumbers = [[NSMutableArray alloc] init];
-        _selected = [[NSMutableSet alloc] init];
+        _selectedFriends = [[NSMutableSet alloc] init];
+        _selectedContacts = [[NSMutableSet alloc] init];
     }
     
     [instances addObject:self];
@@ -189,6 +193,24 @@ static NSMutableArray *instances;
     [self filterInvitables];
 }
 
+-(void)filterContentForSearchText:(NSString*)searchText {
+    if (searchText == NULL || [searchText isEqualToString:@""]){
+        _filteredFriends = _invitableFriends;//[[_invitableFriends
+        _filteredContacts = _contacts;
+        return;
+    }
+    
+    // Filter the array using NSPredicate
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", searchText];
+    
+    NSPredicate *dictionaryPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [(NSString *)[(NSDictionary *)evaluatedObject objectForKey:@"name"] hasPrefix:searchText];
+    }];
+    
+    _filteredFriends = [_invitableFriends filteredArrayUsingPredicate:predicate];
+    _filteredContacts = [_contacts filteredArrayUsingPredicate:dictionaryPredicate];
+}
+
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 1) return NO;
@@ -235,43 +257,54 @@ static NSMutableArray *instances;
     
     [_eventCell exitInviteMode];
     
-    NSArray *inviteRefs = [_selected allObjects];
+//    NSArray *inviteRefs = [_selected allObjects];
     NSMutableArray *userInvites = [[NSMutableArray alloc] init];
     NSMutableArray *phoneInvites = [[NSMutableArray alloc] init];
     
-    int numPhoneNumbers = [_phoneNumbers count];
     int numInvitableFriends = [_invitableFriends count];
     
-    for (int i = 0; i < [inviteRefs count]; ++i){
-        int index = [self lengthOfOptions] -
-                    [(NSNumber *)[inviteRefs objectAtIndex:i] integerValue];
+    NSArray *invitedFriends  = [_selectedFriends allObjects];
+    NSArray *invitedContacts = [_selectedContacts allObjects];
+    
+    int numInvitedFriends = [invitedFriends count];
+    
+    for (int i = 0; i < numInvitedFriends; ++i){
+        BCNUser *friend = [invitedFriends objectAtIndex:i];
         
-        if (index < numPhoneNumbers){
-            NSString *phoneNumber = [_phoneNumbers objectAtIndex:index];
-            NSString *stripped = [_phoneNumberFormat strip:phoneNumber];
-            phoneNumber = [NSString stringWithFormat:@"+%@", stripped];
-            
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            [dict setObject:phoneNumber forKey:@"pn"];
-            [dict setObject:@"" forKey:@"name"];
-            
-            [phoneInvites addObject:dict];
-        } else if (index < numPhoneNumbers + numInvitableFriends){
-            index -= numPhoneNumbers;
-            BCNUser *friend = [_invitableFriends objectAtIndex:index];
-            [userInvites addObject:friend];
-        } else {
-            index -= numPhoneNumbers + numInvitableFriends;
-            NSDictionary *contact = [_contacts objectAtIndex:index];
-            NSString *phoneNumber = [contact objectForKey:@"pn"];
-            
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            [dict setObject:phoneNumber forKey:@"pn"];
-            [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
-            
-            [phoneInvites addObject:dict];
-        }
+        [userInvites addObject:friend];
     }
+    
+    int numInvitedContacts = [invitedContacts count];
+    
+    for (int i = 0; i < numInvitedContacts; ++i){
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        
+        NSDictionary *contact = [invitedContacts objectAtIndex:i];
+        [dict setObject:[contact objectForKey:@"pn"] forKey:@"pn"];
+        [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
+        
+        [phoneInvites addObject:dict];
+    }
+    
+//    for (int i = 0; i < [inviteRefs count]; ++i){
+//        int index = [self lengthOfOptions] -
+//                    [(NSNumber *)[inviteRefs objectAtIndex:i] integerValue];
+//        
+//        if (index < numInvitableFriends){
+//            BCNUser *friend = [_invitableFriends objectAtIndex:index];
+//            [userInvites addObject:friend];
+//        } else {
+//            index -= numInvitableFriends;
+//            NSDictionary *contact = [_contacts objectAtIndex:index];
+//            NSString *phoneNumber = [contact objectForKey:@"pn"];
+//            
+//            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+//            [dict setObject:phoneNumber forKey:@"pn"];
+//            [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
+//            
+//            [phoneInvites addObject:dict];
+//        }
+//    }
     
     NSLog(@"\n\n%@\n%@\n\n", userInvites, phoneInvites);
     
@@ -283,7 +316,7 @@ static NSMutableArray *instances;
 }
 
 - (int)lengthOfOptions{
-    return [_invitableFriends count] + [_phoneNumbers count] + [_contacts count];
+    return [_filteredFriends count] + [_filteredContacts count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -317,9 +350,6 @@ static NSMutableArray *instances;
 
 -(void)updateFriends{
     _needsUpdateFriends = NO;
-    // Worry about selected indices when this happens
-    // OR simply remove everything from the selection. That'll do for now
-    _selected = [[NSMutableSet alloc] init];
     
     NSMutableArray *friends = [[BCNUser getFriends] mutableCopy];
     [friends removeObjectsInArray:[_event invitees]];
@@ -341,6 +371,12 @@ static NSMutableArray *instances;
     [cell addSubview:_textView];
     [cell addSubview:_addSeatButton];
     [cell addSubview:_inviteButton];
+}
+
+- (void)searchChange{
+    [self filterContentForSearchText:_searchTextField.text];
+    int lastSection = [self.tableView numberOfSections] - 1;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:lastSection] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -372,30 +408,25 @@ static NSMutableArray *instances;
         
         // Configure the cell...
         
-        _phoneTextField = cell.textField;
-        _confirmPhoneButton = cell.button;
-        [cell.button setEnabled:NO];
+        _searchTextField = cell.textField;
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
-         selector:@selector(phoneStartEdit)
+         selector:@selector(searchStartEdit)
          name:UITextFieldTextDidBeginEditingNotification
-         object:_phoneTextField];
+         object:_searchTextField];
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
-         selector:@selector(phoneStopEdit)
+         selector:@selector(searchStopEdit)
          name:UITextFieldTextDidEndEditingNotification
-         object:_phoneTextField];
+         object:_searchTextField];
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
-         selector:@selector(phoneChange)
+         selector:@selector(searchChange)
          name:UITextFieldTextDidChangeNotification
-         object:_phoneTextField];
-        
-        UIButton *btn = cell.button;
-        [btn addTarget:self action:@selector(addPhoneNumber:) forControlEvents:UIControlEventTouchUpInside];
+         object:_searchTextField];
         
         [cell.textField setDelegate:self];
         
@@ -412,26 +443,27 @@ static NSMutableArray *instances;
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
-    NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
+//    NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
     
-    [cell setIsSelected:[_selected containsObject:cellReference]];
+    BOOL selected;
     
-    int numPhoneNumbers = [_phoneNumbers count];
-    int numInvitableFriends = [_invitableFriends count];
+    int numInvitableFriends = [_filteredFriends count];
     
     // Configure the cell...
-    if (indexPath.row < numPhoneNumbers){
+    if (indexPath.row < numInvitableFriends) {
         int index = indexPath.row;
         
-        [cell.label setText:[_phoneNumbers objectAtIndex:index]];
-    } else if ((indexPath.row - numPhoneNumbers) < numInvitableFriends) {
-        int index = indexPath.row - numPhoneNumbers;
+        BCNUser *friend = [_filteredFriends objectAtIndex:index];
         
-        [cell.label setText:[[_invitableFriends objectAtIndex:index] name]];
+        [cell.label setText:[friend name]];
+        
+        selected = [_selectedFriends containsObject:friend];
+        
+        [cell setHasFriend:YES];
     } else {
-        int index = indexPath.row - numPhoneNumbers - numInvitableFriends;
+        int index = indexPath.row - numInvitableFriends;
         
-        NSDictionary *contact = [_contacts objectAtIndex:index];
+        NSDictionary *contact = [_filteredContacts objectAtIndex:index];
         
         NSString *name = [contact objectForKey:@"name"];
         
@@ -440,7 +472,13 @@ static NSMutableArray *instances;
         } else {
             [cell.label setText:name];
         }
+        
+        selected = [_selectedContacts containsObject:contact];
+        
+        [cell setHasFriend:NO];
     }
+    
+    [cell setIsSelected:selected];
     
     return cell;
 }
@@ -479,75 +517,40 @@ static NSMutableArray *instances;
     return YES;
 }
 
-- (void) addPhoneNumber:(UIButton *)button{
-    [button setEnabled:NO];
-    [self movePhoneToFriends];
-    
-    [_phoneTextField setText:@""];
-    [_phoneTextField deleteBackward];
-    [self phoneChange];
-}
-
-- (void) movePhoneToFriends{
-    
-    [_phoneNumbers insertObject:_phoneTextField.text
-                   atIndex:0];
-    
-    NSNumber *cellRef = [self getSelectedReferenceFromIndexPath:
-                         [NSIndexPath indexPathForRow:0 inSection:2]];
-    
-    [_selected addObject:cellRef];
-    
-//    NSIndexPath *sourceIndexPath = [NSIndexPath indexPathForRow:1
-//                                                      inSection:0];
-//    NSIndexPath *destinationIndexPath = [NSIndexPath indexPathForRow:0
-//                                                           inSection:1];
-//    
-//    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-//    
-//    [self.tableView moveRowAtIndexPath:sourceIndexPath
-//                           toIndexPath:destinationIndexPath];
-
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
-    
-}
-
--(void)phoneStartEdit{
+-(void)searchStartEdit{
 //    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height - 190);
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.esvc.navIcon setIsEditingText:YES];
-    [appDelegate.esvc setActiveTextField:_phoneTextField];
+    [appDelegate.esvc setActiveTextField:_searchTextField];
     
     NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:1];
     
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
--(void)phoneStopEdit{
+-(void)searchStopEdit{
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.esvc.navIcon setIsEditingText:NO];
     [appDelegate.esvc setActiveTextField:NULL];
 //    self.tableView.frame = [UIScreen mainScreen].bounds;
 }
 
--(void)phoneChange{
-    _phoneTextField.text = [_phoneNumberFormat format:_phoneTextField.text withLocale:_country];
-    
-    if ([self isValidUSPhoneNumber:_phoneTextField.text]){
-        [_confirmPhoneButton setEnabled:YES];
-        return;
-    }
-    
-    [_confirmPhoneButton setEnabled:NO];
-}
-
-
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     
 }
 
 - (NSNumber *)getSelectedReferenceFromIndexPath:(NSIndexPath *)indexPath{
-    return [NSNumber numberWithInt:[self lengthOfOptions] - indexPath.row];
+    int numFriends = [_filteredFriends count];
+    
+    int index = indexPath.row;
+    
+    if (indexPath.row >= numFriends){
+        index -= numFriends;
+    }
+    
+    return [NSNumber numberWithInt:index];
+    
+//    return [NSNumber numberWithInt:[self lengthOfOptions] - indexPath.row];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -556,16 +559,39 @@ static NSMutableArray *instances;
     
     if(indexPath.section != 0)
     {
+//        NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
         NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
+        
         if([cell isSelected])
         {
-            [_selected removeObject:cellReference];
+            if ([cell hasFriend]){
+                BCNUser *friend = [_filteredFriends objectAtIndex:[cellReference integerValue]];
+                [_selectedFriends removeObject:friend];
+                
+            } else {
+                NSDictionary *contact = [_filteredContacts objectAtIndex:[cellReference integerValue]];
+                [_selectedContacts removeObject:contact];
+            }
+            
             [cell setIsSelected:NO];
+//            [_selected removeObject:cellReference];
+//            [cell setIsSelected:NO];
         }
         else
         {
-            [_selected addObject:cellReference];
+            if ([cell hasFriend]){
+                BCNUser *friend = [_filteredFriends objectAtIndex:[cellReference integerValue]];
+                [_selectedFriends addObject:friend];
+                
+            } else {
+                NSDictionary *contact = [_filteredContacts objectAtIndex:[cellReference integerValue]];
+                [_selectedContacts addObject:contact];
+            }
+            
             [cell setIsSelected:YES];
+            
+//            [_selected addObject:cellReference];
+//            [cell setIsSelected:YES];
         }
     } else {
         if (_canBeSelected){

@@ -16,6 +16,8 @@
 
 @property BCNBubbleView *bubbleView;
 
+- (BCNEvent *)event;
+
 - (void)updateBubblesForEvent:(BCNEvent *)event
                       AtIndex:(NSIndexPath *)indexPath
                      Animated:(BOOL)isAnimated;

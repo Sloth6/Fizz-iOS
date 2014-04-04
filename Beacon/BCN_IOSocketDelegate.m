@@ -495,6 +495,10 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     BCNEvent *event = [BCNEvent eventWithEID:eventID];
     
     [event updateNumberOfSeats:numSeats];
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.esvc updateEvent:event];
 }
 
 - (void)incomingRemoveGuest:(NSArray *)args{
@@ -522,8 +526,7 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     
     [[message event] updateAddMessage:message];
     
-    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate
-    ;
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [appDelegate.esvc addIncomingMessage];
 }

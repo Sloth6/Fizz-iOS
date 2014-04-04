@@ -11,12 +11,13 @@
 @interface BCNInviteCell ()
 
 @property BOOL isSelected;
+@property BOOL hasFriend;
 
 @end
 
 @implementation BCNInviteCell
 
-@synthesize isSelected;
+@synthesize isSelected, hasFriend;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -25,6 +26,7 @@
         // Initialization code
         
         isSelected = NO;
+        hasFriend = NO;
     }
     return self;
 }
@@ -48,6 +50,14 @@
 
 - (BOOL)isSelected{
     return isSelected;
+}
+
+- (void)setHasFriend:(BOOL)has{
+    hasFriend = has;
+}
+
+- (BOOL)hasFriend{
+    return hasFriend;
 }
 
 @end

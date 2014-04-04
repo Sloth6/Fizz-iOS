@@ -17,7 +17,6 @@
 
 @interface BCNNewEventCell ()
 
-@property (strong, nonatomic) BCNEvent *event;
 @property (strong, nonatomic) UIButton *sendInviteButton;
 
 @end
@@ -359,15 +358,18 @@
     
     [_resignTextViewer textContainer].maximumNumberOfLines = 3;
     [_resignTextViewer setFrame:CGRectMake(x, y, width, height)];
+    
+    // Enable the placeholder text
     [_resignTextViewer setText:@""];
     [_resignTextViewer deleteBackward];
+    
     [_resignTextViewer setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)setupTextView{
     float hInset  = 50;
     float hOutset = hInset;
-    float vInset  = 341;
+    float vInset  = 241;
     float vOutset = 151;
     
     float sWidth  = [UIScreen mainScreen].bounds.size.width;

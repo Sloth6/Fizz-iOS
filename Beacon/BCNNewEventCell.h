@@ -27,6 +27,7 @@
 @property BCNChatDelegate *chatDelegate;
 
 @property BCNInviteViewController *ivc;
+@property (strong, nonatomic) BCNEvent *event;
 
 - (void)scrollToTopAnimated:(BOOL)isAnimated;
 - (void)setScrollingEnabled:(BOOL)canScroll;

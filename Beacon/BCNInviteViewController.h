@@ -14,7 +14,7 @@
 @interface BCNInviteViewController : UITableViewController <UITextFieldDelegate>
 
 @property UIView *textView;
-@property UITextField *phoneTextField;
+@property UITextField *searchTextField;
 @property UIButton *confirmPhoneButton;
 
 @property BCNEvent *event;

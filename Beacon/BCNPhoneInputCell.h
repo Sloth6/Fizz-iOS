@@ -11,6 +11,5 @@
 @interface BCNPhoneInputCell : UITableViewCell
 
 @property IBOutlet UITextField *textField;
-@property IBOutlet UIButton *button;
 
 @end

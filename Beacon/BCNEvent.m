@@ -164,6 +164,7 @@ static NSString *BCN_REQUEST = @"request";
     @synchronized(self){
         _haveSeatsChanged = YES;
         _numSeats = [numSeats integerValue];
+        _pendingNumSeats = _numSeats;
     }
 }
 

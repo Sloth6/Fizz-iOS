@@ -16,6 +16,7 @@
 @class BCNParallaxViewController;
 @class BCNNavButton;
 @class BCNBackspaceResignTextView;
+@class BCNEvent;
 
 @interface BCNEventStreamViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
@@ -56,5 +57,6 @@ typedef enum {
 
 -(void)setViewMode:(ViewMode)viewMode;
 -(void)addIncomingMessage;
+-(void)updateEvent:(BCNEvent *)event;
 
 @end

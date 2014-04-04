@@ -329,6 +329,11 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     [cell.resignTextViewer setEditable:NO];
     [cell.resignTextViewer setText:message.text];
     
+//    UITextView *tv = object;
+//    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height * [tv zoomScale])/2.0;
+//    topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
+//    tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
+    
     return cell;
 }
 
@@ -728,6 +733,14 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     [_chatDelegate addIncomingMessage];
 }
 
+-(void)updateEvent:(BCNEvent *)event{
+    
+    if ([_bvc event] == event){
+        NSLog(@"SUCCESSES");
+        [_bvc updateBubblesForEvent:event Animated:YES];
+    }
+}
+
 #pragma mark -
 #pragma mark TextView Delegate methods
 
@@ -933,6 +946,53 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 //    [textView setNeedsLayout];
 }
 
+-(void) resignTextViewDidChange:(BCNBackspaceResignTextView *)resignTextView
+{
+    float endY = resignTextView.frame.origin.y + resignTextView.frame.size.height;
+    
+    //    UIEdgeInsets inset = textView.contentInset;
+    
+    float minHeight = 2 * _lineHeight;
+    float maxHeight = 3 * _lineHeight;
+    
+    float textViewHeight = [self measureHeightOfUITextView:resignTextView.textView];
+    
+    // Limit textview num lines
+    if (textViewHeight > maxHeight){
+        UITextRange *textRange;
+        
+        if (resignTextView.textView.selectedTextRange.empty) {
+            UITextPosition *pos = [resignTextView.textView positionFromPosition:textRange.start
+                                                     inDirection:UITextLayoutDirectionLeft
+                                                          offset:1];
+            
+            //make a 0 length range at position
+            textRange = [resignTextView.textView textRangeFromPosition:pos
+                                                            toPosition:pos];
+            
+        }
+        
+        [resignTextView setText:_lastInputString];
+        
+        if (textRange != NULL){
+            [resignTextView.textView setSelectedTextRange:textRange];
+        }
+    }
+    
+    float height = MIN(MAX(minHeight, textViewHeight),
+                       maxHeight) + 20;
+    
+    //float height = textView.frame.size.height-insetDelta;
+    
+    float y = endY - height;
+    
+    float x = resignTextView.frame.origin.x;
+    float width = resignTextView.frame.size.width;
+    
+    [resignTextView setFrame:CGRectMake(x, y, width, height)];
+}
+
+
 - (UICollectionViewCell *)getNewEventCell{
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     
@@ -940,6 +1000,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
 }
 
 - (void)confirmNewEventMessageWithTextView:(UITextView *)textView{
+    [_navIcon setIsEditingText:NO];
     [textView setEditable:NO];
     [_toggleSecret setEnabled:NO];
     
