@@ -403,7 +403,7 @@ static const int kVelocityThreshhold = 18;
                                      BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
                                      BCNEvent *event = appDelegate.bvc.event;
                                      
-                                     if ([event isAttending:_user]){
+                                     if ([event isAttending:_user]){ // Clicked on seated self
                                          // Leave the event
                                          
                                          dispatch_async(dispatch_get_main_queue(), ^{
@@ -413,8 +413,10 @@ static const int kVelocityThreshhold = 18;
                                              
                                              [self setIsEmpty:YES];
                                          });
-                                     } else {
-                                         [self joinEvent:event];
+                                     } else { // Clicked on invited self
+                                         if ([event numEmptySeats] > 0){
+                                             [self joinEvent:event];
+                                         }
                                      }
                                  }
                              } else { // Seat is not taken
