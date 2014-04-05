@@ -371,6 +371,21 @@ static NSMutableArray *instances;
     [cell addSubview:_textView];
     [cell addSubview:_addSeatButton];
     [cell addSubview:_inviteButton];
+    
+    BCNUser *me = [BCNUser me];
+    
+    if ([_event isAttending:me]){ // If I'm attending
+        [_addSeatButton setHidden:NO];
+        [_inviteButton setHidden:NO];
+        
+    } else if ([_event isInvited:me]){ // If I'm invited
+        [_addSeatButton setHidden:YES];
+        [_inviteButton setHidden:YES];
+        
+    } else { // If I'm not invited
+        [_addSeatButton setHidden:YES];
+        [_inviteButton setHidden:YES];
+    }
 }
 
 - (void)searchChange{
@@ -594,7 +609,7 @@ static NSMutableArray *instances;
 //            [cell setIsSelected:YES];
         }
     } else {
-        if (_canBeSelected){
+        if (_canBeSelected && [_event isInvited:[BCNUser me]]){
             [cell setSelected:NO];
             [cell setHighlighted:NO];
             [_eventCell enterChatMode];

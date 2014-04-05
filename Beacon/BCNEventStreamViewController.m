@@ -738,6 +738,14 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     if ([_bvc event] == event){
         NSLog(@"SUCCESSES");
         [_bvc updateBubblesForEvent:event Animated:YES];
+        
+        int index = [_events indexOfObject:event];
+        int section = [self.collectionView numberOfSections] - 1;
+        
+        NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:section];
+        
+        BCNNewEventCell *cell = (BCNNewEventCell *)[self.collectionView cellForItemAtIndexPath:path];
+        [cell.ivc.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
