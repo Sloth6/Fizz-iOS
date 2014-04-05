@@ -476,6 +476,8 @@ static float INVITE_SIZE;
                 
                 [bubble setCenter:point];
                 
+                bubble.user = user;
+                
                 [bubble setImageView:imageView];
                 [bubble setIsEmpty:NO];
                 

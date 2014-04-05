@@ -308,6 +308,31 @@ static const int kVelocityThreshhold = 18;
                      }];
 }
 
+- (void)joinEvent:(BCNEvent *)event{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setIsEmpty:NO];
+        
+        [event joinEvent];
+        
+        float diameter = self.frame.size.width;
+        
+        [_user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
+            UIImageView *imageView;
+            
+            if (image){
+                imageView = [_user circularImageForRect:self.frame];
+            } else {
+                imageView = [_user formatImageView:[_user circularImageForRect:self.frame] ForInitialsForRect:self.frame];
+            }
+            
+            [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
+            
+            [self setImageView:imageView];
+            [self setIsEmpty:NO];
+        }];
+    });
+}
+
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
@@ -374,16 +399,23 @@ static const int kVelocityThreshhold = 18;
                              NSLog(@"%@", _user);
                              if (_user){ // Seat is taken
                                  if (_user == [BCNUser me]){
-                                     NSLog(@"I'm in the event!");
-                                     // Leave the event
                                      
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
-                                         BCNEvent *event = appDelegate.bvc.event;
-                                         [event leaveEvent];
+                                     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+                                     BCNEvent *event = appDelegate.bvc.event;
+                                     
+                                     if ([event isAttending:_user]){
+                                         // Leave the event
                                          
-                                         [self setIsEmpty:YES];
-                                     });
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+                                             BCNEvent *event = appDelegate.bvc.event;
+                                             [event leaveEvent];
+                                             
+                                             [self setIsEmpty:YES];
+                                         });
+                                     } else {
+                                         [self joinEvent:event];
+                                     }
                                  }
                              } else { // Seat is not taken
                                  BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -391,31 +423,11 @@ static const int kVelocityThreshhold = 18;
                                  BCNEvent *event = appDelegate.bvc.event;
                                  BCNUser *me = [BCNUser me];
                                  
-                                 if ([event isInvited:me] && (![event isAttending:me])){
+                                 if ([event isInvited:me] && (![event isAttending:me]) &&
+                                      (_user == NULL || _user == me)){
                                      // Join the Event
                                      
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         [self setIsEmpty:NO];
-                                         
-                                         [event joinEvent];
-                                         
-                                         float diameter = self.frame.size.width;
-                                         
-                                         [_user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
-                                             UIImageView *imageView;
-                                             
-                                             if (image){
-                                                 imageView = [_user circularImageForRect:self.frame];
-                                             } else {
-                                                 imageView = [_user formatImageView:[_user circularImageForRect:self.frame] ForInitialsForRect:self.frame];
-                                             }
-                                             
-                                             [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
-                                             
-                                             [self setImageView:imageView];
-                                             [self setIsEmpty:NO];
-                                         }];
-                                     });
+                                     [self joinEvent:event];
                                  }
                              }
                          }
