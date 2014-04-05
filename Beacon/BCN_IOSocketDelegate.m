@@ -453,6 +453,9 @@ static NSString *BCN_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     BCNUser  *user  = [BCNUser userWithUID:userID];
     
     [event updateAddGuest:user];
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.esvc updateEvent:event];
 }
 
 - (void)incomingNewFriend:(NSArray *)args{

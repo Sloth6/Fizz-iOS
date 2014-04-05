@@ -42,12 +42,18 @@
 -(BOOL)isInviteOnly;
 -(BCNMessage *)firstMessage;
 
+-(BOOL)isInvited:(BCNUser *)user;
+-(BOOL)isAttending:(BCNUser *)user;
+
 -(int)pendingNumSeats;
 -(int)numSeats;
 -(int)pendingNumEmptySeats;
 -(int)numEmptySeats;
 -(void)addSeat;
 -(BOOL)removeSeat;
+
+-(BOOL)joinEvent;
+-(BOOL)leaveEvent;
 
 -(void)updateInvites:(NSArray *)invites;
 -(void)updateRemoveGuest:(BCNUser *)guest;

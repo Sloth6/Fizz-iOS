@@ -9,10 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "BCNBubbleViewController.h"
 
+@class BCNUser;
+
 @interface BCNInteractiveBubble : UIView
 
 -(void)setIsEmpty:(BOOL)isEmpty;
 -(void)setImageView:(UIImageView *)imageView;
 -(void)setCenter:(CGPoint)center;
+
+@property BCNUser *user;
 
 @end

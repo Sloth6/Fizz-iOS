@@ -9,6 +9,9 @@
 #import "BCNInteractiveBubble.h"
 #import "BCNAppDelegate.h"
 
+#import "BCNUser.h"
+#import "BCNEvent.h"
+
 static const int kVelocityThreshhold = 18;
 
 @interface BCNInteractiveBubble ()
@@ -93,6 +96,7 @@ static const int kVelocityThreshhold = 18;
 
 -(void)setIsEmpty:(BOOL)isEmpty{
     _isEmpty = isEmpty;
+    [self setNeedsDisplay];
 }
 
 -(void)setImageView:(UIImageView *)imageView{
@@ -366,6 +370,54 @@ static const int kVelocityThreshhold = 18;
                          
                          if (_isButtonClick){ // Button press
                              NSLog(@"\nCLICK!!\n");
+                             
+                             NSLog(@"%@", _user);
+                             if (_user){ // Seat is taken
+                                 if (_user == [BCNUser me]){
+                                     NSLog(@"I'm in the event!");
+                                     // Leave the event
+                                     
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                         BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+                                         BCNEvent *event = appDelegate.bvc.event;
+                                         [event leaveEvent];
+                                         
+                                         [self setIsEmpty:YES];
+                                     });
+                                 }
+                             } else { // Seat is not taken
+                                 BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+                                 
+                                 BCNEvent *event = appDelegate.bvc.event;
+                                 BCNUser *me = [BCNUser me];
+                                 
+                                 if ([event isInvited:me] && (![event isAttending:me])){
+                                     // Join the Event
+                                     
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                         [self setIsEmpty:NO];
+                                         
+                                         [event joinEvent];
+                                         
+                                         float diameter = self.frame.size.width;
+                                         
+                                         [_user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
+                                             UIImageView *imageView;
+                                             
+                                             if (image){
+                                                 imageView = [_user circularImageForRect:self.frame];
+                                             } else {
+                                                 imageView = [_user formatImageView:[_user circularImageForRect:self.frame] ForInitialsForRect:self.frame];
+                                             }
+                                             
+                                             [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
+                                             
+                                             [self setImageView:imageView];
+                                             [self setIsEmpty:NO];
+                                         }];
+                                     });
+                                 }
+                             }
                          }
                      }];
 }

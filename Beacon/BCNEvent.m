@@ -144,6 +144,14 @@ static NSString *BCN_REQUEST = @"request";
     return _inviteOnly;
 }
 
+-(BOOL)isInvited:(BCNUser *)user{
+    return [_invitees containsObject:user];
+}
+
+-(BOOL)isAttending:(BCNUser *)user{
+    return [attendees containsObject:user];
+}
+
 -(BCNMessage *)firstMessage{
     if ([_messages count] > 0){
         return [_messages objectAtIndex:0];
@@ -212,10 +220,36 @@ static NSString *BCN_REQUEST = @"request";
     }
 }
 
+-(BOOL)joinEvent{
+    BCNUser *me = [BCNUser me];
+    
+    if ([self isAttending:me] || ![self isInvited:me]){
+        return NO;
+    }
+    
+    [self updateAddGuest:me];
+    [self socketIOJoinEventWithAcknowledge:NULL];
+    
+    return YES;
+}
+
+-(BOOL)leaveEvent{
+    BCNUser *me = [BCNUser me];
+    
+    if (![self isAttending:me]){
+        return NO;
+    }
+    
+    [self updateRemoveGuest:me];
+    [self socketIOLeaveEventWithAcknowledge:NULL];
+    
+    return YES;
+}
+
 -(void)updateAddGuest:(BCNUser *)guest{
     @synchronized(self){
-        if (![_invitees containsObject:guest]){
-            [_invitees addObject:guest];
+        if (![attendees containsObject:guest]){
+            [attendees addObject:guest];
         }
     }
 }
@@ -465,7 +499,6 @@ static NSString *BCN_REQUEST = @"request";
         [mutGuestList setObject:user
              atIndexedSubscript:idx];
     }];
-    
     
     /* All invited individuals, as User Object JSONs */
     NSMutableArray *mutInviteList;

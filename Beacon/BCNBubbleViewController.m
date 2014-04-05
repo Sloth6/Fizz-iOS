@@ -339,6 +339,8 @@ static float INVITE_SIZE;
                 
                 BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
                 
+                bubble.user = user;
+                
                 [bubble setCenter:point];
                 
                 [bubble setImageView:imageView];
