@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BCNMapViewController.h"
 #import "BCNManageFriendsViewController.h"
 
 @class BCNChatDelegate;

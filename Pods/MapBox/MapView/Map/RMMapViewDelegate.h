@@ -30,7 +30,6 @@
 @class RMMarker;
 @class RMAnnotation;
 @class RMUserLocation;
-@class MyMarker;
 
 typedef enum : NSUInteger {
     RMMapLayerDragStateNone = 0,
@@ -224,7 +223,5 @@ typedef enum : NSUInteger {
 *   @param mode The mode used to track the user’s location.
 *   @param animated If YES, the change from the current mode to the new mode is animated; otherwise, it is not. This parameter affects only tracking mode changes. Changes to the user location or heading are always animated. */
 - (void)mapView:(RMMapView *)mapView didChangeUserTrackingMode:(RMUserTrackingMode)mode animated:(BOOL)animated;
-
-- (void)tapOnMarker:(MyMarker *)marker at:(CGPoint )pt;
 
 @end

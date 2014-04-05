@@ -53,6 +53,9 @@
 		4954FB2018D4F1010083D07F /* BCNInviteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4954FB1F18D4F1010083D07F /* BCNInviteCell.m */; };
 		495E9D25187BADB4008F7CC7 /* BCNTimelineHostView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 495E9D24187BADB4008F7CC7 /* BCNTimelineHostView.xib */; };
 		495E9D28187BAF98008F7CC7 /* BCNSpeechBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9D27187BAF98008F7CC7 /* BCNSpeechBubble.m */; };
+		4960803D18EFE03700CF72DB /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4960803718EFE03700CF72DB /* libTestFlight.a */; };
+		4960803E18EFE03700CF72DB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4960803818EFE03700CF72DB /* README.md */; };
+		4960803F18EFE03700CF72DB /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 4960803918EFE03700CF72DB /* release_notes.md */; };
 		497DB6E118E1090900095053 /* BCNBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6E018E1090900095053 /* BCNBubbleView.m */; };
 		497DB6E618E11DE000095053 /* BCNParallaxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6E518E11DE000095053 /* BCNParallaxView.m */; };
 		497DB6EC18E1220400095053 /* BCNParallaxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 497DB6EB18E1220400095053 /* BCNParallaxCell.m */; };
@@ -71,8 +74,6 @@
 		499A8E7818CD304300842EA7 /* BCNEventDetailViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 499A8E7718CD304300842EA7 /* BCNEventDetailViewDelegate.m */; };
 		499A8E7F18CD336800842EA7 /* BCNDetailTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 499A8E7E18CD336800842EA7 /* BCNDetailTextCell.m */; };
 		499A8E8118CD337B00842EA7 /* BCNDetailTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 499A8E8018CD337B00842EA7 /* BCNDetailTextCell.xib */; };
-		499AAB41187886D7002C0724 /* BCNMapAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 499AAB40187886D7002C0724 /* BCNMapAnnotationView.xib */; };
-		499AAB4418788843002C0724 /* BCNMapAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 499AAB4318788843002C0724 /* BCNMapAnnotationView.m */; };
 		49A31F5C18CF5E3A001214B9 /* BCNTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F5A18CF5E3A001214B9 /* BCNTestViewController.m */; };
 		49A31F5D18CF5E3A001214B9 /* BCNTestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49A31F5B18CF5E3A001214B9 /* BCNTestViewController.xib */; };
 		49A31F6318CF9D46001214B9 /* BCNMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F6218CF9D46001214B9 /* BCNMessageTextView.m */; };
@@ -117,8 +118,6 @@
 		49E983E4186A5C4D00D37B2A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E3186A5C4D00D37B2A /* CoreLocation.framework */; };
 		49E983E6186A5C5700D37B2A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E5186A5C5700D37B2A /* QuartzCore.framework */; };
 		49E983E8186A5C6C00D37B2A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E7186A5C6C00D37B2A /* libsqlite3.dylib */; };
-		49E983F1186A5D1600D37B2A /* BCNMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E983EF186A5D1600D37B2A /* BCNMapViewController.m */; };
-		49E983F2186A5D1600D37B2A /* BCNMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E983F0186A5D1600D37B2A /* BCNMapViewController.xib */; };
 		49E9843B1872685E00D37B2A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E9843118723D3300D37B2A /* Social.framework */; };
 		49E9843F187268B800D37B2A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E9843E187268B800D37B2A /* AdSupport.framework */; };
 		49EEEA8A18D8D1E600BDA605 /* BCNPhoneInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EEEA8918D8D1E600BDA605 /* BCNPhoneInputCell.xib */; };
@@ -128,7 +127,6 @@
 		49EEEA9718D972FB00BDA605 /* BCNBackspaceResignTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9618D972FB00BDA605 /* BCNBackspaceResignTextView.m */; };
 		49F524D218E1C3040019C5DF /* BCNNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D118E1C3040019C5DF /* BCNNavigationBar.m */; };
 		49F524D518E212840019C5DF /* BCNNavButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D418E212840019C5DF /* BCNNavButton.m */; };
-		DB071FC8809641459481673B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1294CA912292415881418914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,7 +161,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1294CA912292415881418914 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		49069AD618651684003D003A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		49069AD718651684003D003A /* .gitmodules */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitmodules; sourceTree = "<group>"; };
 		49069AD818651684003D003A /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -279,6 +276,12 @@
 		495E9D24187BADB4008F7CC7 /* BCNTimelineHostView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNTimelineHostView.xib; sourceTree = "<group>"; };
 		495E9D26187BAF98008F7CC7 /* BCNSpeechBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNSpeechBubble.h; sourceTree = "<group>"; };
 		495E9D27187BAF98008F7CC7 /* BCNSpeechBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNSpeechBubble.m; sourceTree = "<group>"; };
+		4960803718EFE03700CF72DB /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		4960803818EFE03700CF72DB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		4960803918EFE03700CF72DB /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
+		4960803A18EFE03700CF72DB /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		4960803B18EFE03700CF72DB /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		4960803C18EFE03700CF72DB /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		497DB6DF18E1090900095053 /* BCNBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNBubbleView.h; sourceTree = "<group>"; };
 		497DB6E018E1090900095053 /* BCNBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNBubbleView.m; sourceTree = "<group>"; };
 		497DB6E418E11DE000095053 /* BCNParallaxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNParallaxView.h; sourceTree = "<group>"; };
@@ -312,9 +315,6 @@
 		499A8E7D18CD336800842EA7 /* BCNDetailTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNDetailTextCell.h; sourceTree = "<group>"; };
 		499A8E7E18CD336800842EA7 /* BCNDetailTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNDetailTextCell.m; sourceTree = "<group>"; };
 		499A8E8018CD337B00842EA7 /* BCNDetailTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNDetailTextCell.xib; sourceTree = "<group>"; };
-		499AAB40187886D7002C0724 /* BCNMapAnnotationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNMapAnnotationView.xib; sourceTree = "<group>"; };
-		499AAB4218788843002C0724 /* BCNMapAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNMapAnnotationView.h; sourceTree = "<group>"; };
-		499AAB4318788843002C0724 /* BCNMapAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNMapAnnotationView.m; sourceTree = "<group>"; };
 		49A31F5918CF5E3A001214B9 /* BCNTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTestViewController.h; sourceTree = "<group>"; };
 		49A31F5A18CF5E3A001214B9 /* BCNTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTestViewController.m; sourceTree = "<group>"; };
 		49A31F5B18CF5E3A001214B9 /* BCNTestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNTestViewController.xib; sourceTree = "<group>"; };
@@ -383,9 +383,6 @@
 		49E983E5186A5C5700D37B2A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49E983E7186A5C6C00D37B2A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		49E983E9186A5C7900D37B2A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		49E983EE186A5D1600D37B2A /* BCNMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNMapViewController.h; sourceTree = "<group>"; };
-		49E983EF186A5D1600D37B2A /* BCNMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNMapViewController.m; sourceTree = "<group>"; };
-		49E983F0186A5D1600D37B2A /* BCNMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCNMapViewController.xib; sourceTree = "<group>"; };
 		49E9843118723D3300D37B2A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		49E9843C1872687400D37B2A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		49E9843E187268B800D37B2A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -402,7 +399,8 @@
 		49F524D118E1C3040019C5DF /* BCNNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNNavigationBar.m; sourceTree = "<group>"; };
 		49F524D318E212840019C5DF /* BCNNavButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNNavButton.h; sourceTree = "<group>"; };
 		49F524D418E212840019C5DF /* BCNNavButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNNavButton.m; sourceTree = "<group>"; };
-		555E166FEAAF48F096591AE1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		5D9F535A370840F8A55F2F95 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		77ABE3261F854F65A5295960 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -422,10 +420,10 @@
 				49069B0A1865176A003D003A /* CFNetwork.framework in Frameworks */,
 				49069B0818651762003D003A /* Security.framework in Frameworks */,
 				49D5C9A4186042C2002BB1F0 /* UIKit.framework in Frameworks */,
+				4960803D18EFE03700CF72DB /* libTestFlight.a in Frameworks */,
 				49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */,
 				498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */,
 				49D5C9A2186042C2002BB1F0 /* CoreGraphics.framework in Frameworks */,
-				DB071FC8809641459481673B /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +670,19 @@
 			name = Timeline;
 			sourceTree = "<group>";
 		};
+		4960803618EFE03700CF72DB /* TestFlightSDK3.0.0 */ = {
+			isa = PBXGroup;
+			children = (
+				4960803718EFE03700CF72DB /* libTestFlight.a */,
+				4960803818EFE03700CF72DB /* README.md */,
+				4960803918EFE03700CF72DB /* release_notes.md */,
+				4960803A18EFE03700CF72DB /* TestFlight+AsyncLogging.h */,
+				4960803B18EFE03700CF72DB /* TestFlight+ManualSessions.h */,
+				4960803C18EFE03700CF72DB /* TestFlight.h */,
+			);
+			path = TestFlightSDK3.0.0;
+			sourceTree = "<group>";
+		};
 		497DB6E318E11DA100095053 /* Parallax Scroll */ = {
 			isa = PBXGroup;
 			children = (
@@ -696,19 +707,6 @@
 				497F349418E07F1200B70FD4 /* BCNInviteGuestButton.m */,
 			);
 			name = Buttons;
-			sourceTree = "<group>";
-		};
-		498926FF18E29C5900AECCF8 /* Map */ = {
-			isa = PBXGroup;
-			children = (
-				49E983EE186A5D1600D37B2A /* BCNMapViewController.h */,
-				49E983EF186A5D1600D37B2A /* BCNMapViewController.m */,
-				49E983F0186A5D1600D37B2A /* BCNMapViewController.xib */,
-				499AAB4218788843002C0724 /* BCNMapAnnotationView.h */,
-				499AAB4318788843002C0724 /* BCNMapAnnotationView.m */,
-				499AAB40187886D7002C0724 /* BCNMapAnnotationView.xib */,
-			);
-			name = Map;
 			sourceTree = "<group>";
 		};
 		4989270018E29E4300AECCF8 /* Friend Management */ = {
@@ -768,11 +766,12 @@
 		49D5C993186042C2002BB1F0 = {
 			isa = PBXGroup;
 			children = (
+				4960803618EFE03700CF72DB /* TestFlightSDK3.0.0 */,
 				49D5C9A5186042C2002BB1F0 /* Beacon */,
 				49D5C9BE186042C2002BB1F0 /* BeaconTests */,
 				49D5C99E186042C2002BB1F0 /* Frameworks */,
 				49D5C99D186042C2002BB1F0 /* Products */,
-				555E166FEAAF48F096591AE1 /* Pods.xcconfig */,
+				5D9F535A370840F8A55F2F95 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -806,7 +805,7 @@
 				49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */,
 				49D5C9A3186042C2002BB1F0 /* UIKit.framework */,
 				49D5C9B8186042C2002BB1F0 /* XCTest.framework */,
-				1294CA912292415881418914 /* libPods.a */,
+				77ABE3261F854F65A5295960 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -964,7 +963,6 @@
 			children = (
 				4989270018E29E4300AECCF8 /* Friend Management */,
 				495E9D23187BAD83008F7CC7 /* Timeline */,
-				498926FF18E29C5900AECCF8 /* Map */,
 			);
 			name = MainView;
 			sourceTree = "<group>";
@@ -1087,7 +1085,8 @@
 				4954FB1D18D4F0A30083D07F /* BCNInviteCell.xib in Resources */,
 				49D5E6D318616A56002BB1F0 /* datakit.js in Resources */,
 				49D5E6D518616A56002BB1F0 /* run.js in Resources */,
-				49E983F2186A5D1600D37B2A /* BCNMapViewController.xib in Resources */,
+				4960803E18EFE03700CF72DB /* README.md in Resources */,
+				4960803F18EFE03700CF72DB /* release_notes.md in Resources */,
 				499A8E8118CD337B00842EA7 /* BCNDetailTextCell.xib in Resources */,
 				49D5E6D418616A56002BB1F0 /* package.json in Resources */,
 				49069B4318657D3E003D003A /* BCNLoginViewController.xib in Resources */,
@@ -1100,7 +1099,6 @@
 				49D5E6D618616A56002BB1F0 /* gen_ssl_cert.sh in Resources */,
 				49C8B0E81888B3AA00400832 /* BCNHostCell.xib in Resources */,
 				49A31F5D18CF5E3A001214B9 /* BCNTestViewController.xib in Resources */,
-				499AAB41187886D7002C0724 /* BCNMapAnnotationView.xib in Resources */,
 				495E9D25187BADB4008F7CC7 /* BCNTimelineHostView.xib in Resources */,
 				49C8B0F11888B47700400832 /* BCNEngagedUserCell.xib in Resources */,
 				49EEEA8A18D8D1E600BDA605 /* BCNPhoneInputCell.xib in Resources */,
@@ -1203,7 +1201,6 @@
 				49069B8018661555003D003A /* SBJson4Writer.m in Sources */,
 				49069B7D18661555003D003A /* SBJson4StreamWriter.m in Sources */,
 				494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */,
-				49E983F1186A5D1600D37B2A /* BCNMapViewController.m in Sources */,
 				49EEEA9118D932F000BDA605 /* BCNBackspaceResignTextField.m in Sources */,
 				49EEEA8E18D8D37300BDA605 /* BCNPhoneInputCell.m in Sources */,
 				497DB6EF18E125E800095053 /* BCNParallaxViewController.m in Sources */,
@@ -1223,7 +1220,6 @@
 				4922702118CA1CA600816AD4 /* BCNEventStreamViewController.m in Sources */,
 				49069B4218657D3E003D003A /* BCNLoginViewController.m in Sources */,
 				4954FB1918D4EFFF0083D07F /* BCNInviteViewController.m in Sources */,
-				499AAB4418788843002C0724 /* BCNMapAnnotationView.m in Sources */,
 				49DD371418D1062A002ECF93 /* BCNTitleFlowLayout.m in Sources */,
 				49BBF68818942B5400292723 /* BCNCoordinate.m in Sources */,
 				4989270B18E34F3E00AECCF8 /* BCNDefaultBubble.m in Sources */,
@@ -1365,7 +1361,7 @@
 		};
 		49D5C9C9186042C2002BB1F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 555E166FEAAF48F096591AE1 /* Pods.xcconfig */;
+			baseConfigurationReference = 5D9F535A370840F8A55F2F95 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1380,12 +1376,10 @@
 				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Beacon/Fizz-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"${PODS_ROOT}/MapBox/Proj4\"/**";
+				LIBRARY_SEARCH_PATHS = "/Users/Andrew/Beacon\\ App/Beacon/TestFlightSDK3.0.0";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-lProj4",
-					"-ObjC",
-				);
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1395,7 +1389,7 @@
 		};
 		49D5C9CA186042C2002BB1F0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 555E166FEAAF48F096591AE1 /* Pods.xcconfig */;
+			baseConfigurationReference = 5D9F535A370840F8A55F2F95 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1410,12 +1404,10 @@
 				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Beacon/Fizz-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"${PODS_ROOT}/MapBox/Proj4\"/**";
+				LIBRARY_SEARCH_PATHS = "/Users/Andrew/Beacon\\ App/Beacon/TestFlightSDK3.0.0";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-lProj4",
-					"-ObjC",
-				);
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";

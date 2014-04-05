@@ -7,7 +7,6 @@
 //
 
 #import "BCNLoginViewController.h"
-#import "BCNMapViewController.h"
 #import "BCNAppDelegate.h"
 
 @interface BCNLoginViewController ()

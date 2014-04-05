@@ -18,6 +18,8 @@
 
 #import "BCNNavigationBar.h"
 
+#import "TestFlight.h"
+
 @implementation BCNAppDelegate
 
 @synthesize ioSocketDelegate, fbLoginDelegate;
@@ -58,6 +60,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [TestFlight takeOff:@"02498557-2e39-4e23-9eaf-cb9ee147ed4d"];
+    
+    
+    
     _hasLoggedIn = NO;
     
 //    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];

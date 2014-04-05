@@ -52,5 +52,3 @@
 #import "RMTileMillSource.h"
 #import "RMUserLocation.h"
 #import "RMUserTrackingBarButtonItem.h"
-
-#import "MyMarker.h"
