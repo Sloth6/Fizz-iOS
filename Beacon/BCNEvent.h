@@ -52,6 +52,7 @@
 -(void)addSeat;
 -(BOOL)removeSeat;
 
+-(BOOL)expressInterest;
 -(BOOL)joinEvent;
 -(BOOL)leaveEvent;
 

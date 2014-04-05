@@ -609,10 +609,14 @@ static NSMutableArray *instances;
 //            [cell setIsSelected:YES];
         }
     } else {
-        if (_canBeSelected && [_event isInvited:[BCNUser me]]){
-            [cell setSelected:NO];
-            [cell setHighlighted:NO];
-            [_eventCell enterChatMode];
+        if (_canBeSelected){
+            if ([_event isInvited:[BCNUser me]]){ // Chat Mode
+                [cell setSelected:NO];
+                [cell setHighlighted:NO];
+                [_eventCell enterChatMode];
+            } else { // Express Interest
+                [_event expressInterest];
+            }
         }
     }
 }

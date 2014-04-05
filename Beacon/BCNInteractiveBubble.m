@@ -37,7 +37,7 @@ static const int kVelocityThreshhold = 18;
 @implementation BCNInteractiveBubble
 
 - (id)initWithFrame:(CGRect)frame
-{
+{ ///XXXX TODO CRASH
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -358,8 +358,12 @@ static const int kVelocityThreshhold = 18;
     
     if (_isEmpty){
         
-        if (delta > kVelocityThreshhold ||
-            velocity > kVelocityThreshhold){
+        BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+        BCNEvent *event = appDelegate.bvc.event;
+        
+        if (([event isAttending:[BCNUser me]]) &&
+            (delta > kVelocityThreshhold ||
+            velocity > kVelocityThreshhold)){
             
             [self trashBubbleWithVector:vector];
             

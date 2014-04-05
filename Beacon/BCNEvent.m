@@ -220,6 +220,18 @@ static NSString *BCN_REQUEST = @"request";
     }
 }
 
+-(BOOL)expressInterest{
+    BCNUser *me = [BCNUser me];
+    
+    if ([self isInvited:me]){
+        return NO;
+    }
+    
+    [self socketIORequestEventWithAcknowledge:NULL];
+    
+    return YES;
+}
+
 -(BOOL)joinEvent{
     BCNUser *me = [BCNUser me];
     
