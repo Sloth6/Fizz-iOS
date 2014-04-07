@@ -18,6 +18,7 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import "BCNNavButton.h"
+#import "BCNChatDelegate.h"
 
 #import "BCNInviteGuestButton.h"
 
@@ -62,6 +63,8 @@ static NSMutableArray *instances;
         _country = @"us";
         
         self.tableView.separatorColor = [UIColor clearColor];
+        
+        [self setupKeyboard];
         
         UINib *inviteNib = [UINib nibWithNibName:@"BCNInviteCell" bundle:nil];
         [[self tableView] registerNib:inviteNib forCellReuseIdentifier:@"InviteCell"];
@@ -256,6 +259,9 @@ static NSMutableArray *instances;
 //    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [_eventCell exitInviteMode];
+    [self setIsOnTimeline:YES];
+    [_searchTextField setText:@""];
+    [_searchTextField resignFirstResponder];
     
 //    NSArray *inviteRefs = [_selected allObjects];
     NSMutableArray *userInvites = [[NSMutableArray alloc] init];
@@ -325,7 +331,7 @@ static NSMutableArray *instances;
         return 1;
     }
     
-    if (section == 1) { // "+ Add By Phone Number" cell
+    if (section == 1) { // "Search" cell
         return 1;
     }
     
@@ -372,26 +378,32 @@ static NSMutableArray *instances;
     [cell addSubview:_addSeatButton];
     [cell addSubview:_inviteButton];
     
-    BCNUser *me = [BCNUser me];
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    if ([_event isAttending:me]){ // If I'm attending
-        [_addSeatButton setHidden:NO];
-        [_inviteButton setHidden:NO];
-        
-    } else if ([_event isInvited:me]){ // If I'm invited
-        [_addSeatButton setHidden:YES];
-        [_inviteButton setHidden:YES];
-        
-    } else { // If I'm not invited
-        [_addSeatButton setHidden:YES];
-        [_inviteButton setHidden:YES];
-    }
+    [self setIsOnTimeline:appDelegate.esvc.viewMode == kTimeline];
 }
 
 - (void)searchChange{
     [self filterContentForSearchText:_searchTextField.text];
     int lastSection = [self.tableView numberOfSections] - 1;
+    
+    [UIView setAnimationsEnabled:NO];
+
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:lastSection] withRowAnimation:UITableViewRowAnimationNone];
+    
+    [UIView setAnimationsEnabled:YES];
+}
+
+- (void)setupKeyboard{
+    //set notification for when keyboard shows/hides
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -423,27 +435,29 @@ static NSMutableArray *instances;
         
         // Configure the cell...
         
-        _searchTextField = cell.textField;
-        
-        [[NSNotificationCenter defaultCenter]
-         addObserver:self
-         selector:@selector(searchStartEdit)
-         name:UITextFieldTextDidBeginEditingNotification
-         object:_searchTextField];
-        
-        [[NSNotificationCenter defaultCenter]
-         addObserver:self
-         selector:@selector(searchStopEdit)
-         name:UITextFieldTextDidEndEditingNotification
-         object:_searchTextField];
-        
-        [[NSNotificationCenter defaultCenter]
-         addObserver:self
-         selector:@selector(searchChange)
-         name:UITextFieldTextDidChangeNotification
-         object:_searchTextField];
-        
-        [cell.textField setDelegate:self];
+        if (_searchTextField != cell.textField){
+            _searchTextField = cell.textField;
+            
+            [[NSNotificationCenter defaultCenter]
+             addObserver:self
+             selector:@selector(searchStartEdit)
+             name:UITextFieldTextDidBeginEditingNotification
+             object:_searchTextField];
+            
+            [[NSNotificationCenter defaultCenter]
+             addObserver:self
+             selector:@selector(searchStopEdit)
+             name:UITextFieldTextDidEndEditingNotification
+             object:_searchTextField];
+            
+            [[NSNotificationCenter defaultCenter]
+             addObserver:self
+             selector:@selector(searchChange)
+             name:UITextFieldTextDidChangeNotification
+             object:_searchTextField];
+            
+            [cell.textField setDelegate:self];
+        }
         
         return cell;
     }
@@ -497,6 +511,79 @@ static NSMutableArray *instances;
     
     return cell;
 }
+
+
+-(void) keyboardWillShow:(NSNotification *)note{ // DUPLICATE
+    if (![_searchTextField isFirstResponder]) {
+        return;
+    }
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.esvc.navIcon setIsEditingText:YES];
+    
+    // get keyboard size and loction
+	CGRect keyboardBounds = [BCNChatDelegate getKeyboardBoundsFromNote:note];
+    
+	// get the height since this is the main value that we need.
+	NSInteger kbSizeH = keyboardBounds.size.height;
+    
+	// get a rect for the table/main frame
+	CGRect tableFrame = self.tableView.frame;
+	tableFrame.size.height -= kbSizeH;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[note.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[note.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+	// set views with new info
+	self.tableView.frame = tableFrame;
+    
+    NSIndexPath *searchPath = [NSIndexPath indexPathForItem:0 inSection:1];
+    
+    [self.tableView scrollToRowAtIndexPath:searchPath
+                          atScrollPosition:UITableViewScrollPositionMiddle
+                                  animated:YES];
+    
+	// commit animations
+	[UIView commitAnimations];
+}
+
+-(void) keyboardWillHide:(NSNotification *)note{ // DUPLICATE
+    if (![_searchTextField isFirstResponder]) {
+        return;
+    }
+    
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.esvc.navIcon setIsEditingText:NO];
+    
+    // get keyboard size and location
+    
+	CGRect keyboardBounds;
+    
+    keyboardBounds = [BCNChatDelegate getKeyboardBoundsFromNote:note];
+    
+	// get the height since this is the main value that we need.
+	NSInteger kbSizeH = keyboardBounds.size.height;
+    
+	// get a rect for the table/main frame
+	CGRect tableFrame = self.tableView.frame;
+	tableFrame.size.height += kbSizeH;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[note.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[note.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+	// set views with new info
+	self.tableView.frame = tableFrame;
+	
+    // commit animations
+	[UIView commitAnimations];
+}
+
 
 - (BOOL)isValidUSPhoneNumber:(NSString *)phoneNumber{
     
@@ -572,7 +659,7 @@ static NSMutableArray *instances;
 {
     BCNInviteCell *cell = (BCNInviteCell* )[tableView cellForRowAtIndexPath:indexPath];
     
-    if(indexPath.section != 0)
+    if(indexPath.section == [self numberOfSectionsInTableView:tableView] - 1)
     {
 //        NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
         NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
@@ -608,15 +695,45 @@ static NSMutableArray *instances;
 //            [_selected addObject:cellReference];
 //            [cell setIsSelected:YES];
         }
+    } else if (indexPath.section == 1){
+        [_searchTextField becomeFirstResponder];
     } else {
-        if (_canBeSelected){
+        BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+        
+        if (_canBeSelected && appDelegate.esvc.viewMode == kTimeline){
             if ([_event isInvited:[BCNUser me]]){ // Chat Mode
                 [cell setSelected:NO];
                 [cell setHighlighted:NO];
                 [_eventCell enterChatMode];
+                
+                [self setIsOnTimeline:NO];
             } else { // Express Interest
                 [_event expressInterest];
             }
+        }
+    }
+}
+
+-(void)setIsOnTimeline:(BOOL)isTimeline{
+    if (!isTimeline){
+        [_inviteButton setHidden:YES];
+        [_addSeatButton setHidden:YES];
+        
+    } else {
+        
+        BCNUser *me = [BCNUser me];
+        
+        if ([_event isAttending:me]){ // If I'm attending
+            [_addSeatButton setHidden:NO];
+            [_inviteButton setHidden:NO];
+            
+        } else if ([_event isInvited:me]){ // If I'm invited
+            [_addSeatButton setHidden:YES];
+            [_inviteButton setHidden:YES];
+            
+        } else { // If I'm not invited
+            [_addSeatButton setHidden:YES];
+            [_inviteButton setHidden:YES];
         }
     }
 }
@@ -737,6 +854,7 @@ static NSMutableArray *instances;
         appDelegate.gotAddressBook = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self searchChange];
             [self.tableView reloadData];
         });
     });

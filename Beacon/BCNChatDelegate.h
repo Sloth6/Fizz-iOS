@@ -30,6 +30,8 @@
 - (void)setupKeyboard;
 - (void)addIncomingMessageForEvent:(BCNEvent *)event;
 
++ (CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;
+
 //- (void)popView;
 
 @end

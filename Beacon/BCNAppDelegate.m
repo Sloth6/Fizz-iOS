@@ -60,9 +60,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [TestFlight takeOff:@"02498557-2e39-4e23-9eaf-cb9ee147ed4d"];
-    
-    
+    [TestFlight takeOff:@"c57d6a81-8946-4632-977e-9b92f7d0802a"];
     
     _hasLoggedIn = NO;
     

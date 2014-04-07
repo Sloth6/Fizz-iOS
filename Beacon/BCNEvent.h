@@ -53,6 +53,7 @@
 -(BOOL)removeSeat;
 
 -(BOOL)expressInterest;
+-(BOOL)haveExpressedInterest;
 -(BOOL)joinEvent;
 -(BOOL)leaveEvent;
 

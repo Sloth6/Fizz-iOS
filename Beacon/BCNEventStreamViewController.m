@@ -73,7 +73,7 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         // Burger Button
         
-        CGRect buttonFrame = CGRectMake(14.5, 24.5, 21, 21);
+        CGRect buttonFrame = CGRectMake(14.5, 24.5, 45, 45);
         CGRect iconFrame = CGRectMake(0, 0, buttonFrame.size.width, buttonFrame.size.height);
         
         _burgerButton = [UIButton buttonWithType:UIButtonTypeCustom];

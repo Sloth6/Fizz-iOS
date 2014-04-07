@@ -30,6 +30,7 @@ static NSString *BCN_REQUEST = @"request";
 @property (nonatomic) int numSeats;
 @property (nonatomic) int pendingNumSeats;
 
+@property (nonatomic) BOOL haveExpressedInterest;
 @property BOOL haveSeatsChanged;
 
 @property NSTimer *seatTimer;
@@ -61,6 +62,7 @@ static NSString *BCN_REQUEST = @"request";
     
     if (self){
         _haveSeatsChanged = YES;
+        _haveExpressedInterest = NO;
     }
     
     return self;
@@ -227,9 +229,19 @@ static NSString *BCN_REQUEST = @"request";
         return NO;
     }
     
+    if (_haveExpressedInterest){
+        return NO;
+    }
+    
+    _haveExpressedInterest = YES;
+    
     [self socketIORequestEventWithAcknowledge:NULL];
     
     return YES;
+}
+
+-(BOOL)haveExpressedInterest{
+    return _haveExpressedInterest;
 }
 
 -(BOOL)joinEvent{

@@ -111,6 +111,7 @@
 - (void)exitInviteMode{
     [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
+    [_ivc.addSeatButton setHidden:NO];
     
     [_sendInviteButton removeFromSuperview];
     _sendInviteButton = NULL;
@@ -160,6 +161,7 @@
     
     [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
+    [_ivc.addSeatButton setHidden:NO];
     
     [self hideCommitInvites];
     
@@ -197,6 +199,7 @@
 - (void)exitChatMode{
     [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
+    [_ivc.addSeatButton setHidden:NO];
     
     [self hideCommitInvites];
     
