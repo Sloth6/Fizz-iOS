@@ -13,6 +13,8 @@
  
  */
 
+#import <AudioToolbox/AudioToolbox.h>
+
 #import "BCNChatDelegate.h"
 #import "BCNEvent.h"
 
@@ -184,10 +186,11 @@ static int kBCNNumCellsBeforeMessages = 1;
         
         float threshold = 30;
         
+        BOOL scroll = NO;
         
         if (offset.y + bounds.size.height > size.height - threshold){
             [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
-            [_ivc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            scroll = YES;
         } else {
             [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
         }
@@ -198,6 +201,17 @@ static int kBCNNumCellsBeforeMessages = 1;
         [_ivc.tableView setContentSize:newContentSize];
         
         [_ivc.tableView layoutIfNeeded];
+        
+        if (scroll){
+            [_ivc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
+        
+        BCNMessage *newestMessage = [[_event messages] lastObject];
+        
+        if (!([newestMessage user] == [BCNUser me]) && // Not my message
+            [newestMessage user]){                     // Not the server's message
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        }
     }
 }
 
@@ -703,7 +717,6 @@ static int kBCNNumCellsBeforeMessages = 1;
         return [_ivc tableView:tableView cellForRowAtIndexPath:indexPath];
     }
     
-    
     if(![_nibTextCellLoaded containsObject:tableView])
     {
         NSString *cellID = @"TextCell";
@@ -727,6 +740,7 @@ static int kBCNNumCellsBeforeMessages = 1;
                                                                      forIndexPath:indexPath];
         
         [cell.serverLabel setText:[message text]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
     }
@@ -735,6 +749,8 @@ static int kBCNNumCellsBeforeMessages = 1;
     
     BCNDetailTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID
                                                               forIndexPath:indexPath];
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (!_didGetDimensionsFromCell){
         _didGetDimensionsFromCell = YES;
@@ -760,11 +776,20 @@ static int kBCNNumCellsBeforeMessages = 1;
     [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
         if (image != NULL){
             // Set image
+            [cell.profileImageView removeFromSuperview];
+            CGRect frame = cell.profileImageView.frame;
+            
+            cell.profileImageView = [user circularImageForRect:frame];
             [cell.profileImageView setImage:image];
-            [BCNUser formatImageViewToCircular:cell.profileImageView withScalar:1.0];
+            [cell addSubview:cell.profileImageView];
+            [cell.profileImageView setFrame:frame];
         } else {
-            [user formatImageView:cell.profileImageView ForInitialsWithScalar:1.0];
+            [user formatImageView:cell.profileImageView
+               ForInitialsForRect:cell.profileImageView.frame];
+//            [user formatImageView:cell.profileImageView ForInitialsWithScalar:1.0];
         }
+        
+        [cell.profileImageView setNeedsDisplay];
     }];
     
     [cell.label setText:text];

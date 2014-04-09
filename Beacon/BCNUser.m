@@ -204,12 +204,12 @@ static BCNUser *currentUser = nil;
 
     CGRect rect = CGRectMake(0, 0, 104, 104);
 
-    NSArray *subviews = [imageView subviews];
-
-    for (int i = 0; i < [subviews count]; ++i){
-        UIView *subview = [subviews objectAtIndex:i];
-        [subview removeFromSuperview];
-    }
+//    NSArray *subviews = [imageView subviews];
+//
+//    for (int i = 0; i < [subviews count]; ++i){
+//        UIView *subview = [subviews objectAtIndex:i];
+//        [subview removeFromSuperview];
+//    }
 
     BCNDefaultBubble *bubble = [[BCNDefaultBubble alloc] initWithFrame:rect];
 
@@ -230,6 +230,7 @@ static BCNUser *currentUser = nil;
 
 +(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
                                   forRect:(CGRect)rect{
+    
     float x = imageView.frame.origin.x;
     float y = imageView.frame.origin.y;
     
@@ -254,6 +255,7 @@ static BCNUser *currentUser = nil;
 
 -(UIImageView *)formatImageView:(UIImageView *)imageView
              ForInitialsForRect:(CGRect)rect{
+    
     NSArray *subviews = [imageView subviews];
     
     for (int i = 0; i < [subviews count]; ++i){

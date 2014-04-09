@@ -73,8 +73,11 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         // Burger Button
         
-        CGRect buttonFrame = CGRectMake(14.5, 24.5, 45, 45);
-        CGRect iconFrame = CGRectMake(0, 0, buttonFrame.size.width, buttonFrame.size.height);
+        float burgerX = 14.5;
+        float burgerY = 24.5;
+        
+        CGRect buttonFrame = CGRectMake(0, 0, 45 + burgerX, 45 + burgerY);
+        CGRect iconFrame = CGRectMake(burgerX, burgerY, 21, 21);
         
         _burgerButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_burgerButton setFrame:buttonFrame];
@@ -590,6 +593,8 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
             [_activeTextView resignFirstResponder];
         } else if (_activeTextField){
             [_activeTextField resignFirstResponder];
+//        } else if (_activeSearchBar){
+//            [_activeSearchBar resignFirstResponder];
         } else {
             [[_chatDelegate chatBox] resignFirstResponder];
         }
@@ -746,6 +751,184 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
         
         BCNNewEventCell *cell = (BCNNewEventCell *)[self.collectionView cellForItemAtIndexPath:path];
         [cell.ivc.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+-(void)jumpToMessagesForEvent:(BCNEvent *)event{
+    BOOL delay = NO;
+    BOOL doSomething = NO;
+    
+    switch (_viewMode) {
+        case kFriendManagement: // Press the button twice
+        {
+            [UIView setAnimationsEnabled:NO];
+            [self burgerButtonPress:_burgerButton];
+            [self burgerButtonPress:_burgerButton];
+            [UIView setAnimationsEnabled:YES];
+            
+            delay = YES;
+            doSomething = YES;
+        }
+            break;
+            
+        case kChat:
+            break;
+            
+        case kInvite:
+        {
+            [UIView setAnimationsEnabled:NO];
+            [self burgerButtonPress:_burgerButton];
+            [_currentCell enterChatMode];
+            [UIView setAnimationsEnabled:YES];
+        }
+            break;
+            
+        case kOverview:
+        {
+            [UIView setAnimationsEnabled:NO];
+            [self burgerButtonPress:_burgerButton];
+            [UIView setAnimationsEnabled:YES];
+            
+            delay = YES;
+            doSomething = YES;
+        }
+            break;
+            
+        case kTimeline:
+        {
+            doSomething = YES;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (doSomething && [_events containsObject:event]){
+        int index = [_events indexOfObject:event];
+        int numSections = [self.collectionView numberOfSections];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:numSections - 1];
+        
+        NSIndexPath *firstIndex = [NSIndexPath indexPathForItem:0 inSection:0];
+        
+        if (delay){
+            double delayInSeconds = 3;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [UIView setAnimationsEnabled:NO];
+                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+                [UIView setAnimationsEnabled:YES];
+                
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [UIView setAnimationsEnabled:NO];
+                    
+                    NSLog(@"enter 2");
+                    _currentCell = (BCNNewEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+//                    [_currentCell enterChatMode];
+                    [_currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
+                    [UIView setAnimationsEnabled:YES];
+                });
+            });
+        } else {
+            double delayInSeconds = 4;
+            
+            [UIView setAnimationsEnabled:NO];
+            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+            [UIView setAnimationsEnabled:YES];
+            
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [UIView setAnimationsEnabled:NO];
+                _currentCell = (BCNNewEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                [_currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
+                
+                NSLog(@"enter 1");
+                
+//                [_currentCell enterChatMode];
+                
+                [UIView setAnimationsEnabled:YES];
+            });
+        }
+    }
+}
+
+-(void)jumpToEvent:(BCNEvent *)event{
+    BOOL delay = NO;
+    
+    switch (_viewMode) {
+        case kFriendManagement: // Press the button twice
+        {
+            [UIView setAnimationsEnabled:NO];
+            [self burgerButtonPress:_burgerButton];
+            [self burgerButtonPress:_burgerButton];
+            [UIView setAnimationsEnabled:YES];
+            
+            delay = YES;
+        }
+            break;
+            
+        case kChat:
+        {
+            [UIView setAnimationsEnabled:NO];
+            [self burgerButtonPress:_burgerButton];
+            [UIView setAnimationsEnabled:YES];
+        }
+            break;
+            
+        case kInvite:
+        {
+            [UIView setAnimationsEnabled:NO];
+            [self burgerButtonPress:_burgerButton];
+            [UIView setAnimationsEnabled:YES];
+        }
+            break;
+            
+        case kOverview:
+        {
+            [UIView setAnimationsEnabled:NO];
+            [self burgerButtonPress:_burgerButton];
+            [UIView setAnimationsEnabled:YES];
+            
+            delay = YES;
+        }
+            break;
+            
+        case kTimeline:
+            break;
+            
+        default:
+            break;
+    }
+
+    if ([_events containsObject:event]){
+        int index = [_events indexOfObject:event];
+        int numSections = [self.collectionView numberOfSections];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:numSections - 1];
+        
+        if (delay){
+            double delayInSeconds = 1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+            });
+        } else {
+            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+        }
+    }
+}
+
+-(void)loadToEvent:(BCNEvent *)event{
+    BCNUser *me = [BCNUser me];
+    
+    BOOL showMessages = [event isInvited:me];
+    
+    if (showMessages){
+        [self jumpToMessagesForEvent:event];
+    } else {
+        [self jumpToEvent:event];
     }
 }
 

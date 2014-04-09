@@ -53,9 +53,12 @@ typedef enum {
 
 @property UITextView *activeTextView;
 @property UITextField *activeTextField;
+//@property UISearchBar *activeSearchBar;
 
 -(void)setViewMode:(ViewMode)viewMode;
 -(void)addIncomingMessageForEvent:(BCNEvent *)event;
 -(void)updateEvent:(BCNEvent *)event;
+
+-(void)loadToEvent:(BCNEvent *)event;
 
 @end

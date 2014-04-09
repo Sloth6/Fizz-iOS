@@ -19,6 +19,9 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "BCNNavButton.h"
 #import "BCNChatDelegate.h"
+#import <CoreData/CoreData.h>
+
+#import "BCNInviteSearchController.h"
 
 #import "BCNInviteGuestButton.h"
 
@@ -26,10 +29,16 @@
 
 static NSMutableArray *instances;
 
+static int kBCNNumRecentInvites = 30;
+
 @interface BCNInviteViewController ()
 
-@property NSArray *invitableFriends;
+//@property BCNInviteSearchController *isc;
 
+@property NSArray *invitableFriends;
+@property NSArray *recentInvites;
+
+@property NSArray *filteredRecents;
 @property NSArray *filteredFriends; // Fizz Friends
 @property NSArray *filteredContacts;
 
@@ -64,7 +73,19 @@ static NSMutableArray *instances;
         
         self.tableView.separatorColor = [UIColor clearColor];
         
+//        _isc = [[BCNInviteSearchController alloc] initWithSearchBar:_searchBar
+//                                                 contentsController:self];
+        
+//        [_isc setDelegate:self];
+//        [_isc setSearchResultsDelegate:self];
+//        [_isc setSearchResultsDataSource:self];
+        
+//        _isc.delegate = self;
+//        _isc.searchResultsDataSource = self;
+//        _isc.searchResultsDelegate = self;
+        
         [self setupKeyboard];
+        [self setupSearchField];
         
         UINib *inviteNib = [UINib nibWithNibName:@"BCNInviteCell" bundle:nil];
         [[self tableView] registerNib:inviteNib forCellReuseIdentifier:@"InviteCell"];
@@ -81,10 +102,48 @@ static NSMutableArray *instances;
     return self;
 }
 
+- (void)setupSearchField{
+    BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    _searchTextField = appDelegate.searchTextField;
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(searchStartEdit)
+     name:UITextFieldTextDidBeginEditingNotification
+     object:_searchTextField];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(searchStopEdit)
+     name:UITextFieldTextDidEndEditingNotification
+     object:_searchTextField];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(searchChange)
+     name:UITextFieldTextDidChangeNotification
+     object:_searchTextField];
+    
+    [_searchTextField setDelegate:self];
+}
+
 - (void)setupInterface{
     [self setupSeats];
     [self setupInvite];
 }
+
+//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+//{
+//    [self filterContentForSearchText:searchString];
+//    return YES;
+//}
+//
+//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
+//{
+//    NSString *searchString = controller.searchBar.text;
+//    [self filterContentForSearchText:searchString];
+//    return YES;
+//}
 
 - (void)updateSeatUI{
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -184,6 +243,7 @@ static NSMutableArray *instances;
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
+    [(UIView *)appDelegate.bvc.bubbleView removeFromSuperview];
     [cell addSubview:(UIView *)appDelegate.bvc.bubbleView];
 }
 
@@ -204,19 +264,36 @@ static NSMutableArray *instances;
     }
     
     // Filter the array using NSPredicate
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", searchText];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@", [NSString stringWithFormat:@" %@", searchText]];
+    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchText];
     
-    NSPredicate *dictionaryPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return [(NSString *)[(NSDictionary *)evaluatedObject objectForKey:@"name"] hasPrefix:searchText];
-    }];
+    NSArray *predicates = [[NSArray alloc] initWithObjects:predicate, predicate2, nil];
+    NSPredicate *fullPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
     
-    _filteredFriends = [_invitableFriends filteredArrayUsingPredicate:predicate];
-    _filteredContacts = [_contacts filteredArrayUsingPredicate:dictionaryPredicate];
+    
+//    NSPredicate *dictionaryPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+//        return [(NSString *)[(NSDictionary *)evaluatedObject objectForKey:@"name"] hasPrefix:searchText];
+//    }];
+    
+//    NSPredicate *dictionaryPredicateEither = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+//        
+//        NSString *name = (NSString *)[(NSDictionary *)evaluatedObject objectForKey:@"name"];
+//        
+//        if (!name){
+//            name =
+//        }
+//        
+//        return [name hasPrefix:searchText];
+//    }];
+//    
+//    _filteredRecents = [_recentInvites filteredArrayUsingPredicate:];
+    _filteredFriends = [_invitableFriends filteredArrayUsingPredicate:fullPredicate];
+    _filteredContacts = [_contacts filteredArrayUsingPredicate:fullPredicate];
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.section == 1) return NO;
+//    if (indexPath.section == 1) return NO;
     
     return YES;
 }
@@ -251,8 +328,163 @@ static NSMutableArray *instances;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 3;
+    if (tableView == self.tableView)
+    {
+        // Return the number of sections.
+        return 2;
+    } else {
+        return 1;
+    }
+}
+
+-(void)loadRecentInvites{
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *savedInvites = [pref objectForKey:@"recentInvites"];
+    
+    NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithCapacity:[savedInvites count]];
+    
+    [savedInvites enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSMutableDictionary *dict = [(NSDictionary *)obj mutableCopy];
+        NSString *phoneNumber = key;
+        
+        [dict setObject:phoneNumber forKey:@"pn"];
+        
+        NSNumber *userID = [dict objectForKey:@"uid"];
+        
+        if (userID){
+            BCNUser *user = [BCNUser userWithUID:userID];
+            
+            [dict removeObjectForKey:@"uid"];
+            [dict setObject:user forKey:@"user"];
+        }
+        
+        [update setObject:dict forKey:key];
+    }];
+    
+    // Sort by count
+    NSArray *sortedValues =
+    [[update allValues] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSDictionary *val1 = obj1;
+        NSDictionary *val2 = obj2;
+        
+        NSNumber *count1 = [val1 objectForKey:@"count"];
+        NSNumber *count2 = [val2 objectForKey:@"count"];
+        
+        return [count2 compare:count1];
+    }];
+    
+    _recentInvites = sortedValues;
+}
+
+-(void)updateRecentInvitedFriends:(NSArray *)invitedFriends
+                      andContacts:(NSArray *)invitedContacts{
+    
+    int numInvitedFriends = [invitedFriends count];
+    int numInvitedContacts = [invitedContacts count];
+    
+    // Save recents
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableDictionary *savedInvites = [[pref objectForKey:@"recentInvites"] mutableCopy];
+    
+    NSMutableDictionary *updateInvites;
+    
+    int capacity = 0;
+    
+    if (savedInvites){
+        capacity = MIN(MIN([savedInvites count], kBCNNumRecentInvites), numInvitedFriends + numInvitedContacts);
+        updateInvites = [[NSMutableDictionary alloc] initWithCapacity:capacity];
+    } else {
+        capacity = MIN(numInvitedContacts + numInvitedFriends, kBCNNumRecentInvites);
+        updateInvites = [[NSMutableDictionary alloc] initWithCapacity:capacity];
+    }
+    
+    // Update recent users
+    for (int i = 0; i < numInvitedFriends; ++i){
+        BCNUser *user = (BCNUser *)[invitedFriends objectAtIndex:i];
+        NSString *phoneNumber = [user phoneNumber];
+        NSNumber *userID = [user userID];
+        
+        NSDictionary *dict = [savedInvites objectForKey:phoneNumber];
+        NSNumber *count;
+        
+        if (dict){
+            count = [dict objectForKey:@"count"];
+            count = [NSNumber numberWithInteger:[count integerValue] + 1];
+        } else {
+            count = [NSNumber numberWithInteger:1];
+        }
+        
+        NSDictionary *savedInfo =
+        [[NSDictionary alloc] initWithObjectsAndKeys:count,  @"count",
+                                                     userID, @"uid", nil];
+        
+        [updateInvites setObject:savedInfo forKey:phoneNumber];
+        
+        [savedInvites removeObjectForKey:phoneNumber];
+    }
+    
+    // Update recent contacts
+    for (int i = 0; i < numInvitedContacts; ++i){
+        NSDictionary *contact = [invitedContacts objectAtIndex:i];
+        NSString *phoneNumber = [contact objectForKey:@"pn"];
+        NSString *name = [contact objectForKey:@"name"];
+        
+        NSDictionary *dict = [savedInvites objectForKey:phoneNumber];
+        NSNumber *count;
+        
+        if (dict){
+            count = [dict objectForKey:@"count"];
+            count = [NSNumber numberWithInteger:[count integerValue] + 1];
+        } else {
+            count = [NSNumber numberWithInteger:1];
+        }
+        
+        NSDictionary *savedInfo =
+        [[NSDictionary alloc] initWithObjectsAndKeys:count, @"count",
+                                                     name,  @"name", nil];
+        
+        [updateInvites setObject:savedInfo forKey:phoneNumber];
+        
+        [savedInvites removeObjectForKey:phoneNumber];
+    }
+    
+    // Update unused recent values
+    [savedInvites enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSMutableDictionary *dict = [(NSDictionary *)obj mutableCopy];
+        
+        NSNumber *count = [dict objectForKey:@"count"];
+        count = [NSNumber numberWithInteger:([count integerValue] / 2) + 1];
+        NSString *phoneNumber = [dict objectForKey:@"pn"];
+        
+        [dict setObject:count forKey:@"count"];
+        
+        [updateInvites setObject:dict forKey:phoneNumber];
+    }];
+    
+    // Sort by count
+    NSArray *sortedKeys =
+    [updateInvites keysSortedByValueUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSDictionary *val1 = obj1;
+        NSDictionary *val2 = obj2;
+        
+        NSNumber *count1 = [val1 objectForKey:@"count"];
+        NSNumber *count2 = [val2 objectForKey:@"count"];
+        
+        return [count2 compare:count1];
+    }];
+    
+    // Keep only the allowed amount
+    sortedKeys =
+    [sortedKeys subarrayWithRange:NSMakeRange(0, MIN(kBCNNumRecentInvites, sortedKeys.count))];
+    
+    NSDictionary *toSave = [updateInvites dictionaryWithValuesForKeys:sortedKeys];
+    updateInvites = NULL;
+    
+    [pref setObject:toSave forKey:@"recentInvites"];
+    [pref synchronize];
 }
 
 -(void)sendInvitations{
@@ -266,8 +498,6 @@ static NSMutableArray *instances;
 //    NSArray *inviteRefs = [_selected allObjects];
     NSMutableArray *userInvites = [[NSMutableArray alloc] init];
     NSMutableArray *phoneInvites = [[NSMutableArray alloc] init];
-    
-    int numInvitableFriends = [_invitableFriends count];
     
     NSArray *invitedFriends  = [_selectedFriends allObjects];
     NSArray *invitedContacts = [_selectedContacts allObjects];
@@ -292,27 +522,9 @@ static NSMutableArray *instances;
         [phoneInvites addObject:dict];
     }
     
-//    for (int i = 0; i < [inviteRefs count]; ++i){
-//        int index = [self lengthOfOptions] -
-//                    [(NSNumber *)[inviteRefs objectAtIndex:i] integerValue];
-//        
-//        if (index < numInvitableFriends){
-//            BCNUser *friend = [_invitableFriends objectAtIndex:index];
-//            [userInvites addObject:friend];
-//        } else {
-//            index -= numInvitableFriends;
-//            NSDictionary *contact = [_contacts objectAtIndex:index];
-//            NSString *phoneNumber = [contact objectForKey:@"pn"];
-//            
-//            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-//            [dict setObject:phoneNumber forKey:@"pn"];
-//            [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
-//            
-//            [phoneInvites addObject:dict];
-//        }
-//    }
+    [self updateRecentInvitedFriends:invitedFriends andContacts:invitedContacts];
     
-    NSLog(@"\n\n%@\n%@\n\n", userInvites, phoneInvites);
+    NSLog(@"\n\nUser Invites: %@\nPhone Invites: %@\n\n", userInvites, phoneInvites);
     
     if ([userInvites count] > 0 || [phoneInvites count] > 0){
         [_event socketIOInviteWithInviteList:userInvites
@@ -328,12 +540,18 @@ static NSMutableArray *instances;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0){ // Title cell
-        return 1;
+        BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+        
+        if (appDelegate.esvc.viewMode == kInvite){
+            return 0;
+        } else {
+            return 1;
+        }
     }
     
-    if (section == 1) { // "Search" cell
-        return 1;
-    }
+//    if (section == 1) { // "Search" cell
+//        return 1;
+//    }
     
     // Return the number of rows in the section.
     return [self lengthOfOptions];
@@ -384,14 +602,25 @@ static NSMutableArray *instances;
 }
 
 - (void)searchChange{
+//    if (self.tableView.delegate != self){
+//        [self.tableView setDelegate:self];
+//        [self.tableView setDataSource:self];
+//    }
+    
+//    [self searchDisplayController];
     [self filterContentForSearchText:_searchTextField.text];
-    int lastSection = [self.tableView numberOfSections] - 1;
-    
-    [UIView setAnimationsEnabled:NO];
-
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:lastSection] withRowAnimation:UITableViewRowAnimationNone];
-    
-    [UIView setAnimationsEnabled:YES];
+    [self.tableView reloadData];
+//    int lastSection = [self.tableView numberOfSections] - 1;
+//    
+//    [UIView setAnimationsEnabled:NO];
+//    
+//    if ([self.tableView numberOfRowsInSection:0] == 1){
+//        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+//    }
+//
+//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:lastSection] withRowAnimation:UITableViewRowAnimationNone];
+//    
+//    [UIView setAnimationsEnabled:YES];
 }
 
 - (void)setupKeyboard{
@@ -400,6 +629,7 @@ static NSMutableArray *instances;
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
@@ -408,59 +638,47 @@ static NSMutableArray *instances;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0){ // BIG top cell
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    
+    if (tableView == self.tableView)
+    {
+        if (indexPath.section == 0){ // BIG top cell
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            // Configure the cell...
+            BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+            
+            if (appDelegate.esvc.viewMode == kInvite){
+                
+            } else if (appDelegate.esvc.viewMode == kChat){
+                
+            } else { // Timeline or otherwise
+                [self setTopCellSubviews:cell];
+            }
+            
+            return cell;
         }
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        // Configure the cell...
-        
-        [self setTopCellSubviews:cell];
-        
-        return cell;
     }
     
-    if (indexPath.section == 1){
-        // New Phone Number Cell
-        
-        static NSString *CellIdentifier = @"PhoneInputCell";
-        BCNPhoneInputCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[BCNPhoneInputCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        // Configure the cell...
-        
-        if (_searchTextField != cell.textField){
-            _searchTextField = cell.textField;
-            
-            [[NSNotificationCenter defaultCenter]
-             addObserver:self
-             selector:@selector(searchStartEdit)
-             name:UITextFieldTextDidBeginEditingNotification
-             object:_searchTextField];
-            
-            [[NSNotificationCenter defaultCenter]
-             addObserver:self
-             selector:@selector(searchStopEdit)
-             name:UITextFieldTextDidEndEditingNotification
-             object:_searchTextField];
-            
-            [[NSNotificationCenter defaultCenter]
-             addObserver:self
-             selector:@selector(searchChange)
-             name:UITextFieldTextDidChangeNotification
-             object:_searchTextField];
-            
-            [cell.textField setDelegate:self];
-        }
-        
-        return cell;
-    }
+    // This was for the Search Field Cell
+//    if (indexPath.section == 1){
+//        // New Phone Number Cell
+//        
+//        static NSString *CellIdentifier = @"PhoneInputCell";
+//        BCNPhoneInputCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//        if (cell == nil) {
+//            cell = [[BCNPhoneInputCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//        }
+//        
+//        // Configure the cell...
+//        
+//        return cell;
+//    }
     
     // All other cells
     
@@ -518,6 +736,8 @@ static NSMutableArray *instances;
         return;
     }
     
+    NSLog(@"%d>>>", [self.tableView numberOfRowsInSection:1]);
+    
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [appDelegate.esvc.navIcon setIsEditingText:YES];
@@ -530,6 +750,7 @@ static NSMutableArray *instances;
     
 	// get a rect for the table/main frame
 	CGRect tableFrame = self.tableView.frame;
+    
 	tableFrame.size.height -= kbSizeH;
     
     [UIView beginAnimations:nil context:NULL];
@@ -540,11 +761,13 @@ static NSMutableArray *instances;
 	// set views with new info
 	self.tableView.frame = tableFrame;
     
-    NSIndexPath *searchPath = [NSIndexPath indexPathForItem:0 inSection:1];
-    
-    [self.tableView scrollToRowAtIndexPath:searchPath
-                          atScrollPosition:UITableViewScrollPositionMiddle
-                                  animated:YES];
+    if ([self.tableView numberOfRowsInSection:1] > 0){
+        NSIndexPath *searchPath = [NSIndexPath indexPathForItem:0 inSection:1];
+        
+        [self.tableView scrollToRowAtIndexPath:searchPath
+                              atScrollPosition:UITableViewScrollPositionMiddle
+                                      animated:YES];
+    }
     
 	// commit animations
 	[UIView commitAnimations];
@@ -570,6 +793,7 @@ static NSMutableArray *instances;
     
 	// get a rect for the table/main frame
 	CGRect tableFrame = self.tableView.frame;
+    
 	tableFrame.size.height += kbSizeH;
     
     [UIView beginAnimations:nil context:NULL];
@@ -624,10 +848,11 @@ static NSMutableArray *instances;
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.esvc.navIcon setIsEditingText:YES];
     [appDelegate.esvc setActiveTextField:_searchTextField];
+//    [appDelegate.esvc setActiveSearchBar:_searchBar];
     
-    NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:1];
-    
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+//    NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:1];
+//    
+//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 -(void)searchStopEdit{
@@ -695,9 +920,11 @@ static NSMutableArray *instances;
 //            [_selected addObject:cellReference];
 //            [cell setIsSelected:YES];
         }
-    } else if (indexPath.section == 1){
-        [_searchTextField becomeFirstResponder];
-    } else {
+    }
+//    else if (indexPath.section == 1){
+//        [_searchTextField becomeFirstResponder];
+//    }
+    else {
         BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
         
         if (_canBeSelected && appDelegate.esvc.viewMode == kTimeline){
@@ -747,7 +974,7 @@ static NSMutableArray *instances;
         return [UIScreen mainScreen].bounds.size.height;
     }
     
-    return 65;
+    return 48;
 }
 
 -(void)getContacts{
@@ -817,8 +1044,9 @@ static NSMutableArray *instances;
             }
         }
         
-        NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name"
-                                                                     ascending:YES];
+        NSSortDescriptor *sortByName = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+//        NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name"
+//                                                                     ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
         _contacts = [[contacts sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
         

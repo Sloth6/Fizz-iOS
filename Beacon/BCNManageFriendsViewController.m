@@ -124,7 +124,8 @@
     
     [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
         [cell.profilePic setImage:image];
-        [BCNUser formatImageViewToCircular:cell.profilePic withScalar:1.0];
+//        [BCNUser formatImageViewToCircular:cell.profilePic withScalar:1.0];
+        [BCNUser formatImageViewToCircular:cell.profilePic forRect:cell.profilePic.frame];
     }];
     
     if ([self isFriend:user]){

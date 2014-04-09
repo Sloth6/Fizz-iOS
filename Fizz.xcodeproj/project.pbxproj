@@ -115,6 +115,7 @@
 		49D5E6D518616A56002BB1F0 /* run.js in Resources */ = {isa = PBXBuildFile; fileRef = 49D5E6CB18616A56002BB1F0 /* run.js */; };
 		49D5E6D618616A56002BB1F0 /* gen_ssl_cert.sh in Resources */ = {isa = PBXBuildFile; fileRef = 49D5E6CD18616A56002BB1F0 /* gen_ssl_cert.sh */; };
 		49DD371418D1062A002ECF93 /* BCNTitleFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DD371318D1062A002ECF93 /* BCNTitleFlowLayout.m */; };
+		49DD57E718F4E01F0084D4CC /* BCNInviteSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DD57E618F4E01F0084D4CC /* BCNInviteSearchController.m */; };
 		49E983E4186A5C4D00D37B2A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E3186A5C4D00D37B2A /* CoreLocation.framework */; };
 		49E983E6186A5C5700D37B2A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E5186A5C5700D37B2A /* QuartzCore.framework */; };
 		49E983E8186A5C6C00D37B2A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E7186A5C6C00D37B2A /* libsqlite3.dylib */; };
@@ -379,6 +380,8 @@
 		49D5E6CD18616A56002BB1F0 /* gen_ssl_cert.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = gen_ssl_cert.sh; sourceTree = "<group>"; };
 		49DD371218D1062A002ECF93 /* BCNTitleFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNTitleFlowLayout.h; sourceTree = "<group>"; };
 		49DD371318D1062A002ECF93 /* BCNTitleFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNTitleFlowLayout.m; sourceTree = "<group>"; };
+		49DD57E518F4E01F0084D4CC /* BCNInviteSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNInviteSearchController.h; sourceTree = "<group>"; };
+		49DD57E618F4E01F0084D4CC /* BCNInviteSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNInviteSearchController.m; sourceTree = "<group>"; };
 		49E983E3186A5C4D00D37B2A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		49E983E5186A5C5700D37B2A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49E983E7186A5C6C00D37B2A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -621,6 +624,8 @@
 			children = (
 				4954FB1618D4EFFF0083D07F /* BCNInviteViewController.h */,
 				4954FB1718D4EFFF0083D07F /* BCNInviteViewController.m */,
+				49DD57E518F4E01F0084D4CC /* BCNInviteSearchController.h */,
+				49DD57E618F4E01F0084D4CC /* BCNInviteSearchController.m */,
 				497F348F18DCB75D00B70FD4 /* BCNChatDelegate.h */,
 				497F349018DCB75D00B70FD4 /* BCNChatDelegate.m */,
 				49EEEA8C18D8D37300BDA605 /* BCNPhoneInputCell.h */,
@@ -1187,6 +1192,7 @@
 				49069B0618651731003D003A /* SRWebSocket.m in Sources */,
 				49D5C9AC186042C2002BB1F0 /* main.m in Sources */,
 				49069B7F18661555003D003A /* SBJson4Parser.m in Sources */,
+				49DD57E718F4E01F0084D4CC /* BCNInviteSearchController.m in Sources */,
 				49D5C9B0186042C2002BB1F0 /* BCNAppDelegate.m in Sources */,
 				49069B0518651731003D003A /* NSData+SRB64Additions.m in Sources */,
 				4989270618E2A02600AECCF8 /* BCNManageFriendCell.m in Sources */,
@@ -1366,8 +1372,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.beaconbeta.beacon";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Sweet (LVXPU6ZL2V)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Andrew Sweet (LVXPU6ZL2V)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -1381,7 +1387,7 @@
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "0C7CF202-67C9-4583-8FDB-5B0B674FF2F4";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1394,8 +1400,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.beaconbeta.beacon";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Sweet (LVXPU6ZL2V)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Andrew Sweet (LVXPU6ZL2V)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -1409,7 +1415,7 @@
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "0C7CF202-67C9-4583-8FDB-5B0B674FF2F4";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};

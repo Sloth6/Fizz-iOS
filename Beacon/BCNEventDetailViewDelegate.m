@@ -488,7 +488,8 @@ static int kBCNNumCellsBeforeMessages = 1;
         if (image != NULL){
             // Set image
             [cell.imageView setImage:image];
-            [BCNUser formatImageViewToCircular:cell.imageView withScalar:1.0];
+            [BCNUser formatImageViewToCircular:cell.imageView forRect:cell.imageView.frame];
+//            [BCNUser formatImageViewToCircular:cell.imageView withScalar:1.0];
         }
     }];
     

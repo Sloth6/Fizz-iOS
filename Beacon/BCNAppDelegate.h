@@ -40,6 +40,7 @@ static float const kBCNInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) BCNParallaxViewController *pvc;
 
 @property (strong, nonatomic) BCNNavigationBar *navigationBar;
+@property (strong, nonatomic) UITextField *searchTextField;
 
 @property BOOL hasLoggedIn;
 @property BOOL isConnecting;
@@ -56,6 +57,5 @@ static float const kBCNInviteProfilePictureHeight = 50;
 
 // Server Handlers, recieving and handing out information
 - (void)updateEvents:(NSArray *)events;
-
 
 @end

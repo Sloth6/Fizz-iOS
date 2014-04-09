@@ -11,7 +11,7 @@
 @class BCNEvent;
 @class BCNNewEventCell;
 
-@interface BCNInviteViewController : UITableViewController <UITextFieldDelegate>
+@interface BCNInviteViewController : UITableViewController <UITextFieldDelegate>//, UISearchDisplayDelegate>
 
 @property UIView *textView;
 @property UITextField *searchTextField;

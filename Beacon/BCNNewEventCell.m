@@ -52,10 +52,11 @@
 }
 
 - (void)enterInviteMode{
-    [_ivc.inviteButton setEnabled:NO];
     [_ivc.inviteButton setHidden:YES];
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.searchTextField setHidden:NO];
     
     CGRect sendInviteFrame = CGRectMake(240, 22, 70, 40);
     
@@ -70,6 +71,9 @@
     [appDelegate.esvc enterCellDetail];
     appDelegate.esvc.viewMode = kInvite;
     appDelegate.esvc.currentCell = self;
+    
+    NSArray *sections = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [_ivc.tableView deleteRowsAtIndexPaths:sections withRowAnimation:UITableViewRowAnimationTop];
     
     UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithTitle:@"Send!"
                                                                    style:UIBarButtonItemStylePlain
@@ -95,12 +99,35 @@
     
     // Enable nested scroll
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-    
     [_ivc.tableView setScrollEnabled:YES];
-    [_ivc.tableView scrollToRowAtIndexPath:indexPath
-                          atScrollPosition:UITableViewScrollPositionTop
-                                  animated:YES];
+    
+    
+    // Animate Table resize
+    float dy = appDelegate.searchTextField.frame.size.height
+             + appDelegate.searchTextField.frame.origin.y;
+    
+    CGRect tableFrame = _ivc.tableView.frame;
+    
+    tableFrame.origin.y += dy;
+	tableFrame.size.height -= dy;
+    
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+	// set views with new info
+	_ivc.tableView.frame = tableFrame;
+	
+    // commit animations
+	[UIView commitAnimations];
+    
+    if ([_ivc.tableView numberOfRowsInSection:1] > 0){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        
+        [_ivc.tableView scrollToRowAtIndexPath:indexPath
+                              atScrollPosition:UITableViewScrollPositionTop
+                                      animated:YES];
+    }
 }
 
 - (void)hideCommitInvites{
@@ -109,7 +136,7 @@
 }
 
 - (void)exitInviteMode{
-    [_ivc.inviteButton setEnabled:YES];
+    
     [_ivc.inviteButton setHidden:NO];
     [_ivc.addSeatButton setHidden:NO];
     
@@ -120,6 +147,8 @@
     
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
+    [appDelegate.searchTextField setHidden:YES];
+    
     appDelegate.esvc.viewMode = kTimeline;
     appDelegate.esvc.currentCell = NULL;
     
@@ -129,6 +158,29 @@
 //    CGRect frame = [UIScreen mainScreen].bounds;
 //    
 //    [_ivc.tableView setFrame:frame];
+    
+    
+    // Animate Table resize
+    float dy = appDelegate.searchTextField.frame.size.height
+             + appDelegate.searchTextField.frame.origin.y;
+    
+    CGRect tableFrame = _ivc.tableView.frame;
+    
+    tableFrame.origin.y -= dy;
+	tableFrame.size.height += dy;
+    
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+	// set views with new info
+	_ivc.tableView.frame = tableFrame;
+	
+    // commit animations
+	[UIView commitAnimations];
+    
+    NSArray *sections = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [_ivc.tableView insertRowsAtIndexPaths:sections withRowAnimation:UITableViewRowAnimationTop];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
@@ -159,7 +211,6 @@
 - (void)enterChatMode{
     BCNAppDelegate *appDelegate = (BCNAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
     [_ivc.addSeatButton setHidden:NO];
     
@@ -197,7 +248,6 @@
 }
 
 - (void)exitChatMode{
-    [_ivc.inviteButton setEnabled:YES];
     [_ivc.inviteButton setHidden:NO];
     [_ivc.addSeatButton setHidden:NO];
     

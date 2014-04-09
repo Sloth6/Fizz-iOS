@@ -73,6 +73,10 @@ static NSString *BCN_REQUEST = @"request";
 }
 
 -(id)initWithEID:(NSNumber *)eID{
+    if (!eID){
+        return NULL;
+    }
+    
     self = [super init];
     
     if (self){
@@ -129,6 +133,8 @@ static NSString *BCN_REQUEST = @"request";
 }
 
 +(BCNEvent *)eventWithEID:(NSNumber *)eID{
+    if (!eID) return NULL;
+    
     BCNEvent *event = [events objectForKey:eID];
     
     if (event == NULL){

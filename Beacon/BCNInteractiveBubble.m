@@ -96,7 +96,10 @@ static const int kVelocityThreshhold = 18;
 
 -(void)setIsEmpty:(BOOL)isEmpty{
     _isEmpty = isEmpty;
-    [self setNeedsDisplay];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setNeedsDisplay];
+    });
 }
 
 -(void)setImageView:(UIImageView *)imageView{

@@ -306,13 +306,16 @@ static float INVITE_SIZE;
     
     int limit = numAttendingSlots - extra;
     
-    for (int j = 0; j < [_seatBubbles count]; ++j){
-        BCNInteractiveBubble *bubble = [_seatBubbles objectAtIndex:j];
-        [bubble removeFromSuperview];
+    @synchronized(_seatBubbles){
+        for (int j = 0; j < [_seatBubbles count]; ++j){
+            BCNInteractiveBubble *bubble = [_seatBubbles objectAtIndex:j];
+            [bubble removeFromSuperview];
+        }
     }
     
-    [_seatBubbles removeAllObjects];
+    NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:limit];
     
+    // Filled Seats
     for (int i = 0; i < numAttendees; ++i){
         if (i < limit){
             
@@ -337,21 +340,24 @@ static float INVITE_SIZE;
                 
 //                NSLog(@"\n\nuser(3): %@\n\n", user);
                 
-                BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
-                
-                bubble.user = user;
-                
-                [bubble setCenter:point];
-                
-                [bubble setImageView:imageView];
-                [bubble setIsEmpty:NO];
-                
-                [bubble setCenter:point];
-                [self.bubbleView addSubview:bubble];
-                
+//                dispatch_async(dispatch_get_main_queue(), ^{
+                    BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
+                    
+                    bubble.user = user;
+                    
+                    [bubble setCenter:point];
+                    
+                    [bubble setImageView:imageView];
+                    [bubble setIsEmpty:NO];
+                    
+                    [bubble setCenter:point];
+                    [self.bubbleView addSubview:bubble];
+                    
+                    [temp addObject:bubble];
+//                });
                 
 //             TODO XXX CRASHES HERE
-                [_seatBubbles addObject:bubble];
+                
             }];
         } else {
             //            BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
@@ -360,6 +366,10 @@ static float INVITE_SIZE;
             //
             //            [bubble setCenter:point];
         }
+    }
+    
+    @synchronized(_seatBubbles){
+        [_seatBubbles setArray:temp];
     }
     
     int numSlotsTaken = numAttendees - numExtra + extra;
@@ -376,6 +386,9 @@ static float INVITE_SIZE;
     
     limit = numSeatSlots - extra;
     
+    [temp removeAllObjects];
+    
+    // Empty Seats
     for (int i = 0; i < numSeats; ++i){
         if (i < limit){
             
@@ -395,7 +408,8 @@ static float INVITE_SIZE;
             [self.bubbleView addSubview:bubble];
             
             [bubble setIsEmpty:YES];
-            [_seatBubbles addObject:bubble];
+            [temp addObject:bubble];
+            
         } else {
             //            BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
             //
@@ -404,6 +418,8 @@ static float INVITE_SIZE;
             //            [bubble setCenter:point];
         }
     }
+    
+    [_seatBubbles addObjectsFromArray:temp];
     
     
     if (extra > 0){ // Fill a bubble with "+4" to show for more friends or whatever
@@ -441,12 +457,14 @@ static float INVITE_SIZE;
     
     int limit = numInviteSlots - extra;
     
-    for (int j = 0; j < [_inviteBubbles count]; ++j){
-        BCNInteractiveBubble *bubble = [_inviteBubbles objectAtIndex:j];
-        [bubble removeFromSuperview];
+    @synchronized(_inviteBubbles){
+        [_inviteBubbles enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            BCNInteractiveBubble *bubble = (BCNInteractiveBubble *)obj;
+            [bubble removeFromSuperview];
+        }];
     }
     
-    [_inviteBubbles removeAllObjects];
+    NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:limit];
     
     for (int i = 0; i < numInvites; ++i){
         if (i < limit){
@@ -472,19 +490,25 @@ static float INVITE_SIZE;
                 
 //                NSLog(@"\n\nuser(1): %@\n\n", user);
                 
-                BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
+                BCNInteractiveBubble *bubble;
                 
-                [bubble setCenter:point];
-                
-                bubble.user = user;
-                
-                [bubble setImageView:imageView];
-                [bubble setIsEmpty:NO];
-                
-                [bubble setCenter:point];
-                [self.bubbleView addSubview:bubble];
-                
-                [_inviteBubbles addObject:bubble];
+                @synchronized(bubble){
+                    bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
+                    
+                    if (bubble){
+                        [bubble setCenter:point];
+                        
+                        bubble.user = user;
+                        
+                        [bubble setImageView:imageView];
+                        [bubble setIsEmpty:NO];
+                        
+                        [bubble setCenter:point];
+                        [self.bubbleView addSubview:bubble];
+                        
+                        [temp addObject:bubble];
+                    }
+                }
             }];
         } else {
 //            BCNInteractiveBubble *bubble = [[BCNInteractiveBubble alloc] initWithFrame:frame];
@@ -493,6 +517,10 @@ static float INVITE_SIZE;
 //            
 //            [bubble setCenter:point];
         }
+    }
+    
+    @synchronized(_inviteBubbles){
+        [_inviteBubbles setArray:temp];
     }
     
     if (extra > 0){ // Fill a bubble with "+4" to show for more friends or whatever

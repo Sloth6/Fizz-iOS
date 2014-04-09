@@ -30,10 +30,27 @@
     CGRect navBarRect = CGRectMake(0, 0, screenWidth, 80);
     
     self.navigationBar = [[BCNNavigationBar alloc] initWithFrame:navBarRect];
+    [self addSearchBar];
+}
+
+- (void)addSearchBar{
+    float x = 60;
+    float y = 12;
+    float screenWidth = [UIScreen mainScreen].bounds.size.width;
+    
+    CGRect frame = CGRectMake(x, y, screenWidth - (2 * x) - 14, 60);
+    
+    _searchTextField = [[UITextField alloc] initWithFrame:frame];
+    
+    [_searchTextField setFont:[UIFont fontWithName:@"HelveticaNeue" size:18.0]];
+//    [_searchTextField setSearchBarStyle:UISearchBarStyleMinimal];
+    [_searchTextField setPlaceholder:@"Search"];
+    
+    [_searchTextField setHidden:YES];
 }
 
 - (void)setupNavigationController{
-
+    
 //    _esvc.automaticallyAdjustsScrollViewInsets = NO;
     
     UINavigationController *navigationController = [[UINavigationController alloc]
@@ -43,6 +60,7 @@
     
 //    navigationController.automaticallyAdjustsScrollViewInsets = NO;
     self.window.rootViewController = navigationController;
+    self.window.backgroundColor = [UIColor whiteColor];
     
     _bvc = [[BCNBubbleViewController alloc] init];
     _esvc.bvc = _bvc;
@@ -56,6 +74,7 @@
 //    [self.window addSubview:_pvc.tableView];
     
     [self.window addSubview:self.navigationBar];
+    [self.window addSubview:_searchTextField];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -194,7 +213,113 @@
      self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[BCNLoginViewController alloc] initWithNibName:@"BCNLoginViewController" bundle:Nil]];
      */
     
+    NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+    
+    //Accept push notification when app is not open
+    if (remoteNotif) {
+        [self application:application didReceiveRemoteNotification:remoteNotif];
+        return YES;
+    }
+    
     return YES;
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    // app was already in the foreground
+    if ( application.applicationState == UIApplicationStateActive)
+    {
+//        NSDictionary *apsInfo = [userInfo objectForKey:@"aps"];
+//        
+//        NSString *alertMsg = @"";
+//        NSString *badge = @"";
+//        NSString *sound = @"";
+//        NSString *custom = @"";
+//        
+//        if( [apsInfo objectForKey:@"alert"] != NULL)
+//        {
+//            alertMsg = [apsInfo objectForKey:@"alert"];
+//        }
+//        
+//        
+//        if( [apsInfo objectForKey:@"badge"] != NULL)
+//        {
+//            badge = [apsInfo objectForKey:@"badge"];
+//        }
+//        
+//        
+//        if( [apsInfo objectForKey:@"sound"] != NULL)
+//        {
+//            sound = [apsInfo objectForKey:@"sound"];
+//        }
+//        
+//        if( [userInfo objectForKey:@"Type"] != NULL)
+//        {
+//            custom = [userInfo objectForKey:@"Type"];
+//        }
+//        
+//        // Set your appending text.
+//        NSString *textToAdd = [NSString stringWithFormat:@":%@", alertMsg];
+//        
+//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//        NSString *documentsDirectory = [paths objectAtIndex:0];
+//        NSString *fileName = [NSString stringWithFormat:@"%@/AccountNotifications.txt", documentsDirectory];
+//        NSString *fileContents = [[NSString alloc]  initWithContentsOfFile:fileName usedEncoding:nil error:nil];
+//        
+//        NSString *textToFile;
+//        
+//        if (fileContents == NULL)
+//        {
+//            textToFile = alertMsg;
+//        }
+//        
+//        // Here you append new text to the existing one
+//        if (fileContents != NULL)
+//        {
+//            textToFile = [fileContents stringByAppendingString:textToAdd];
+//        }
+//        
+//        // Here you save the updated text to that file
+//        paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//        documentsDirectory = [paths objectAtIndex:0];
+//        fileName = [NSString stringWithFormat:@"%@/AccountNotifications.txt", documentsDirectory];
+//        NSString *content = textToFile;
+//        [content writeToFile:fileName atomically:NO encoding:NSStringEncodingConversionAllowLossy error:nil];
+//        
+//        NSArray *fileData = [textToFile componentsSeparatedByString:@":"];
+//        
+//        NSMutableArray *tableDataFromFile;
+//        tableDataFromFile = [[NSMutableArray alloc] init];
+//        
+//        int i = 0;
+//        
+//        for (i = 1; i < [fileData count]; i++)
+//        {
+//            [tableDataFromFile addObject:fileData[i]];
+//        }
+//        
+//        NotificationViewController *vc = [[NotificationViewController alloc] initWithNibName:@"NotificationViewController" bundle:nil];
+//        vc.tableData = tableDataFromFile;
+//        
+//        UIViewController *root = self.mainNavController.topViewController;
+//        NSArray *vcs = [NSArray arrayWithObjects:root, vc, nil];
+//        [self.mainNavController setViewControllers:vcs animated:YES];
+    }
+    // app was just brought from background to foreground
+    else
+    {
+        //NSDictionary *apsInfo = [userInfo objectForKey:@"aps"];
+        
+        NSNumber *eid = [userInfo objectForKey:@"eid"];
+        
+        NSLog(@"Loading From Push To Event: %@", eid);
+        
+        if (eid){
+            BCNEvent *event = [BCNEvent eventWithEID:eid];
+            
+            [_esvc loadToEvent:event];
+        }
+    }
 }
 
 - (void)promptForNewFacebookToken{
@@ -245,6 +370,7 @@
 }
 
 - (void)reclaimBubbleView{
+    [(UIView *)_bvc.bubbleView removeFromSuperview];
     [self.window addSubview:(UIView *)_bvc.bubbleView];
 }
 
