@@ -591,16 +591,18 @@ static NSString *kBCNPlaceholderText = @"What do you want to do?";
     if ([_navIcon isEditingText]){
         if (_activeTextView){
             [_activeTextView resignFirstResponder];
+            
+            // If you're resigning the New Event TextView, you should be able to scroll
+            if(_activeTextView == (UITextView *)_eventTextView){
+                [self.collectionView setScrollEnabled:YES];
+            }
         } else if (_activeTextField){
             [_activeTextField resignFirstResponder];
-//        } else if (_activeSearchBar){
-//            [_activeSearchBar resignFirstResponder];
         } else {
             [[_chatDelegate chatBox] resignFirstResponder];
         }
         
         [_navIcon setIsEditingText:NO];
-        [self.collectionView setScrollEnabled:YES];
     } else switch (_viewMode) {
         case kFriendManagement:
         {

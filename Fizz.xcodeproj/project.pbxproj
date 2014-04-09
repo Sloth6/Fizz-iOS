@@ -1382,7 +1382,7 @@
 				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Beacon/Fizz-Info.plist";
-				LIBRARY_SEARCH_PATHS = "/Users/Andrew/Beacon\\ App/Beacon/TestFlightSDK3.0.0";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/TestFlightSDK3.0.0";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
@@ -1410,7 +1410,7 @@
 				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Beacon/Fizz-Info.plist";
-				LIBRARY_SEARCH_PATHS = "/Users/Andrew/Beacon\\ App/Beacon/TestFlightSDK3.0.0";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/TestFlightSDK3.0.0";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";

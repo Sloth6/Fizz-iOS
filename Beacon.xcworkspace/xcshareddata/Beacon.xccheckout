@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>143F1A98-6634-4A48-9D46-526553B21015</string>
+	<string>1056DA0C-F8DE-46E8-9DE0-8E934A0B35BD</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Beacon</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>4D294DE2-F14A-496E-87CE-C9FDA8066A64</key>
-		<string>https://github.com/Sloth6/FizzApp.git</string>
+		<key>B5AB8E7D-A8B2-4082-9BE4-812790F62914</key>
+		<string>https://github.com/Sloth6/FizzApp</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Beacon.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>4D294DE2-F14A-496E-87CE-C9FDA8066A64</key>
+		<key>B5AB8E7D-A8B2-4082-9BE4-812790F62914</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/Sloth6/FizzApp.git</string>
+	<string>https://github.com/Sloth6/FizzApp</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>4D294DE2-F14A-496E-87CE-C9FDA8066A64</string>
+	<string>B5AB8E7D-A8B2-4082-9BE4-812790F62914</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>4D294DE2-F14A-496E-87CE-C9FDA8066A64</string>
+			<string>B5AB8E7D-A8B2-4082-9BE4-812790F62914</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Beacon</string>
+			<string>FizzApp</string>
 		</dict>
 	</array>
 </dict>

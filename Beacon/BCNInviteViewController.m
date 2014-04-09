@@ -1111,22 +1111,15 @@ static int kBCNNumRecentInvites = 30;
         mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
         if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel]) {
             NSLog(@"iphone:");
-            priority = 5;
+            priority = 4;
         } else if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel]) {
             NSLog(@"mobile:");
-            priority = 4;
+            priority = 3;
         } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
             NSLog(@"main:");
-            priority = 3;
-        } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneHomeFAXLabel]) {
-            NSLog(@"home:");
             priority = 2;
-        } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneWorkFAXLabel]) {
-            NSLog(@"work:");
+        } else {
             priority = 1;
-        } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneOtherFAXLabel]) {
-            NSLog(@"other:");
-            priority = 0;
         }
         
         if (priority > savedPriority){
