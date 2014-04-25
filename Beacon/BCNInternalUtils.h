@@ -1,9 +1,9 @@
 //
 //  BCNInternalUtils.h
-//  Beacon
+//  Fizz
 //
 //  Created by Andrew Sweet on 12/17/13.
-//  Copyright (c) 2013 Beacon. All rights reserved.
+//  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

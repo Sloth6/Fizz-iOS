@@ -5,9 +5,9 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>AAAA82BA-2D22-4326-BDA4-11C12DE442D0</string>
+	<string>F3FE163F-55B9-474F-B3CE-EB09C637BF0F</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Beacon</string>
+	<string>Fizz</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>114E8B33-67C0-42F9-BB9E-5811CB7F7215</key>
@@ -16,7 +16,7 @@
 		<string>https://github.com/chrismiles/CMTraerPhysics.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Beacon.xcworkspace</string>
+	<string>Fizz.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>114E8B33-67C0-42F9-BB9E-5811CB7F7215</key>
