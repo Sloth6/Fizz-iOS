@@ -767,7 +767,7 @@
 			isa = PBXGroup;
 			children = (
 				4960803618EFE03700CF72DB /* TestFlightSDK3.0.0 */,
-				49D5C9A5186042C2002BB1F0 /* Beacon */,
+				49D5C9A5186042C2002BB1F0 /* Fizz */,
 				49D5C9BE186042C2002BB1F0 /* BeaconTests */,
 				49D5C99E186042C2002BB1F0 /* Frameworks */,
 				49D5C99D186042C2002BB1F0 /* Products */,
@@ -810,7 +810,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		49D5C9A5186042C2002BB1F0 /* Beacon */ = {
+		49D5C9A5186042C2002BB1F0 /* Fizz */ = {
 			isa = PBXGroup;
 			children = (
 				49D5C9F018605960002BB1F0 /* Utils */,
@@ -826,7 +826,7 @@
 				49D5C9B1186042C2002BB1F0 /* Images.xcassets */,
 				49D5C9A6186042C2002BB1F0 /* Supporting Files */,
 			);
-			path = Beacon;
+			path = Fizz;
 			sourceTree = "<group>";
 		};
 		49D5C9A6186042C2002BB1F0 /* Supporting Files */ = {
@@ -1373,9 +1373,9 @@
 					"$(SRCROOT)/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "Beacon/Fizz-Info.plist";
+				INFOPLIST_FILE = "Fizz/Fizz-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/TestFlightSDK3.0.0";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
@@ -1401,9 +1401,9 @@
 					"$(SRCROOT)/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "Beacon/Fizz-Info.plist";
+				INFOPLIST_FILE = "Fizz/Fizz-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/TestFlightSDK3.0.0";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
@@ -1418,14 +1418,14 @@
 		49D5C9CC186042C2002BB1F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Beacon.app/Beacon";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Fizz.app/Fizz";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1440,14 +1440,14 @@
 		49D5C9CD186042C2002BB1F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Beacon.app/Beacon";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Fizz.app/Fizz";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Beacon/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
 				INFOPLIST_FILE = "BeaconTests/FizzTests-Info.plist";
 				PRODUCT_NAME = FizzTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
