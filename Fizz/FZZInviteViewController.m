@@ -963,7 +963,7 @@ static int kFZZNumRecentInvites = 30;
         
         FZZUser *me = [FZZUser me];
         
-        if ([_event isAttending:me]){ // If I'm attending
+        if ([_event isGuest:me]){ // If I'm attending
             [_addSeatButton setHidden:NO];
             [_inviteButton setHidden:NO];
             

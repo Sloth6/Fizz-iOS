@@ -32,30 +32,53 @@ static NSString *FZZ_INCOMING_REMOVE_GUEST = @"removeGuest";
 static NSString *FZZ_INCOMING_NEW_INVITE_LIST = @"newInviteList";
 static NSString *FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
 static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
+static NSString *FZZ_INCOMING_PRESENT_AT_EVENT_LIST_UPDATES = @"presentAtEventListUpdates";
+
+static BOOL hasMadeDelegate = NO;
+static FZZSocketIODelegate *delegate;
+
+static SocketIO *socketIO;
+
+static NSDictionary *incomingEventResponses;
+
+static int reconnectDelay;
+static BOOL connected;
+static BOOL resignedActive;
+static BOOL didAjax;
+static NSURLConnection *connection;
+static NSMutableData *data;
 
 @interface FZZSocketIODelegate ()
 
-@property NSDictionary *incomingEventResponses;
+//@property (strong, nonatomic) SocketIO *socketIO;
 
-@property int reconnectDelay;
-@property BOOL connected;
-@property BOOL resignedActive;
-//@property (strong, nonatomic) NSString *beaconSessionToken;
-@property BOOL didAjax;
-@property (strong, nonatomic) NSURLConnection *connection;
-@property (strong, nonatomic) NSMutableData *data;
+//@property NSDictionary *incomingEventResponses;
+
+//@property int reconnectDelay;
+//@property BOOL connected;
+//@property BOOL resignedActive;
+////@property (strong, nonatomic) NSString *fizzSessionToken;
+//@property BOOL didAjax;
+//@property (strong, nonatomic) NSURLConnection *connection;
+//@property (strong, nonatomic) NSMutableData *data;
 
 @end
 
 @implementation FZZSocketIODelegate
 
-@synthesize socketIO, reconnectDelay, connected, incomingEventResponses,
-            didAjax, connection, data, resignedActive;
+//@synthesize socketIO, reconnectDelay, connected, incomingEventResponses,
+//            didAjax, connection, data, resignedActive;
 
 -(id) init{
+    if (hasMadeDelegate){
+        return NULL;
+    }
+    
     self = [super init];
     
     if (self){
+        hasMadeDelegate = YES;
+        delegate = self;
         reconnectDelay = kFZZDefaultReconnectDelay;
         socketIO = [[SocketIO alloc] initWithDelegate:self];
         connected = NO;
@@ -88,25 +111,28 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingSetSeatCapacity:))
                                   forKey:FZZ_INCOMING_SET_SEAT_CAPACITY];
         
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingPresentAtEventListUpdates:))
+                                  forKey:FZZ_INCOMING_PRESENT_AT_EVENT_LIST_UPDATES];
+        
     }
     
     return self;
 }
 
 /* Check for a network connection. Attempt to connect to network with increasing time intervals. */
-- (void) openConnectionCheckingForInternet{
++ (void) openConnectionCheckingForInternet{
     FZZ_Reachability *reachability = [FZZ_Reachability reachabilityForInternetConnection];
     
     if ([reachability isReachable]){
         NSLog(@"isReachable");
         
-        [self openConnection];
+        [delegate openConnection];
     } else {
         NSLog(@"is NOT reachable");
         
-        [self performSelector:@selector(openConnectionCheckingForInternet) withObject:nil afterDelay:reconnectDelay];
+        [delegate performSelector:@selector(openConnectionCheckingForInternet) withObject:nil afterDelay:reconnectDelay];
         
-        [self updateReconnectDelay];
+        [delegate updateReconnectDelay];
     }
 }
 
@@ -181,7 +207,7 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
         
         connection = [[NSURLConnection alloc]
                       initWithRequest:request
-                      delegate:self
+                      delegate:delegate
                       startImmediately:NO];
         
         /*[connection scheduleInRunLoop:[NSRunLoop mainRunLoop]
@@ -196,30 +222,34 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     return NO;
 }
 
-- (void)logout{
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    
-    NSString *url = [NSString stringWithFormat:@"http://%@:%d/logout", kFZZSocketHost, kFZZSocketPort];
-    
-    [request setHTTPMethod:@"GET"];
-    [request setURL:[NSURL URLWithString:url]];
-    
-    NSError *error = [[NSError alloc] init];
-    NSHTTPURLResponse *responseCode = nil;
-    
-    NSData *oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&responseCode error:&error];
-    
-    if([responseCode statusCode] != 200){
-        NSLog(@"Error getting %@, HTTP status code %i", url, [responseCode statusCode]);
-        return;
-    }
-    
-    didAjax = NO;
-    NSLog(@"Logged out");
-    
-    
-    NSLog(@"%@",[[NSString alloc] initWithData:oResponseData encoding:NSUTF8StringEncoding]);
++ (SocketIO *)socketIO{
+    return socketIO;
 }
+
+//+ (void)logout{
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    
+//    NSString *url = [NSString stringWithFormat:@"http://%@:%d/logout", kFZZSocketHost, kFZZSocketPort];
+//    
+//    [request setHTTPMethod:@"GET"];
+//    [request setURL:[NSURL URLWithString:url]];
+//    
+//    NSError *error = [[NSError alloc] init];
+//    NSHTTPURLResponse *responseCode = nil;
+//    
+//    NSData *oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&responseCode error:&error];
+//    
+//    if([responseCode statusCode] != 200){
+//        NSLog(@"Error getting %@, HTTP status code %i", url, [responseCode statusCode]);
+//        return;
+//    }
+//    
+//    didAjax = NO;
+//    NSLog(@"Logged out");
+//    
+//    
+//    NSLog(@"%@",[[NSString alloc] initWithData:oResponseData encoding:NSUTF8StringEncoding]);
+//}
 
 - (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten
 {
@@ -242,13 +272,13 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    [self.data setLength:0];
+    [data setLength:0];
     NSHTTPURLResponse *resp= (NSHTTPURLResponse *) response;
     NSLog(@"got response with status @push %d",[resp statusCode]);
     
     if ([resp statusCode] == 200){
         didAjax = YES;
-        [self openConnectionCheckingForInternet];
+        [FZZSocketIODelegate openConnectionCheckingForInternet];
     } else {
         // AJAX failed
         
@@ -260,14 +290,14 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)d
 {
-    [self.data appendData:d];
+    [data appendData:d];
     
     NSLog(@"recieved data @push %@", data);
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSString *responseText = [[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding];
+    NSString *responseText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     NSLog(@"didfinishLoading%@",responseText);
     
@@ -303,7 +333,7 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     if (didAjax){
         [socketIO connectToHost:kFZZSocketHost onPort:kFZZSocketPort];
     } else {
-        if (![self ajaxPostRequest]){
+        if (![delegate ajaxPostRequest]){
             // Get the fb token and post an AJAX Request Again
         }
     }
@@ -323,7 +353,7 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     connected = NO;
     NSLog(@"\n[socketIO] Connection Disconnected\n");
     if (!resignedActive){ NSLog(@"\n[socketIO] Attempting to Reconnect\n");
-        [self performSelector:@selector(reconnect) withObject:nil afterDelay:reconnectDelay];
+        [delegate performSelector:@selector(reconnect) withObject:nil afterDelay:reconnectDelay];
     }
 }
 
@@ -338,18 +368,18 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
 
 - (void) reconnect{
     [socketIO disconnect];
-    [self openConnectionCheckingForInternet];
+    [FZZSocketIODelegate openConnectionCheckingForInternet];
     NSLog(@"OPENCONN 2");
 }
 
-- (void) willResignActive{
++ (void) willResignActive{
     resignedActive = YES;
     
     if (connected){
         [socketIO disconnect];
         connected = NO;
     } else {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [NSObject cancelPreviousPerformRequestsWithTarget:delegate];
         reconnectDelay = kFZZDefaultReconnectDelay;
     }
 }
@@ -380,7 +410,7 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
         SEL function = NSSelectorFromString(functionName);
         
         SuppressPerformSelectorLeakWarning(
-            [self performSelectorInBackground:function withObject:args];
+            [delegate performSelectorInBackground:function withObject:args];
         );
     }
 }
@@ -505,6 +535,25 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     [appDelegate.esvc updateEvent:event];
 }
 
+- (void)incomingPresentAtEventListUpdates:(NSArray *)args{
+    NSDictionary *json  = [args objectAtIndex:0];
+    
+    // Event ID
+    NSNumber *eventID = [json objectForKey:@"eid"];
+    
+    // List of Users who have just arrived at the event
+    NSArray *arrivingList = [json objectForKey:@"arrivingList"];
+    
+    // List of Users who have just left from the event
+    NSArray *leavingList = [json objectForKey:@"leavingList"];
+    
+    // Event
+    FZZEvent *event = [FZZEvent eventWithEID:eventID];
+    
+    [event updateAddAtEvent:arrivingList];
+    [event updateRemoveAtEvent:leavingList];
+}
+
 - (void)incomingRemoveGuest:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
     
@@ -563,7 +612,7 @@ static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
     NSLog(@"\n[socketIO] Error: %@\n", error);
 }
 
-- (BOOL) isConnectionOpen{
++ (BOOL) isConnectionOpen{
     return connected;
 }
 

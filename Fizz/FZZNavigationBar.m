@@ -17,7 +17,6 @@
 @property CGPoint startTouchPosition2;
 
 
-
 @end
 
 @implementation FZZNavigationBar

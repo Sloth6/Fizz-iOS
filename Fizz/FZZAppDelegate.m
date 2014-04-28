@@ -22,7 +22,7 @@
 
 @implementation FZZAppDelegate
 
-@synthesize ioSocketDelegate, fbLoginDelegate;
+@synthesize fbLoginDelegate;
 
 - (void)setupNavigationBar{
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -105,13 +105,13 @@
     // Load the FBLoginView Class
     [FBLoginView class];
     
-    ioSocketDelegate = [[FZZSocketIODelegate alloc] init];
+    // Call this to initialize the sockIODelegate class
+    [[FZZSocketIODelegate alloc] init];
+    
     fbLoginDelegate = [[FZZFacebookLoginDelegate alloc] init];
     
     facebookColor = [UIColor colorWithRed:59.0/256.0 green:89.0/256.0 blue:152.0/256.0 alpha:1.0];
     fizzColor = [UIColor colorWithRed:128.0/256.0 green:128.0/256.0 blue:128.0/256.0 alpha:1.0];
-    
-    [FZZObject setIOSocketDelegate:ioSocketDelegate];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
@@ -140,7 +140,7 @@
         FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
         NSLog(@"\n\nActive Session Loaded\n\n");
         
-        [ioSocketDelegate openConnectionCheckingForInternet];
+        [FZZSocketIODelegate openConnectionCheckingForInternet];
         [self setupNavigationController];
 //         // If there's one, just open the session silently, without showing the user the login UI
 //         [FBSession openActiveSessionWithReadPermissions:@[@"user_friends",
@@ -377,7 +377,7 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    [ioSocketDelegate willResignActive];
+    [FZZSocketIODelegate willResignActive];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -397,10 +397,10 @@
     
     _gotAddressBook = NO;
     
-    if ((![ioSocketDelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
+    if ((![FZZSocketIODelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
 //    if ((![ioSocketDelegate isConnectionOpen]) && !_hasLoggedIn){
         NSLog(@"Connection is not open");
-        [ioSocketDelegate openConnectionCheckingForInternet];
+        [FZZSocketIODelegate openConnectionCheckingForInternet];
     }
     
 //        [[FBSession activeSession] handleDidBecomeActive];

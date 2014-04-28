@@ -364,7 +364,8 @@ static const int kVelocityThreshhold = 18;
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         FZZEvent *event = appDelegate.bvc.event;
         
-        if (([event isAttending:[FZZUser me]]) &&
+        // If I'm attending the event, I can throw people out
+        if (([event isGuest:[FZZUser me]]) &&
             (delta > kVelocityThreshhold ||
             velocity > kVelocityThreshhold)){
             
@@ -410,7 +411,7 @@ static const int kVelocityThreshhold = 18;
                                      FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
                                      FZZEvent *event = appDelegate.bvc.event;
                                      
-                                     if ([event isAttending:_user]){ // Clicked on seated self
+                                     if ([event isGuest:_user]){ // Clicked on seated self
                                          // Leave the event
                                          
                                          dispatch_async(dispatch_get_main_queue(), ^{
@@ -432,7 +433,7 @@ static const int kVelocityThreshhold = 18;
                                  FZZEvent *event = appDelegate.bvc.event;
                                  FZZUser *me = [FZZUser me];
                                  
-                                 if ([event isInvited:me] && (![event isAttending:me]) &&
+                                 if ([event isInvited:me] && (![event isGuest:me]) &&
                                       (_user == NULL || _user == me)){
                                      // Join the Event
                                      

@@ -29,7 +29,7 @@
     NSNumber *didRegister = [pref objectForKey:@"registered"];
     
     if (didRegister){
-        [appDelegate.ioSocketDelegate openConnectionCheckingForInternet];
+        [FZZSocketIODelegate openConnectionCheckingForInternet];
         
         [appDelegate setupNavigationController];
     } else {

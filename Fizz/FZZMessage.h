@@ -8,6 +8,7 @@
 
 @class FZZEvent;
 @class FZZUser;
+@class FZZCoordinate;
 
 #import "SocketIO.h"
 
@@ -16,6 +17,7 @@
 -(FZZEvent *)event;
 -(FZZUser *)user;
 -(NSString *)text;
+-(FZZCoordinate *)marker;
 -(NSDate *)timestamp;
 -(NSNumber *)messageID;
 

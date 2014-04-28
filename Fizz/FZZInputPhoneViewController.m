@@ -68,7 +68,7 @@
     [pref setObject:phoneNumber forKey:@"phoneNumber"];
     [pref synchronize];
     
-    [appDelegate.ioSocketDelegate openConnectionCheckingForInternet];
+    [FZZSocketIODelegate openConnectionCheckingForInternet];
     
     [self finishPhoneSetup];
 }

@@ -277,29 +277,29 @@ static float INVITE_SIZE;
     int extra = 0;
     int numExtra = 0;
     
-    NSArray *attendees;
+    NSArray *guests;
     
     if (_event == NULL){
-        attendees = [[NSArray alloc] init];
+        guests = [[NSArray alloc] init];
     } else{
-        attendees = [_event attendees];
+        guests = [_event guests];
     }
     
     NSArray *seatPoints = [self getPointsForSeatsAtIndex:index];
     
-    int numAttendingSlots = [seatPoints count] / 2;
+    int numGuestSlots = [seatPoints count] / 2;
     
-    int numAttendees = [attendees count];
+    int numGuests = [guests count];
     
-    if (numAttendingSlots < numAttendees){
+    if (numGuestSlots < numGuests){
         extra = 1;
-        numExtra = numAttendees - numAttendingSlots;
+        numExtra = numGuests - numGuestSlots;
     }
     
     float diameter = SEAT_SIZE;
     float radius = diameter / 2.0;
     
-    int limit = numAttendingSlots - extra;
+    int limit = numGuestSlots - extra;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         @synchronized(_seatBubbles){
@@ -313,10 +313,10 @@ static float INVITE_SIZE;
     NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:limit];
     
     // Filled Seats
-    for (int i = 0; i < numAttendees; ++i){
+    for (int i = 0; i < numGuests; ++i){
         if (i < limit){
             
-            FZZUser *user = [attendees objectAtIndex:i];
+            FZZUser *user = [guests objectAtIndex:i];
             CGPoint point = [(NSValue *)[seatPoints objectAtIndex:i] CGPointValue];
             
             [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
@@ -369,10 +369,10 @@ static float INVITE_SIZE;
         [_seatBubbles setArray:temp];
     }
     
-    int numSlotsTaken = numAttendees - numExtra + extra;
+    int numSlotsTaken = numGuests - numExtra + extra;
     
     int numSeatSlots = [seatPoints count] - numSlotsTaken;
-    int numSeats = [_event pendingNumEmptySeats];
+    int numSeats = [[_event pendingNumEmptySeats] integerValue];
     
     extra = 0;
     
@@ -440,7 +440,7 @@ static float INVITE_SIZE;
     if (_event == NULL){
         invitees = [[NSArray alloc] init];
     } else{
-        invitees = [_event notYetAttending];
+        invitees = [_event notYetGuests];
     }
 
     NSArray *invitePoints = [self getPointsForInvitesAtIndex:index];

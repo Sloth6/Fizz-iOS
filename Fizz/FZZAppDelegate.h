@@ -31,7 +31,6 @@ static float const kFZZInviteProfilePictureHeight = 50;
 @interface FZZAppDelegate : UIResponder <UIApplicationDelegate, SocketIODelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) FZZSocketIODelegate *ioSocketDelegate;
 @property (strong, nonatomic) FBSession *session;
 @property (strong, nonatomic) FZZFacebookLoginDelegate *fbLoginDelegate;
 @property (strong, nonatomic) FZZEventStreamViewController *esvc;

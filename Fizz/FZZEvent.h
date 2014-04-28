@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
-#import "FZZObject.h"
 #import <CoreLocation/CoreLocation.h>
+#import "FZZSocketIODelegate.h"
 
 @class FZZUser;
 @class FZZMessage;
@@ -20,7 +20,7 @@
                     InviteContactList:(NSArray *)contactList
                      AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIORequestEventWithAcknowledge:(SocketIOCallback)function;
--(void)socketIOSetSeatCapacityToCapacity:(int)capacity
+-(void)socketIOSetSeatCapacityToCapacity:(NSNumber *)capacity
                          WithAcknowledge:(SocketIOCallback)function;
 +(void)socketIONewEventWithMessage:(NSString *)message
                         InviteOnly:(BOOL)isInviteOnly
@@ -31,23 +31,25 @@
 -(FZZUser *)creator;
 -(NSArray *)messages;
 
-// Attendees is a subset of invitees ALWAYS. People who join a non-secret event are "invited"
--(NSArray *)attendees;
+// Guests is a subset of invitees ALWAYS. People who join a non-secret event are "invited"
+-(NSArray *)guests;
 -(NSArray *)invitees;
-// invites - attendees
--(NSArray *)notYetAttending;
+// invitees who aren't guests
+-(NSArray *)notYetGuests;
 
 //-(NSArray *)engaged;
 -(BOOL)isInviteOnly;
 -(FZZMessage *)firstMessage;
 
 -(BOOL)isInvited:(FZZUser *)user;
--(BOOL)isAttending:(FZZUser *)user;
+-(BOOL)isGuest:(FZZUser *)user;
+-(BOOL)isAtEvent:(FZZUser *)user;
 
--(int)pendingNumSeats;
--(int)numSeats;
--(int)pendingNumEmptySeats;
--(int)numEmptySeats;
+-(BOOL)hasSeats;
+-(NSNumber *)pendingNumSeats;
+-(NSNumber *)numSeats;
+-(NSNumber *)pendingNumEmptySeats;
+-(NSNumber *)numEmptySeats;
 -(void)addSeat;
 -(BOOL)removeSeat;
 
@@ -61,6 +63,9 @@
 -(void)updateNumberOfSeats:(NSNumber *)numSeats;
 -(void)updateAddMessage:(FZZMessage *)message;
 -(void)updateAddGuest:(FZZUser *)guest;
+
+-(void)updateAddAtEvent:(NSArray *)arrivingList;
+-(void)updateRemoveAtEvent:(NSArray *)leavingList;
 
 -(BOOL)haveSeatsChangedSinceLastCheck;
 

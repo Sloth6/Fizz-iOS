@@ -8,7 +8,6 @@
 
 #import "FZZUser.h"
 #import "FZZAppDelegate.h"
-#import "FZZObject.h"
 
 static NSMutableDictionary *users;
 static int kFZZProfilePictureDimension = 50;
@@ -29,7 +28,6 @@ static FZZUser *me;
 @property (nonatomic) NSNumber *userID;
 @property (nonatomic) NSNumber *facebookID;
 @property (strong, nonatomic) NSString *phoneNumber;
-@property (strong, nonatomic) NSString *userType;
 @property (strong, nonatomic) UIImage *image;
 @property (nonatomic) BOOL hasFetched;
 @property (strong, nonatomic) FZZCoordinate *coords;
@@ -48,7 +46,7 @@ static FZZUser *me;
 
 static FZZUser *currentUser = nil;
 
-@synthesize facebookID, image, name, phoneNumber, userType;
+@synthesize facebookID, image, name, phoneNumber;
 
 +(void)setupUserClass{
     if (!users){
@@ -164,6 +162,10 @@ static FZZUser *currentUser = nil;
 
 -(BOOL)hasNoImage{
     return (!_hasFetched || image == NULL);
+}
+
+-(BOOL)isAppUser{
+    return (facebookID != NULL);
 }
 
 +(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
@@ -330,10 +332,6 @@ static FZZUser *currentUser = nil;
     return [NSString stringWithFormat:@"%@%@", firstInitial, lastInitial];
 }
 
--(NSString *)userType{
-    return userType;
-}
-
 -(NSString *)phoneNumber{
     if ([phoneNumber isEqualToString:@""]){
         return NULL;
@@ -424,7 +422,7 @@ static FZZUser *currentUser = nil;
     // if you'll call the callback asynchronously,
     // even with garbage collection!
     
-    if ([userType isEqualToString:@"Phone"]){
+    if (![self isAppUser]){ // SMS User
         _completionHandler = [handler copy];
         if (_completionHandler != NULL){
             
@@ -493,11 +491,17 @@ static FZZUser *currentUser = nil;
 
     NSNumber *uid = [userJSON objectForKey:@"uid"];
     
-    // User Type ("Member", "Guest", "Phone", "Incomplete")
-    NSString *userType = [userJSON objectForKey:@"type"];
+    // App User Object (NULL if not full user)
+    NSDictionary *appUserDetails = [userJSON objectForKey:@"appUserDetails"];
     
+    NSNumber *fbid;
+    
+    if (appUserDetails){
     // Facebook ID number
-    NSNumber *fbid = [userJSON objectForKey:@"fbid"];
+        fbid = [appUserDetails objectForKey:@"fbid"];
+    } else {
+        fbid = NULL;
+    }
     
     // Phone Number
     NSString *phoneNumber = [userJSON objectForKey:@"pn"];
@@ -514,7 +518,6 @@ static FZZUser *currentUser = nil;
     /* Update user info */
     FZZUser *user = [FZZUser userWithUID:uid];
     user.facebookID = fbid;
-    user.userType = userType;
     user.phoneNumber = phoneNumber;
     user.name = name;
     
@@ -584,10 +587,13 @@ static FZZUser *currentUser = nil;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
     [dict setObject:_userID forKey:@"uid"];
-    [dict setObject:userType forKey:@"type"];
-    [dict setObject:facebookID forKey:@"fbid"];
     [dict setObject:phoneNumber forKey:@"pn"];
     [dict setObject:name forKey:@"name"];
+    
+    NSMutableDictionary *appUserDetails = [[NSMutableDictionary alloc] init];
+    [appUserDetails setObject:facebookID forKey:@"fbid"];
+    
+    [dict setObject:appUserDetails forKey:@"appUserDetails"];
     
     return dict;
 }
@@ -616,9 +622,7 @@ static FZZUser *currentUser = nil;
     
     [json setObject:dict forKey:@"userLocation"];
     
-    FZZSocketIODelegate *socketIODelegate = [FZZObject getIOSocketDelegate];
-    
-    [[socketIODelegate socketIO] sendEvent:FZZ_NEW_USER_LOCATION withData:json andAcknowledge:function];
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_USER_LOCATION withData:json andAcknowledge:function];
 }
 
 +(void)socketIOAddFriendsUserArray:(NSArray *)friendList
@@ -631,9 +635,7 @@ static FZZUser *currentUser = nil;
     /* Array of UIDs */
     [json setObject:uids forKey:@"friendList"];
     
-    FZZSocketIODelegate *socketIODelegate = [FZZObject getIOSocketDelegate];
-    
-    [[socketIODelegate socketIO] sendEvent:FZZ_ADD_FRIEND_LIST withData:json andAcknowledge:function];
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_ADD_FRIEND_LIST withData:json andAcknowledge:function];
 }
 
 +(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
@@ -646,9 +648,7 @@ static FZZUser *currentUser = nil;
     /* Array of UIDs */
     [json setObject:uids forKey:@"friendList"];
     
-    FZZSocketIODelegate *socketIODelegate = [FZZObject getIOSocketDelegate];
-    
-    [[socketIODelegate socketIO] sendEvent:FZZ_REMOVE_FRIEND_LIST withData:json andAcknowledge:function];
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_REMOVE_FRIEND_LIST withData:json andAcknowledge:function];
 }
 
 @end

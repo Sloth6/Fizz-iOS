@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
+// Currently unused class
+
 #import "BCNInternalUtils.h"
 #import "SBJson4Parser.h"
 #import "SBJson4Writer.h"

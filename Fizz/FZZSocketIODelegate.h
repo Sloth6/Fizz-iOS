@@ -20,11 +20,10 @@ static int const kFZZMaximumReconnectDelay = 300; // 5 minutes
 
 @interface FZZSocketIODelegate : NSObject <SocketIODelegate, NSURLConnectionDelegate>
 
-@property (strong, nonatomic) SocketIO *socketIO;
-
-- (void) openConnectionCheckingForInternet;
-- (void) willResignActive;
-- (void) logout;
-- (BOOL) isConnectionOpen;
++ (void) openConnectionCheckingForInternet;
++ (void) willResignActive;
+//+ (void) logout;
++ (BOOL) isConnectionOpen;
++ (SocketIO *)socketIO;
 
 @end
