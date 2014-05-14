@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "FZZEventStreamViewController.h"
 
+/*
+ 
+ This CollectionViewController is the one present when you've collapsed the events into the overview mode.
+ 
+ [TODO (5/13/14)] Animation between the two (expanded/contracted) should be handled by pushing between the two CollectionViewControllers via Apple's iOS 7.0 approach of switching between flowlayouts.
+ 
+ */
+
 @interface FZZOverviewCollectionViewController : UICollectionViewController //<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
 
 @property (strong, nonatomic) FZZEventStreamViewController *esvc;

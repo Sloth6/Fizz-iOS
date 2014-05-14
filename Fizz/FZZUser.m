@@ -13,7 +13,6 @@ static NSMutableDictionary *users;
 static int kFZZProfilePictureDimension = 50;
 
 static NSMutableArray *friends;
-static NSMutableArray *blackList;
 
 static NSString *FZZ_NEW_USER_LOCATION = @"newUserLocation";
 static NSString *FZZ_ADD_FRIEND_LIST = @"addFriendList";
@@ -25,15 +24,18 @@ static FZZUser *me;
     void (^_completionHandler)(UIImage *image);
 }
 
-@property (nonatomic) NSNumber *userID;
-@property (nonatomic) NSNumber *facebookID;
-@property (strong, nonatomic) NSString *phoneNumber;
-@property (strong, nonatomic) UIImage *image;
-@property (nonatomic) BOOL hasFetched;
-@property (strong, nonatomic) FZZCoordinate *coords;
+@property (retain, nonatomic) NSNumber *userID;
+@property (retain, nonatomic) NSString *phoneNumber;
+@property (retain, nonatomic) NSString *name;
 
-@property (nonatomic)  NSString *name;
-@property (strong, nonatomic) NSString *hasApp;
+@property (retain, nonatomic) NSNumber *facebookID;
+
+@property (retain, nonatomic) NSData *imageData;
+@property (strong, nonatomic) UIImage *image;
+
+@property (nonatomic) BOOL hasFetched;
+@property (retain, nonatomic) FZZCoordinate *coords;
+
 @property (strong, nonatomic) NSString *accessToken;
 
 @property BOOL isFetchingData;
@@ -46,7 +48,7 @@ static FZZUser *me;
 
 static FZZUser *currentUser = nil;
 
-@synthesize facebookID, image, name, phoneNumber;
+@synthesize facebookID, image, phoneNumber, coords;
 
 +(void)setupUserClass{
     if (!users){
@@ -60,10 +62,6 @@ static FZZUser *currentUser = nil;
 
 +(NSArray *)getFriends{
     return friends;
-}
-
-+(NSArray *)getBlackList{
-    return blackList;
 }
 
 -(void)dealloc {
@@ -90,14 +88,16 @@ static FZZUser *currentUser = nil;
 //}
 
 -(id)initPrivateWithUserID:(NSNumber *)uID{
-    self = [super init];
+//    self = [super init];
+
+    self = (FZZUser *)[FZZDataStore insertNewObjectForEntityForName:@"FZZUser"];
     
     if (self){
-        _userID = uID;
+        self.userID = uID;
         
-        _hasFetched = NO;
-        _chid = 0;
-        _isFetchingData = NO;
+        self.hasFetched = NO;
+        self.chid = 0;
+        self.isFetchingData = NO;
         
         [users setObject:self forKey:uID];
     }
@@ -161,7 +161,7 @@ static FZZUser *currentUser = nil;
 }
 
 -(BOOL)hasNoImage{
-    return (!_hasFetched || image == NULL);
+    return (!self.hasFetched || image == NULL);
 }
 
 -(BOOL)isAppUser{
@@ -301,11 +301,24 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSString *)name{
-    return name;
+    return self.name;
+}
+
+-(void)setName:(NSString *)name{
+    [self setInitials:nil];
+    self.name = name;
+}
+
+- (void)setInitials:(NSString *)initials{
+    self.initials = initials;
 }
 
 -(NSString *)initials{
-    NSArray *terms = [name componentsSeparatedByString:@" "];
+    if (self.initials){
+        return self.initials;
+    }
+    
+    NSArray *terms = [self.name componentsSeparatedByString:@" "];
     
     NSString *firstName;
     NSString *lastName;
@@ -329,7 +342,9 @@ static FZZUser *currentUser = nil;
         lastInitial = [lastName substringToIndex:1];
     }
     
-    return [NSString stringWithFormat:@"%@%@", firstInitial, lastInitial];
+    [self setInitials:[NSString stringWithFormat:@"%@%@", firstInitial, lastInitial]];
+    
+    return self.initials;
 }
 
 -(NSString *)phoneNumber{
@@ -341,7 +356,7 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSNumber *)userID{
-    return _userID;
+    return self.userID;
 }
 
 -(void)setCurrentUser:(FZZUser *)user{
@@ -438,12 +453,12 @@ static FZZUser *currentUser = nil;
     
     if (image == NULL){
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (_isFetchingData){
+            if (self.isFetchingData){
                 
-                [_completionHandlers addObject:[handler copy]];
+                [self.completionHandlers addObject:[handler copy]];
                 
             } else {
-                _isFetchingData = true;
+                self.isFetchingData = true;
                 _completionHandler = [handler copy];
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -454,15 +469,15 @@ static FZZUser *currentUser = nil;
                         if (_completionHandler != nil){
                             _completionHandler(image);
                             
-                            for (int i = 0; i < [_completionHandlers count]; ++i){
-                                _completionHandler = [_completionHandlers objectAtIndex:i];
+                            for (int i = 0; i < [self.completionHandlers count]; ++i){
+                                _completionHandler = [self.completionHandlers objectAtIndex:i];
                                 _completionHandler(image);
                             }
                         }
                         
                         // Clean up.
                         _completionHandler = nil;
-                        _isFetchingData = false;
+                        self.isFetchingData = false;
                     });
                 });
             }
@@ -573,22 +588,12 @@ static FZZUser *currentUser = nil;
     return result;
 }
 
-+(NSArray *)parseUserJSONBlackList:(NSArray *)blackListJSON{
-    NSMutableArray *result = [FZZUser parseUserJSONList:blackListJSON];
-    
-    if (result){
-        blackList = result;
-    }
-    
-    return result;
-}
-
 -(NSDictionary *)toJson{
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
-    [dict setObject:_userID forKey:@"uid"];
+    [dict setObject:self.userID forKey:@"uid"];
     [dict setObject:phoneNumber forKey:@"pn"];
-    [dict setObject:name forKey:@"name"];
+    [dict setObject:[self name] forKey:@"name"];
     
     NSMutableDictionary *appUserDetails = [[NSMutableDictionary alloc] init];
     [appUserDetails setObject:facebookID forKey:@"fbid"];

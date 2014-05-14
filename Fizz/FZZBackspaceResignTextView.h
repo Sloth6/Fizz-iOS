@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+/*
+ 
+ This is a custom textView (ie multiline textField) which allows hitting backspace on an empty textView to act as a dismissal tool for the keyboard. It's pretty non-standard as far as Apple standards go, and was designed because we didn't have a specific UI element for dismissing the keyboard. Most keyboards are now dismissed by the navigation button turning into an X. Useful class if neccessary.
+ 
+ */
+
 @class FZZEventStreamViewController;
 
 @interface FZZBackspaceResignTextView : UIView

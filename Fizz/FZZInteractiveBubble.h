@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "FZZBubbleViewController.h"
 
+/* 
+ 
+ These are the floating faces. They can be toggleable as interactive, they can act as a button, and can be thrown off screen given the logic allows the given user to within the FZZBubbleViewController.
+ 
+ */
+
 @class FZZUser;
 
 @interface FZZInteractiveBubble : UIView

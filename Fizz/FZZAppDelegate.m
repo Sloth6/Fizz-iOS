@@ -14,7 +14,6 @@
 #import "FZZEventStreamViewController.h"
 #import "FZZInviteViewController.h"
 #import "FZZBubbleViewController.h"
-#import "FZZParallaxViewController.h"
 
 #import "FZZNavigationBar.h"
 
@@ -65,13 +64,7 @@
     _bvc = [[FZZBubbleViewController alloc] init];
     _esvc.bvc = _bvc;
     
-    _pvc = [[FZZParallaxViewController alloc] init];
-    _esvc.pvc = _pvc;
-    
     [self.window addSubview:(UIView *)_bvc.bubbleView];
-    
-    // Add the parallax text view on top of this
-//    [self.window addSubview:_pvc.tableView];
     
     [self.window addSubview:self.navigationBar];
     [self.window addSubview:_searchTextField];
@@ -105,8 +98,8 @@
     // Load the FBLoginView Class
     [FBLoginView class];
     
-    // Call this to initialize the sockIODelegate class
-    [[FZZSocketIODelegate alloc] init];
+    // Call this to initialize the socketIODelegate class
+    [FZZSocketIODelegate initialize];
     
     fbLoginDelegate = [[FZZFacebookLoginDelegate alloc] init];
     
@@ -384,6 +377,10 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    [[FZZCoordinate alloc] initWithLongitude:1 andLatitude:2];
+    
+    [FZZDataStore synchronize];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

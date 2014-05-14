@@ -40,22 +40,6 @@
     return self;
 }
 
-//- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-//    return NULL;
-//}
-//
-//- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-//    return 0;
-//}
-//
-//-(void)setupCollectionViewForEvent:(FZZEvent *)event{
-//    FZZCellFlowLayout *flowLayout = [[FZZCellFlowLayout alloc] init];
-//    
-//    _collectionView = [[UICollectionView alloc] initWithFrame:self.frame
-//                                         collectionViewLayout:flowLayout];
-//    
-//}
-
 -(void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     [_label setFrame:frame];

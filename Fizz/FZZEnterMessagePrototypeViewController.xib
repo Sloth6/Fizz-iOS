@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4504" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3734.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FZZEnterMessagePrototypeViewController">
+            <connections>
+                <outlet property="placeholderTV" destination="xnG-PF-Fcf" id="ere-kv-cUq"/>
+                <outlet property="textView" destination="zlB-dt-XLm" id="tMY-Lp-bkz"/>
+                <outlet property="view" destination="Ys1-oT-xqY" id="Je1-XP-Ko1"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="Ys1-oT-xqY" customClass="BCNTextInputView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Enter a message" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xnG-PF-Fcf">
+                    <rect key="frame" x="6" y="7" width="308" height="559"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zlB-dt-XLm">
+                    <rect key="frame" x="6" y="7" width="308" height="559"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="xnG-PF-Fcf" firstAttribute="leading" secondItem="Ys1-oT-xqY" secondAttribute="leading" constant="6" id="G0v-Co-FWx"/>
+                <constraint firstItem="zlB-dt-XLm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Ys1-oT-xqY" secondAttribute="top" constant="7" id="GZ9-cn-Iou"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="zlB-dt-XLm" secondAttribute="bottom" constant="2" id="HaP-IT-ejU"/>
+                <constraint firstItem="xnG-PF-Fcf" firstAttribute="top" secondItem="Ys1-oT-xqY" secondAttribute="top" constant="7" id="JAD-Jd-E8u"/>
+                <constraint firstAttribute="trailing" secondItem="xnG-PF-Fcf" secondAttribute="trailing" constant="6" id="JMz-wl-31Y"/>
+                <constraint firstAttribute="trailing" secondItem="zlB-dt-XLm" secondAttribute="trailing" constant="6" id="Miw-bA-fHp"/>
+                <constraint firstItem="zlB-dt-XLm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ys1-oT-xqY" secondAttribute="leading" constant="6" id="NrG-bT-hW2"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zlB-dt-XLm" secondAttribute="trailing" constant="6" id="h7M-uD-T0L"/>
+                <constraint firstItem="zlB-dt-XLm" firstAttribute="top" secondItem="Ys1-oT-xqY" secondAttribute="top" constant="7" id="n4q-J8-p5z"/>
+                <constraint firstAttribute="bottom" secondItem="zlB-dt-XLm" secondAttribute="bottom" constant="2" id="oZK-uc-ied"/>
+                <constraint firstAttribute="bottom" secondItem="xnG-PF-Fcf" secondAttribute="bottom" constant="2" id="pyM-Tg-RdI"/>
+                <constraint firstItem="zlB-dt-XLm" firstAttribute="leading" secondItem="Ys1-oT-xqY" secondAttribute="leading" constant="6" id="ulK-aZ-vUq"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+</document>

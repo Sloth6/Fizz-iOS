@@ -8,37 +8,46 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import "FZZSocketIODelegate.h"
+#import "FZZDataStore.h"
+
+/*
+ 
+ FZZEvents work extremely similarly to FZZUsers. Refer to their documentation for more details.
+ 
+ */
 
 @class FZZUser;
 @class FZZMessage;
 
-@interface FZZEvent : NSObject
+@interface FZZEvent : NSManagedObject
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOInviteWithInviteList:(NSArray *)inviteList
-                    InviteContactList:(NSArray *)contactList
+                  InviteContactList:(NSArray *)contactList
                      AndAcknowledge:(SocketIOCallback)function;
+-(void)socketIOSuggestInviteWithInviteList:(NSArray *)inviteList
+                         InviteContactList:(NSArray *)contactList
+                            AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIORequestEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOSetSeatCapacityToCapacity:(NSNumber *)capacity
                          WithAcknowledge:(SocketIOCallback)function;
 +(void)socketIONewEventWithMessage:(NSString *)message
-                        InviteOnly:(BOOL)isInviteOnly
+                          AndSeats:(int)numSeats
                     AndAcknowledge:(SocketIOCallback)function;
 
 -(NSNumber *)eventID;
 
 -(FZZUser *)creator;
--(NSArray *)messages;
+-(NSMutableArray *)messages;
 
 // Guests is a subset of invitees ALWAYS. People who join a non-secret event are "invited"
--(NSArray *)guests;
--(NSArray *)invitees;
+-(NSMutableArray *)guests;
+-(NSMutableArray *)invitees;
 // invitees who aren't guests
 -(NSArray *)notYetGuests;
 
 //-(NSArray *)engaged;
--(BOOL)isInviteOnly;
 -(FZZMessage *)firstMessage;
 
 -(BOOL)isInvited:(FZZUser *)user;
@@ -58,11 +67,17 @@
 -(BOOL)joinEvent;
 -(BOOL)leaveEvent;
 
--(void)updateInvites:(NSArray *)invites;
--(void)updateRemoveGuest:(FZZUser *)guest;
+// Updates called from the server updates
+-(void)updateAtEvent:(NSArray *)attendees;
+-(void)updateGuests:(NSArray *)guests;
+-(void)updateAddInvitees:(NSArray *)invitees;
+
+-(void)updateToAttendees:(NSArray *)toAttendees;
+-(void)updateToGuests:(NSArray *)toGuests;
+-(void)updateToInvitees:(NSArray *)toInvitees;
+
 -(void)updateNumberOfSeats:(NSNumber *)numSeats;
 -(void)updateAddMessage:(FZZMessage *)message;
--(void)updateAddGuest:(FZZUser *)guest;
 
 -(void)updateAddAtEvent:(NSArray *)arrivingList;
 -(void)updateRemoveAtEvent:(NSArray *)leavingList;

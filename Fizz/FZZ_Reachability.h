@@ -103,6 +103,13 @@
  A multiple convenience test methods have been added.
  */
 
+
+/*
+ 
+ This class is used to check if you are able to reach the internet
+ 
+ */
+
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 

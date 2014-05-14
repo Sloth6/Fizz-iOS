@@ -8,16 +8,13 @@
 
 #import "FZZEventStreamViewController.h"
 #import "FZZEventCell.h"
-#import "FZZNewEventCell.h"
+#import "FZZExpandedEventCell.h"
 #import "FZZEvent.h"
 #import "FZZUser.h"
 #import "FZZMessage.h"
 #import "FZZAppDelegate.h"
 
-#import "FZZNavButton.h"
-
-#import "FZZTitleFlowLayout.h"
-#import "FZZParallaxViewController.h"
+#import "FZZNavIcon.h"
 
 #import "FZZChatDelegate.h"
 #import "FZZOverviewCollectionViewController.h"
@@ -31,7 +28,7 @@
 
 #import "FZZInteractiveBubble.h"
 
-#import "FZZTestViewController.h"
+#import "FZZEnterMessagePrototypeViewController.h"
 
 static int kFZZNumCellsBeforeEvents = 1; // Add New Event
 static NSString *kFZZPlaceholderText = @"What do you want to do?";
@@ -51,7 +48,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 @property float lineHeight;
 
 @property UICollectionView *textCV;
-@property UIButton *burgerButton;
 @property UIButton *friendsButton;
 
 @property BOOL firstAppear;
@@ -71,51 +67,51 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         _firstAppear = YES;
         _currentCell = NULL;
         
-        // Burger Button
-        
-        float burgerX = 14.5;
-        float burgerY = 24.5;
-        
-        CGRect buttonFrame = CGRectMake(0, 0, 45 + burgerX, 45 + burgerY);
-        CGRect iconFrame = CGRectMake(burgerX, burgerY, 21, 21);
-        
-        _burgerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_burgerButton setFrame:buttonFrame];
-        
-        _navIcon = [[FZZNavButton alloc] initWithFrame:iconFrame];
-        
-        [_navIcon setState:kCollapsed];
-        
-        [_burgerButton addSubview:_navIcon];
-        
-        [_burgerButton addTarget:self action:@selector(burgerButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-        
-        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-        
-        [appDelegate.navigationBar addSubview:_burgerButton];
-        
-        
-        // Friends Button
-        
-        float xOffset = buttonFrame.origin.x;
-        float width = buttonFrame.size.width;
-        float y = buttonFrame.origin.y;
-        float x = [UIScreen mainScreen].bounds.size.width - (width + xOffset);
-        
-        CGRect button2Frame = CGRectMake(x, y, width, width);
-        
-        _friendsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_friendsButton setFrame:button2Frame];
-        
-        [_friendsButton setBackgroundColor:[UIColor blueColor]];
-        [_friendsButton setHidden:YES];
-        
-        [_friendsButton addTarget:self action:@selector(friendsButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [appDelegate.navigationBar addSubview:_friendsButton];
+//        // Burger Button
+//        
+//        float burgerX = 14.5;
+//        float burgerY = 24.5;
+//        
+//        CGRect buttonFrame = CGRectMake(0, 0, 45 + burgerX, 45 + burgerY);
+//        CGRect iconFrame = CGRectMake(burgerX, burgerY, 21, 21);
+//        
+//        _burgerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [_burgerButton setFrame:buttonFrame];
+//        
+//        _navIcon = [[FZZNavIcon alloc] initWithFrame:iconFrame];
+//        
+//        [_navIcon setState:kCollapsed];
+//        
+//        [_burgerButton addSubview:_navIcon];
+//        
+//        [_burgerButton addTarget:self action:@selector(navButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+//        
+//        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//        
+//        [appDelegate.navigationBar addSubview:_burgerButton];
         
         
-//        [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(burgerButtonPress:)];
+//        // Friends Button
+//        
+//        float xOffset = buttonFrame.origin.x;
+//        float width = buttonFrame.size.width;
+//        float y = buttonFrame.origin.y;
+//        float x = [UIScreen mainScreen].bounds.size.width - (width + xOffset);
+//        
+//        CGRect button2Frame = CGRectMake(x, y, width, width);
+//        
+//        _friendsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [_friendsButton setFrame:button2Frame];
+//        
+//        [_friendsButton setBackgroundColor:[UIColor blueColor]];
+//        [_friendsButton setHidden:YES];
+//        
+//        [_friendsButton addTarget:self action:@selector(friendsButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+//        
+//        [appDelegate.navigationBar addSubview:_friendsButton];
+        
+        
+//        [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(navButtonPress:)];
         
         //self.collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:];
         
@@ -146,10 +142,10 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
         
         // For the new event
-        [self.collectionView registerClass:[FZZNewEventCell class] forCellWithReuseIdentifier:@"NewEventCell"];
+        [self.collectionView registerClass:[FZZExpandedEventCell class] forCellWithReuseIdentifier:@"ExpandedEventCell"];
         
         // For all other events
-        [self.collectionView registerClass:[FZZNewEventCell class] forCellWithReuseIdentifier:@"NewEventCell2"];
+        [self.collectionView registerClass:[FZZExpandedEventCell class] forCellWithReuseIdentifier:@"ExpandedEventCell2"];
         
         //        self.textCV = [[UICollectionView alloc]
         //                       initWithFrame:self.view.frame
@@ -165,7 +161,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         //
         //        appDelegate.window.RootViewController = navController;
         
-        //FZZTitleFlowLayout *titleFlowLayout = [[FZZTitleFlowLayout alloc] init];
         CGSize itemSize = CGSizeMake(100, 70);
         //CGSizeMake([UIScreen mainScreen].bounds.size.width, 30);
         
@@ -277,7 +272,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     return 2;
 }
 
-- (FZZNewEventCell *)setupNewEventCell:(FZZNewEventCell *)cell{
+- (FZZExpandedEventCell *)setupExpandedEventCell:(FZZExpandedEventCell *)cell{
     
     cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     
@@ -310,7 +305,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     return cell;
 }
 
-- (FZZNewEventCell *)setupEventCell:(FZZNewEventCell *)cell withEvent:(FZZEvent *)event{
+- (FZZExpandedEventCell *)setupEventCell:(FZZExpandedEventCell *)cell withEvent:(FZZEvent *)event{
     
     //[cell setEvent:event];
     
@@ -343,13 +338,13 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 - (UICollectionViewCell *)timelineCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0){
-        NSString *cellID = @"NewEventCell";
+        NSString *cellID = @"ExpandedEventCell";
         
-        FZZNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+        FZZExpandedEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
         
-        [cell setupNewEventCell];
-        cell = [self setupNewEventCell:cell];
+        [cell setupExpandedEventCell];
+        cell = [self setupExpandedEventCell:cell];
         
         [cell.resignTextViewer setUserInteractionEnabled:YES];
         cell.ivc.canBeSelected = NO;
@@ -360,9 +355,9 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     } else {
         int eventNum = indexPath.item;
         
-        NSString *cellID = @"NewEventCell2";
+        NSString *cellID = @"ExpandedEventCell2";
         
-        FZZNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+        FZZExpandedEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
         FZZEvent *event = [_events objectAtIndex:eventNum];
         
@@ -528,19 +523,24 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 -(void)setViewMode:(ViewMode)viewMode{
     
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    FZZNavIcon *navIcon = [appDelegate.navigationBar navIcon];
+    
     _viewMode = viewMode;
     
     switch (viewMode) {
         case kTimeline:
         {
             [_friendsButton setHidden:YES];
-            [_navIcon setState:kCollapsed];
+            [navIcon setState:kCollapsed];
         }
             break;
             
         case kOverview:
         {
-            [_navIcon setState:kExpanded];
+            [navIcon setState:kExpanded];
         }
             break;
             
@@ -552,7 +552,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
             
         default:
         {
-            [_navIcon setState:kCancel];
+            [navIcon setState:kCancel];
         }
             break;
     }
@@ -562,13 +562,18 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     [button setEnabled:NO];
     [button setHidden:YES];
     
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    UIButton *navButton = [appDelegate.navigationBar navButton];
+    
     // Temporarily disable the back button
-    [_burgerButton setEnabled:NO];
+    [navButton setEnabled:NO];
     
 //    double delayInSeconds = 0.3;
 //    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
 //    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//        [_burgerButton setEnabled:YES];
+//        [navButton setEnabled:YES];
 //    });
     
     
@@ -578,19 +583,25 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     // presentViewController
     
     [self.navigationController presentViewController:_mfvc animated:YES completion:^{
-        [_burgerButton setEnabled:YES];
+        [navButton setEnabled:YES];
     }];
     
 //    [self.navigationController pushViewController:<#(UIViewController *)#> animated:YES];
 }
 
 
-- (void)burgerButtonPress:(UIButton*)button{
+- (void)navButtonPress:(UIButton*)button{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    FZZNavIcon *navIcon = [appDelegate.navigationBar navIcon];
+    UIButton *navButton = [appDelegate.navigationBar navButton];
+    
     [button setEnabled:NO];
     
     BOOL shouldStartButtonTimer = YES;
     
-    if ([_navIcon isEditingText]){
+    if ([navIcon isEditingText]){
         if (_activeTextView){
             [_activeTextView resignFirstResponder];
             
@@ -604,7 +615,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
             [[_chatDelegate chatBox] resignFirstResponder];
         }
         
-        [_navIcon setIsEditingText:NO];
+        [navIcon setIsEditingText:NO];
     } else switch (_viewMode) {
         case kFriendManagement:
         {
@@ -613,7 +624,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
             [self setViewMode:kOverview];
             
             [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                [_burgerButton setEnabled:YES];
+                [navButton setEnabled:YES];
                 [_friendsButton setHidden:NO];
                 [_friendsButton setEnabled:YES];
             }];
@@ -656,6 +667,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
             break;
     }
     
+    // Solve threading issues/spam button issues with simple delay timer
     if (shouldStartButtonTimer){
         double delayInSeconds = 0.3;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
@@ -753,7 +765,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:section];
         
-        FZZNewEventCell *cell = (FZZNewEventCell *)[self.collectionView cellForItemAtIndexPath:path];
+        FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:path];
         
         [cell.ivc.tableView reloadData];
 //        [cell.ivc.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
@@ -764,12 +776,17 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     BOOL delay = NO;
     BOOL doSomething = NO;
     
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    UIButton *navButton = [appDelegate.navigationBar navButton];
+    
     switch (_viewMode) {
         case kFriendManagement: // Press the button twice
         {
             [UIView setAnimationsEnabled:NO];
-            [self burgerButtonPress:_burgerButton];
-            [self burgerButtonPress:_burgerButton];
+            [self navButtonPress:navButton];
+            [self navButtonPress:navButton];
             [UIView setAnimationsEnabled:YES];
             
             delay = YES;
@@ -783,7 +800,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         case kInvite:
         {
             [UIView setAnimationsEnabled:NO];
-            [self burgerButtonPress:_burgerButton];
+            [self navButtonPress:navButton];
             [_currentCell enterChatMode];
             [UIView setAnimationsEnabled:YES];
         }
@@ -792,7 +809,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         case kOverview:
         {
             [UIView setAnimationsEnabled:NO];
-            [self burgerButtonPress:_burgerButton];
+            [self navButtonPress:navButton];
             [UIView setAnimationsEnabled:YES];
             
             delay = YES;
@@ -831,7 +848,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
                     [UIView setAnimationsEnabled:NO];
                     
                     NSLog(@"enter 2");
-                    _currentCell = (FZZNewEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                    _currentCell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
 //                    [_currentCell enterChatMode];
                     [_currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
                     [UIView setAnimationsEnabled:YES];
@@ -847,7 +864,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 [UIView setAnimationsEnabled:NO];
-                _currentCell = (FZZNewEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                _currentCell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
                 [_currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
                 
                 NSLog(@"enter 1");
@@ -863,12 +880,17 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 -(void)jumpToEvent:(FZZEvent *)event{
     BOOL delay = NO;
     
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    UIButton *navButton = [appDelegate.navigationBar navButton];
+    
     switch (_viewMode) {
         case kFriendManagement: // Press the button twice
         {
             [UIView setAnimationsEnabled:NO];
-            [self burgerButtonPress:_burgerButton];
-            [self burgerButtonPress:_burgerButton];
+            [self navButtonPress:navButton];
+            [self navButtonPress:navButton];
             [UIView setAnimationsEnabled:YES];
             
             delay = YES;
@@ -878,7 +900,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         case kChat:
         {
             [UIView setAnimationsEnabled:NO];
-            [self burgerButtonPress:_burgerButton];
+            [self navButtonPress:navButton];
             [UIView setAnimationsEnabled:YES];
         }
             break;
@@ -886,7 +908,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         case kInvite:
         {
             [UIView setAnimationsEnabled:NO];
-            [self burgerButtonPress:_burgerButton];
+            [self navButtonPress:navButton];
             [UIView setAnimationsEnabled:YES];
         }
             break;
@@ -894,7 +916,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         case kOverview:
         {
             [UIView setAnimationsEnabled:NO];
-            [self burgerButtonPress:_burgerButton];
+            [self navButtonPress:navButton];
             [UIView setAnimationsEnabled:YES];
             
             delay = YES;
@@ -943,7 +965,12 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 - (BOOL) textViewShouldBeginEditing:(UITextView *)textView
 {
-    [_navIcon setIsEditingText:YES];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    FZZNavIcon *navIcon = [appDelegate.navigationBar navIcon];
+    
+    [navIcon setIsEditingText:YES];
     
 //    if ([textView.text isEqualToString:@""]) {
     
@@ -1190,28 +1217,30 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 }
 
 
-- (UICollectionViewCell *)getNewEventCell{
+- (UICollectionViewCell *)getExpandedEventCell{
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     
     return [self.collectionView cellForItemAtIndexPath:indexPath];
 }
 
 - (void)confirmNewEventMessageWithTextView:(UITextView *)textView{
-    [_navIcon setIsEditingText:NO];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    FZZNavIcon *navIcon = [appDelegate.navigationBar navIcon];
+    
+    [navIcon setIsEditingText:NO];
     [textView setEditable:NO];
     [_toggleSecret setEnabled:NO];
-    
-    BOOL isSecret = [_toggleSecret isOn];
     
     // Submitting content
     // Scrolling is still disabled
     [FZZEvent socketIONewEventWithMessage:textView.text
-                               InviteOnly:isSecret
+                                 AndSeats:0
                            AndAcknowledge:^(id argsData) {
                                NSLog(@"Acknowledge!");
                                NSLog(@"%@", argsData);
                            }];
-    
     
     [UIView animateWithDuration:0.25 animations:^{
         [textView setTextColor:[UIColor blackColor]];
@@ -1221,7 +1250,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         //_currentIndex = [NSIndexPath indexPathForItem:0 inSection:0];
         [self.collectionView setScrollEnabled:YES];
         
-//        FZZNewEventCell *nec = (FZZNewEventCell *)[self getNewEventCell];
+//        FZZExpandedEventCell *nec = (FZZExpandedEventCell *)[self getExpandedEventCell];
 //        
 //        [nec setScrollingEnabled:YES];
     } completion:^(BOOL finished) {
@@ -1284,7 +1313,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
-        [self.pvc.tableView reloadData];
     });
     
     int numIncomingEvents = [incomingEvents count];

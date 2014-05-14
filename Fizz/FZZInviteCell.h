@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+/*
+ 
+ This TableViewCell is present in the Invite View Controller. It displays a person's name (label) and face (imageView). The NIB is used to define constraints.
+ 
+ */
+
 @interface FZZInviteCell : UITableViewCell
 
 @property IBOutlet UIImageView *imageView;

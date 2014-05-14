@@ -15,10 +15,12 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 
+#import "FZZAppDelegate.h"
+
 #import "FZZChatDelegate.h"
 #import "FZZEvent.h"
 
-#import "FZZDetailTextCell.h"
+#import "FZZUserMessageCell.h"
 #import "FZZServerMessageCell.h"
 
 #import "FZZMessage.h"
@@ -27,9 +29,9 @@
 #import "FZZEventStreamViewController.h"
 #import "FZZInviteViewController.h"
 
-#import "FZZTestViewController.h"
+#import "FZZEnterMessagePrototypeViewController.h"
 
-#import "FZZNavButton.h"
+#import "FZZNavIcon.h"
 
 static int kFZZNumCellsBeforeMessages = 1;
 
@@ -111,7 +113,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     
     CGRect viewFormRect = CGRectMake(x, y, width, height);
     
-    FZZTestViewController *tvc = [[FZZTestViewController alloc] initWithNibName:@"FZZTestViewController" bundle:nil];
+    FZZEnterMessagePrototypeViewController *tvc = [[FZZEnterMessagePrototypeViewController alloc] initWithNibName:@"FZZTestViewController" bundle:nil];
     viewForm = tvc.view;
     chatBox  = tvc.textView;
     
@@ -221,7 +223,9 @@ static int kFZZNumCellsBeforeMessages = 1;
         return;
     }
     
-    [_esvc.navIcon setIsEditingText:YES];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.navigationBar.navIcon setIsEditingText:YES];
     
     //    [UIView beginAnimations:nil context:NULL];
     //    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
@@ -454,7 +458,9 @@ static int kFZZNumCellsBeforeMessages = 1;
                           ForEvent:_event
                    WithAcknowledge:nil];
     
-    [_esvc.navIcon setIsEditingText:NO];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.navigationBar.navIcon setIsEditingText:NO];
     
 	// hide the keyboard, we are done with it.
 	[chatBox resignFirstResponder];
@@ -489,7 +495,9 @@ static int kFZZNumCellsBeforeMessages = 1;
         return;
     }
     
-    [_esvc.navIcon setIsEditingText:NO];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.navigationBar.navIcon setIsEditingText:NO];
     
     //    [UIView beginAnimations:nil context:NULL];
     //    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
@@ -698,7 +706,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     
     //NSLog(@"\ntext: <%@>\nlabelWidth: %f", text, labelWidth);
     
-    float height = [FZZDetailTextCell getTextBoxForText:text withLabelWidth:labelWidth].height;
+    float height = [FZZUserMessageCell getTextBoxForText:text withLabelWidth:labelWidth].height;
     
     // Fit the profile picture at least
     height = MAX(height, 52 + 6);
@@ -747,7 +755,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     
     NSString *cellID = @"TextCell";
     
-    FZZDetailTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID
+    FZZUserMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID
                                                               forIndexPath:indexPath];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

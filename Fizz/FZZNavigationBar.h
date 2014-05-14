@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+/*
+ 
+ This is the UIView drawn on top of all other views. It contains the navButton which is animated by the navIcon. No view should go on top of this view.
+ 
+ */
+
+@class FZZNavIcon;
+
 @interface FZZNavigationBar : UIView
+
+@property UIButton *navButton;
+@property FZZNavIcon *navIcon;
 
 @end

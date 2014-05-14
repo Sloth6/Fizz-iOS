@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+/*
+ 
+ This is the view that is drawn on top of most other views (except the FZZNavigationBar). It's managed by the FZZBubbleViewController, and contains FZZInteractiveBubble's.
+ 
+ */
+
 @interface FZZBubbleView : UIView
 
 @end

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+/*
+ 
+ This is where the user inputs his/her phone number for the first time on login. Visuals are defined in the NIB for ease.
+ 
+ */
+
 @interface FZZInputPhoneViewController : UIViewController <UITextFieldDelegate>
 
 @property IBOutlet UITextField *textField;

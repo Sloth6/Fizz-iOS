@@ -13,27 +13,31 @@
 #import "FZZEvent.h"
 #import "FZZEventStreamViewController.h"
 #import "FZZAppDelegate.h"
-#import "FZZNewEventCell.h"
+#import "FZZExpandedEventCell.h"
 #import "FZZBubbleViewController.h"
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
-#import "FZZNavButton.h"
+#import "FZZNavIcon.h"
 #import "FZZChatDelegate.h"
 #import <CoreData/CoreData.h>
-
-#import "FZZInviteSearchController.h"
 
 #import "FZZInviteGuestButton.h"
 
 #import "PhoneNumberFormatter.h"
+
+/*
+ 
+ While horribly named, this cell was repurposed from inputting a phone number to add a friend by cell phone number to just a search field for finding your desired friends among the list.
+ 
+ [TODO (5/13/14)] DO NOT DELETE JUST YET. This cell is currently unused. Due to the server not being online, I'm not sure if its because A) I'm using some other search input. B) We removed search/cell phone input functionality. If it's determined that the app in its current state supports searching for friends AND we decide that we don't want users to be able to add people to an event/to the app via phone number, then this can be deleted. Otherwise, this have a lot of useful code for adding people by phone number, or could easily be repurposed and used as a search field for friends.
+ 
+ */
 
 static NSMutableArray *instances;
 
 static int kFZZNumRecentInvites = 30;
 
 @interface FZZInviteViewController ()
-
-//@property FZZInviteSearchController *isc;
 
 @property NSArray *invitableFriends;
 @property NSArray *recentInvites;
@@ -75,17 +79,6 @@ static int kFZZNumRecentInvites = 30;
         self.tableView.separatorColor = [UIColor clearColor];
         
         _invitedContacts = [[NSMutableSet alloc] init];
-        
-//        _isc = [[FZZInviteSearchController alloc] initWithSearchBar:_searchBar
-//                                                 contentsController:self];
-        
-//        [_isc setDelegate:self];
-//        [_isc setSearchResultsDelegate:self];
-//        [_isc setSearchResultsDataSource:self];
-        
-//        _isc.delegate = self;
-//        _isc.searchResultsDataSource = self;
-//        _isc.searchResultsDelegate = self;
         
         [self setupKeyboard];
         [self setupSearchField];
@@ -544,7 +537,7 @@ static int kFZZNumRecentInvites = 30;
     
     if ([userInvites count] > 0 || [phoneInvites count] > 0){
         [_event socketIOInviteWithInviteList:userInvites
-                             InviteContactList:phoneInvites
+                           InviteContactList:phoneInvites
                               AndAcknowledge:nil];
     }
 }
@@ -753,7 +746,7 @@ static int kFZZNumRecentInvites = 30;
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [appDelegate.esvc.navIcon setIsEditingText:YES];
+    [appDelegate.navigationBar.navIcon setIsEditingText:YES];
     
     // get keyboard size and loction
 	CGRect keyboardBounds = [FZZChatDelegate getKeyboardBoundsFromNote:note];
@@ -793,7 +786,7 @@ static int kFZZNumRecentInvites = 30;
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [appDelegate.esvc.navIcon setIsEditingText:NO];
+    [appDelegate.navigationBar.navIcon setIsEditingText:NO];
     
     // get keyboard size and location
     
@@ -859,7 +852,7 @@ static int kFZZNumRecentInvites = 30;
 -(void)searchStartEdit{
 //    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height - 190);
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.esvc.navIcon setIsEditingText:YES];
+    [appDelegate.navigationBar.navIcon setIsEditingText:YES];
     [appDelegate.esvc setActiveTextField:_searchTextField];
 //    [appDelegate.esvc setActiveSearchBar:_searchBar];
     
@@ -870,7 +863,7 @@ static int kFZZNumRecentInvites = 30;
 
 -(void)searchStopEdit{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.esvc.navIcon setIsEditingText:NO];
+    [appDelegate.navigationBar.navIcon setIsEditingText:NO];
     [appDelegate.esvc setActiveTextField:NULL];
 //    self.tableView.frame = [UIScreen mainScreen].bounds;
 }

@@ -8,7 +8,7 @@
 
 #import "FZZOverviewCollectionViewController.h"
 #import "FZZEventStreamViewController.h"
-#import "FZZNavButton.h"
+#import "FZZNavIcon.h"
 
 #import "FZZEventCell.h"
 

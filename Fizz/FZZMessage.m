@@ -15,21 +15,25 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 
 @interface FZZMessage ()
 
-@property (strong, nonatomic) NSString *text;
-@property (strong, nonatomic) FZZUser  *user;
-@property (strong, nonatomic) FZZEvent *event;
 @property (strong, nonatomic) NSNumber *messageID;
+@property (strong, nonatomic) FZZEvent *event;
+@property (strong, nonatomic) FZZUser  *user;
+
+@property (strong, nonatomic) NSString *text;
 @property (strong, nonatomic) FZZCoordinate *marker;
+
 @property (strong, nonatomic) NSDate *creationTime;
 
 @end
 
 @implementation FZZMessage
 
-@synthesize user, text, event, messageID, marker;
+@synthesize user, text, event, messageID;
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndText:(NSString *)inputText ForEvent:(FZZEvent *)inputEvent{
-    self = [super init];
+//    self = [super init];
+    
+    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
     
     if (self){
         self.messageID = mID;
@@ -43,7 +47,9 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndMarker:(FZZCoordinate *)marker ForEvent:(FZZEvent *)inputEvent{
-    self = [super init];
+//    self = [super init];
+    
+    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
     
     if (self){
         self.messageID = mID;
@@ -56,6 +62,14 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     return self;
 }
 
+-(NSDate *)creationTime{
+    return self.creationTime;
+}
+
+-(void)setCreationTime:(NSDate *)creationTime{
+    self.creationTime = creationTime;
+}
+
 -(FZZUser *)user{
     return user;
 }
@@ -65,22 +79,18 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(NSString *)text{
-    if (text){
-        return [text copy];
-    } else {
-        return nil;
-    }
+    return text;
 }
 
 -(FZZCoordinate *)marker{
-    if (marker){
-        return [marker copy];
-    } else {
-        return nil;
-    }
+    return self.marker;
 }
 
-+(void)socketIONewMessage:(NSString *)message
+-(void)setMarker:(FZZCoordinate *)marker{
+    self.marker = marker;
+}
+
++(void)socketIONewMessage:(NSString *)text
                  ForEvent:(FZZEvent *)event
           WithAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
@@ -89,7 +99,7 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     [json setObject:[event eventID] forKey:@"eid"];
     
     /* message : string */
-    [json setObject:message forKey:@"text"];
+    [json setObject:text forKey:@"text"];
     
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_MESSAGE withData:json andAcknowledge:function];
 }
@@ -162,6 +172,21 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     return message;
 }
 
++(NSArray *)parseMessageJSONList:(NSArray *)messageListJSON{
+    if (messageListJSON == NULL){
+        return NULL;
+    }
+    
+    NSMutableArray *result = [[NSMutableArray alloc] initWithArray:messageListJSON];
+    
+    [messageListJSON enumerateObjectsUsingBlock:^(id messageJSON, NSUInteger index, BOOL *stop) {
+        FZZMessage *message = [FZZMessage parseJSON:messageJSON];
+        [result setObject:message atIndexedSubscript:index];
+    }];
+    
+    return result;
+}
+
 - (NSDictionary *)jsonDict{
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
@@ -193,7 +218,7 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(NSNumber *)messageID{
-    return [messageID copy];
+    return messageID;
 }
 
 @end

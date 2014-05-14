@@ -7,6 +7,8 @@
 //
 
 #import "FZZNavigationBar.h"
+#import "FZZNavIcon.h"
+#import "FZZAppDelegate.h"
 
 @interface FZZNavigationBar ()
 
@@ -15,7 +17,6 @@
 
 @property CGPoint startTouchPosition1;
 @property CGPoint startTouchPosition2;
-
 
 @end
 
@@ -30,6 +31,36 @@
         // Initialization code
     }
     return self;
+}
+
+- (void)makeButtons{
+    [self makeNavButton];
+}
+
+- (void)makeNavButton{
+    // nav Button
+    
+    float navX = 14.5;
+    float navY = 24.5;
+    
+    CGRect buttonFrame = CGRectMake(0, 0, 45 + navX, 45 + navY);
+    CGRect iconFrame = CGRectMake(navX, navY, 21, 21);
+    
+    _navButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_navButton setFrame:buttonFrame];
+    
+    _navIcon = [[FZZNavIcon alloc] initWithFrame:iconFrame];
+    
+    [_navIcon setState:kCollapsed];
+    
+    [_navButton addSubview:_navIcon];
+    
+    
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [_navButton addTarget:appDelegate.esvc action:@selector(navButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self addSubview:_navButton];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {

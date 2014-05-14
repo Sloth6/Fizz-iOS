@@ -6,6 +6,13 @@
 //  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
+
+/*
+ 
+ The FZZSocketIODelegate handles all socket connections with the Fizz servers. This is where incoming messages from the server are handled. All outgoing messages are handled within the object that corresponds with the action (ie if you send a message, the server call would be made from the FZZMessage class. Some calls are static calls from the class itself, while others are made from an instance of the object).
+ 
+ */
+
 #import <Foundation/Foundation.h>
 #import "SocketIO.h"
 #import "SocketIOPacket.h"
@@ -19,6 +26,8 @@ static int const kFZZMaximumReconnectDelay = 300; // 5 minutes
 
 
 @interface FZZSocketIODelegate : NSObject <SocketIODelegate, NSURLConnectionDelegate>
+
++ (void)initialize;
 
 + (void) openConnectionCheckingForInternet;
 + (void) willResignActive;

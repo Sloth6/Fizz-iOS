@@ -7,44 +7,63 @@
 //
 
 #import "FZZCoordinate.h"
+#import "FZZEvent.h"
+
+static NSString *FZZ_NEW_MARKER = @"newMarker";
 
 @interface FZZCoordinate ()
 
-@property (nonatomic) float longitude;
-@property (nonatomic) float latitude;
+@property (retain, nonatomic) NSNumber *longitude;
+@property (retain, nonatomic) NSNumber *latitude;
 
 @end
 
 @implementation FZZCoordinate
 
+@dynamic longitude;
+@dynamic latitude;
+
 - (id)initWithLongitude:(float)lng andLatitude:(float)lat
 {
-    self = [super init];
+//    self = [super init];
+    self = (FZZCoordinate *)[FZZDataStore insertNewObjectForEntityForName:@"FZZCoordinate"];
+    
     if (self) {
-        self.longitude = lng;
-        self.latitude = lat;
+        self.longitude = [NSNumber numberWithFloat:lng];
+        self.latitude  = [NSNumber numberWithFloat:lat];
     }
     return self;
 }
 
-- (float)longitude{
+- (NSNumber *)longitude{
     return self.longitude;
 }
 
-- (float)latitude{
+- (NSNumber *)latitude{
     return self.latitude;
 }
 
 - (NSDictionary *)jsonDict{
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
-    NSNumber *lng = [NSNumber numberWithFloat:self.longitude];
-    NSNumber *lat = [NSNumber numberWithFloat:self.latitude];
-    
-    [dict setObject:lng forKey:@"lng"];
-    [dict setObject:lat forKey:@"lat"];
+    [dict setObject:self.longitude forKey:@"lng"];
+    [dict setObject:self.latitude forKey:@"lat"];
     
     return dict;
+}
+
++(void)socketIONewMarker:(FZZCoordinate *)coord
+                ForEvent:(FZZEvent *)event
+         WithAcknowledge:(SocketIOCallback)function{
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    /* eid : int */
+    [json setObject:[event eventID] forKey:@"eid"];
+    
+    /* latlng : latlng */
+    [json setObject:coord forKey:@"latlng"];
+    
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_MARKER withData:json andAcknowledge:function];
 }
 
 + (FZZCoordinate *)parseJSON:(NSDictionary *)coordJSON{
@@ -62,6 +81,13 @@
     
     return [[FZZCoordinate alloc] initWithLongitude:longitude
                                         andLatitude:latitude];
+}
+
++ (NSArray *)fetchAll{
+    
+    NSString *className = @"FZZCoordinate";
+    
+    return [FZZDataStore fetchAllWithClassName:className];
 }
 
 @end

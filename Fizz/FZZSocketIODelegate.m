@@ -25,14 +25,13 @@ _Pragma("clang diagnostic pop") \
 } while (0)
 
 static NSString *FZZ_INCOMING_ON_LOGIN = @"onLogin";
-static NSString *FZZ_INCOMING_NEW_FRIEND = @"newFriend";
-static NSString *FZZ_INCOMING_NEW_EVENT = @"newEvent";
-static NSString *FZZ_INCOMING_ADD_GUEST = @"addGuest";
-static NSString *FZZ_INCOMING_REMOVE_GUEST = @"removeGuest";
-static NSString *FZZ_INCOMING_NEW_INVITE_LIST = @"newInviteList";
-static NSString *FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
+static NSString *FZZ_INCOMING_NEW_EVENTS = @"newEvents";
+static NSString *FZZ_INCOMING_NEW_SUGGESTED_INVITES = @"newSuggestedInvites";
+static NSString *FZZ_INCOMING_TO_ATTENDEES = @"toAttendees";
+static NSString *FZZ_INCOMING_TO_GUESTS = @"toGuests";
+static NSString *FZZ_INCOMING_TO_INVITEES = @"toInvitees";
+static NSString *FZZ_INCOMING_NEW_MESSAGES = @"newMessages";
 static NSString *FZZ_INCOMING_SET_SEAT_CAPACITY = @"setSeatCapacity";
-static NSString *FZZ_INCOMING_PRESENT_AT_EVENT_LIST_UPDATES = @"presentAtEventListUpdates";
 
 static BOOL hasMadeDelegate = NO;
 static FZZSocketIODelegate *delegate;
@@ -50,37 +49,18 @@ static NSMutableData *data;
 
 @interface FZZSocketIODelegate ()
 
-//@property (strong, nonatomic) SocketIO *socketIO;
-
-//@property NSDictionary *incomingEventResponses;
-
-//@property int reconnectDelay;
-//@property BOOL connected;
-//@property BOOL resignedActive;
-////@property (strong, nonatomic) NSString *fizzSessionToken;
-//@property BOOL didAjax;
-//@property (strong, nonatomic) NSURLConnection *connection;
-//@property (strong, nonatomic) NSMutableData *data;
-
 @end
 
 @implementation FZZSocketIODelegate
 
-//@synthesize socketIO, reconnectDelay, connected, incomingEventResponses,
-//            didAjax, connection, data, resignedActive;
-
--(id) init{
-    if (hasMadeDelegate){
-        return NULL;
-    }
-    
-    self = [super init];
-    
-    if (self){
++ (void)initialize{
+    if (self == [NSObject class]) {
+        // Once-only initializion
+        delegate = [[FZZSocketIODelegate alloc] init];
         hasMadeDelegate = YES;
-        delegate = self;
+        
         reconnectDelay = kFZZDefaultReconnectDelay;
-        socketIO = [[SocketIO alloc] initWithDelegate:self];
+        socketIO = [[SocketIO alloc] initWithDelegate:delegate];
         connected = NO;
         didAjax = NO;
         resignedActive = NO;
@@ -90,29 +70,39 @@ static NSMutableData *data;
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingOnLogin:))
                                   forKey:FZZ_INCOMING_ON_LOGIN];
         
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewFriend:))
-                                  forKey:FZZ_INCOMING_NEW_FRIEND];
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewEvents:))
+                                  forKey:FZZ_INCOMING_NEW_EVENTS];
         
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewEvent:))
-                                  forKey:FZZ_INCOMING_NEW_EVENT];
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewSuggestedInvites:))
+                                  forKey:FZZ_INCOMING_NEW_SUGGESTED_INVITES];
         
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingAddGuest:))
-                                  forKey:FZZ_INCOMING_ADD_GUEST];
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingToAttendees:))
+                                  forKey:FZZ_INCOMING_TO_ATTENDEES];
         
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingRemoveGuest:))
-                                  forKey:FZZ_INCOMING_REMOVE_GUEST];
-                                                              
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewInviteList:))
-                                  forKey:FZZ_INCOMING_NEW_INVITE_LIST];
-                                                              
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewMessage:))
-                                  forKey:FZZ_INCOMING_NEW_MESSAGE];
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingToGuests:))
+                                  forKey:FZZ_INCOMING_TO_GUESTS];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingToInvitees:))
+                                  forKey:FZZ_INCOMING_TO_INVITEES];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewMessages:))
+                                  forKey:FZZ_INCOMING_NEW_MESSAGES];
         
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingSetSeatCapacity:))
                                   forKey:FZZ_INCOMING_SET_SEAT_CAPACITY];
-        
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingPresentAtEventListUpdates:))
-                                  forKey:FZZ_INCOMING_PRESENT_AT_EVENT_LIST_UPDATES];
+    }
+    // Initialization for this class and any subclasses
+}
+
+// Generally does not allow FZZSocketIODelegate to exist outside of the class
+-(id) init{
+    if (hasMadeDelegate){
+        return NULL;
+    }
+    
+    self = [super init];
+    
+    if (self){
         
     }
     
@@ -198,7 +188,7 @@ static NSMutableData *data;
         
         NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
         
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/iosLogin", kFZZSocketHost, kFZZSocketPort]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/login", kFZZSocketHost, kFZZSocketPort]]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -423,11 +413,20 @@ static NSMutableData *data;
     
     NSDictionary *json  = [args objectAtIndex:0];
     
-    NSDictionary *userJSON = [json objectForKey:@"me"];
-    NSArray *friendListJSON = [json objectForKey:@"friendList"];
-    NSArray *blackListJSON = [json objectForKey:@"blackList"];
-    NSArray *eventListJSON = [json objectForKey:@"eventList"];
-    NSString *fbAccessToken = [json objectForKey:@"fbToken"];
+    NSDictionary *userJSON   = [json objectForKey:@"me"];
+    NSArray *friendListJSON  = [json objectForKey:@"newFriendList"];
+    NSArray *eventListJSON   = [json objectForKey:@"newEventList"];
+    NSArray *messageListJSON = [json objectForKey:@"newMessageList"];
+    NSString *fbAccessToken  = [json objectForKey:@"fbToken"];
+    NSDictionary *friendScoreMap = [json objectForKey:@"friendScoreMap"];
+    
+    // uid arrays
+    NSDictionary *attendees   = [json objectForKey:@"attendees"];
+    NSDictionary *guests      = [json objectForKey:@"guests"];
+    
+    // User array
+    NSDictionary *newInvitees = [json objectForKey:@"newInvitees"];
+    
     
     // User (me)
     
@@ -435,87 +434,132 @@ static NSMutableData *data;
     
     [FZZUser setMeAs:me];
     
-    // User Array (friends)
-    NSArray *friends = [FZZUser parseUserJSONFriendList:friendListJSON];
     
-    NSArray *blackList = [FZZUser parseUserJSONBlackList:blackListJSON];
+    // User Array (friends)
+    NSArray *newFriends = [FZZUser parseUserJSONFriendList:friendListJSON];
     
     [FZZInviteViewController updateFriends];
     
+    
     // Events
-    NSArray *events = [FZZEvent parseEventJSONList:eventListJSON];
+    NSArray *newEvents = [FZZEvent parseEventJSONList:eventListJSON];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    [appDelegate updateEvents:events];
-//    [appDelegate updateFriendsWithFriendsList:friends AndBlackList:blackList];
+    [appDelegate updateEvents:newEvents];
+    
+    
+    // Messages
+    NSArray *newMessages = [FZZMessage parseMessageJSONList:messageListJSON];
+    
     
     // Facebook Access Token
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     [pref setObject:fbAccessToken forKey:@"fbToken"];
     
+    
+    // friendScoreMap
+    
+    
+    /* Handle invitees first in order  */
+    // newInvitees
+    [guests enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        NSArray *newUsers = (NSArray *)obj;
+        
+        [event updateAddInvitees:newUsers];
+    }];
+    
+    // attendees
+    [attendees enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        NSArray *newUsers = [FZZUser parseUserJSONList:(NSArray *)obj];
+        
+        [event updateAtEvent:newUsers];
+    }];
+    
+    // guests
+    [guests enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        NSArray *newUsers = [FZZUser parseUserJSONList:(NSArray *)obj];
+        
+        [event updateGuests:newUsers];
+    }];
+    
 }
 
-- (void)incomingNewEvent:(NSArray *)args{
+- (void)incomingNewEvents:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
     
-    NSDictionary *eventJSON = [json objectForKey:@"event"];
+    NSArray *data = [json objectForKey:@"data"];
     
-    // Event
-    FZZEvent *event = [FZZEvent parseJSON:eventJSON];
-    
-    NSArray *eventArray = [[NSArray alloc] initWithObjects:event, nil];
+    NSArray *newEvents = [FZZEvent parseEventJSONList:data];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate updateEvents:eventArray];
+    [appDelegate updateEvents:newEvents];
 }
 
-- (void)incomingAddGuest:(NSArray *)args{
+- (void)incomingNewSuggestedInvites:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
     
-    NSNumber *eventID = [json objectForKey:@"eid"];
-    NSNumber *userID  = [json objectForKey:@"uid"];
+    NSArray *data = [json objectForKey:@"data"];
     
-    // Event
-    FZZEvent *event = [FZZEvent eventWithEID:eventID];
+    NSArray *newSuggested = [FZZUser parseUserJSONList:data];
     
-    // User (guest)
-    FZZUser  *user  = [FZZUser userWithUID:userID];
-    
-    [event updateAddGuest:user];
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.esvc updateEvent:event];
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-- (void)incomingNewFriend:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
+- (void)incomingToAttendees:(NSArray *)args{
+    NSDictionary *json = [args objectAtIndex:0];
     
-    NSDictionary *userJSON = [json objectForKey:@"user"];
+    NSDictionary *data = [json objectForKey:@"data"];
     
-    // User (new friend)
-    
-    FZZUser *user = [FZZUser parseJSON:userJSON];
-    [FZZUser addFriends:[NSArray arrayWithObject:user]];
+    [data enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        NSArray *toAttendees = obj;
+        
+        [event updateToAttendees:toAttendees];
+    }];
 }
-                                                              
-- (void)incomingNewInviteList:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
+
+- (void)incomingToGuests:(NSArray *)args{
+    NSDictionary *json = [args objectAtIndex:0];
     
-    // Event ID
-    NSNumber *eventID = [json objectForKey:@"eid"];
-    NSArray *inviteListJSON = [json objectForKey:@"inviteList"];
+    NSDictionary *data = [json objectForKey:@"data"];
     
-    // Friends
-    NSArray *invited = [FZZUser parseUserJSONList:inviteListJSON];
-    
-    FZZEvent *event = [FZZEvent eventWithEID:eventID];
-    
-    [event updateInvites:invited];
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.esvc updateEvent:event];
+    [data enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        NSArray *toGuests = obj;
+        
+        [event updateToGuests:toGuests];
+    }];
 }
+
+- (void)incomingToInvitees:(NSArray *)args{
+    NSDictionary *json = [args objectAtIndex:0];
+    
+    NSDictionary *data = [json objectForKey:@"data"];
+    
+    [data enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        NSArray *toInvitees = obj;
+        
+        [event updateToInvitees:toInvitees];
+    }];
+}
+
                                                               
 - (void)incomingSetSeatCapacity:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
@@ -535,56 +579,23 @@ static NSMutableData *data;
     [appDelegate.esvc updateEvent:event];
 }
 
-- (void)incomingPresentAtEventListUpdates:(NSArray *)args{
+- (void)incomingNewMessages:(NSArray *)args{
     NSDictionary *json  = [args objectAtIndex:0];
     
-    // Event ID
-    NSNumber *eventID = [json objectForKey:@"eid"];
+    NSArray *data = [json objectForKey:@"data"];
     
-    // List of Users who have just arrived at the event
-    NSArray *arrivingList = [json objectForKey:@"arrivingList"];
-    
-    // List of Users who have just left from the event
-    NSArray *leavingList = [json objectForKey:@"leavingList"];
-    
-    // Event
-    FZZEvent *event = [FZZEvent eventWithEID:eventID];
-    
-    [event updateAddAtEvent:arrivingList];
-    [event updateRemoveAtEvent:leavingList];
-}
-
-- (void)incomingRemoveGuest:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSNumber *eventID = [json objectForKey:@"eid"];
-    NSNumber *userID  = [json objectForKey:@"uid"];
-    
-    // Event
-    FZZEvent *event = [FZZEvent eventWithEID:eventID];
-    
-    // User to remove
-    FZZUser  *user  = [FZZUser userWithUID:userID];
-    
-    [event updateRemoveGuest:user];
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.esvc updateEvent:event];
-}
-
-- (void)incomingNewMessage:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSDictionary *messageJSON = [json objectForKey:@"message"];
-    
-    // New Message
-    FZZMessage *message = [FZZMessage parseJSON:messageJSON];
-    
-    [[message event] updateAddMessage:message];
+    NSArray *messages = [FZZMessage parseMessageJSONList:data];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [appDelegate.esvc addIncomingMessageForEvent:[message event]];
+    [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        FZZMessage *message = obj;
+        FZZEvent *event = [message event];
+        
+        [event updateAddMessage:message];
+        
+//        [appDelegate.esvc addIncomingMessageForEvent:event];
+    }];
 }
 
 //- (void)incomingNewUserLocationList:(NSArray *)args{

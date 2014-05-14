@@ -6,6 +6,12 @@
 
 #import <Foundation/Foundation.h>
 
+/*
+ 
+ Formats a string of numbers as a phone number based on the input country.
+ 
+ */
+
 
 
 @interface PhoneNumberFormatter : NSObject {

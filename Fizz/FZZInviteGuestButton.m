@@ -22,6 +22,7 @@ static const float kAlpha = 1.0;
     return self;
 }
 
+// Draws a plus in a circle inside the given rect, assuming rect is square
 - (void)drawRect:(CGRect)rect
 {
     // Get the current graphics context
