@@ -17,7 +17,7 @@
  
  */
 
-@class FZZEventStreamViewController;
+@class FZZEventsExpandedViewController;
 @class FZZInviteViewController;
 
 @interface FZZChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
@@ -26,7 +26,7 @@
 @property (nonatomic, retain) UITextView *chatBox;
 
 @property (strong, nonatomic) FZZEvent *event;
-@property (strong, nonatomic) FZZEventStreamViewController *esvc;
+@property (strong, nonatomic) FZZEventsExpandedViewController *esvc;
 @property (strong, nonatomic) FZZInviteViewController *ivc;
 
 // For temporary deletion of the chat portion

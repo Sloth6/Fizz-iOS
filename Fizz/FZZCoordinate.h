@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "SocketIO.h"
-#import "FZZDataStore.h"
 
 /*
  
@@ -20,8 +20,13 @@
 
 
 @class FZZEvent;
+@class FZZMessage;
 
 @interface FZZCoordinate : NSManagedObject
+
+@property (nonatomic, retain) NSNumber *latitude;
+@property (nonatomic, retain) NSNumber *longitude;
+@property (nonatomic, retain) FZZMessage *message;
 
 - (id)initWithLongitude:(float)lng andLatitude:(float)lat;
 - (NSNumber *)longitude;

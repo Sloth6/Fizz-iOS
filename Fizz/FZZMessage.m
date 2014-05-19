@@ -15,12 +15,10 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 
 @interface FZZMessage ()
 
-@property (strong, nonatomic) NSNumber *messageID;
-@property (strong, nonatomic) FZZEvent *event;
-@property (strong, nonatomic) FZZUser  *user;
+//@property (strong, nonatomic) NSNumber *messageID;
 
-@property (strong, nonatomic) NSString *text;
-@property (strong, nonatomic) FZZCoordinate *marker;
+//@property (strong, nonatomic) NSString *text;
+//@property (strong, nonatomic) FZZCoordinate *marker;
 
 @property (strong, nonatomic) NSDate *creationTime;
 
@@ -28,12 +26,19 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 
 @implementation FZZMessage
 
-@synthesize user, text, event, messageID;
+@dynamic messageID;
+@dynamic text;
+@dynamic timestamp;
+@dynamic marker;
+@dynamic event;
+@dynamic user;
+
+//@synthesize user, text, event, messageID;
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndText:(NSString *)inputText ForEvent:(FZZEvent *)inputEvent{
-//    self = [super init];
+    self = [super init];
     
-    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
+//    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
     
     if (self){
         self.messageID = mID;
@@ -47,9 +52,9 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndMarker:(FZZCoordinate *)marker ForEvent:(FZZEvent *)inputEvent{
-//    self = [super init];
+    self = [super init];
     
-    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
+//    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
     
     if (self){
         self.messageID = mID;
@@ -71,15 +76,15 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(FZZUser *)user{
-    return user;
+    return self.user;
 }
 
 -(BOOL)isServerMessage{
-    return user == NULL;
+    return self.user == NULL;
 }
 
 -(NSString *)text{
-    return text;
+    return self.text;
 }
 
 -(FZZCoordinate *)marker{
@@ -214,11 +219,11 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(FZZEvent *)event{
-    return event;
+    return self.event;
 }
 
 -(NSNumber *)messageID{
-    return messageID;
+    return self.messageID;
 }
 
 @end

@@ -7,12 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "FZZCoordinate.h"
 #import "FZZDefaultBubble.h"
 #import "SocketIO.h"
-#import "FZZDataStore.h"
 
 @interface FZZUser : NSManagedObject
+
+@property (nonatomic, retain) NSNumber * facebookID;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * phoneNumber;
+@property (nonatomic, retain) NSNumber * userID;
+@property (nonatomic, retain) FZZCoordinate *coords;
+@property (nonatomic, retain) FZZUser *creator;
 
 /*
  

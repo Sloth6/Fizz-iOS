@@ -14,13 +14,13 @@
  
  */
 
-@class FZZEventStreamViewController;
+@class FZZEventsExpandedViewController;
 
 @interface FZZBackspaceResignTextView : UIView
 
 -(UITextView *)textView;
 
--(void)setESVC:(FZZEventStreamViewController *)esvc;
+-(void)setESVC:(FZZEventsExpandedViewController *)esvc;
 -(void)setPlaceholderText:(NSString *)placeholderText;
 
 -(NSTextContainer *)textContainer;

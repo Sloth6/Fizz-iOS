@@ -13,8 +13,8 @@ static NSString *FZZ_NEW_MARKER = @"newMarker";
 
 @interface FZZCoordinate ()
 
-@property (retain, nonatomic) NSNumber *longitude;
-@property (retain, nonatomic) NSNumber *latitude;
+//@property (retain, nonatomic) NSNumber *longitude;
+//@property (retain, nonatomic) NSNumber *latitude;
 
 @end
 
@@ -22,11 +22,12 @@ static NSString *FZZ_NEW_MARKER = @"newMarker";
 
 @dynamic longitude;
 @dynamic latitude;
+@dynamic message;
 
 - (id)initWithLongitude:(float)lng andLatitude:(float)lat
 {
-//    self = [super init];
-    self = (FZZCoordinate *)[FZZDataStore insertNewObjectForEntityForName:@"FZZCoordinate"];
+    self = [super init];
+//    self = (FZZCoordinate *)[FZZDataStore insertNewObjectForEntityForName:@"FZZCoordinate"];
     
     if (self) {
         self.longitude = [NSNumber numberWithFloat:lng];
@@ -83,11 +84,11 @@ static NSString *FZZ_NEW_MARKER = @"newMarker";
                                         andLatitude:latitude];
 }
 
-+ (NSArray *)fetchAll{
-    
-    NSString *className = @"FZZCoordinate";
-    
-    return [FZZDataStore fetchAllWithClassName:className];
-}
+//+ (NSArray *)fetchAll{
+//    
+//    NSString *className = @"FZZCoordinate";
+//    
+//    return [FZZDataStore fetchAllWithClassName:className];
+//}
 
 @end

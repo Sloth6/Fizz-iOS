@@ -6,9 +6,11 @@
 //  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
-#import <CoreLocation/CoreLocation.h>
+#import <Foundation/Foundation.h>
+//#import <CoreLocation/CoreLocation.h>
+#import <CoreData/CoreData.h>
 #import "FZZSocketIODelegate.h"
-#import "FZZDataStore.h"
+
 
 /*
  
@@ -20,6 +22,14 @@
 @class FZZMessage;
 
 @interface FZZEvent : NSManagedObject
+
+@property (nonatomic, retain) NSNumber *numSeats;
+@property (nonatomic, retain) NSNumber *eventID;
+@property (nonatomic, retain) FZZUser *creator;
+@property (nonatomic, retain) NSArray *messages;
+@property (nonatomic, retain) NSArray *inviteesNotGuest;
+@property (nonatomic, retain) NSArray *guestsNotPresent;
+@property (nonatomic, retain) NSArray *presentAtEvent;
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
@@ -39,11 +49,10 @@
 -(NSNumber *)eventID;
 
 -(FZZUser *)creator;
--(NSMutableArray *)messages;
 
 // Guests is a subset of invitees ALWAYS. People who join a non-secret event are "invited"
--(NSMutableArray *)guests;
--(NSMutableArray *)invitees;
+//-(NSMutableArray *)guests;
+//-(NSMutableArray *)invitees;
 // invitees who aren't guests
 -(NSArray *)notYetGuests;
 

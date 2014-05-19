@@ -7,11 +7,11 @@
 //
 
 #import "FZZBackspaceResignTextView.h"
-#import "FZZEventStreamViewController.h"
+#import "FZZEventsExpandedViewController.h"
 
 @interface FZZBackspaceResignTextView ()
 
-@property FZZEventStreamViewController *esvc;
+@property FZZEventsExpandedViewController *esvc;
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UITextView *placeholderTextView;
 
@@ -122,7 +122,7 @@
     return [_textView resignFirstResponder];
 }
 
--(void)setESVC:(FZZEventStreamViewController *)esvc{
+-(void)setESVC:(FZZEventsExpandedViewController *)esvc{
     _esvc = esvc;
 }
 

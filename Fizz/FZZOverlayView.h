@@ -1,5 +1,5 @@
 //
-//  FZZNavigationBar.h
+//  FZZOverlayView.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/25/14.
@@ -16,7 +16,7 @@
 
 @class FZZNavIcon;
 
-@interface FZZNavigationBar : UIView
+@interface FZZOverlayView : UIView
 
 @property UIButton *navButton;
 @property FZZNavIcon *navIcon;

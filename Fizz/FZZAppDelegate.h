@@ -20,9 +20,9 @@
 #import "FZZSocketIODelegate.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "FZZFacebookLoginDelegate.h"
-#import "FZZEventStreamViewController.h"
-#import "FZZOverviewCollectionViewController.h"
-#import "FZZNavigationBar.h"
+#import "FZZEventsExpandedViewController.h"
+#import "FZZEventsCondensedViewController.h"
+#import "FZZOverlayView.h"
 
 static const UIColor *facebookColor;
 static const UIColor *fizzColor;
@@ -41,11 +41,11 @@ static float const kFZZInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) FBSession *session;
 @property (strong, nonatomic) FZZFacebookLoginDelegate *fbLoginDelegate;
-@property (strong, nonatomic) FZZEventStreamViewController *esvc;
-@property (strong, nonatomic) FZZOverviewCollectionViewController *ocvc;
+@property (strong, nonatomic) FZZEventsExpandedViewController *esvc;
+@property (strong, nonatomic) FZZEventsCondensedViewController *ocvc;
 @property (strong, nonatomic) FZZBubbleViewController *bvc;
 
-@property (strong, nonatomic) FZZNavigationBar *navigationBar;
+@property (strong, nonatomic) FZZOverlayView *navigationBar;
 @property (strong, nonatomic) UITextField *searchTextField;
 
 @property BOOL hasLoggedIn;
@@ -63,5 +63,15 @@ static float const kFZZInviteProfilePictureHeight = 50;
 
 // Server Handlers, recieving and handing out information
 - (void)updateEvents:(NSArray *)events;
+
+
+// Core Data
+
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+- (void)saveContext;
+- (NSURL *)applicationDocumentsDirectory;
 
 @end

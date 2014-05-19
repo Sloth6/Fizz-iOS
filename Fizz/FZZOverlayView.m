@@ -1,16 +1,16 @@
 //
-//  FZZNavigationBar.m
+//  FZZOverlayView.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/25/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZNavigationBar.h"
+#import "FZZOverlayView.h"
 #import "FZZNavIcon.h"
 #import "FZZAppDelegate.h"
 
-@interface FZZNavigationBar ()
+@interface FZZOverlayView ()
 
 //@property (strong, nonatomic) UIButton *leftButton;
 //@property (strong, nonatomic) UIButton *rightButton;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation FZZNavigationBar
+@implementation FZZOverlayView
 
 @synthesize startTouchPosition1, startTouchPosition2;
 

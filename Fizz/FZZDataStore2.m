@@ -13,7 +13,7 @@
 //
 
 
-#import "FZZDataStore.h"
+#import "FZZDataStore2.h"
 
 static NSPersistentStore *store;
 //static NSPersistentStoreCoordinator *coordinator;

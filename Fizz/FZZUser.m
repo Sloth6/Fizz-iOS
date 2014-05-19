@@ -24,17 +24,19 @@ static FZZUser *me;
     void (^_completionHandler)(UIImage *image);
 }
 
-@property (retain, nonatomic) NSNumber *userID;
-@property (retain, nonatomic) NSString *phoneNumber;
-@property (retain, nonatomic) NSString *name;
 
-@property (retain, nonatomic) NSNumber *facebookID;
+
+//@property (retain, nonatomic) NSNumber *userID;
+//@property (retain, nonatomic) NSString *phoneNumber;
+//@property (retain, nonatomic) NSString *name;
+
+//@property (retain, nonatomic) NSNumber *facebookID;
 
 @property (retain, nonatomic) NSData *imageData;
 @property (strong, nonatomic) UIImage *image;
 
 @property (nonatomic) BOOL hasFetched;
-@property (retain, nonatomic) FZZCoordinate *coords;
+//@property (retain, nonatomic) FZZCoordinate *coords;
 
 @property (strong, nonatomic) NSString *accessToken;
 
@@ -46,9 +48,16 @@ static FZZUser *me;
 
 @implementation FZZUser
 
+@dynamic facebookID;
+@dynamic name;
+@dynamic phoneNumber;
+@dynamic userID;
+@dynamic coords;
+@dynamic creator;
+
 static FZZUser *currentUser = nil;
 
-@synthesize facebookID, image, phoneNumber, coords;
+@synthesize image;
 
 +(void)setupUserClass{
     if (!users){
@@ -90,7 +99,9 @@ static FZZUser *currentUser = nil;
 -(id)initPrivateWithUserID:(NSNumber *)uID{
 //    self = [super init];
 
-    self = (FZZUser *)[FZZDataStore insertNewObjectForEntityForName:@"FZZUser"];
+//    self = (FZZUser *)[FZZDataStore insertNewObjectForEntityForName:@"FZZUser"];
+    
+    self = [super init];
     
     if (self){
         self.userID = uID;
@@ -114,11 +125,11 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSNumber *)facebookID{
-    if ([facebookID integerValue] == 0){
+    if ([self.facebookID integerValue] == 0){
         return NULL;
     }
     
-    return facebookID;
+    return self.facebookID;
 }
 
 +(void)setMeAs:(FZZUser *)user{
@@ -153,11 +164,11 @@ static FZZUser *currentUser = nil;
 }
 
 -(void)setFacebookID:(NSNumber *)fbID{
-    facebookID = fbID;
+    self.facebookID = fbID;
 }
 
 -(void)setPhoneNumber:(NSString *)pn{
-    phoneNumber = pn;
+    self.phoneNumber = pn;
 }
 
 -(BOOL)hasNoImage{
@@ -165,7 +176,7 @@ static FZZUser *currentUser = nil;
 }
 
 -(BOOL)isAppUser{
-    return (facebookID != NULL);
+    return (self.facebookID != NULL);
 }
 
 +(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
@@ -348,11 +359,11 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSString *)phoneNumber{
-    if ([phoneNumber isEqualToString:@""]){
+    if ([self.phoneNumber isEqualToString:@""]){
         return NULL;
     }
     
-    return phoneNumber;
+    return self.phoneNumber;
 }
 
 -(NSNumber *)userID{
@@ -379,7 +390,7 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSString *)getPhotoURLOfWidth:(int)width andHeight:(int)height{
-    NSString *urlStr = [NSString stringWithFormat:@"http://graph.facebook.com/%lld?fields=picture.width(%d).height(%d)", [facebookID longLongValue], width, height];
+    NSString *urlStr = [NSString stringWithFormat:@"http://graph.facebook.com/%lld?fields=picture.width(%d).height(%d)", [self.facebookID longLongValue], width, height];
     
     //NSString *urlStr = [NSString stringWithFormat:@"http://graph.facebook.com/%d?fields=picture,name", [facebookID integerValue]];
     
@@ -414,7 +425,7 @@ static FZZUser *currentUser = nil;
 }
 
 -(void)getAndSetUserDataSynchronously{
-    if (facebookID == NULL || [facebookID isEqualToNumber:[NSNumber numberWithInt:0]]){
+    if (self.facebookID == NULL || [self.facebookID isEqualToNumber:[NSNumber numberWithInt:0]]){
         image = NULL;
         return;
     }
@@ -592,11 +603,11 @@ static FZZUser *currentUser = nil;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
     [dict setObject:self.userID forKey:@"uid"];
-    [dict setObject:phoneNumber forKey:@"pn"];
+    [dict setObject:self.phoneNumber forKey:@"pn"];
     [dict setObject:[self name] forKey:@"name"];
     
     NSMutableDictionary *appUserDetails = [[NSMutableDictionary alloc] init];
-    [appUserDetails setObject:facebookID forKey:@"fbid"];
+    [appUserDetails setObject:self.facebookID forKey:@"fbid"];
     
     [dict setObject:appUserDetails forKey:@"appUserDetails"];
     

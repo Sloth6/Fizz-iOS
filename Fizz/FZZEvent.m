@@ -9,7 +9,6 @@
 #import "FZZEvent.h"
 #import "FZZMessage.h"
 #import "FZZUser.h"
-#import <CoreLocation/CoreLocation.h>
 
 static NSMutableDictionary *events;
 
@@ -23,25 +22,24 @@ static NSString *FZZ_REQUEST = @"request";
 
 @interface FZZEvent ()
 
-@property (strong, nonatomic) NSNumber *eventID;
+//@property (strong, nonatomic) NSNumber *eventID;
 
-@property (strong, nonatomic) FZZUser *creator;
+//@property (strong, nonatomic) FZZUser *creator;
 
 @property NSTimer *seatTimer;
 
-@property (strong, nonatomic) NSMutableArray *presentAtEvent;
-@property (strong, nonatomic) NSMutableArray *guests;
-@property (strong, nonatomic) NSMutableArray *invitees;
+//@property (strong, nonatomic) NSMutableArray *presentAtEvent;
+//@property (strong, nonatomic) NSMutableArray *guests;
+//@property (strong, nonatomic) NSMutableArray *invitees;
 
 @property (strong, nonatomic) NSMutableSet *inviteesSet;
 
 @property (nonatomic) BOOL haveExpressedInterest;
 @property BOOL haveSeatsChanged;
 
-@property (strong, nonatomic) NSNumber *numSeats;
+//@property (strong, nonatomic) NSNumber *numSeats;
 @property (strong, nonatomic) NSNumber *pendingNumSeats;
 
-@property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSDate *lastUpdate;
 
 // A lightly-sorted list of users who are engaged with the event (attending or commenting or both)
@@ -53,8 +51,8 @@ static NSString *FZZ_REQUEST = @"request";
 
 @dynamic eventID;
 @dynamic presentAtEvent;
-@dynamic guests;
-@dynamic invitees;
+@dynamic guestsNotPresent;
+@dynamic inviteesNotGuest;
 @dynamic numSeats;
 @dynamic messages;
 @dynamic lastUpdate;
@@ -68,9 +66,9 @@ static NSString *FZZ_REQUEST = @"request";
 }
 
 -(id)init{
-//    self = [super init];
+    self = [super init];
     
-    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
+//    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
     
     if (self){
         self.haveSeatsChanged = YES;
@@ -89,8 +87,8 @@ static NSString *FZZ_REQUEST = @"request";
         return NULL;
     }
     
-//    self = [super init];
-    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
+    self = [super init];
+//    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
     
     if (self){
         self.haveSeatsChanged = YES;
@@ -107,7 +105,7 @@ static NSString *FZZ_REQUEST = @"request";
     return self.creator;
 }
 
--(NSMutableArray *)messages{
+-(NSArray *)messages{
     return self.messages;
 }
 
@@ -238,8 +236,11 @@ static NSString *FZZ_REQUEST = @"request";
 
 -(void)updateGuests:(NSArray *)guests{
     @synchronized(self){
-        self.guests = [guests mutableCopy];
-        [self.presentAtEvent removeObjectsInArray:guests];
+        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+        
+        self.guestsNotPresent = guests;
+        [presentAtEvent removeObjectsInArray:guests];
+        self.presentAtEvent = presentAtEvent;
         [self.invitees removeObjectsInArray:guests];
     }
 }
@@ -256,17 +257,24 @@ static NSString *FZZ_REQUEST = @"request";
 
 -(void)updateToAttendees:(NSArray *)toAttendees{
     @synchronized(self){
-        [self.presentAtEvent removeObjectsInArray:toAttendees];
+        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+        
+        [presentAtEvent removeObjectsInArray:toAttendees];
+        [presentAtEvent addObjectsFromArray:toAttendees];
+        self.presentAtEvent = presentAtEvent;
+        
         [self.guests removeObjectsInArray:toAttendees];
         [self.invitees removeObjectsInArray:toAttendees];
-        
-        [self.presentAtEvent addObjectsFromArray:toAttendees];
     }
 }
 
 -(void)updateToGuests:(NSArray *)toGuests{
     @synchronized(self){
-        [self.presentAtEvent removeObjectsInArray:toGuests];
+        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+        
+        [presentAtEvent removeObjectsInArray:toGuests];
+        self.presentAtEvent = presentAtEvent;
+        
         [self.guests removeObjectsInArray:toGuests];
         [self.invitees removeObjectsInArray:toGuests];
         
@@ -276,7 +284,11 @@ static NSString *FZZ_REQUEST = @"request";
 
 -(void)updateToInvitees:(NSArray *)toInvitees{
     @synchronized(self){
-        [self.presentAtEvent removeObjectsInArray:toInvitees];
+        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+        
+        [presentAtEvent removeObjectsInArray:toInvitees];
+        self.presentAtEvent = presentAtEvent;
+        
         [self.guests removeObjectsInArray:toInvitees];
         [self.invitees removeObjectsInArray:toInvitees];
         
@@ -286,10 +298,11 @@ static NSString *FZZ_REQUEST = @"request";
 
 -(void)updateAddMessage:(FZZMessage *)message{
     @synchronized(self){
-        [self.messages removeObject:message];
-        [self.messages addObject:message];
+        if (![self.messages containsObject:message]){
+            self.messages = [self.messages arrayByAddingObject:message];
+        }
         
-        [self.messages sortWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(id obj1, id obj2) {
+        self.messages = [self.messages sortedArrayWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(id obj1, id obj2) {
             FZZMessage *m1 = obj1;
             FZZMessage *m2 = obj2;
             
@@ -367,33 +380,47 @@ static NSString *FZZ_REQUEST = @"request";
 
 -(void)updateAddGuest:(FZZUser *)guest{
     @synchronized(self){
-        if (![self.guests containsObject:guest]){
-            [self.guests addObject:guest];
+        if (![self.guestsNotPresent containsObject:guest]){
+            [self.guestsNotPresent arrayByAddingObject:guest];
         }
+        
+        // Sort array here
+        
     }
 }
 
 -(void)updateAddAtEvent:(NSArray *)arrivingList{
     @synchronized(self){
+        
+        NSMutableArray *deltas = [[NSMutableArray alloc] init];
+        
         [arrivingList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             FZZUser *user = obj;
             
             if (![self.presentAtEvent containsObject:user]){
-                [self.presentAtEvent addObject:user];
+                [deltas addObject:user];
             }
         }];
+        
+        // Sort array here
+        
+        self.presentAtEvent = [self.presentAtEvent arrayByAddingObjectsFromArray:deltas];
     }
 }
 
 -(void)updateRemoveAtEvent:(NSArray *)leavingList{
     @synchronized(self){
+        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+        
         [leavingList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             FZZUser *user = obj;
             
-            if ([self.presentAtEvent containsObject:user]){
-                [self.presentAtEvent removeObject:user];
+            if ([presentAtEvent containsObject:user]){
+                [presentAtEvent removeObject:user];
             }
         }];
+        
+        self.presentAtEvent = presentAtEvent;
     }
 }
 
@@ -717,8 +744,8 @@ static NSString *FZZ_REQUEST = @"request";
     /* Allocate Memory and Assign Values */
     FZZEvent *event = [FZZEvent eventWithEID:eid];
     event.creator = creator;
-    event.guests = mutGuestList;
-    event.invitees = mutInviteList;
+    event.guestsNotPresent = mutGuestList;
+    event.inviteesNotGuest = mutInviteList;
     event.presentAtEvent = mutPresentAtEventList;
     event.inviteesSet = [NSMutableSet setWithArray:mutInviteList];
     
@@ -755,6 +782,7 @@ static NSString *FZZ_REQUEST = @"request";
         return [message timestamp];
     }
     
+    // Never updated
     return [NSDate distantPast];
 }
 

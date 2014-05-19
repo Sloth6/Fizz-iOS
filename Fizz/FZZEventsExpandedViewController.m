@@ -1,12 +1,12 @@
 //
-//  FZZEventStreamViewController.m
+//  FZZEventsExpandedViewController.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/7/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZEventStreamViewController.h"
+#import "FZZEventsExpandedViewController.h"
 #import "FZZEventCell.h"
 #import "FZZExpandedEventCell.h"
 #import "FZZEvent.h"
@@ -17,7 +17,7 @@
 #import "FZZNavIcon.h"
 
 #import "FZZChatDelegate.h"
-#import "FZZOverviewCollectionViewController.h"
+#import "FZZEventsCondensedViewController.h"
 #import "FZZBackspaceResignTextView.h"
 
 #import "FZZInviteViewController.h"
@@ -34,9 +34,9 @@ static int kFZZNumCellsBeforeEvents = 1; // Add New Event
 static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 
-@interface FZZEventStreamViewController ()
+@interface FZZEventsExpandedViewController ()
 
-@property FZZOverviewCollectionViewController *ocvc;
+@property FZZEventsCondensedViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
 @property (nonatomic) FZZBackspaceResignTextView *eventTextView;
@@ -54,7 +54,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 @end
 
-@implementation FZZEventStreamViewController
+@implementation FZZEventsExpandedViewController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout{
     self = [super initWithCollectionViewLayout:layout];
@@ -174,7 +174,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         _events = [[NSMutableArray alloc] init];
         _chatDelegate = [[FZZChatDelegate alloc] init];
-        _ocvc   = [[FZZOverviewCollectionViewController alloc] initWithCollectionViewLayout:_overviewFlowLayout];
+        _ocvc   = [[FZZEventsCondensedViewController alloc] initWithCollectionViewLayout:_overviewFlowLayout];
         
         _ocvc.useLayoutToLayoutNavigationTransitions = YES;
         

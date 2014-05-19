@@ -282,7 +282,7 @@ static float INVITE_SIZE;
     if (_event == NULL){
         guests = [[NSArray alloc] init];
     } else{
-        guests = [_event guests];
+        guests = [_event guestsNotPresent];
     }
     
     NSArray *seatPoints = [self getPointsForSeatsAtIndex:index];

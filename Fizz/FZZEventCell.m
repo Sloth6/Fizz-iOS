@@ -111,7 +111,7 @@
     _label.text = text;
     
     // Bubbles
-    NSArray *invitees = [event invitees];
+    NSArray *invitees = [event inviteesNotGuest];
     
     for (int i = 0; i < [_bubbles count]; ++i){
         UIImageView *bubble = [_bubbles objectAtIndex:i];

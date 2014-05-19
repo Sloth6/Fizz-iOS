@@ -20,10 +20,18 @@
 @class FZZUser;
 @class FZZCoordinate;
 
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "SocketIO.h"
-#import "FZZDataStore.h"
 
 @interface FZZMessage : NSManagedObject
+
+@property (retain, nonatomic) NSNumber *messageID;
+@property (retain, nonatomic) NSString *text;
+@property (retain, nonatomic) NSDate *timestamp;
+@property (retain, nonatomic) FZZCoordinate *marker;
+@property (retain, nonatomic) FZZEvent *event;
+@property (retain, nonatomic) FZZUser  *user;
 
 -(FZZEvent *)event;
 -(FZZUser *)user;

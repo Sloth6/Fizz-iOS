@@ -1,5 +1,5 @@
 //
-//  FZZOverviewCollectionViewController.h
+//  FZZEventsCondensedViewController.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/13/14.
@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FZZEventStreamViewController.h"
+#import "FZZEventsExpandedViewController.h"
 
 /*
  
@@ -17,9 +17,9 @@
  
  */
 
-@interface FZZOverviewCollectionViewController : UICollectionViewController //<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
+@interface FZZEventsCondensedViewController : UICollectionViewController //<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
 
-@property (strong, nonatomic) FZZEventStreamViewController *esvc;
+@property (strong, nonatomic) FZZEventsExpandedViewController *esvc;
 @property (strong, nonatomic) NSMutableArray *events;
 @property (strong, nonatomic) NSIndexPath *lastIndex;
 

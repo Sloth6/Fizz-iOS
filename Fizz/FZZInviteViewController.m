@@ -11,7 +11,7 @@
 #import "FZZInviteCell.h"
 #import "FZZUser.h"
 #import "FZZEvent.h"
-#import "FZZEventStreamViewController.h"
+#import "FZZEventsExpandedViewController.h"
 #import "FZZAppDelegate.h"
 #import "FZZExpandedEventCell.h"
 #import "FZZBubbleViewController.h"
@@ -585,7 +585,7 @@ static int kFZZNumRecentInvites = 30;
     _needsUpdateFriends = NO;
     
     NSMutableArray *friends = [[FZZUser getFriends] mutableCopy];
-    [friends removeObjectsInArray:[_event invitees]];
+    [friends removeObjectsInArray:[_event inviteesNotGuest]];
     
     _invitableFriends = friends;
     [self filterInvitables];

@@ -1,24 +1,24 @@
 //
-//  FZZOverviewCollectionViewController.m
+//  FZZEventsCondensedViewController.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/13/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZOverviewCollectionViewController.h"
-#import "FZZEventStreamViewController.h"
+#import "FZZEventsCondensedViewController.h"
+#import "FZZEventsExpandedViewController.h"
 #import "FZZNavIcon.h"
 
 #import "FZZEventCell.h"
 
-@interface FZZOverviewCollectionViewController ()
+@interface FZZEventsCondensedViewController ()
 
 @property (strong, nonatomic) UIBarButtonItem *burgerButton;
 
 @end
 
-@implementation FZZOverviewCollectionViewController
+@implementation FZZEventsCondensedViewController
 
 -(id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout{
     self = [super initWithCollectionViewLayout:layout];
