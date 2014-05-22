@@ -18,7 +18,7 @@
 #import "SocketIOPacket.h"
 
 /* Server Info */
-static NSString * const kFZZSocketHost = @"54.84.205.222";//@"128.237.139.204";//@"localhost";//
+static NSString * const kFZZSocketHost = @"localhost";//@"68.225.244.171";//@"54.84.205.222";//@"128.237.139.204";//@"localhost"
 static int const kFZZSocketPort = 9001;
 
 static int const kFZZDefaultReconnectDelay = 5; // 5 seconds
@@ -34,5 +34,6 @@ static int const kFZZMaximumReconnectDelay = 300; // 5 minutes
 //+ (void) logout;
 + (BOOL) isConnectionOpen;
 + (SocketIO *)socketIO;
++(void)socketIOResetDataToServerWithAcknowledge:(SocketIOCallback)function;
 
 @end

@@ -14,7 +14,7 @@
  
  We'll be making a lot of changes to how bubbles work, so I imagine not all of this code will survive to the MVP. It was designed for the seat use-case, but will also handle any logic you want to have with users throwing/moving bubbles.
  
- [TODO (5/13/14)] Consider shifting the bubble Press logic into the BVC, as that makes more sense from a delegation point of view.
+ [TODOAndrew (5/13/14)] Consider shifting the bubble Press logic into the BVC, as that makes more sense from a delegation point of view.
  
  */
 
@@ -38,7 +38,7 @@
 - (void)transitionToEvent:(FZZEvent *)event
                   AtIndex:(NSIndexPath *)indexPath;
 
-- (void)trashBubble:(FZZInteractiveBubble *)bubble;
+//- (void)trashBubble:(FZZInteractiveBubble *)bubble;
 
 
 -(void)viewDidScroll:(UIScrollView *)scrollView;

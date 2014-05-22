@@ -112,10 +112,10 @@ static float INVITE_SIZE;
     return YES;
 }
 
-- (void)trashBubble:(FZZInteractiveBubble *)bubble{
-    [_event removeSeat];
-    [self updateBubblesForEvent:_event Animated:YES];
-}
+//- (void)trashBubble:(FZZInteractiveBubble *)bubble{
+//    [_event removeSeat];
+//    [self updateBubblesForEvent:_event Animated:YES];
+//}
 
 - (NSMutableArray *)layoutNumSeats:(int)numSeats InFrame:(CGRect)rect{
     return [self layoutNumBubbles:numSeats InFrame:rect ForSeats:YES];
@@ -274,161 +274,161 @@ static float INVITE_SIZE;
 //}
 
 - (void)fillSeatsAtIndex:(int)index{
-    int extra = 0;
-    int numExtra = 0;
-    
-    NSArray *guests;
-    
-    if (_event == NULL){
-        guests = [[NSArray alloc] init];
-    } else{
-        guests = [_event guestsNotPresent];
-    }
-    
-    NSArray *seatPoints = [self getPointsForSeatsAtIndex:index];
-    
-    int numGuestSlots = [seatPoints count] / 2;
-    
-    int numGuests = [guests count];
-    
-    if (numGuestSlots < numGuests){
-        extra = 1;
-        numExtra = numGuests - numGuestSlots;
-    }
-    
-    float diameter = SEAT_SIZE;
-    float radius = diameter / 2.0;
-    
-    int limit = numGuestSlots - extra;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @synchronized(_seatBubbles){
-            for (int j = 0; j < [_seatBubbles count]; ++j){
-                FZZInteractiveBubble *bubble = [_seatBubbles objectAtIndex:j];
-                [bubble removeFromSuperview];
-            }
-        }
-    });
-    
-    NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:limit];
-    
-    // Filled Seats
-    for (int i = 0; i < numGuests; ++i){
-        if (i < limit){
-            
-            FZZUser *user = [guests objectAtIndex:i];
-            CGPoint point = [(NSValue *)[seatPoints objectAtIndex:i] CGPointValue];
-            
-            [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
-                UIImageView *imageView;
-                
-                float x = point.x;
-                float y = point.y;
-                
-                CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
-                
-                if (image){
-                    imageView = [user circularImageForRect:frame];
-                } else {
-                    imageView = [user formatImageView:[user circularImageForRect:frame] ForInitialsForRect:frame];
-                }
-                
-                [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
-                
-//                NSLog(@"\n\nuser(3): %@\n\n", user);
-                
-//                dispatch_async(dispatch_get_main_queue(), ^{
-                    FZZInteractiveBubble *bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
-                    
-                    bubble.user = user;
-                    
-                    [bubble setCenter:point];
-                    
-                    [bubble setImageView:imageView];
-                    [bubble setIsEmpty:NO];
-                    
-                    [bubble setCenter:point];
-                    [self.bubbleView addSubview:bubble];
-                    
-                    [temp addObject:bubble];
-//                });
-                
-//             TODO XXX CRASHES HERE
-                
-            }];
-        } else {
-            //            FZZInteractiveBubble *bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
-            //
-            //            [bubble setImageView:imageView];
-            //
-            //            [bubble setCenter:point];
-        }
-    }
-    
-    @synchronized(_seatBubbles){
-        [_seatBubbles setArray:temp];
-    }
-    
-    int numSlotsTaken = numGuests - numExtra + extra;
-    
-    int numSeatSlots = [seatPoints count] - numSlotsTaken;
-    int numSeats = [[_event pendingNumEmptySeats] integerValue];
-    
-    extra = 0;
-    
-    if (numSeatSlots < numSeats){
-        extra = 1;
-        numExtra = numSeats - numSeatSlots;
-    }
-    
-    limit = numSeatSlots - extra;
-    
-    [temp removeAllObjects];
-    
-    // Empty Seats
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-    
-        for (int i = 0; i < numSeats; ++i){
-            if (i < limit){
-                
-                CGPoint point = [(NSValue *)[seatPoints objectAtIndex:numSlotsTaken+i] CGPointValue];
-                
-                float x = point.x;
-                float y = point.y;
-                
-                CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
-                
-    //            NSLog(@"\n\nuser(2): %f\n\n", frame.size.width);
-                
-                FZZInteractiveBubble *bubble;
-                bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
-                
-                [bubble setCenter:point];
-                [self.bubbleView addSubview:bubble];
-                
-                [bubble setIsEmpty:YES];
-                [temp addObject:bubble];
-                
-            } else {
-                //            FZZInteractiveBubble *bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
-                //
-                //            [bubble setImageView:imageView];
-                //
-                //            [bubble setCenter:point];
-            }
-        }
-        
-        [_seatBubbles addObjectsFromArray:temp];
-        
-    });
-    
-    
-    if (extra > 0){ // Fill a bubble with "+4" to show for more friends or whatever
-        // Consider the "too many empty seats and too many full seats" case
-        
-        NSLog(@"Couldn't fit all");
-    }
+//    int extra = 0;
+//    int numExtra = 0;
+//    
+//    NSArray *guests;
+//    
+//    if (_event == NULL){
+//        guests = [[NSArray alloc] init];
+//    } else{
+//        guests = [_event guestsNotPresent];
+//    }
+//    
+//    NSArray *seatPoints = [self getPointsForSeatsAtIndex:index];
+//    
+//    int numGuestSlots = [seatPoints count] / 2;
+//    
+//    int numGuests = [guests count];
+//    
+//    if (numGuestSlots < numGuests){
+//        extra = 1;
+//        numExtra = numGuests - numGuestSlots;
+//    }
+//    
+//    float diameter = SEAT_SIZE;
+//    float radius = diameter / 2.0;
+//    
+//    int limit = numGuestSlots - extra;
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        @synchronized(_seatBubbles){
+//            for (int j = 0; j < [_seatBubbles count]; ++j){
+//                FZZInteractiveBubble *bubble = [_seatBubbles objectAtIndex:j];
+//                [bubble removeFromSuperview];
+//            }
+//        }
+//    });
+//    
+//    NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:limit];
+//    
+//    // Filled Seats
+//    for (int i = 0; i < numGuests; ++i){
+//        if (i < limit){
+//            
+//            FZZUser *user = [guests objectAtIndex:i];
+//            CGPoint point = [(NSValue *)[seatPoints objectAtIndex:i] CGPointValue];
+//            
+//            [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
+//                UIImageView *imageView;
+//                
+//                float x = point.x;
+//                float y = point.y;
+//                
+//                CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
+//                
+//                if (image){
+//                    imageView = [user circularImageForRect:frame];
+//                } else {
+//                    imageView = [user formatImageView:[user circularImageForRect:frame] ForInitialsForRect:frame];
+//                }
+//                
+//                [imageView setFrame:CGRectMake(0, 0, diameter, diameter)];
+//                
+////                NSLog(@"\n\nuser(3): %@\n\n", user);
+//                
+////                dispatch_async(dispatch_get_main_queue(), ^{
+//                    FZZInteractiveBubble *bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
+//                    
+//                    bubble.user = user;
+//                    
+//                    [bubble setCenter:point];
+//                    
+//                    [bubble setImageView:imageView];
+//                    [bubble setIsEmpty:NO];
+//                    
+//                    [bubble setCenter:point];
+//                    [self.bubbleView addSubview:bubble];
+//                    
+//                    [temp addObject:bubble];
+////                });
+//                
+////             TODOAndrew XXX CRASHES HERE
+//                
+//            }];
+//        } else {
+//            //            FZZInteractiveBubble *bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
+//            //
+//            //            [bubble setImageView:imageView];
+//            //
+//            //            [bubble setCenter:point];
+//        }
+//    }
+//    
+//    @synchronized(_seatBubbles){
+//        [_seatBubbles setArray:temp];
+//    }
+//    
+//    int numSlotsTaken = numGuests - numExtra + extra;
+//    
+//    int numSeatSlots = [seatPoints count] - numSlotsTaken;
+//    int numSeats = [[_event pendingNumEmptySeats] integerValue];
+//    
+//    extra = 0;
+//    
+//    if (numSeatSlots < numSeats){
+//        extra = 1;
+//        numExtra = numSeats - numSeatSlots;
+//    }
+//    
+//    limit = numSeatSlots - extra;
+//    
+//    [temp removeAllObjects];
+//    
+//    // Empty Seats
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//    
+//        for (int i = 0; i < numSeats; ++i){
+//            if (i < limit){
+//                
+//                CGPoint point = [(NSValue *)[seatPoints objectAtIndex:numSlotsTaken+i] CGPointValue];
+//                
+//                float x = point.x;
+//                float y = point.y;
+//                
+//                CGRect frame = CGRectMake(x - radius, y - radius, diameter, diameter);
+//                
+//    //            NSLog(@"\n\nuser(2): %f\n\n", frame.size.width);
+//                
+//                FZZInteractiveBubble *bubble;
+//                bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
+//                
+//                [bubble setCenter:point];
+//                [self.bubbleView addSubview:bubble];
+//                
+//                [bubble setIsEmpty:YES];
+//                [temp addObject:bubble];
+//                
+//            } else {
+//                //            FZZInteractiveBubble *bubble = [[FZZInteractiveBubble alloc] initWithFrame:frame];
+//                //
+//                //            [bubble setImageView:imageView];
+//                //
+//                //            [bubble setCenter:point];
+//            }
+//        }
+//        
+//        [_seatBubbles addObjectsFromArray:temp];
+//        
+//    });
+//    
+//    
+//    if (extra > 0){ // Fill a bubble with "+4" to show for more friends or whatever
+//        // Consider the "too many empty seats and too many full seats" case
+//        
+//        NSLog(@"Couldn't fit all");
+//    }
 }
 
 - (void)fillInvitesAtIndex:(int)index{
@@ -440,7 +440,7 @@ static float INVITE_SIZE;
     if (_event == NULL){
         invitees = [[NSArray alloc] init];
     } else{
-        invitees = [_event notYetGuests];
+        invitees = [_event invitees]; //was notYetGuests TODO?
     }
 
     NSArray *invitePoints = [self getPointsForInvitesAtIndex:index];
@@ -549,10 +549,8 @@ static float INVITE_SIZE;
     
     _event = event;
     
-    NSLog(@"\n\nHARDCORE %d\n\n", event.numEmptySeats);
-    
     [self fillSeatsAtIndex:_currentIndex];
-    [self fillInvitesAtIndex:_currentIndex];
+//    [self fillInvitesAtIndex:_currentIndex];
 }
 
 
@@ -569,7 +567,7 @@ static float INVITE_SIZE;
     _event = event;
     
     [self fillSeatsAtIndex:indexPath.item];
-    [self fillInvitesAtIndex:indexPath.item];
+//    [self fillInvitesAtIndex:indexPath.item];
     
 //    int index = indexPath.item;
 //    

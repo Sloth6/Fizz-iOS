@@ -2,7 +2,7 @@
 //  FZZCoordinate.h
 //  Fizz
 //
-//  Created by Andrew Sweet on 5/18/14.
+//  Created by Andrew Sweet on 1/25/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
@@ -18,13 +18,15 @@
  
  */
 
+
 @class FZZEvent;
+@class FZZMessage;
 
-@interface FZZCoordinate : NSManagedObject
+@interface FZZCoordinate3 : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * latitude;
-@property (nonatomic, retain) NSNumber * longitude;
-@property (nonatomic, retain) NSManagedObject *message;
+@property (nonatomic, retain) NSNumber *latitude;
+@property (nonatomic, retain) NSNumber *longitude;
+@property (nonatomic, retain) FZZMessage *message;
 
 - (id)initWithLongitude:(float)lng andLatitude:(float)lat;
 - (NSNumber *)longitude;
@@ -33,13 +35,10 @@
 
 - (BOOL)saveObjectWithError:(NSError**)error;
 
-+(void)socketIONewMarker:(FZZCoordinate *)coord
++(void)socketIONewMarker:(FZZCoordinate3 *)coord
                 ForEvent:(FZZEvent *)event
          WithAcknowledge:(SocketIOCallback)function;
 
-+(void)socketIOUpdateLocationWithAcknowledge:(SocketIOCallback)function;
-
-+ (FZZCoordinate *)parseJSON:(NSDictionary *)coordJSON;
-
++ (FZZCoordinate3 *)parseJSON:(NSDictionary *)coordJSON;
 
 @end

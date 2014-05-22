@@ -29,7 +29,7 @@
  
  While horribly named, this cell was repurposed from inputting a phone number to add a friend by cell phone number to just a search field for finding your desired friends among the list.
  
- [TODO (5/13/14)] DO NOT DELETE JUST YET. This cell is currently unused. Due to the server not being online, I'm not sure if its because A) I'm using some other search input. B) We removed search/cell phone input functionality. If it's determined that the app in its current state supports searching for friends AND we decide that we don't want users to be able to add people to an event/to the app via phone number, then this can be deleted. Otherwise, this have a lot of useful code for adding people by phone number, or could easily be repurposed and used as a search field for friends.
+ [TODOAndrew (5/13/14)] DO NOT DELETE JUST YET. This cell is currently unused. Due to the server not being online, I'm not sure if its because A) I'm using some other search input. B) We removed search/cell phone input functionality. If it's determined that the app in its current state supports searching for friends AND we decide that we don't want users to be able to add people to an event/to the app via phone number, then this can be deleted. Otherwise, this have a lot of useful code for adding people by phone number, or could easily be repurposed and used as a search field for friends.
  
  */
 
@@ -124,7 +124,7 @@ static int kFZZNumRecentInvites = 30;
 }
 
 - (void)setupInterface{
-    [self setupSeats];
+//    [self setupSeats];
     [self setupInvite];
 }
 
@@ -148,17 +148,17 @@ static int kFZZNumRecentInvites = 30;
 }
 
 // You can always add a seat
-- (void)addSeat{
-    [_event addSeat];
-    [self updateSeatUI];
-}
+//- (void)addSeat{
+//    [_event addSeat];
+//    [self updateSeatUI];
+//}
 
 // Attempt to subtract an empty seat. If no empty seats, no subtraction
-- (void)removeSeat{
-    if ([_event removeSeat]){
-        [self updateSeatUI];
-    }
-}
+//- (void)removeSeat{
+//    if ([_event removeSeat]){
+//        [self updateSeatUI];
+//    }
+//}
 
 - (void)setupSeats{
     // Get TextView positions
@@ -536,9 +536,17 @@ static int kFZZNumRecentInvites = 30;
     NSLog(@"\n\nUser Invites: %@\nPhone Invites: %@\n\n", userInvites, phoneInvites);
     
     if ([userInvites count] > 0 || [phoneInvites count] > 0){
-        [_event socketIOInviteWithInviteList:userInvites
-                           InviteContactList:phoneInvites
-                              AndAcknowledge:nil];
+        
+        // If I'm the host, then invite the individuals
+        if ([[_event creator] isEqual:[FZZUser me]]){
+            [_event socketIOHostInviteWithInviteList:userInvites
+                                   InviteContactList:phoneInvites
+                                      AndAcknowledge:nil];
+        } else { // else suggest the invited individuals
+            [_event socketIOSuggestInviteWithInviteList:userInvites
+                                      InviteContactList:phoneInvites
+                                         AndAcknowledge:nil];
+        }
     }
 }
 
@@ -585,7 +593,7 @@ static int kFZZNumRecentInvites = 30;
     _needsUpdateFriends = NO;
     
     NSMutableArray *friends = [[FZZUser getFriends] mutableCopy];
-    [friends removeObjectsInArray:[_event inviteesNotGuest]];
+    [friends removeObjectsInArray:[[_event invitees] array]];
     
     _invitableFriends = friends;
     [self filterInvitables];
@@ -940,9 +948,10 @@ static int kFZZNumRecentInvites = 30;
                 [_eventCell enterChatMode];
                 
                 [self setIsOnTimeline:NO];
-            } else { // Express Interest
-                [_event expressInterest];
             }
+//            else { // TODOAndrew Express Interest
+//                [_event expressInterest];
+//            }
         }
     }
 }

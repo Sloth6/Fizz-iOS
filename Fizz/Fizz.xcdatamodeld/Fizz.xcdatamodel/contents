@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3394" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="FZZCoordinate" syncable="YES">
+    <entity name="FZZCluster" representedClassName="FZZCluster" syncable="YES">
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZEvent" syncable="YES"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZUser" syncable="YES"/>
+    </entity>
+    <entity name="FZZCoordinate" representedClassName="FZZCoordinate" syncable="YES">
         <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZMessage" inverseName="marker" inverseEntity="FZZMessage" syncable="YES"/>
     </entity>
-    <entity name="FZZEvent" representedClassName="FZZEvent2" syncable="YES">
+    <entity name="FZZEvent" representedClassName="FZZEvent" syncable="YES">
+        <attribute name="creationTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="eventID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="numSeats" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZUser" inverseName="creator" inverseEntity="FZZUser" syncable="YES"/>
-        <relationship name="guestsNotPresent" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZUser" syncable="YES"/>
-        <relationship name="inviteesNotGuest" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZUser" syncable="YES"/>
+        <relationship name="clusters" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZCluster" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZUser" syncable="YES"/>
+        <relationship name="guests" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZUser" syncable="YES"/>
+        <relationship name="invitees" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZUser" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZMessage" inverseName="event" inverseEntity="FZZMessage" syncable="YES"/>
-        <relationship name="presentAtEvent" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZUser" syncable="YES"/>
+        <relationship name="suggestedInvites" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="FZZUser" syncable="YES"/>
     </entity>
-    <entity name="FZZMessage" syncable="YES">
+    <entity name="FZZMessage" representedClassName="FZZMessage" syncable="YES">
+        <attribute name="creationTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="messageID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZEvent" inverseName="messages" inverseEntity="FZZEvent" syncable="YES"/>
         <relationship name="marker" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZCoordinate" inverseName="message" inverseEntity="FZZCoordinate" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZUser" syncable="YES"/>
     </entity>
-    <entity name="FZZUser" representedClassName="FZZUser2" syncable="YES">
+    <entity name="FZZUser" representedClassName="FZZUser" syncable="YES">
         <attribute name="facebookID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="coords" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZCoordinate" syncable="YES"/>
-        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FZZEvent" inverseName="creator" inverseEntity="FZZEvent" syncable="YES"/>
     </entity>
     <elements>
         <element name="FZZCoordinate" positionX="0" positionY="0" width="0" height="0"/>
         <element name="FZZEvent" positionX="0" positionY="0" width="0" height="0"/>
         <element name="FZZMessage" positionX="0" positionY="0" width="0" height="0"/>
         <element name="FZZUser" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FZZCluster" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

@@ -113,7 +113,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     
     CGRect viewFormRect = CGRectMake(x, y, width, height);
     
-    FZZEnterMessagePrototypeViewController *tvc = [[FZZEnterMessagePrototypeViewController alloc] initWithNibName:@"FZZTestViewController" bundle:nil];
+    FZZEnterMessagePrototypeViewController *tvc = [[FZZEnterMessagePrototypeViewController alloc] initWithNibName:@"FZZEnterMessagePrototypeViewController" bundle:nil];
     viewForm = tvc.view;
     chatBox  = tvc.textView;
     

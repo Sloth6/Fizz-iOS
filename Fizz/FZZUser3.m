@@ -1,30 +1,36 @@
 //
-//  FZZUser.m
+//  FZZUser3.m
 //  Fizz
 //
-//  Created by Andrew Sweet on 5/18/14.
-//  Copyright (c) 2014 Fizz. All rights reserved.
+//  Created by Andrew Sweet on 12/17/13.
+//  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
-#import "FZZUser.h"
-#import "FZZCoordinate.h"
-#import "FZZEvent.h"
+#import "FZZUser3.h"
 #import "FZZAppDelegate.h"
-#import "FZZDefaultBubble.h"
 
-static NSMutableArray *friends;
 static NSMutableDictionary *users;
 static int kFZZProfilePictureDimension = 50;
+
+static NSMutableArray *friends;
 
 static NSString *FZZ_NEW_USER_LOCATION = @"newUserLocation";
 static NSString *FZZ_ADD_FRIEND_LIST = @"addFriendList";
 static NSString *FZZ_REMOVE_FRIEND_LIST = @"removeFriendList";
 
-static FZZUser *me;
+static FZZUser3 *me;
 
-@interface FZZUser (){
+@interface FZZUser3 (){
     void (^_completionHandler)(UIImage *image);
 }
+
+
+
+//@property (retain, nonatomic) NSNumber *userID;
+//@property (retain, nonatomic) NSString *phoneNumber;
+//@property (retain, nonatomic) NSString *name;
+
+//@property (retain, nonatomic) NSNumber *facebookID;
 
 @property (retain, nonatomic) NSData *imageData;
 @property (strong, nonatomic) UIImage *image;
@@ -40,21 +46,18 @@ static FZZUser *me;
 
 @end
 
-@implementation FZZUser
+@implementation FZZUser3
 
 @dynamic facebookID;
 @dynamic name;
 @dynamic phoneNumber;
 @dynamic userID;
 @dynamic coords;
+@dynamic creator;
 
-static FZZUser *currentUser = nil;
+static FZZUser3 *currentUser = nil;
 
 @synthesize image;
-@synthesize hasFetched = _hasFetched;
-@synthesize chid = _chid;
-@synthesize isFetchingData = _isFetchingData;
-@synthesize completionHandlers = _completionHandlers;
 
 +(void)setupUserClass{
     if (!users){
@@ -83,8 +86,8 @@ static FZZUser *currentUser = nil;
 }
 
 //-(id)initWithUserID:(NSNumber *)uID{
-//    FZZUser *user = [users objectForKey:uID];
-//
+//    FZZUser3 *user = [users objectForKey:uID];
+//    
 //    if (user){
 //        self = user.self;
 //        return self;
@@ -93,34 +96,21 @@ static FZZUser *currentUser = nil;
 //    }
 //}
 
-
--(NSEntityDescription *)getEntityDescription{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    return [NSEntityDescription entityForName:@"FZZUser" inManagedObjectContext:moc];
-}
-
 -(id)initPrivateWithUserID:(NSNumber *)uID{
-    //    self = [super init];
-    
-    //    self = (FZZUser *)[FZZDataStore insertNewObjectForEntityForName:@"FZZUser"];
-    
 //    self = [super init];
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+
+//    self = (FZZUser3 *)[FZZDataStore insertNewObjectForEntityForName:@"FZZUser3"];
     
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
+    self = [super init];
     
-    NSLog(@"\n\n%@\n\n", entityDescription);
+    NSLog(@"\n\n%@\n\n", uID);
     
     if (self){
         self.userID = uID;
         
-        _hasFetched = NO;
-        _chid = 0;
-        _isFetchingData = NO;
+        self.hasFetched = NO;
+        self.chid = 0;
+        self.isFetchingData = NO;
         
         [users setObject:self forKey:uID];
     }
@@ -130,56 +120,43 @@ static FZZUser *currentUser = nil;
 
 -(id)initPrivateWithUserID:(NSNumber *)uID andName:(NSString *)strName{
     
-    FZZUser *user = [self initPrivateWithUserID:uID];
+    FZZUser3 *user = [self initPrivateWithUserID:uID];
     user.name = strName;
     
     return user;
 }
 
-- (NSNumber *)facebookID
-{
-    [self willAccessValueForKey:@"facebookID"];
-    NSNumber *facebookID = [self primitiveValueForKey:@"facebookID"];
-    [self didAccessValueForKey:@"facebookID"];
-    
-    if ([facebookID integerValue] == 0){
+-(NSNumber *)facebookID{
+    if ([self.facebookID integerValue] == 0){
         return NULL;
     }
     
-    return facebookID;
+    return self.facebookID;
 }
 
-//-(NSNumber *)facebookID{
-//    if ([self.facebookID integerValue] == 0){
-//        return NULL;
-//    }
-//    
-//    return self.facebookID;
-//}
-
-+(void)setMeAs:(FZZUser *)user{
++(void)setMeAs:(FZZUser3 *)user{
     me = user;
 }
 
-+(FZZUser *)me{
++(FZZUser3 *)me{
     return me;
 }
 
-+(FZZUser *)userWithUID:(NSNumber *)uID{
-    FZZUser *user = [users objectForKey:uID];
++(FZZUser3 *)userWithUID:(NSNumber *)uID{
+    FZZUser3 *user = [users objectForKey:uID];
     
     if (!user){
-        user = [[FZZUser alloc] initPrivateWithUserID:uID];
+        user = [[FZZUser3 alloc] initPrivateWithUserID:uID];
     }
     
     return user;
 }
 
 +(id)addUserWithUserID:(NSNumber *)uID andName:(NSString *)strName{
-    FZZUser *user = [users objectForKey:uID];
+    FZZUser3 *user = [users objectForKey:uID];
     
     if (!user){
-        user = [[FZZUser alloc] initPrivateWithUserID:uID
+        user = [[FZZUser3 alloc] initPrivateWithUserID:uID
                                               andName:strName];
     } else {
         user.name = strName;
@@ -188,9 +165,16 @@ static FZZUser *currentUser = nil;
     return user;
 }
 
+-(void)setFacebookID:(NSNumber *)fbID{
+    self.facebookID = fbID;
+}
+
+-(void)setPhoneNumber:(NSString *)pn{
+    self.phoneNumber = pn;
+}
 
 -(BOOL)hasNoImage{
-    return (!_hasFetched || image == NULL);
+    return (!self.hasFetched || image == NULL);
 }
 
 -(BOOL)isAppUser{
@@ -225,32 +209,32 @@ static FZZUser *currentUser = nil;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.layer.cornerRadius = cornerRadius;
     imageView.layer.masksToBounds = YES;
-    //    imageView.layer.borderColor = [UIColor blackColor].CGColor;
-    //    imageView.layer.borderWidth = 1.0;
+//    imageView.layer.borderColor = [UIColor blackColor].CGColor;
+//    imageView.layer.borderWidth = 1.0;
     
     return imageView;
 }
 
 -(UIImageView *)formatImageView:(UIImageView *)imageView ForInitialsWithScalar:(float)scalar{
-    
+
     CGRect rect = CGRectMake(0, 0, 104, 104);
-    
-    //    NSArray *subviews = [imageView subviews];
-    //
-    //    for (int i = 0; i < [subviews count]; ++i){
-    //        UIView *subview = [subviews objectAtIndex:i];
-    //        [subview removeFromSuperview];
-    //    }
-    
+
+//    NSArray *subviews = [imageView subviews];
+//
+//    for (int i = 0; i < [subviews count]; ++i){
+//        UIView *subview = [subviews objectAtIndex:i];
+//        [subview removeFromSuperview];
+//    }
+
     FZZDefaultBubble *bubble = [[FZZDefaultBubble alloc] initWithFrame:rect];
-    
+
     UIImage *image2 = [bubble imageFromBubble];
     [imageView setImage:image2];
-    imageView = [FZZUser formatImageViewToCircular:imageView withScalar:1.0];
-    
+    imageView = [FZZUser3 formatImageViewToCircular:imageView withScalar:1.0];
+
     UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
     UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
-    
+
     [label setFont:font];
     [label setTextColor:[UIColor whiteColor]];
     [label setText:[self initials]];
@@ -298,10 +282,10 @@ static FZZUser *currentUser = nil;
     
     UIImage *image2 = [bubble imageFromBubble];
     [imageView setImage:image2];
-    imageView = [FZZUser formatImageViewToCircular:imageView forRect:rect];
+    imageView = [FZZUser3 formatImageViewToCircular:imageView forRect:rect];
     
     UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
-    //    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
+//    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
     
     UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:(5*rect.size.width)/9];
     
@@ -319,18 +303,23 @@ static FZZUser *currentUser = nil;
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     
-    return [FZZUser formatImageViewToCircular:imageView withScalar:scalar];
+    return [FZZUser3 formatImageViewToCircular:imageView withScalar:scalar];
 }
 
 -(UIImageView *)circularImageForRect:(CGRect)rect{
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     
-    return [FZZUser formatImageViewToCircular:imageView forRect:rect];
+    return [FZZUser3 formatImageViewToCircular:imageView forRect:rect];
 }
 
 -(NSString *)name{
     return self.name;
+}
+
+-(void)setName:(NSString *)name{
+    [self setInitials:nil];
+    self.name = name;
 }
 
 - (void)setInitials:(NSString *)initials{
@@ -383,11 +372,11 @@ static FZZUser *currentUser = nil;
     return self.userID;
 }
 
--(void)setCurrentUser:(FZZUser *)user{
-    currentUser = user;
+-(void)setCurrentUser:(FZZUser3 *)user{
+   currentUser = user;
 }
 
-+(FZZUser *)currentUser{
++(FZZUser3 *)currentUser{
     return currentUser;
 }
 
@@ -477,12 +466,12 @@ static FZZUser *currentUser = nil;
     
     if (image == NULL){
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (_isFetchingData){
+            if (self.isFetchingData){
                 
-                [_completionHandlers addObject:[handler copy]];
+                [self.completionHandlers addObject:[handler copy]];
                 
             } else {
-                _isFetchingData = true;
+                self.isFetchingData = true;
                 _completionHandler = [handler copy];
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -493,15 +482,15 @@ static FZZUser *currentUser = nil;
                         if (_completionHandler != nil){
                             _completionHandler(image);
                             
-                            for (int i = 0; i < [_completionHandlers count]; ++i){
-                                _completionHandler = [_completionHandlers objectAtIndex:i];
+                            for (int i = 0; i < [self.completionHandlers count]; ++i){
+                                _completionHandler = [self.completionHandlers objectAtIndex:i];
                                 _completionHandler(image);
                             }
                         }
                         
                         // Clean up.
                         _completionHandler = nil;
-                        _isFetchingData = false;
+                        self.isFetchingData = false;
                     });
                 });
             }
@@ -519,7 +508,7 @@ static FZZUser *currentUser = nil;
     }
 }
 
-+(FZZUser *)parseJSON:(NSDictionary *)userJSON{
++(FZZUser3 *)parseJSON:(NSDictionary *)userJSON{
     if (userJSON == NULL){
         return NULL;
     }
@@ -527,11 +516,10 @@ static FZZUser *currentUser = nil;
     /* Parse the JSON object */
     
     // User ID Number
-    
+
     NSNumber *uid = [userJSON objectForKey:@"uid"];
     
-    // Phone Number
-    NSString *phoneNumber = [userJSON objectForKey:@"pn"];
+    NSLog(@"\n---\n%@\n---\n", [userJSON objectForKey:@"uid"]);
     
     // App User Object (NULL if not full user)
     NSDictionary *appUserDetails = [userJSON objectForKey:@"appUserDetails"];
@@ -539,18 +527,26 @@ static FZZUser *currentUser = nil;
     NSNumber *fbid;
     
     if (appUserDetails){
-        // Facebook ID number
+    // Facebook ID number
         fbid = [appUserDetails objectForKey:@"fbid"];
-        
     } else {
         fbid = NULL;
     }
+    
+    // Phone Number
+    NSString *phoneNumber = [userJSON objectForKey:@"pn"];
+    
+    // FB Token
+    //NSString *fbToken = [userJSON objectForKey:@"fbToken"];
+    
+    // iOS Token
+    //NSString *iosToken = [userJSON objectForKey:@"iosToken"];
     
     // User's Name
     NSString *name = [userJSON objectForKey:@"name"];
     
     /* Update user info */
-    FZZUser *user = [FZZUser userWithUID:uid];
+    FZZUser3 *user = [FZZUser3 userWithUID:uid];
     user.facebookID = fbid;
     user.phoneNumber = phoneNumber;
     user.name = name;
@@ -566,7 +562,7 @@ static FZZUser *currentUser = nil;
 }
 
 +(void)forUserWithUID:(NSNumber *)uID updateCoordinates:(FZZCoordinate *)coords{
-    FZZUser *user = [[self class] userWithUID:uID];
+    FZZUser3 *user = [[self class] userWithUID:uID];
     [user updateCoordinates:(FZZCoordinate *)coords];
 }
 
@@ -574,7 +570,7 @@ static FZZUser *currentUser = nil;
     NSMutableArray *result = [users mutableCopy];
     
     [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        FZZUser *user = (FZZUser *)obj;
+        FZZUser3 *user = (FZZUser3 *)obj;
         
         [result setObject:[user userID] atIndexedSubscript:idx];
     }];
@@ -590,7 +586,7 @@ static FZZUser *currentUser = nil;
     NSMutableArray *result = [[NSMutableArray alloc] initWithArray:userListJSON];
     
     [userListJSON enumerateObjectsUsingBlock:^(id userJSON, NSUInteger index, BOOL *stop) {
-        FZZUser *user = [FZZUser parseJSON:userJSON];
+        FZZUser3 *user = [FZZUser3 parseJSON:userJSON];
         [result setObject:user atIndexedSubscript:index];
     }];
     
@@ -598,7 +594,7 @@ static FZZUser *currentUser = nil;
 }
 
 +(NSArray *)parseUserJSONFriendList:(NSArray *)friendListJSON{
-    NSMutableArray *result = [FZZUser parseUserJSONList:friendListJSON];
+    NSMutableArray *result = [FZZUser3 parseUserJSONList:friendListJSON];
     
     if (result){
         friends = result;
@@ -652,7 +648,7 @@ static FZZUser *currentUser = nil;
 +(void)socketIOAddFriendsUserArray:(NSArray *)friendList
                    WithAcknowledge:(SocketIOCallback)function{
     
-    NSArray *uids = [FZZUser getUserIDsFromUsers:friendList];
+    NSArray *uids = [FZZUser3 getUserIDsFromUsers:friendList];
     
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
@@ -665,7 +661,7 @@ static FZZUser *currentUser = nil;
 +(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
                       WithAcknowledge:(SocketIOCallback)function{
     
-    NSArray *uids = [FZZUser getUserIDsFromUsers:friendList];
+    NSArray *uids = [FZZUser3 getUserIDsFromUsers:friendList];
     
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     

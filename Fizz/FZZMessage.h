@@ -2,8 +2,8 @@
 //  FZZMessage.h
 //  Fizz
 //
-//  Created by Andrew Sweet on 12/20/13.
-//  Copyright (c) 2013 Fizz. All rights reserved.
+//  Created by Andrew Sweet on 5/18/14.
+//  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
 /*
@@ -16,9 +16,7 @@
  
  */
 
-@class FZZEvent;
-@class FZZUser;
-@class FZZCoordinate;
+@class FZZCoordinate, FZZEvent, FZZUser;
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
@@ -26,19 +24,12 @@
 
 @interface FZZMessage : NSManagedObject
 
-@property (retain, nonatomic) NSNumber *messageID;
-@property (retain, nonatomic) NSString *text;
-@property (retain, nonatomic) NSDate *timestamp;
-@property (retain, nonatomic) FZZCoordinate *marker;
-@property (retain, nonatomic) FZZEvent *event;
-@property (retain, nonatomic) FZZUser  *user;
-
--(FZZEvent *)event;
--(FZZUser *)user;
--(NSString *)text;
--(FZZCoordinate *)marker;
--(NSDate *)timestamp;
--(NSNumber *)messageID;
+@property (nonatomic, retain) NSNumber * messageID;
+@property (nonatomic, retain) NSString * text;
+@property (nonatomic, retain) NSDate * creationTime;
+@property (nonatomic, retain) FZZCoordinate *marker;
+@property (nonatomic, retain) FZZUser *user;
+@property (nonatomic, retain) FZZEvent *event;
 
 -(BOOL)isServerMessage;
 
@@ -49,6 +40,6 @@
           WithAcknowledge:(SocketIOCallback)function;
 
 +(FZZMessage *)parseJSON:(NSDictionary *)messageJSON;
-+(NSArray *)parseMessageJSONList:(NSArray *)messageListJSON;
++(NSDictionary *)parseMessageJSONDict:(NSDictionary *)messageDictJSON;
 
 @end

@@ -12,10 +12,10 @@
  
  While in the expanded view, each of these cells is what's on display.
  Each cell contains a tableview which scrolls vertically, 
- revealing the cell containing the chat view, [TODO (5/13/14)]
- and the cell containing the invite view. [TODO (5/13/14)]
+ revealing the cell containing the chat view, [TODOAndrew (5/13/14)]
+ and the cell containing the invite view. [TODOAndrew (5/13/14)]
  
- [TODO (5/13/14)] The current implementation does not paginate, they are simply in
+ [TODOAndrew (5/13/14)] The current implementation does not paginate, they are simply in
  one large scrolling view which locks if you choose to leave the view. Pagination
  is a much simpler and more appropriate approach for the current design.
  

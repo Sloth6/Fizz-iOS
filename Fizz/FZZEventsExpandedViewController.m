@@ -1236,11 +1236,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     // Submitting content
     // Scrolling is still disabled
     [FZZEvent socketIONewEventWithMessage:textView.text
-                                 AndSeats:0
-                           AndAcknowledge:^(id argsData) {
-                               NSLog(@"Acknowledge!");
-                               NSLog(@"%@", argsData);
-                           }];
+                           AndAcknowledge:Nil];
     
     [UIView animateWithDuration:0.25 animations:^{
         [textView setTextColor:[UIColor blackColor]];
@@ -1293,8 +1289,13 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 - (void)updateEvents:(NSMutableArray *)incomingEvents{
     NSLog(@"%dxx!", [incomingEvents count]);
     
-    // Resort current Events because of messaging activity
+    // Re-sort current Events because of messaging activity
     if (incomingEvents == NULL){
+        _events = [FZZEvent getEvents];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView reloadData];
+        });
         
         return;
     }

@@ -19,8 +19,8 @@
 		49069B1C186517FE003D003A /* SocketIOTransportWebsocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B16186517FE003D003A /* SocketIOTransportWebsocket.m */; };
 		49069B1D186517FE003D003A /* SocketIOTransportXHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B18186517FE003D003A /* SocketIOTransportXHR.m */; };
 		49069B2018651FFA003D003A /* FZZSocketIODelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B1F18651FFA003D003A /* FZZSocketIODelegate.m */; };
-		49069B2318652C66003D003A /* FZZEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B2218652C66003D003A /* FZZEvent.m */; };
-		49069B2618652D58003D003A /* FZZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B2518652D58003D003A /* FZZMessage.m */; };
+		49069B2318652C66003D003A /* FZZEvent3.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B2218652C66003D003A /* FZZEvent3.m */; };
+		49069B2618652D58003D003A /* FZZMessage3.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B2518652D58003D003A /* FZZMessage3.m */; };
 		49069B4218657D3E003D003A /* FZZLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B4018657D3E003D003A /* FZZLoginViewController.m */; };
 		49069B4318657D3E003D003A /* FZZLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49069B4118657D3E003D003A /* FZZLoginViewController.xib */; };
 		49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B6E18661555003D003A /* SBJson4StreamWriterState.m */; };
@@ -31,7 +31,7 @@
 		49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B7918661555003D003A /* SBJson4StreamParserState.m */; };
 		49069B8218661555003D003A /* SBJson4StreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B7A18661555003D003A /* SBJson4StreamTokeniser.m */; };
 		4914AC9E190FEBA000C198B6 /* FZZDataStore2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4914AC9D190FEBA000C198B6 /* FZZDataStore2.m */; };
-		4914ACA2190FEFB300C198B6 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4914ACA0190FEFB300C198B6 /* DataModel.xcdatamodeld */; };
+		4914ACA2190FEFB300C198B6 /* Fizz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4914ACA0190FEFB300C198B6 /* Fizz.xcdatamodeld */; };
 		4922702118CA1CA600816AD4 /* FZZEventsExpandedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4922702018CA1CA600816AD4 /* FZZEventsExpandedViewController.m */; };
 		494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */; };
 		494BFB3218E08FD600C59D18 /* CMTPCustomForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2118E08FD600C59D18 /* CMTPCustomForce.m */; };
@@ -65,8 +65,10 @@
 		4989270B18E34F3E00AECCF8 /* FZZDefaultBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270A18E34F3E00AECCF8 /* FZZDefaultBubble.m */; };
 		498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498E5E6D18B42CB300487898 /* FacebookSDK.framework */; };
 		49923ADE18727FDF0045107C /* FZZFacebookLoginDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49923ADD18727FDF0045107C /* FZZFacebookLoginDelegate.m */; };
-		4994FC5C192996A800BD2FB8 /* FZZUser2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FC5B192996A800BD2FB8 /* FZZUser2.m */; };
-		4994FC601929994500BD2FB8 /* FZZEvent2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FC5F1929994500BD2FB8 /* FZZEvent2.m */; };
+		4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */; };
+		4994FCFD1929D2C000BD2FB8 /* FZZEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFC1929D2C000BD2FB8 /* FZZEvent.m */; };
+		4994FD001929D2D800BD2FB8 /* FZZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFF1929D2D800BD2FB8 /* FZZMessage.m */; };
+		4994FD031929D2EE00BD2FB8 /* FZZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FD021929D2EE00BD2FB8 /* FZZUser.m */; };
 		499A8E7F18CD336800842EA7 /* FZZUserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 499A8E7E18CD336800842EA7 /* FZZUserMessageCell.m */; };
 		499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 499A8E8018CD337B00842EA7 /* FZZUserMessageCell.xib */; };
 		49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F5A18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m */; };
@@ -75,7 +77,8 @@
 		49AA439218E8FBFE006D6830 /* FZZServerMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA439118E8FBFE006D6830 /* FZZServerMessageCell.xib */; };
 		49B1C17818E4C6F2007C5D44 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */; };
 		49B1C17B18E4C6F8007C5D44 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */; };
-		49BBF68818942B5400292723 /* FZZCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BBF68718942B5400292723 /* FZZCoordinate.m */; };
+		49BBF68818942B5400292723 /* FZZCoordinate3.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BBF68718942B5400292723 /* FZZCoordinate3.m */; };
+		49BCC49C192D2FAA0085CE16 /* FZZCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BCC49B192D2FAA0085CE16 /* FZZCluster.m */; };
 		49C8B1551889F08600400832 /* FZZEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C8B1541889F08600400832 /* FZZEventCell.m */; };
 		49C9618E18D28E3F0061A903 /* FZZEventsCondensedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C9618D18D28E3F0061A903 /* FZZEventsCondensedViewController.m */; };
 		49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C99F186042C2002BB1F0 /* Foundation.framework */; };
@@ -90,7 +93,7 @@
 		49D5C9BB186042C2002BB1F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A3186042C2002BB1F0 /* UIKit.framework */; };
 		49D5C9C3186042C2002BB1F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49D5C9C1186042C2002BB1F0 /* InfoPlist.strings */; };
 		49D5C9C5186042C2002BB1F0 /* FizzTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9C4186042C2002BB1F0 /* FizzTests.m */; };
-		49D5C9D3186044B2002BB1F0 /* FZZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9D2186044B2002BB1F0 /* FZZUser.m */; };
+		49D5C9D3186044B2002BB1F0 /* FZZUser3.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9D2186044B2002BB1F0 /* FZZUser3.m */; };
 		49D5C9DE1860471D002BB1F0 /* BCNInternalUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9DD1860471D002BB1F0 /* BCNInternalUtils.m */; };
 		49D5C9E218604973002BB1F0 /* FZZ_Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D5C9E118604973002BB1F0 /* FZZ_Reachability.m */; };
 		49D5E6D318616A56002BB1F0 /* datakit.js in Resources */ = {isa = PBXBuildFile; fileRef = 49D5E6C918616A56002BB1F0 /* datakit.js */; };
@@ -192,10 +195,10 @@
 		49069B18186517FE003D003A /* SocketIOTransportXHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOTransportXHR.m; sourceTree = "<group>"; };
 		49069B1E18651FFA003D003A /* FZZSocketIODelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZSocketIODelegate.h; sourceTree = "<group>"; };
 		49069B1F18651FFA003D003A /* FZZSocketIODelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZSocketIODelegate.m; sourceTree = "<group>"; };
-		49069B2118652C66003D003A /* FZZEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEvent.h; sourceTree = "<group>"; };
-		49069B2218652C66003D003A /* FZZEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEvent.m; sourceTree = "<group>"; };
-		49069B2418652D58003D003A /* FZZMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZMessage.h; sourceTree = "<group>"; };
-		49069B2518652D58003D003A /* FZZMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZMessage.m; sourceTree = "<group>"; };
+		49069B2118652C66003D003A /* FZZEvent3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEvent3.h; sourceTree = "<group>"; };
+		49069B2218652C66003D003A /* FZZEvent3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEvent3.m; sourceTree = "<group>"; };
+		49069B2418652D58003D003A /* FZZMessage3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZMessage3.h; sourceTree = "<group>"; };
+		49069B2518652D58003D003A /* FZZMessage3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZMessage3.m; sourceTree = "<group>"; };
 		49069B3F18657D3E003D003A /* FZZLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZLoginViewController.h; sourceTree = "<group>"; };
 		49069B4018657D3E003D003A /* FZZLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZLoginViewController.m; sourceTree = "<group>"; };
 		49069B4118657D3E003D003A /* FZZLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZLoginViewController.xib; sourceTree = "<group>"; };
@@ -216,7 +219,7 @@
 		49069B7B18661555003D003A /* SBJson4StreamTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamTokeniser.h; sourceTree = "<group>"; };
 		4914AC9C190FEBA000C198B6 /* FZZDataStore2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZDataStore2.h; sourceTree = "<group>"; };
 		4914AC9D190FEBA000C198B6 /* FZZDataStore2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZDataStore2.m; sourceTree = "<group>"; };
-		4914ACA1190FEFB300C198B6 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		4914ACA1190FEFB300C198B6 /* Fizz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Fizz.xcdatamodel; sourceTree = "<group>"; };
 		4922701F18CA1CA600816AD4 /* FZZEventsExpandedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventsExpandedViewController.h; sourceTree = "<group>"; };
 		4922702018CA1CA600816AD4 /* FZZEventsExpandedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEventsExpandedViewController.m; sourceTree = "<group>"; };
 		494BFB1D18E08FD600C59D18 /* CMTPAttraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPAttraction.h; path = CMTraerPhysics/CMTraerPhysics/CMTPAttraction.h; sourceTree = SOURCE_ROOT; };
@@ -279,10 +282,14 @@
 		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		49923ADC18727FDF0045107C /* FZZFacebookLoginDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZFacebookLoginDelegate.h; sourceTree = "<group>"; };
 		49923ADD18727FDF0045107C /* FZZFacebookLoginDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZFacebookLoginDelegate.m; sourceTree = "<group>"; };
-		4994FC5A192996A800BD2FB8 /* FZZUser2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUser2.h; sourceTree = "<group>"; };
-		4994FC5B192996A800BD2FB8 /* FZZUser2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUser2.m; sourceTree = "<group>"; };
-		4994FC5E1929994500BD2FB8 /* FZZEvent2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEvent2.h; sourceTree = "<group>"; };
-		4994FC5F1929994500BD2FB8 /* FZZEvent2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEvent2.m; sourceTree = "<group>"; };
+		4994FCF51929D23900BD2FB8 /* FZZCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCoordinate.h; sourceTree = "<group>"; };
+		4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCoordinate.m; sourceTree = "<group>"; };
+		4994FCFB1929D2C000BD2FB8 /* FZZEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEvent.h; sourceTree = "<group>"; };
+		4994FCFC1929D2C000BD2FB8 /* FZZEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEvent.m; sourceTree = "<group>"; };
+		4994FCFE1929D2D800BD2FB8 /* FZZMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZMessage.h; sourceTree = "<group>"; };
+		4994FCFF1929D2D800BD2FB8 /* FZZMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZMessage.m; sourceTree = "<group>"; };
+		4994FD011929D2EE00BD2FB8 /* FZZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUser.h; sourceTree = "<group>"; };
+		4994FD021929D2EE00BD2FB8 /* FZZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUser.m; sourceTree = "<group>"; };
 		499A8E7D18CD336800842EA7 /* FZZUserMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUserMessageCell.h; sourceTree = "<group>"; };
 		499A8E7E18CD336800842EA7 /* FZZUserMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUserMessageCell.m; sourceTree = "<group>"; };
 		499A8E8018CD337B00842EA7 /* FZZUserMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZUserMessageCell.xib; sourceTree = "<group>"; };
@@ -295,8 +302,10 @@
 		49AAFC2B18CBD3260029A07C /* MapView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MapView.xcodeproj; path = "/Users/Andrew/Beacon App/Beacon/MapView/mapbox-ios-example/MapBox-iOS-SDK/MapView/MapView.xcodeproj"; sourceTree = "<absolute>"; };
 		49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		49BBF68618942B5400292723 /* FZZCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCoordinate.h; sourceTree = "<group>"; };
-		49BBF68718942B5400292723 /* FZZCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCoordinate.m; sourceTree = "<group>"; };
+		49BBF68618942B5400292723 /* FZZCoordinate3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCoordinate3.h; sourceTree = "<group>"; };
+		49BBF68718942B5400292723 /* FZZCoordinate3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCoordinate3.m; sourceTree = "<group>"; };
+		49BCC49A192D2FAA0085CE16 /* FZZCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCluster.h; sourceTree = "<group>"; };
+		49BCC49B192D2FAA0085CE16 /* FZZCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCluster.m; sourceTree = "<group>"; };
 		49C8B1531889F08600400832 /* FZZEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventCell.h; sourceTree = "<group>"; };
 		49C8B1541889F08600400832 /* FZZEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEventCell.m; sourceTree = "<group>"; };
 		49C9618C18D28E3F0061A903 /* FZZEventsCondensedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventsCondensedViewController.h; sourceTree = "<group>"; };
@@ -317,8 +326,8 @@
 		49D5C9C0186042C2002BB1F0 /* FizzTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FizzTests-Info.plist"; sourceTree = "<group>"; };
 		49D5C9C2186042C2002BB1F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49D5C9C4186042C2002BB1F0 /* FizzTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FizzTests.m; sourceTree = "<group>"; };
-		49D5C9D1186044B2002BB1F0 /* FZZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUser.h; sourceTree = "<group>"; };
-		49D5C9D2186044B2002BB1F0 /* FZZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUser.m; sourceTree = "<group>"; };
+		49D5C9D1186044B2002BB1F0 /* FZZUser3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUser3.h; sourceTree = "<group>"; };
+		49D5C9D2186044B2002BB1F0 /* FZZUser3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUser3.m; sourceTree = "<group>"; };
 		49D5C9DC1860471D002BB1F0 /* BCNInternalUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCNInternalUtils.h; sourceTree = "<group>"; };
 		49D5C9DD1860471D002BB1F0 /* BCNInternalUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCNInternalUtils.m; sourceTree = "<group>"; };
 		49D5C9E018604973002BB1F0 /* FZZ_Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZ_Reachability.h; sourceTree = "<group>"; };
@@ -512,11 +521,7 @@
 			children = (
 				4914AC9C190FEBA000C198B6 /* FZZDataStore2.h */,
 				4914AC9D190FEBA000C198B6 /* FZZDataStore2.m */,
-				4914ACA0190FEFB300C198B6 /* DataModel.xcdatamodeld */,
-				4994FC5E1929994500BD2FB8 /* FZZEvent2.h */,
-				4994FC5F1929994500BD2FB8 /* FZZEvent2.m */,
-				4994FC5A192996A800BD2FB8 /* FZZUser2.h */,
-				4994FC5B192996A800BD2FB8 /* FZZUser2.m */,
+				4914ACA0190FEFB300C198B6 /* Fizz.xcdatamodeld */,
 			);
 			name = "Data Store";
 			sourceTree = "<group>";
@@ -616,14 +621,17 @@
 		496B87B4190D86B700E100FB /* Fizz Objects */ = {
 			isa = PBXGroup;
 			children = (
-				49BBF68618942B5400292723 /* FZZCoordinate.h */,
-				49BBF68718942B5400292723 /* FZZCoordinate.m */,
-				49D5C9D1186044B2002BB1F0 /* FZZUser.h */,
-				49D5C9D2186044B2002BB1F0 /* FZZUser.m */,
-				49069B2418652D58003D003A /* FZZMessage.h */,
-				49069B2518652D58003D003A /* FZZMessage.m */,
-				49069B2118652C66003D003A /* FZZEvent.h */,
-				49069B2218652C66003D003A /* FZZEvent.m */,
+				4994FCF51929D23900BD2FB8 /* FZZCoordinate.h */,
+				4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */,
+				4994FCFB1929D2C000BD2FB8 /* FZZEvent.h */,
+				4994FCFC1929D2C000BD2FB8 /* FZZEvent.m */,
+				4994FCFE1929D2D800BD2FB8 /* FZZMessage.h */,
+				4994FCFF1929D2D800BD2FB8 /* FZZMessage.m */,
+				4994FD011929D2EE00BD2FB8 /* FZZUser.h */,
+				4994FD021929D2EE00BD2FB8 /* FZZUser.m */,
+				49BCC49A192D2FAA0085CE16 /* FZZCluster.h */,
+				49BCC49B192D2FAA0085CE16 /* FZZCluster.m */,
+				4994FD041929D36A00BD2FB8 /* OLD */,
 			);
 			name = "Fizz Objects";
 			sourceTree = "<group>";
@@ -675,6 +683,21 @@
 				4989270718E2A8DC00AECCF8 /* FZZManageFriendCell.xib */,
 			);
 			name = "Friend Management";
+			sourceTree = "<group>";
+		};
+		4994FD041929D36A00BD2FB8 /* OLD */ = {
+			isa = PBXGroup;
+			children = (
+				49BBF68618942B5400292723 /* FZZCoordinate3.h */,
+				49BBF68718942B5400292723 /* FZZCoordinate3.m */,
+				49D5C9D1186044B2002BB1F0 /* FZZUser3.h */,
+				49D5C9D2186044B2002BB1F0 /* FZZUser3.m */,
+				49069B2418652D58003D003A /* FZZMessage3.h */,
+				49069B2518652D58003D003A /* FZZMessage3.m */,
+				49069B2118652C66003D003A /* FZZEvent3.h */,
+				49069B2218652C66003D003A /* FZZEvent3.m */,
+			);
+			name = OLD;
 			sourceTree = "<group>";
 		};
 		499A8E7918CD32B000842EA7 /* Chat Cells */ = {
@@ -1078,28 +1101,30 @@
 			files = (
 				494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */,
 				49069B2018651FFA003D003A /* FZZSocketIODelegate.m in Sources */,
-				49D5C9D3186044B2002BB1F0 /* FZZUser.m in Sources */,
+				49D5C9D3186044B2002BB1F0 /* FZZUser3.m in Sources */,
 				49F524D518E212840019C5DF /* FZZNavIcon.m in Sources */,
 				4954FB0818D3AB800083D07F /* PhoneNumberFormatter.m in Sources */,
 				49EEEA9718D972FB00BDA605 /* FZZBackspaceResignTextView.m in Sources */,
 				494BFB3318E08FD600C59D18 /* CMTPForce.m in Sources */,
-				49069B2618652D58003D003A /* FZZMessage.m in Sources */,
+				49069B2618652D58003D003A /* FZZMessage3.m in Sources */,
 				494BFB3218E08FD600C59D18 /* CMTPCustomForce.m in Sources */,
 				49C8B1551889F08600400832 /* FZZEventCell.m in Sources */,
 				49F524D218E1C3040019C5DF /* FZZOverlayView.m in Sources */,
 				494BFB3418E08FD600C59D18 /* CMTPIntegrator.m in Sources */,
-				49069B2318652C66003D003A /* FZZEvent.m in Sources */,
+				49069B2318652C66003D003A /* FZZEvent3.m in Sources */,
 				4954FB2018D4F1010083D07F /* FZZInviteCell.m in Sources */,
+				4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */,
 				49069B1C186517FE003D003A /* SocketIOTransportWebsocket.m in Sources */,
 				49069B8218661555003D003A /* SBJson4StreamTokeniser.m in Sources */,
 				4914AC9E190FEBA000C198B6 /* FZZDataStore2.m in Sources */,
 				494BFB3518E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m in Sources */,
 				4954FB0B18D4BD280083D07F /* FZZExpandedEventCell.m in Sources */,
 				494BFB4018E0B88400C59D18 /* FZZInteractiveBubble.m in Sources */,
-				4994FC601929994500BD2FB8 /* FZZEvent2.m in Sources */,
+				4994FD001929D2D800BD2FB8 /* FZZMessage.m in Sources */,
 				49AA439018E8FBEC006D6830 /* FZZServerMessageCell.m in Sources */,
 				49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */,
 				49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */,
+				4994FD031929D2EE00BD2FB8 /* FZZUser.m in Sources */,
 				494BFB3D18E093B400C59D18 /* FZZBubbleViewController.m in Sources */,
 				49D5C9E218604973002BB1F0 /* FZZ_Reachability.m in Sources */,
 				49069B0618651731003D003A /* SRWebSocket.m in Sources */,
@@ -1108,7 +1133,9 @@
 				49D5C9B0186042C2002BB1F0 /* FZZAppDelegate.m in Sources */,
 				49069B0518651731003D003A /* NSData+SRB64Additions.m in Sources */,
 				4989270618E2A02600AECCF8 /* FZZManageFriendCell.m in Sources */,
+				49BCC49C192D2FAA0085CE16 /* FZZCluster.m in Sources */,
 				4954FB0118D3AAA40083D07F /* FZZInputPhoneViewController.m in Sources */,
+				4994FCFD1929D2C000BD2FB8 /* FZZEvent.m in Sources */,
 				499A8E7F18CD336800842EA7 /* FZZUserMessageCell.m in Sources */,
 				495E9D28187BAF98008F7CC7 /* FZZSpeechBubble.m in Sources */,
 				49069B1D186517FE003D003A /* SocketIOTransportXHR.m in Sources */,
@@ -1128,9 +1155,8 @@
 				4922702118CA1CA600816AD4 /* FZZEventsExpandedViewController.m in Sources */,
 				49069B4218657D3E003D003A /* FZZLoginViewController.m in Sources */,
 				4954FB1918D4EFFF0083D07F /* FZZInviteViewController.m in Sources */,
-				4914ACA2190FEFB300C198B6 /* DataModel.xcdatamodeld in Sources */,
-				49BBF68818942B5400292723 /* FZZCoordinate.m in Sources */,
-				4994FC5C192996A800BD2FB8 /* FZZUser2.m in Sources */,
+				4914ACA2190FEFB300C198B6 /* Fizz.xcdatamodeld in Sources */,
+				49BBF68818942B5400292723 /* FZZCoordinate3.m in Sources */,
 				4989270B18E34F3E00AECCF8 /* FZZDefaultBubble.m in Sources */,
 				49069B19186517FE003D003A /* SocketIO.m in Sources */,
 				49069B1A186517FE003D003A /* SocketIOJSONSerialization.m in Sources */,
@@ -1396,13 +1422,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		4914ACA0190FEFB300C198B6 /* DataModel.xcdatamodeld */ = {
+		4914ACA0190FEFB300C198B6 /* Fizz.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				4914ACA1190FEFB300C198B6 /* DataModel.xcdatamodel */,
+				4914ACA1190FEFB300C198B6 /* Fizz.xcdatamodel */,
 			);
-			currentVersion = 4914ACA1190FEFB300C198B6 /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
+			currentVersion = 4914ACA1190FEFB300C198B6 /* Fizz.xcdatamodel */;
+			path = Fizz.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -13,7 +13,7 @@
  
  This is the core CollectionViewController. It displays what I've called the Event Stream, or all of the events you've been invited to. Each cell in the ESVC contains nested TableViews handled by delegate ViewControllers to handle the user interaction with each given event. This VC simply allows you to navigate between full-screen events (horizontally in the current design (5/13/14)).
 
- [TODO (5/13/14)] While the above text claims each cell contains a nested TableView, it currently contains a nested TableViewController, which is wasteful since all interactions are highly modular. Instead, the app will contain 1 type of each VC in the workspace (probably stored within the AppDelegate, or by some other means). Also a note, my intuition tells me there's too much dependency upon the AppDelegate (do a search for FZZAppDelegate and note how many classes reference it). Long-term goal might be to reduce the classes which need to directly reference the AppDelegate to increase modularity.
+ [TODOAndrew (5/13/14)] While the above text claims each cell contains a nested TableView, it currently contains a nested TableViewController, which is wasteful since all interactions are highly modular. Instead, the app will contain 1 type of each VC in the workspace (probably stored within the AppDelegate, or by some other means). Also a note, my intuition tells me there's too much dependency upon the AppDelegate (do a search for FZZAppDelegate and note how many classes reference it). Long-term goal might be to reduce the classes which need to directly reference the AppDelegate to increase modularity.
  
  */
 

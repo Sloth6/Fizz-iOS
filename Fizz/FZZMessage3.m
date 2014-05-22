@@ -1,48 +1,45 @@
 //
-//  FZZMessage.m
+//  FZZMessage3.m
 //  Fizz
 //
-//  Created by Andrew Sweet on 5/18/14.
-//  Copyright (c) 2014 Fizz. All rights reserved.
+//  Created by Andrew Sweet on 12/20/13.
+//  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
-#import "FZZMessage.h"
-#import "FZZCoordinate.h"
+#import "FZZMessage3.h"
 #import "FZZEvent.h"
 #import "FZZUser.h"
+#import "FZZCoordinate.h"
 #import "FZZSocketIODelegate.h"
-#import "FZZAppDelegate.h"
 
 static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 
+@interface FZZMessage3 ()
 
-@implementation FZZMessage
+//@property (strong, nonatomic) NSNumber *messageID;
+
+//@property (strong, nonatomic) NSString *text;
+//@property (strong, nonatomic) FZZCoordinate *marker;
+
+@property (strong, nonatomic) NSDate *creationTime;
+
+@end
+
+@implementation FZZMessage3
 
 @dynamic messageID;
 @dynamic text;
-@dynamic creationTime;
+@dynamic timestamp;
 @dynamic marker;
-@dynamic user;
 @dynamic event;
+@dynamic user;
 
--(NSEntityDescription *)getEntityDescription{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    return [NSEntityDescription entityForName:@"FZZMessage" inManagedObjectContext:moc];
-}
+//@synthesize user, text, event, messageID;
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndText:(NSString *)inputText ForEvent:(FZZEvent *)inputEvent{
+    self = [super init];
     
-//    self = [super init];
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
-
-    //    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
+//    self = (FZZMessage3 *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage3"];
     
     if (self){
         self.messageID = mID;
@@ -56,15 +53,9 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndMarker:(FZZCoordinate *)marker ForEvent:(FZZEvent *)inputEvent{
-//    self = [super init];
+    self = [super init];
     
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
-    
-    //    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
+//    self = (FZZMessage3 *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage3"];
     
     if (self){
         self.messageID = mID;
@@ -75,6 +66,34 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     }
     
     return self;
+}
+
+-(NSDate *)creationTime{
+    return self.creationTime;
+}
+
+-(void)setCreationTime:(NSDate *)creationTime{
+    self.creationTime = creationTime;
+}
+
+-(FZZUser *)user{
+    return self.user;
+}
+
+-(BOOL)isServerMessage{
+    return self.user == NULL;
+}
+
+-(NSString *)text{
+    return self.text;
+}
+
+-(FZZCoordinate *)marker{
+    return self.marker;
+}
+
+-(void)setMarker:(FZZCoordinate *)marker{
+    self.marker = marker;
 }
 
 +(void)socketIONewMessage:(NSString *)text
@@ -91,7 +110,7 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_MESSAGE withData:json andAcknowledge:function];
 }
 
-+(FZZMessage *)parseJSON:(NSDictionary *)messageJSON{
++(FZZMessage3 *)parseJSON:(NSDictionary *)messageJSON{
     if (messageJSON == NULL){
         return NULL;
     }
@@ -129,7 +148,7 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     FZZCoordinate *marker;
     
     if (!text){
-        marker = [FZZCoordinate parseJSON:[messageJSON objectForKey:@"marker"]];
+        marker = [FZZCoordinate parseJSON:[messageJSON objectForKey:@"latlng"]];
     }
     
     // When this message was created
@@ -139,16 +158,16 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
         creationTime = [NSDate dateWithTimeIntervalSince1970:[creationTimeNum integerValue]];
     }
     
-    FZZMessage *message;
+    FZZMessage3 *message;
     
     // Message can either contain a marker or text
     if (text){
-        message = [[FZZMessage alloc] initWithMID:mid
+        message = [[FZZMessage3 alloc] initWithMID:mid
                                              User:user
                                           AndText:text
                                          ForEvent:event];
     } else {
-        message = [[FZZMessage alloc] initWithMID:mid
+        message = [[FZZMessage3 alloc] initWithMID:mid
                                              User:user
                                         AndMarker:marker
                                          ForEvent:event];
@@ -159,28 +178,16 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     return message;
 }
 
-+(NSDictionary *)parseMessageJSONDict:(NSDictionary *)messageDictJSON{
-    if (messageDictJSON == NULL){
++(NSArray *)parseMessageJSONList:(NSArray *)messageListJSON{
+    if (messageListJSON == NULL){
         return NULL;
     }
     
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:[messageDictJSON count]];
+    NSMutableArray *result = [[NSMutableArray alloc] initWithArray:messageListJSON];
     
-    [messageDictJSON enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        NSNumber *eid = key;
-        NSArray *messagesJSON = obj;
-        NSMutableArray *messagesForEid = [[NSMutableArray alloc] initWithCapacity:[messagesJSON count]];
-        
-        for (int i = 0; i < [messagesJSON count]; ++i){
-            NSDictionary *messageJSON = [messagesJSON objectAtIndex:i];
-            FZZMessage *message = [FZZMessage parseJSON:messageJSON];
-            [messagesForEid addObject:message];
-        }
-        
-        FZZEvent *event = [FZZEvent eventWithEID:eid];
-        [event addMessages:[NSOrderedSet orderedSetWithArray:messagesForEid]];
-        
-        [result setObject:messagesForEid forKey:eid];
+    [messageListJSON enumerateObjectsUsingBlock:^(id messageJSON, NSUInteger index, BOOL *stop) {
+        FZZMessage3 *message = [FZZMessage3 parseJSON:messageJSON];
+        [result setObject:message atIndexedSubscript:index];
     }];
     
     return result;
@@ -206,6 +213,18 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     }
     
     return dict;
+}
+
+-(NSDate *)timestamp{
+    return self.creationTime;
+}
+
+-(FZZEvent *)event{
+    return self.event;
+}
+
+-(NSNumber *)messageID{
+    return self.messageID;
 }
 
 @end

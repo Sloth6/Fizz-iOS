@@ -1,39 +1,44 @@
 //
-//  FZZUser.h
+//  FZZUser3.h
 //  Fizz
 //
-//  Created by Andrew Sweet on 5/18/14.
-//  Copyright (c) 2014 Fizz. All rights reserved.
+//  Created by Andrew Sweet on 12/17/13.
+//  Copyright (c) 2013 Fizz. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "FZZCoordinate.h"
+#import "FZZDefaultBubble.h"
 #import "SocketIO.h"
 
-@class FZZCoordinate, FZZEvent;
-
-/*
- 
- The FZZUser is a class which attempts to maintain a set of all cached users the current user has interacted with (with possible LRU eviction written in the future).
- 
- Grabbing a user should most often be a call like this:
- 
- [FZZUser userWithId:ENTER_FIZZ_USER_ID]
- 
- Think of this class and the FZZEvent class as dictionaries where you can access a user in the dictionary if it exists, and if it doesn't yet exist, the user will be inserted and then returned to you. The only exception to this rule is when the server is writing to the FZZUser class or we read users from the local cache.
- 
- WithAcknowledge should generally accept a null object. Whatever SocketIOCallback function is passed to that parameter will be called when the socket object is successfully sent. It may actually be when a callback from the server occurs; I believe it to be the first, and so I don't think it's nearly as useful.
- 
- */
-
-@interface FZZUser : NSManagedObject
+@interface FZZUser3 : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * facebookID;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * phoneNumber;
 @property (nonatomic, retain) NSNumber * userID;
 @property (nonatomic, retain) FZZCoordinate *coords;
+@property (nonatomic, retain) FZZUser3 *creator;
 
+/*
+ 
+ The FZZUser3 is a class which attempts to maintain a set of all cached users the current user has interacted with (with possible LRU eviction written in the future).
+ 
+ Grabbing a user should most often be a call like this:
+ 
+ [FZZUser3 userWithId:ENTER_FIZZ_USER_ID]
+ 
+ Think of this class and the FZZEvent class as dictionaries where you can access a user in the dictionary if it exists, and if it doesn't yet exist, the user will be inserted and then returned to you. The only exception to this rule is when the server is writing to the FZZUser3 class or we read users from the local cache.
+ 
+ WithAcknowledge should generally accept a null object. Whatever SocketIOCallback function is passed to that parameter will be called when the socket object is successfully sent. It may actually be when a callback from the server occurs; I believe it to be the first, and so I don't think it's nearly as useful.
+ 
+ */
+
+-(NSNumber *)userID;
+-(NSString *)phoneNumber;
+-(NSString *)name;
+-(NSNumber *)facebookID;
 -(NSString *)initials;
 
 // Use this to get a profile picture
@@ -66,17 +71,17 @@
 +(id)addUserWithUserID:(NSNumber *)uID andName:(NSString *)strName;
 
 +(void)setupUserClass;
-+(FZZUser *)userWithUID:(NSNumber *)uID;
-+(FZZUser *)currentUser;
++(FZZUser3 *)userWithUID:(NSNumber *)uID;
++(FZZUser3 *)currentUser;
 +(NSArray *)getUsers;
 +(NSArray *)getFriends;
 
-+(void)setMeAs:(FZZUser *)me;
-+(FZZUser *)me;
++(void)setMeAs:(FZZUser3 *)me;
++(FZZUser3 *)me;
 
 +(void)addFriends:(NSArray *)friends;
 
-+(FZZUser *)parseJSON:(NSDictionary *)userJSON;
++(FZZUser3 *)parseJSON:(NSDictionary *)userJSON;
 -(NSDictionary *)toJson;
 +(NSArray *)usersToJSONUsers:(NSArray *)users;
 

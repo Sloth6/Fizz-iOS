@@ -2,62 +2,63 @@
 //  FZZEvent.m
 //  Fizz
 //
-//  Created by Andrew Sweet on 12/20/13.
-//  Copyright (c) 2013 Fizz. All rights reserved.
+//  Created by Andrew Sweet on 5/18/14.
+//  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
 #import "FZZEvent.h"
 #import "FZZMessage.h"
 #import "FZZUser.h"
+#import "SocketIO.h"
+#import "FZZSocketIODelegate.h"
+#import "FZZAppDelegate.h"
+#import "FZZCluster.h"
 
 static NSMutableDictionary *events;
 
 static NSString *FZZ_NEW_EVENT   = @"newEvent";
 static NSString *FZZ_JOIN_EVENT  = @"joinEvent";
 static NSString *FZZ_LEAVE_EVENT = @"leaveEvent";
-static NSString *FZZ_SET_SEAT_CAPACITY = @"setSeatCapacity";
+//static NSString *FZZ_SET_SEAT_CAPACITY = @"setSeatCapacity";
 static NSString *FZZ_NEW_INVITES = @"newInvites";
-static NSString *FZZ_REQUEST = @"request";
+static NSString *FZZ_SUGGEST_INVITED_LIST = @"suggestInvitedList";
+static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 
 
 @interface FZZEvent ()
 
-//@property (strong, nonatomic) NSNumber *eventID;
-
-//@property (strong, nonatomic) FZZUser *creator;
-
-@property NSTimer *seatTimer;
+//@property NSTimer *seatTimer;
 
 //@property (strong, nonatomic) NSMutableArray *presentAtEvent;
 //@property (strong, nonatomic) NSMutableArray *guests;
 //@property (strong, nonatomic) NSMutableArray *invitees;
 
-@property (strong, nonatomic) NSMutableSet *inviteesSet;
-
 @property (nonatomic) BOOL haveExpressedInterest;
-@property BOOL haveSeatsChanged;
+//@property BOOL haveSeatsChanged;
 
 //@property (strong, nonatomic) NSNumber *numSeats;
-@property (strong, nonatomic) NSNumber *pendingNumSeats;
+//@property (strong, nonatomic) NSNumber *pendingNumSeats;
 
 @property (strong, nonatomic) NSDate *lastUpdate;
-
-// A lightly-sorted list of users who are engaged with the event (attending or commenting or both)
-//@property (strong, nonatomic) NSMutableArray *engaged;
 
 @end
 
 @implementation FZZEvent
 
+@dynamic creator;
+@dynamic creationTime;
 @dynamic eventID;
-@dynamic presentAtEvent;
-@dynamic guestsNotPresent;
-@dynamic inviteesNotGuest;
-@dynamic numSeats;
-@dynamic messages;
-@dynamic lastUpdate;
 
-//@synthesize eventID;
+@dynamic invitees;
+@dynamic guests;
+@dynamic clusters;
+
+@dynamic suggestedInvites;
+
+@dynamic messages;
+
+//@synthesize haveSeatsChanged = _haveSeatsChanged;
+@synthesize haveExpressedInterest = _haveExpressedInterest;
 
 +(void)setupEventClass{
     if (!events){
@@ -65,14 +66,26 @@ static NSString *FZZ_REQUEST = @"request";
     }
 }
 
--(id)init{
-    self = [super init];
+-(NSEntityDescription *)getEntityDescription{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
     
-//    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
+    return [NSEntityDescription entityForName:@"FZZEvent" inManagedObjectContext:moc];
+}
+
+-(id)init{
+//    self = [super init];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    
+    NSEntityDescription *entityDescription = [self getEntityDescription];
+    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
+    
+    //    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
     
     if (self){
-        self.haveSeatsChanged = YES;
-        self.haveExpressedInterest = NO;
+//        _haveSeatsChanged = YES;
+        _haveExpressedInterest = NO;
     }
     
     return self;
@@ -82,16 +95,23 @@ static NSString *FZZ_REQUEST = @"request";
     [events removeObjectForKey:self.eventID];
 }
 
+
 -(id)initWithEID:(NSNumber *)eID{
     if (!eID){
         return NULL;
     }
     
-    self = [super init];
-//    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    
+    NSEntityDescription *entityDescription = [self getEntityDescription];
+    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
+    
+//    self = [super init];
+    //    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
     
     if (self){
-        self.haveSeatsChanged = YES;
+//        _haveSeatsChanged = YES;
         self.eventID = eID;
         [events setObject:self forKey:eID];
     }
@@ -99,68 +119,53 @@ static NSString *FZZ_REQUEST = @"request";
     return self;
 }
 
++(NSArray *)getEvents{
+    NSArray *allEvents = [events allValues];
+    return [allEvents sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        FZZEvent *e1 = obj1;
+        FZZEvent *e2 = obj2;
+        
+        return [[e1 creationTime] compare:[e2 creationTime]];
+    }];
+}
+
 #pragma mark Accessors
-
--(FZZUser *)creator{
-    return self.creator;
-}
-
--(NSArray *)messages{
-    return self.messages;
-}
-
--(NSMutableArray *)guests{
-    return self.guests;
-}
-
--(NSMutableArray *)invitees{
-    return self.invitees;
-}
-
--(NSArray *)notYetGuests{
-    NSMutableArray *notGuests = [self.invitees mutableCopy];
-    
-    [notGuests removeObjectsInArray:self.guests];
-    
-    return [NSArray arrayWithArray:notGuests];
-}
 
 //-(NSArray *)engaged{
 //    return [self.engaged copy];
 //}
 
--(BOOL)hasSeats{
-    return (self.numSeats != nil);
-}
-
--(NSNumber *)pendingNumSeats{
-    return self.pendingNumSeats;
-}
-
--(NSNumber *)numSeats{
-    return self.numSeats;
-}
-
--(NSNumber *)pendingNumEmptySeats{
-    if (!self.numSeats){
-        return NULL;
-    }
-    
-    int result = MAX([self.pendingNumSeats integerValue] - [self.guests count], 0);
-    
-    
-    return [NSNumber numberWithInt:result];
-}
-
--(NSNumber *)numEmptySeats{
-    if (!self.numSeats){
-        return NULL;
-    }
-    
-    int result = MAX([self.numSeats integerValue] - [self.guests count], 0);
-    
-    return [NSNumber numberWithInt:result];
-}
+//-(BOOL)hasSeats{
+//    return (self.numSeats != nil);
+//}
+//
+//-(NSNumber *)pendingNumSeats{
+//    return self.pendingNumSeats;
+//}
+//
+//-(NSNumber *)numSeats{
+//    return self.numSeats;
+//}
+//
+//-(NSNumber *)pendingNumEmptySeats{
+//    if (!self.numSeats){
+//        return NULL;
+//    
+//    int result = MAX([self.pendingNumSeats integerValue] - [self.guests count], 0);
+//    
+//    
+//    return [NSNumber numberWithInt:result];
+//}
+//
+//-(NSNumber *)numEmptySeats{
+//    if (!self.numSeats){
+//        return NULL;
+//    }
+//    
+//    int result = MAX([self.numSeats integerValue] - [self.guests count], 0);
+//    
+//    return [NSNumber numberWithInt:result];
+//}
 
 +(FZZEvent *)eventWithEID:(NSNumber *)eID{
     if (!eID) return NULL;
@@ -179,7 +184,7 @@ static NSString *FZZ_REQUEST = @"request";
 }
 
 -(BOOL)isInvited:(FZZUser *)user{
-    return [self.inviteesSet containsObject:user];
+    return [self.invitees containsObject:user];
 }
 
 -(BOOL)isGuest:(FZZUser *)user{
@@ -187,7 +192,14 @@ static NSString *FZZ_REQUEST = @"request";
 }
 
 -(BOOL)isAtEvent:(FZZUser *)user{
-    return [self.presentAtEvent containsObject:user];
+    for (int i = 0; i < [self.clusters count]; ++i){
+        NSOrderedSet *cluster = [self.clusters objectAtIndex:i];
+        if ([cluster containsObject:user]){
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 -(FZZMessage *)firstMessage{
@@ -199,154 +211,186 @@ static NSString *FZZ_REQUEST = @"request";
 }
 
 // You can always add a seat
-- (void)addSeat{
+//- (void)addSeat{
+//    @synchronized(self){
+//        if (self.pendingNumSeats){
+//            [self restartTimer];
+//            
+//            self.haveSeatsChanged = YES;
+//            
+//            self.pendingNumSeats = [NSNumber numberWithInt:[self.pendingNumSeats integerValue] + 1];
+//        }
+//    }
+//}
+
+//-(void)updateNumberOfSeats:(NSNumber *)numSeats{
+//    @synchronized(self){
+//        _haveSeatsChanged = YES;
+//        self.numSeats = [numSeats copy];
+//        _pendingNumSeats = self.numSeats;
+//    }
+//}
+
+-(void)updateClusters:(NSArray *)clusters{
     @synchronized(self){
-        if (self.pendingNumSeats){
-            [self restartTimer];
-            
-            self.haveSeatsChanged = YES;
+        NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:clusters];
         
-            self.pendingNumSeats = [NSNumber numberWithInt:[self.pendingNumSeats integerValue] + 1];
-        }
-    }
-}
-
--(void)updateNumberOfSeats:(NSNumber *)numSeats{
-    @synchronized(self){
-        self.haveSeatsChanged = YES;
-        self.numSeats = [numSeats copy];
-        self.pendingNumSeats = self.numSeats;
-    }
-}
-
--(void)updateRemoveGuest:(FZZUser *)guest{
-    @synchronized(self){
-        [self.guests removeObject:guest];
-    }
-}
-
--(void)updateAtEvent:(NSArray *)attendees{
-    @synchronized(self){
-        self.presentAtEvent = [attendees mutableCopy];
-        
-        [self.guests removeObjectsInArray:attendees];
-        [self.invitees removeObjectsInArray:attendees];
+        [self setClusters:orderedSet];
     }
 }
 
 -(void)updateGuests:(NSArray *)guests{
     @synchronized(self){
-        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+        NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:guests];
         
-        self.guestsNotPresent = guests;
-        [presentAtEvent removeObjectsInArray:guests];
-        self.presentAtEvent = presentAtEvent;
-        [self.invitees removeObjectsInArray:guests];
+        [self setGuests:orderedSet];
     }
 }
 
--(void)updateAddInvitees:(NSArray *)invitees{
+-(void)updateInvitees:(NSArray *)invitees{
     @synchronized(self){
-        // Ensure no duplicates
-        [self.invitees removeObjectsInArray:invitees];
-        [self.invitees addObjectsFromArray:invitees];
+        NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:invitees];
         
-        [self.inviteesSet addObjectsFromArray:invitees];
+        [self setInvitees:orderedSet];
     }
 }
 
--(void)updateToAttendees:(NSArray *)toAttendees{
-    @synchronized(self){
-        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-        
-        [presentAtEvent removeObjectsInArray:toAttendees];
-        [presentAtEvent addObjectsFromArray:toAttendees];
-        self.presentAtEvent = presentAtEvent;
-        
-        [self.guests removeObjectsInArray:toAttendees];
-        [self.invitees removeObjectsInArray:toAttendees];
-    }
-}
 
--(void)updateToGuests:(NSArray *)toGuests{
-    @synchronized(self){
-        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-        
-        [presentAtEvent removeObjectsInArray:toGuests];
-        self.presentAtEvent = presentAtEvent;
-        
-        [self.guests removeObjectsInArray:toGuests];
-        [self.invitees removeObjectsInArray:toGuests];
-        
-        [self.guests addObjectsFromArray:toGuests];
-    }
-}
-
--(void)updateToInvitees:(NSArray *)toInvitees{
-    @synchronized(self){
-        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-        
-        [presentAtEvent removeObjectsInArray:toInvitees];
-        self.presentAtEvent = presentAtEvent;
-        
-        [self.guests removeObjectsInArray:toInvitees];
-        [self.invitees removeObjectsInArray:toInvitees];
-        
-        [self.invitees addObjectsFromArray:toInvitees];
-    }
-}
+//-(void)updateRemoveGuest:(FZZUser *)guest{
+//    @synchronized(self){
+//        [self removePresentAtEvent:[NSOrderedSet orderedSetWithObject:guest]];
+////        [self.guestsNotPresent removeObject:guest];
+//    }
+//}
+//
+//-(void)updateAtEvent:(NSArray *)attendees{
+//    @synchronized(self){
+//        NSOrderedSet *attendeesOrderedSet = [NSOrderedSet orderedSetWithArray:attendees];
+//        
+//        self.presentAtEvent = attendeesOrderedSet;
+//        
+//        [self removeGuestsNotPresent:attendeesOrderedSet];
+//        [self removeInviteesNotGuest:attendeesOrderedSet];
+//    }
+//}
+//
+//-(void)updateGuests:(NSArray *)guests{
+//    @synchronized(self){
+//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+//        
+//        NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:guests];
+//        
+//        self.guestsNotPresent = orderedSet;
+//        [self removePresentAtEvent:orderedSet];
+//        [self removeInviteesNotGuest:orderedSet];
+//    }
+//}
+//
+//-(void)updateAddInvitees:(NSArray *)invitees{
+//    @synchronized(self){
+//        // Ensure no duplicates
+//        
+//        
+//        [self.invitees removeObjectsInArray:invitees];
+//        [self.invitees addObjectsFromArray:invitees];
+//        
+//        [self.inviteesSet addObjectsFromArray:invitees];
+//    }
+//}
+//
+//-(void)updateToAttendees:(NSArray *)toAttendees{
+//    @synchronized(self){
+//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+//        
+//        [presentAtEvent removeObjectsInArray:toAttendees];
+//        [presentAtEvent addObjectsFromArray:toAttendees];
+//        self.presentAtEvent = presentAtEvent;
+//        
+//        [self.guests removeObjectsInArray:toAttendees];
+//        [self.invitees removeObjectsInArray:toAttendees];
+//    }
+//}
+//
+//-(void)updateToGuests:(NSArray *)toGuests{
+//    @synchronized(self){
+//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+//        
+//        [presentAtEvent removeObjectsInArray:toGuests];
+//        self.presentAtEvent = presentAtEvent;
+//        
+//        [self.guests removeObjectsInArray:toGuests];
+//        [self.invitees removeObjectsInArray:toGuests];
+//        
+//        [self.guests addObjectsFromArray:toGuests];
+//    }
+//}
+//
+//-(void)updateToInvitees:(NSArray *)toInvitees{
+//    @synchronized(self){
+//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
+//        
+//        [presentAtEvent removeObjectsInArray:toInvitees];
+//        self.presentAtEvent = presentAtEvent;
+//        
+//        [self.guests removeObjectsInArray:toInvitees];
+//        [self.invitees removeObjectsInArray:toInvitees];
+//        
+//        [self.invitees addObjectsFromArray:toInvitees];
+//    }
+//}
 
 -(void)updateAddMessage:(FZZMessage *)message{
     @synchronized(self){
-        if (![self.messages containsObject:message]){
-            self.messages = [self.messages arrayByAddingObject:message];
-        }
         
-        self.messages = [self.messages sortedArrayWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(id obj1, id obj2) {
+        [self addMessages:[[NSOrderedSet alloc] initWithObject:message]];
+        
+        NSArray *items = [self.messages sortedArrayWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(id obj1, id obj2) {
             FZZMessage *m1 = obj1;
             FZZMessage *m2 = obj2;
             
             return [[m1 messageID] compare:[m2 messageID]];
         }];
+        
+        self.messages = [[NSOrderedSet alloc] initWithArray:items];
     }
 }
 
 // Attempt to subtract an empty seat. If no empty seats, no subtraction
-- (BOOL)removeSeat{
-    @synchronized(self){
-        [self restartTimer];
-        
-        int pendingNumSeats = [self.pendingNumSeats integerValue];
-        int numOccupiedSeats = [self.guests count];
-        
-        if (pendingNumSeats > numOccupiedSeats){
-            self.haveSeatsChanged = YES;
-            self.pendingNumSeats = [NSNumber numberWithInt:pendingNumSeats - 1];
-            
-            return YES;
-        } else {
-            return NO;
-        }
-    }
-}
+//- (BOOL)removeSeat{
+//    @synchronized(self){
+//        [self restartTimer];
+//        
+//        int pendingNumSeats = [self.pendingNumSeats integerValue];
+//        int numOccupiedSeats = [self.guests count];
+//        
+//        if (pendingNumSeats > numOccupiedSeats){
+//            self.haveSeatsChanged = YES;
+//            self.pendingNumSeats = [NSNumber numberWithInt:pendingNumSeats - 1];
+//            
+//            return YES;
+//        } else {
+//            return NO;
+//        }
+//    }
+//}
 
--(BOOL)expressInterest{
-    FZZUser *me = [FZZUser me];
-    
-    if ([self isInvited:me]){
-        return NO;
-    }
-    
-    if (self.haveExpressedInterest){
-        return NO;
-    }
-    
-    self.haveExpressedInterest = YES;
-    
-    [self socketIORequestEventWithAcknowledge:NULL];
-    
-    return YES;
-}
+//-(BOOL)expressInterest{
+//    FZZUser *me = [FZZUser me];
+//    
+//    if ([self isInvited:me]){
+//        return NO;
+//    }
+//    
+//    if (self.haveExpressedInterest){
+//        return NO;
+//    }
+//    
+//    self.haveExpressedInterest = YES;
+//    
+//    [self socketIORequestEventWithAcknowledge:NULL];
+//    
+//    return YES;
+//}
 
 -(BOOL)haveExpressedInterest{
     return self.haveExpressedInterest;
@@ -359,8 +403,9 @@ static NSString *FZZ_REQUEST = @"request";
         return NO;
     }
     
-    [self updateAddGuest:me];
     [self socketIOJoinEventWithAcknowledge:NULL];
+    
+    // TODOAndrew Visually join the event temporarily, waiting for server confirmation
     
     return YES;
 }
@@ -368,97 +413,67 @@ static NSString *FZZ_REQUEST = @"request";
 -(BOOL)leaveEvent{
     FZZUser *me = [FZZUser me];
     
-    if (![self isGuest:me]){
-        return NO;
+    @synchronized(self){
+        if (![self isGuest:me]){
+            return NO;
+        }
+    
+        // Attempt to remove from cluster
+    
+        for (int i = 0; i < [self.clusters count]; ++i){
+            FZZCluster *cluster = [self.clusters objectAtIndex:i];
+            
+            if ([cluster.users containsObject:me]){
+                
+                [cluster removeUsersObject:me];
+                break;
+            }
+        }
+        
+        [self removeGuestsObject:me];
+        [self removeInviteesObject:me];
     }
     
-    [self updateRemoveGuest:me];
     [self socketIOLeaveEventWithAcknowledge:NULL];
     
     return YES;
 }
 
--(void)updateAddGuest:(FZZUser *)guest{
-    @synchronized(self){
-        if (![self.guestsNotPresent containsObject:guest]){
-            [self.guestsNotPresent arrayByAddingObject:guest];
-        }
-        
-        // Sort array here
-        
-    }
-}
-
--(void)updateAddAtEvent:(NSArray *)arrivingList{
-    @synchronized(self){
-        
-        NSMutableArray *deltas = [[NSMutableArray alloc] init];
-        
-        [arrivingList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            FZZUser *user = obj;
-            
-            if (![self.presentAtEvent containsObject:user]){
-                [deltas addObject:user];
-            }
-        }];
-        
-        // Sort array here
-        
-        self.presentAtEvent = [self.presentAtEvent arrayByAddingObjectsFromArray:deltas];
-    }
-}
-
--(void)updateRemoveAtEvent:(NSArray *)leavingList{
-    @synchronized(self){
-        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-        
-        [leavingList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            FZZUser *user = obj;
-            
-            if ([presentAtEvent containsObject:user]){
-                [presentAtEvent removeObject:user];
-            }
-        }];
-        
-        self.presentAtEvent = presentAtEvent;
-    }
-}
-
--(BOOL)haveSeatsChangedSinceLastCheck{
-    BOOL result = self.haveSeatsChanged;
-    
-    self.haveSeatsChanged = NO;
-    
-    return result;
-}
-
-- (void)pushSeatsToServer{
-    self.seatTimer = NULL;
-    
-    // Don't send anything if nothing has changed
-    if ([self.numSeats isEqualToNumber:self.pendingNumSeats]){
-        return;
-    }
-    
-    self.numSeats = self.pendingNumSeats;
-    
-    // Perform the push to the server
-    [self socketIOSetSeatCapacityToCapacity:self.numSeats
-                            WithAcknowledge:nil];
-}
-
-// Call this every time the seats change, it ensures 1.6 second after the last seat change
-// The data will be pushed to the server if need be
-// Avoids spamming the server
-- (void)restartTimer{
-    [self.seatTimer invalidate];
-    
-    self.seatTimer = [NSTimer scheduledTimerWithTimeInterval:1.6
-                                                  target:self
-                                                selector:@selector(pushSeatsToServer)
-                                                userInfo:nil
-                                                 repeats:NO];
-}
+//-(BOOL)haveSeatsChangedSinceLastCheck{
+//    BOOL result = self.haveSeatsChanged;
+//    
+//    self.haveSeatsChanged = NO;
+//    
+//    return result;
+//}
+//
+//- (void)pushSeatsToServer{
+//    self.seatTimer = NULL;
+//    
+//    // Don't send anything if nothing has changed
+//    if ([self.numSeats isEqualToNumber:self.pendingNumSeats]){
+//        return;
+//    }
+//    
+//    self.numSeats = self.pendingNumSeats;
+//    
+//    // Perform the push to the server
+//    [self socketIOSetSeatCapacityToCapacity:self.numSeats
+//                            WithAcknowledge:nil];
+//}
+//
+//// Call this every time the seats change, it ensures 1.6 second after the last seat change
+//// The data will be pushed to the server if need be
+//// Avoids spamming the server
+//- (void)restartTimer{
+//    [self.seatTimer invalidate];
+//    
+//    self.seatTimer = [NSTimer scheduledTimerWithTimeInterval:1.6
+//                                                      target:self
+//                                                    selector:@selector(pushSeatsToServer)
+//                                                    userInfo:nil
+//                                                     repeats:NO];
+//}
 
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function{
@@ -467,21 +482,32 @@ static NSString *FZZ_REQUEST = @"request";
     /* id : int */
     [json setObject:self.eventID forKey:@"eid"];
     
-//    FZZSocketIODelegate *socketIODelegate = [FZZSocketIODelegate getIOSocketDelegate];
-    
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_JOIN_EVENT withData:json andAcknowledge:function];
 }
 
-/*-(void)socketIODeleteEventWithAcknowledge:(SocketIOCallback)function{
+-(void)socketIOLoadMessagesBeforeMID:(NSNumber *)mid
+                      AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
-    // id : int
-    [json setObject:eventID forKey:@"id"];
+    /* eid : int */
+    [json setObject:self.eventID forKey:@"eid"];
     
-    FZZ_IOSocketDelegate *socketIODelegate = [FZZObject getIOSocketDelegate];
+    /* mid : int */
+    [json setObject:mid forKey:@"oldestMid"];
     
-    [[socketIODelegate socketIO] sendEvent:FZZ_DELETE_EVENT withData:json andAcknowledge:function];
-}*/
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_GET_MORE_MESSAGES withData:json andAcknowledge:function];
+}
+
+/*-(void)socketIODeleteEventWithAcknowledge:(SocketIOCallback)function{
+ NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+ 
+ // id : int
+ [json setObject:eventID forKey:@"id"];
+ 
+ FZZ_IOSocketDelegate *socketIODelegate = [FZZObject getIOSocketDelegate];
+ 
+ [[socketIODelegate socketIO] sendEvent:FZZ_DELETE_EVENT withData:json andAcknowledge:function];
+ }*/
 
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
@@ -492,9 +518,9 @@ static NSString *FZZ_REQUEST = @"request";
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_LEAVE_EVENT withData:json andAcknowledge:function];
 }
 
--(void)socketIOInviteWithInviteList:(NSArray *)inviteList
-                  InviteContactList:(NSArray *)contactList
-                     AndAcknowledge:(SocketIOCallback)function{
+-(void)socketIOHostInviteWithInviteList:(NSArray *)inviteList
+                      InviteContactList:(NSArray *)contactList
+                         AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
     /* eid : int */
@@ -527,38 +553,25 @@ static NSString *FZZ_REQUEST = @"request";
     // Any user without a UID, send their name and phone number
     [json setObject:contactList forKey:@"pnList"];
     
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_INVITES withData:json andAcknowledge:function];
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_SUGGEST_INVITED_LIST withData:json andAcknowledge:function];
 }
 
--(void)socketIORequestEventWithAcknowledge:(SocketIOCallback)function{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* id : int */
-    [json setObject:self.eventID forKey:@"eid"];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_REQUEST withData:json andAcknowledge:function];
-}
-
--(void)socketIOSetSeatCapacityToCapacity:(NSNumber *)capacity
-                         WithAcknowledge:(SocketIOCallback)function{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* id : int */
-    [json setObject:self.eventID forKey:@"eid"];
-    
-    /* seats : int */
-    [json setObject:capacity forKey:@"seats"];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_SET_SEAT_CAPACITY withData:json andAcknowledge:function];
-}
+//-(void)socketIOSetSeatCapacityToCapacity:(NSNumber *)capacity
+//                         WithAcknowledge:(SocketIOCallback)function{
+//    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+//    
+//    /* id : int */
+//    [json setObject:self.eventID forKey:@"eid"];
+//    
+//    /* seats : int */
+//    [json setObject:capacity forKey:@"seats"];
+//    
+//    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_SET_SEAT_CAPACITY withData:json andAcknowledge:function];
+//}
 
 +(void)socketIONewEventWithMessage:(NSString *)message
-                          AndSeats:(int)numSeats
                     AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* seats : int */
-    [json setObject:[NSNumber numberWithInt:numSeats] forKey:@"seats"];
     
     /* text : string */
     [json setObject:message forKey:@"text"];
@@ -566,24 +579,38 @@ static NSString *FZZ_REQUEST = @"request";
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_EVENT withData:json andAcknowledge:function];
 }
 
+//+(void)socketIONewEventWithMessage:(NSString *)message
+//                          AndSeats:(int)numSeats
+//                    AndAcknowledge:(SocketIOCallback)function{
+//    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+//    
+//    /* seats : int */
+//    [json setObject:[NSNumber numberWithInt:numSeats] forKey:@"seats"];
+//    
+//    /* text : string */
+//    [json setObject:message forKey:@"text"];
+//    
+//    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_EVENT withData:json andAcknowledge:function];
+//}
+
 /*-(NSArray *)getJsonComments{
-    NSMutableArray *json = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < [comments count]; i++){
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        FZZComment *comment = [comments objectAtIndex:i];
-        
-        NSString *nameOfUser = [[comment user] name];
-        NSString *text = [comment text];
-        
-        [dict setObject:text forKey:@"comment"];
-        [dict setObject:nameOfUser forKey:@"user"];
-        
-        [json addObject:dict];
-    }
-    
-    return json;
-}*/
+ NSMutableArray *json = [[NSMutableArray alloc] init];
+ 
+ for (int i = 0; i < [comments count]; i++){
+ NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+ FZZComment *comment = [comments objectAtIndex:i];
+ 
+ NSString *nameOfUser = [[comment user] name];
+ NSString *text = [comment text];
+ 
+ [dict setObject:text forKey:@"comment"];
+ [dict setObject:nameOfUser forKey:@"user"];
+ 
+ [json addObject:dict];
+ }
+ 
+ return json;
+ }*/
 
 -(NSMutableArray *)getArrayOfUniqueCommenters{
     // Get all unique commenters
@@ -630,18 +657,18 @@ static NSString *FZZ_REQUEST = @"request";
 
 //-(void)updateEngaged{
 //    NSMutableArray *uniqueCommenters = [self getArrayOfUniqueCommenters];
-//    
+//
 //    NSMutableArray *uniqueAttendees = [attendees copy];
-//    
+//
 //    // Removes commentingAttendees from uniqueCommenters and attendees
 //    NSMutableArray *commentingAttendees = [self takeCommentingAttendeesFromCommenters:uniqueCommenters
 //                                                                         andAttendees:uniqueAttendees];
-//    
+//
 //    NSMutableArray *engagedTemp = commentingAttendees;
-//    
+//
 //    [engagedTemp addObjectsFromArray:uniqueCommenters];
 //    [engagedTemp addObjectsFromArray:uniqueAttendees];
-//    
+//
 //    self.engaged = engagedTemp;
 //}
 
@@ -662,98 +689,26 @@ static NSString *FZZ_REQUEST = @"request";
     
     creatorUID = nil;
     
+    /* Creation Time */
+    NSDate *creationTime = [eventJSON objectForKey:@"creationTime"];
     
-    /* Present At Event uID List */
-    NSMutableArray *mutPresentAtEventList;
-    
-    NSArray *presentAtEventIDList = [eventJSON objectForKey:@"presentAtEventList"];
-    
-    mutPresentAtEventList = [presentAtEventIDList mutableCopy];
-    
-    // Map JSON Parsing
-    [mutPresentAtEventList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSNumber *uid = (NSNumber *)obj;
-        
-        FZZUser *user = [FZZUser userWithUID:uid];
-        
-        [mutPresentAtEventList setObject:user
-                        atIndexedSubscript:idx];
-    }];
-    
-    presentAtEventIDList = nil;
-    
-    
-    /* Guest uID List */
-    NSMutableArray *mutGuestList;
-
-    NSArray *guestIDList = [eventJSON objectForKey:@"guestList"];
-    
-    mutGuestList = [guestIDList mutableCopy];
-    
-    // Map JSON Parsing
-    [guestIDList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSNumber *uid = (NSNumber *)obj;
-        
-        FZZUser *user = [FZZUser userWithUID:uid];
-        
-        [mutGuestList setObject:user
-             atIndexedSubscript:idx];
-    }];
-    
-    guestIDList = nil;
-    
-    
-    /* All invited individuals, as User Object JSONs */
-    NSMutableArray *mutInviteList;
-    
-    NSArray *inviteJSONList = [eventJSON objectForKey:@"inviteList"];
-    
-    mutInviteList = [inviteJSONList mutableCopy];
-    
-    // Map JSON Parsing
-    [inviteJSONList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        FZZUser *user = [FZZUser parseJSON:obj];
-        
-        [mutInviteList setObject:user
-              atIndexedSubscript:idx];
-    }];
-    
-    inviteJSONList = nil;
-    
-    
-    /* Seats */
-    NSNumber *numSeats = [eventJSON objectForKey:@"seats"];
-    
-    
-    /* Message List */
-    NSMutableArray *mutMessageList;
-    NSArray *messageJSONList = [eventJSON objectForKey:@"messageList"];
-        
-    mutMessageList = [messageJSONList mutableCopy];
-
-    
-    // Map JSON Parsing
-    [messageJSONList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        FZZMessage *message = [FZZMessage parseJSON:obj];
-        
-        [mutMessageList setObject:message
-              atIndexedSubscript:idx];
-    }];
-    
+    NSArray *messages = [eventJSON objectForKey:@"messages"];
     
     /* Allocate Memory and Assign Values */
     FZZEvent *event = [FZZEvent eventWithEID:eid];
     event.creator = creator;
-    event.guestsNotPresent = mutGuestList;
-    event.inviteesNotGuest = mutInviteList;
-    event.presentAtEvent = mutPresentAtEventList;
-    event.inviteesSet = [NSMutableSet setWithArray:mutInviteList];
+    event.creationTime = creationTime;
     
-    // NULL if no seats required
-    event.numSeats = numSeats;
-    event.pendingNumSeats = event.numSeats;
-    
-    event.messages = mutMessageList;
+    // load messages if they are contained in the event object
+    if (messages != Nil){
+        NSMutableArray *mutMessages = [messages mutableCopy];
+        
+        [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [mutMessages setObject:[FZZMessage parseJSON:obj] atIndexedSubscript:idx];
+        }];
+        
+        [event setMessages:[NSOrderedSet orderedSetWithArray:mutMessages]];
+    }
     
     return event;
 }
@@ -773,13 +728,21 @@ static NSString *FZZ_REQUEST = @"request";
     return result;
 }
 
++(void)killEvents:(NSArray *)deadEvents{
+    [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSNumber *eID = obj;
+        
+        [events removeObjectForKey:eID];
+    }];
+}
+
 -(NSDate *)lastUpdate{
     int count = [self.messages count];
     
     if (count != 0){ // Should always be > 0
         FZZMessage *message = [self.messages objectAtIndex:count - 1];
         
-        return [message timestamp];
+        return [message creationTime];
     }
     
     // Never updated

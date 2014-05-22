@@ -76,6 +76,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Install crash handlers
+    NSSetUncaughtExceptionHandler(&HandleException);
+    
+    struct sigaction signalAction;
+    memset(&signalAction, 0, sizeof(signalAction));
+    signalAction.sa_handler = &HandleSignal;
+    
+    sigaction(SIGABRT, &signalAction, NULL);
+    sigaction(SIGILL, &signalAction, NULL);
+    sigaction(SIGBUS, &signalAction, NULL);
+    
     [TestFlight takeOff:@"c57d6a81-8946-4632-977e-9b92f7d0802a"];
     
     _hasLoggedIn = NO;
@@ -101,9 +112,6 @@
     
     // Load the FBLoginView Class
     [FBLoginView class];
-    
-    // Call this to initialize the socketIODelegate class
-    [FZZSocketIODelegate initialize];
     
     fbLoginDelegate = [[FZZFacebookLoginDelegate alloc] init];
     
@@ -517,6 +525,20 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+#pragma mark - Crash Handlers
+
+void HandleException(NSException *exception) {
+    NSLog(@"App crashing with exception: %@", exception);
+    //Save somewhere that your app has crashed.
+    //Note this on launch, so that I can query the server for a clean slate of data
+}
+
+void HandleSignal(int signal) {
+    NSLog(@"We received a signal: %d", signal);
+    //Save somewhere that your app has crashed.
+    //Note this on launch, so that I can query the server for a clean slate of data
 }
 
 @end

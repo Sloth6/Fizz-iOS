@@ -13,7 +13,7 @@
  
  The chat delegate acts as a pseudo-TableViewController, both as the data source and delegate for the Chat Table View. Its custom controls were preferable for pushing new messages in on the fly
  
- [TODO (5/13/14)] same as FZZInviteViewController, see if we can reduce the number of these in the app or see if the dequeueing of the cell is already ensuring there's only 1, 2, or maybe 3 of these ever existing in the app.
+ [TODOAndrew (5/13/14)] same as FZZInviteViewController, see if we can reduce the number of these in the app or see if the dequeueing of the cell is already ensuring there's only 1, 2, or maybe 3 of these ever existing in the app.
  
  */
 

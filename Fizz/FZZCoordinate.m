@@ -2,32 +2,42 @@
 //  FZZCoordinate.m
 //  Fizz
 //
-//  Created by Andrew Sweet on 1/25/14.
+//  Created by Andrew Sweet on 5/18/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
 #import "FZZCoordinate.h"
 #import "FZZEvent.h"
+#import "FZZSocketIODelegate.h"
+#import "FZZAppDelegate.h"
 
 static NSString *FZZ_NEW_MARKER = @"newMarker";
-
-@interface FZZCoordinate ()
-
-//@property (retain, nonatomic) NSNumber *longitude;
-//@property (retain, nonatomic) NSNumber *latitude;
-
-@end
+static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
 
 @implementation FZZCoordinate
 
-@dynamic longitude;
 @dynamic latitude;
+@dynamic longitude;
 @dynamic message;
+
+-(NSEntityDescription *)getEntityDescription{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    
+    return [NSEntityDescription entityForName:@"FZZCoordinate" inManagedObjectContext:moc];
+}
 
 - (id)initWithLongitude:(float)lng andLatitude:(float)lat
 {
-    self = [super init];
-//    self = (FZZCoordinate *)[FZZDataStore insertNewObjectForEntityForName:@"FZZCoordinate"];
+//    self = [super init];
+    
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    
+    NSEntityDescription *entityDescription = [self getEntityDescription];
+    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
+    
+    //    self = (FZZCoordinate *)[FZZDataStore insertNewObjectForEntityForName:@"FZZCoordinate"];
     
     if (self) {
         self.longitude = [NSNumber numberWithFloat:lng];
@@ -62,9 +72,21 @@ static NSString *FZZ_NEW_MARKER = @"newMarker";
     [json setObject:[event eventID] forKey:@"eid"];
     
     /* latlng : latlng */
-    [json setObject:coord forKey:@"latlng"];
+    [json setObject:[coord jsonDict] forKey:@"latlng"];
     
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_MARKER withData:json andAcknowledge:function];
+}
+
++(void)socketIOUpdateLocationWithAcknowledge:(SocketIOCallback)function{
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    // TODOAndrew get my actual location
+    NSDictionary *coord = Nil;
+    
+    /* latlng : latlng */
+    [json setObject:coord forKey:@"latlng"];
+    
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_LOCATION_CHANGE withData:json andAcknowledge:function];
 }
 
 + (FZZCoordinate *)parseJSON:(NSDictionary *)coordJSON{
@@ -83,12 +105,5 @@ static NSString *FZZ_NEW_MARKER = @"newMarker";
     return [[FZZCoordinate alloc] initWithLongitude:longitude
                                         andLatitude:latitude];
 }
-
-//+ (NSArray *)fetchAll{
-//    
-//    NSString *className = @"FZZCoordinate";
-//    
-//    return [FZZDataStore fetchAllWithClassName:className];
-//}
 
 @end
