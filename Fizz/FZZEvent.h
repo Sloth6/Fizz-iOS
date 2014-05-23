@@ -110,7 +110,6 @@
 //-(NSMutableArray *)guests;
 //-(NSMutableArray *)invitees;
 // invitees who aren't guests
--(NSArray *)notYetGuests;
 
 //-(NSArray *)engaged;
 -(FZZMessage *)firstMessage;
