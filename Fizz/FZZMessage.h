@@ -24,12 +24,12 @@
 
 @interface FZZMessage : NSManagedObject
 
+@property (nonatomic, retain) NSDate * creationTime;
 @property (nonatomic, retain) NSNumber * messageID;
 @property (nonatomic, retain) NSString * text;
-@property (nonatomic, retain) NSDate * creationTime;
+@property (nonatomic, retain) FZZEvent *event;
 @property (nonatomic, retain) FZZCoordinate *marker;
 @property (nonatomic, retain) FZZUser *user;
-@property (nonatomic, retain) FZZEvent *event;
 
 -(BOOL)isServerMessage;
 

@@ -22,20 +22,14 @@
 
 @interface FZZChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
+@property (strong, nonatomic) UIView *view;
 @property (nonatomic, retain) UIView *viewForm;
 @property (nonatomic, retain) UITextView *chatBox;
 
 @property (strong, nonatomic) FZZEvent *event;
 @property (strong, nonatomic) FZZEventsExpandedViewController *esvc;
-@property (strong, nonatomic) FZZInviteViewController *ivc;
-
-// For temporary deletion of the chat portion
-@property int numSectionsDeleted;
-
 @property (strong, nonatomic) UITableView *tableView;
 
-- (void)setupViewForm;
-- (void)setupKeyboard;
 - (void)addIncomingMessageForEvent:(FZZEvent *)event;
 
 + (CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;

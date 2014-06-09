@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-/* 
+/*
  
  While in the expanded view, each of these cells is what's on display.
- Each cell contains a tableview which scrolls vertically, 
+ Each cell contains a tableview which scrolls vertically,
  revealing the cell containing the chat view, [TODOAndrew (5/13/14)]
  and the cell containing the invite view. [TODOAndrew (5/13/14)]
  
@@ -25,22 +25,21 @@
 
 @class FZZInviteViewController;
 @class FZZEvent;
-@class FZZBackspaceResignTextView;
 @class FZZChatDelegate;
+@class FZZExpandedVerticalTableViewController;
 
 @interface FZZExpandedEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property FZZBackspaceResignTextView *resignTextViewer;
+@property UITextView *textView;
 @property float lineHeight;
 @property UISwitch *toggleSecret;
 @property UILabel *label;
 
 @property UILabel *attendeesLabel;
 
-@property UIButton *addSeatButton;
-
 @property FZZChatDelegate *chatDelegate;
 
+@property FZZExpandedVerticalTableViewController *tvc;
 @property FZZInviteViewController *ivc;
 @property (strong, nonatomic) FZZEvent *event;
 
@@ -48,18 +47,17 @@
 - (void)setScrollingEnabled:(BOOL)canScroll;
 - (void)sendInvitations;
 
-- (void)enterInviteMode;
-- (void)exitInviteMode;
-- (void)enterChatMode;
-- (void)exitChatMode;
-
+//- (void)enterInviteMode;
+//- (void)exitInviteMode;
+//- (void)enterChatMode;
+//- (void)exitChatMode;
 
 - (void)setEvent:(FZZEvent *)event;
 
+// Update who is currently invited and not invited for the Invite View Controller
 - (void)updateFriends;
 
 - (void)setupToggle;
 - (void)setupExpandedEventCell;
-- (void)setupCell;
 
 @end

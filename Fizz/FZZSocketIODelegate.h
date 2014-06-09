@@ -34,6 +34,6 @@ static int const kFZZMaximumReconnectDelay = 300; // 5 minutes
 //+ (void) logout;
 + (BOOL) isConnectionOpen;
 + (SocketIO *)socketIO;
-+(void)socketIOResetDataToServerWithAcknowledge:(SocketIOCallback)function;
++(void)socketIOResetDataFromServerWithAcknowledge:(SocketIOCallback)function;
 
 @end

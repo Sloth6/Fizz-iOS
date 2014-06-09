@@ -33,6 +33,8 @@
 
 #import "FZZNavIcon.h"
 
+#import "FZZBounceTableView.h"
+
 static int kFZZNumCellsBeforeMessages = 1;
 
 @interface FZZChatDelegate ()
@@ -57,6 +59,7 @@ static int kFZZNumCellsBeforeMessages = 1;
 
 - (id)init
 {
+    NSLog(@"<<2<<");
     self = [super init];
     if (self) {
         // Custom initialization
@@ -68,9 +71,10 @@ static int kFZZNumCellsBeforeMessages = 1;
         
         _pictureDimension = 52;
         
-        _numSectionsDeleted = 0;
-        
         [self setupKeyboard];
+        
+        [self setupView];
+        
         
         //        [[self collectionView] scrollToItemAtIndexPath:
         //         [NSIndexPath indexPathForItem:kFZZNumCellsBeforeMessages inSection:0]
@@ -78,6 +82,9 @@ static int kFZZNumCellsBeforeMessages = 1;
         //                                              animated:NO];
         
     }
+    
+    NSLog(@">>2>>");
+    
     return self;
 }
 
@@ -100,7 +107,35 @@ static int kFZZNumCellsBeforeMessages = 1;
 //    _event = NULL;
 //}
 
+- (void)setupView{
+    NSLog(@"<<1<<");
+    [self setupViewForm];
+    
+    CGRect frame = [UIScreen mainScreen].bounds;
+    float viewFormHeight = self.viewForm.bounds.size.height;
+    
+    frame.size.height = frame.size.height - viewFormHeight;
+    
+    _tableView = [[UITableView alloc] initWithFrame:frame];//[[FZZBounceTableView alloc] initWithFrame:frame bounceAtTop:NO bounceAtBottom:YES];
+    
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    
+    
+    _view = [[UIView alloc] initWithFrame:frame];
+    [_view addSubview:_tableView];
+    [_view addSubview:self.viewForm];
+    
+    NSLog(@">>1>>");
+}
+
+/*
+ 
+ Returns the frame of the remaining space on the screen above the viewform
+ 
+ */
 - (void)setupViewForm{
+    NSLog(@"<<3<<");
     _lastTextBoxTooBig = NO;
     
     float width = [UIScreen mainScreen].bounds.size.width;
@@ -129,9 +164,12 @@ static int kFZZNumCellsBeforeMessages = 1;
     //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     [tvc.view setFrame:viewFormRect];
+    
+    NSLog(@">>3>>");
 }
 
 - (void)setupKeyboard{
+    NSLog(@"<<4<<");
     //set notification for when keyboard shows/hides
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -154,6 +192,8 @@ static int kFZZNumCellsBeforeMessages = 1;
 //                                             selector: @selector(keyPressed:)
 //                                                 name: UITextViewTextDidChangeNotification
 //                                               object: nil];
+    
+    NSLog(@">>4>>");
 }
 
 //- (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
@@ -163,25 +203,31 @@ static int kFZZNumCellsBeforeMessages = 1;
 //}
 
 +(CGRect) getKeyboardBoundsFromNote:(NSNotification *)note{
+    NSLog(@"<<5<<");
     CGRect _keyboardEndFrame;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue:&_keyboardEndFrame];
     
     // (x,y) is irrelevant for the use
+    
+    NSLog(@">>5>>");
+    
     return CGRectMake(0, 0, 0, _keyboardEndFrame.size.height);
 }
 
 - (void)addIncomingMessageForEvent:(FZZEvent *)event{
+    NSLog(@"<<6<<");
     if (_esvc.viewMode == kChat){
-        if (_ivc.event != event){
+        if (self.event != event){
+            NSLog(@">>6a>>");
             return;
         }
         
-        CGPoint offset = _ivc.tableView.contentOffset;
-        CGRect bounds = _ivc.tableView.bounds;
-        CGSize size = _ivc.tableView.contentSize;
+        CGPoint offset = _tableView.contentOffset;
+        CGRect bounds = _tableView.bounds;
+        CGSize size = _tableView.contentSize;
         
-        int lastSection = [_ivc.tableView numberOfSections] - 1;
-        int nextRow = [_ivc.tableView numberOfRowsInSection:lastSection];
+        NSInteger lastSection = [_tableView numberOfSections] - 1;
+        NSInteger nextRow = [_tableView numberOfRowsInSection:lastSection];
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nextRow inSection:lastSection];
         NSArray *paths = [NSArray arrayWithObject:indexPath];
@@ -191,21 +237,21 @@ static int kFZZNumCellsBeforeMessages = 1;
         BOOL scroll = NO;
         
         if (offset.y + bounds.size.height > size.height - threshold){
-            [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
+            [_tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
             scroll = YES;
         } else {
-            [_ivc.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+            [_tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
         }
         
-        CGFloat newCellHeight = [self tableView:_ivc.tableView heightForRowAtIndexPath:indexPath];
-        CGSize newContentSize = CGSizeMake(_ivc.tableView.contentSize.width, _ivc.tableView.contentSize.height + newCellHeight);
+        CGFloat newCellHeight = [self tableView:_tableView heightForRowAtIndexPath:indexPath];
+        CGSize newContentSize = CGSizeMake(_tableView.contentSize.width, _tableView.contentSize.height + newCellHeight);
         
-        [_ivc.tableView setContentSize:newContentSize];
+        [_tableView setContentSize:newContentSize];
         
-        [_ivc.tableView layoutIfNeeded];
+        [_tableView layoutIfNeeded];
         
         if (scroll){
-            [_ivc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
         
         FZZMessage *newestMessage = [[_event messages] lastObject];
@@ -215,11 +261,13 @@ static int kFZZNumCellsBeforeMessages = 1;
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
     }
+    NSLog(@">>6b>>");
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{ // DUPLICATE
-    
+    NSLog(@"<<7<<");
     if (![chatBox isFirstResponder]) {
+        NSLog(@">>7a>>");
         return;
     }
     
@@ -245,7 +293,7 @@ static int kFZZNumCellsBeforeMessages = 1;
 	NSInteger kbSizeH = keyboardBounds.size.height;
     
 	// get a rect for the table/main frame
-	CGRect tableFrame = _ivc.tableView.frame;
+	CGRect tableFrame = _tableView.frame;
 	tableFrame.size.height -= kbSizeH;
     
 	// get a rect for the form frame
@@ -258,15 +306,15 @@ static int kFZZNumCellsBeforeMessages = 1;
     [UIView setAnimationBeginsFromCurrentState:YES];
     
 	// set views with new info
-	_ivc.tableView.frame = tableFrame;
+	_tableView.frame = tableFrame;
 	viewForm.frame = formFrame;
     
-    int numSections = [_ivc.tableView numberOfSections];
-    int numMessages = [_ivc.tableView numberOfRowsInSection:numSections - 1];
+    NSInteger numSections = [_tableView numberOfSections];
+    NSInteger numMessages = [_tableView numberOfRowsInSection:numSections - 1];
     
     NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:numSections - 1];
     
-    [_ivc.tableView scrollToRowAtIndexPath:lastPath
+    [_tableView scrollToRowAtIndexPath:lastPath
                           atScrollPosition:UITableViewScrollPositionBottom
                                   animated:YES];
     
@@ -298,6 +346,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     //
     //	// commit animations
     //	[UIView commitAnimations];
+    NSLog(@">>7b>>");
 }
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
@@ -306,10 +355,11 @@ static int kFZZNumCellsBeforeMessages = 1;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    
+    NSLog(@"<<8<<");
     if ([[textView text] length] > 0){
         if([text isEqualToString:@"\n"]){
             [self sendMessage];
+            NSLog(@">>8a>>");
             return NO;
         }
     }
@@ -325,19 +375,25 @@ static int kFZZNumCellsBeforeMessages = 1;
         
         [textView replaceRange:textRange withText:validText];
         
+        NSLog(@">>8b>>");
         return NO;
     } else {
+        NSLog(@">>8c>>");
         return YES;
     }
 }
 
 -(void)textViewDidChange:(UITextView *)textView{
+    NSLog(@"<<9<<");
     [self keyPressed];
+    NSLog(@">>9>>");
 }
 
 -(void) keyPressed{
+    NSLog(@"<<10<<");
     
     if (![chatBox isFirstResponder]) {
+        NSLog(@">>10a>>");
         return;
     }
     
@@ -445,15 +501,18 @@ static int kFZZNumCellsBeforeMessages = 1;
     viewForm.frame = formFrame;
     
     // table view
-    CGRect tableFrame = _ivc.tableView.frame;
+    CGRect tableFrame = _tableView.frame;
     NSInteger viewTableH = tableFrame.size.height;
     //NSLog(@"TABLE VIEW HEIGHT : %d", viewTableH);
     tableFrame.size.height = formFrame.origin.y;
     //tableFrame.size.height = 199 - (newSizeH - 18);
-    _ivc.tableView.frame = tableFrame;
+    _tableView.frame = tableFrame;
+    
+    NSLog(@">>10b>>");
 }
 
 - (void)sendMessage{
+    NSLog(@"<<11<<");
     [FZZMessage socketIONewMessage:chatBox.text
                           ForEvent:_event
                    WithAcknowledge:nil];
@@ -480,18 +539,24 @@ static int kFZZNumCellsBeforeMessages = 1;
 	viewForm.frame = formFrame;
     
 	// table view
-	CGRect tableFrame = _ivc.tableView.frame;
+	CGRect tableFrame = _tableView.frame;
 	tableFrame.size.height = formFrame.origin.y;
-	_ivc.tableView.frame = tableFrame;
+	_tableView.frame = tableFrame;
+    
+    NSLog(@">>11>>");
 }
 
 + (CGRect) convertRect:(CGRect)rect toView:(UIView *)view {
+    NSLog(@"<<12<<");
     UIWindow *window = [view isKindOfClass:[UIWindow class]] ? (UIWindow *) view : [view window];
+    NSLog(@">>12>>");
     return [view convertRect:[window convertRect:rect fromWindow:nil] fromView:nil];
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{ // DUPLICATE
+    NSLog(@"<<13<<");
     if (![chatBox isFirstResponder]) {
+        NSLog(@">>13a>>");
         return;
     }
     
@@ -518,7 +583,7 @@ static int kFZZNumCellsBeforeMessages = 1;
 	NSInteger kbSizeH = keyboardBounds.size.height;
     
 	// get a rect for the table/main frame
-	CGRect tableFrame = _ivc.tableView.frame;
+	CGRect tableFrame = _tableView.frame;
 	tableFrame.size.height += kbSizeH;
     
 	// get a rect for the form frame
@@ -531,18 +596,18 @@ static int kFZZNumCellsBeforeMessages = 1;
     [UIView setAnimationBeginsFromCurrentState:YES];
     
 	// set views with new info
-	_ivc.tableView.frame = tableFrame;
+	_tableView.frame = tableFrame;
 	viewForm.frame = formFrame;
     
-//    int numSections = [_ivc.tableView numberOfSections];
+//    int numSections = [_tableView numberOfSections];
     
 //    int section = numSections - 1;
     
-//    int numMessages = [_ivc.tableView numberOfRowsInSection:section];
+//    int numMessages = [_tableView numberOfRowsInSection:section];
     
 //    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:section];
     
-//    [_ivc.tableView scrollToRowAtIndexPath:lastPath
+//    [_tableView scrollToRowAtIndexPath:lastPath
 //                          atScrollPosition:UITableViewScrollPositionBottom
 //                                  animated:YES];
     
@@ -577,6 +642,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     //
     //	// commit animations
     //	[UIView commitAnimations];
+    NSLog(@">>13b>>");
 }
 
 //-(void) keyboardDidHide:(NSNotification *)note{
@@ -605,7 +671,7 @@ static int kFZZNumCellsBeforeMessages = 1;
 //	NSInteger kbSizeH = keyboardBounds.size.height;
 //    
 //	// get a rect for the table/main frame
-//	CGRect tableFrame = _ivc.tableView.frame;
+//	CGRect tableFrame = _tableView.frame;
 //	tableFrame.size.height += kbSizeH;
 //    
 //	// get a rect for the form frame
@@ -618,18 +684,18 @@ static int kFZZNumCellsBeforeMessages = 1;
 //    [UIView setAnimationBeginsFromCurrentState:YES];
 //    
 //	// set views with new info
-//	_ivc.tableView.frame = tableFrame;
+//	_tableView.frame = tableFrame;
 //	viewForm.frame = formFrame;
 //    
-//    //    int numSections = [_ivc.tableView numberOfSections];
+//    //    int numSections = [_tableView numberOfSections];
 //    
 //    //    int section = numSections - 1;
 //    
-//    //    int numMessages = [_ivc.tableView numberOfRowsInSection:section];
+//    //    int numMessages = [_tableView numberOfRowsInSection:section];
 //    
 //    //    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:section];
 //    
-//    //    [_ivc.tableView scrollToRowAtIndexPath:lastPath
+//    //    [_tableView scrollToRowAtIndexPath:lastPath
 //    //                          atScrollPosition:UITableViewScrollPositionBottom
 //    //                                  animated:YES];
 //    
@@ -668,17 +734,13 @@ static int kFZZNumCellsBeforeMessages = 1;
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0){
-        return [_ivc tableView:tableView numberOfRowsInSection:section];
-    }
-    
     //NSLog(@"\nmessages: %@\nevent: %@", [_event messages], _event);
     
     return [[_event messages] count];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2 - _numSectionsDeleted;
+    return 1;
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -690,9 +752,6 @@ static int kFZZNumCellsBeforeMessages = 1;
 //}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 0){
-        return [_ivc tableView:tableView heightForRowAtIndexPath:indexPath];
-    }
     
     FZZMessage *message = [self getMessageAtIndexPath:indexPath];
     
@@ -715,15 +774,11 @@ static int kFZZNumCellsBeforeMessages = 1;
 }
 
 -(FZZMessage *)getMessageAtIndexPath:(NSIndexPath *)indexPath{
-    int index = [indexPath item]; // - kFZZNumCellsBeforeMessages;
+    NSInteger index = [indexPath item]; // - kFZZNumCellsBeforeMessages;
     return [[_event messages] objectAtIndex:index];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    if (indexPath.section == 0){
-        return [_ivc tableView:tableView cellForRowAtIndexPath:indexPath];
-    }
     
     if(![_nibTextCellLoaded containsObject:tableView])
     {
@@ -773,8 +828,6 @@ static int kFZZNumCellsBeforeMessages = 1;
     float height = cell.bounds.size.height;
     
     cell.bounds = CGRectMake(x, y, width, height);
-    
-    
     
     NSString *text = [message text];
     FZZUser  *user = [message user];

@@ -635,8 +635,8 @@ static float INVITE_SIZE;
             
             //                NSLog(@"UPDATE BUBBLES FOR [%d]", itemNum);
             
-            if (itemNum < [appDelegate.esvc.events count]){
-                FZZEvent *event = [appDelegate.esvc.events objectAtIndex:itemNum];
+            if (itemNum < [appDelegate.eevc.events count]){
+                FZZEvent *event = [appDelegate.eevc.events objectAtIndex:itemNum];
                 [self updateBubblesForEvent:event AtIndex:path Animated:YES];
             }
         } else {

@@ -57,7 +57,7 @@
 //    _esvc.automaticallyAdjustsScrollViewInsets = NO;
     
     UINavigationController *navigationController = [[UINavigationController alloc]
-                                initWithRootViewController:_esvc];
+                                initWithRootViewController:_eevc];
    
     [navigationController setNavigationBarHidden:YES];
     
@@ -66,12 +66,77 @@
     [self.window setBackgroundColor:[UIColor whiteColor]];
     
     _bvc = [[FZZBubbleViewController alloc] init];
-    _esvc.bvc = _bvc;
+    _eevc.bvc = _bvc;
     
     [self.window addSubview:(UIView *)_bvc.bubbleView];
     
     [self.window addSubview:self.navigationBar];
     [self.window addSubview:_searchTextField];
+}
+
+- (void)handleDidCrash{
+    _hasLoadedDataFromCache = YES;
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSNumber *didCrash = [pref objectForKey:@"didCrash"];
+    
+    // Initial Launch: if didCrash is nil, [didCrash boolValue] returns nil
+    if ([didCrash boolValue]){
+        
+        NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Fizz.sqlite"];
+        
+        NSString *path = [storeURL path];
+        
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager fileExistsAtPath:path];
+        
+        NSError *error;
+        BOOL fileExists = [fileManager fileExistsAtPath:path];
+        
+        if (fileExists)
+        {
+            BOOL success = [fileManager removeItemAtPath:path error:&error];
+            if (!success) {
+                NSLog(@"Error trying to delete cache: %@", [error localizedDescription]);
+            }
+        }
+    }
+}
+
+- (void)loadDataFromCache{
+    _hasLoadedDataFromCache = YES;
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSNumber *didCrash = [pref objectForKey:@"didCrash"];
+    
+    // Initial Launch: if didCrash is nil, [didCrash boolValue] returns nil
+    if ([didCrash boolValue]){
+        
+        [FZZSocketIODelegate socketIOResetDataFromServerWithAcknowledge:NULL];
+        
+    } else { // Load data from cache
+        
+        NSManagedObjectContext *moc = [self managedObjectContext];
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        
+        NSEntityDescription *entity = [NSEntityDescription
+                                       entityForName:@"FZZEvent" inManagedObjectContext:moc];
+        
+        [fetchRequest setEntity:entity];
+        
+        NSError *error;
+        
+        NSArray *results = [moc executeFetchRequest:fetchRequest error:&error];
+        
+        if (results != nil && [results count] > 0){
+            [self updateEvents:results];
+        }
+    }
+    
+    // Make sure to only update didCrash when everything is fixed
+    [pref setObject:[NSNumber numberWithBool:NO] forKey:@"didCrash"];
+    [pref synchronize];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -87,8 +152,12 @@
     sigaction(SIGILL, &signalAction, NULL);
     sigaction(SIGBUS, &signalAction, NULL);
     
+    // Install TestFlight
     [TestFlight takeOff:@"c57d6a81-8946-4632-977e-9b92f7d0802a"];
     
+    [self handleDidCrash];
+    
+    _hasLoadedDataFromCache = NO;
     _hasLoggedIn = NO;
     
 //    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -99,14 +168,14 @@
     // Create a flow layout for the collection view that scrolls
     // vertically and has no space between items
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.itemSize = [UIScreen mainScreen].bounds.size;
     
     [self setupNavigationBar];
     
-    _esvc = [[FZZEventsExpandedViewController alloc] initWithCollectionViewLayout:flowLayout];
+    _eevc = [[FZZEventsExpandedViewController alloc] initWithCollectionViewLayout:flowLayout];
     
     [FZZInviteViewController setupClass];
     
@@ -222,7 +291,6 @@
     //Accept push notification when app is not open
     if (remoteNotif) {
         [self application:application didReceiveRemoteNotification:remoteNotif];
-        return YES;
     }
     
     return YES;
@@ -321,7 +389,7 @@
         if (eid){
             FZZEvent *event = [FZZEvent eventWithEID:eid];
             
-            [_esvc loadToEvent:event];
+            [_eevc loadToEvent:event];
         }
     }
 }
@@ -348,18 +416,13 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSMutableDictionary *contents = [[NSMutableDictionary alloc] init];
-    [contents setObject:[self stringWithDeviceToken:deviceToken] forKey:@"deviceToken"];
-    NSDictionary *wrapper = [[NSDictionary alloc] initWithObjectsAndKeys:contents, @"registerForPushNotifications", nil];
-    
-    SBJson4Writer *writer = [[SBJson4Writer alloc] init];
-    NSString *json = [writer stringWithObject:wrapper];
+    NSString *tokenString = [self stringWithDeviceToken:deviceToken];
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    [pref setObject:[self stringWithDeviceToken:deviceToken] forKey:@"iosToken"];
+    [pref setObject:tokenString forKey:@"iosToken"];
     [pref synchronize];
     
-    NSLog(@"\n\nDevice Token: <%@>\n\n", [contents objectForKey:@"deviceToken"]);
+    NSLog(@"\n\nDevice Token: <%@>\n\n", tokenString);
 }
 
 - (NSString*)stringWithDeviceToken:(NSData*)deviceToken {
@@ -429,7 +492,7 @@
 }
 
 - (void)updateEvents:(NSArray *)events{
-    [_esvc updateEvents:[events mutableCopy]];
+    [_eevc updateEvents:[events mutableCopy]];
 }
 
 - (void)saveContext
@@ -488,8 +551,16 @@
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSNumber *didCrash = [pref objectForKey:@"didCrash"];
+    
+    if ([didCrash boolValue]){ // Delete the old cache if you've crashed recently
+        
+    }
+    
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        /*
+        /* TODOAndrew (get rid of all abort() calls before launch)
          Replace this implementation with code to handle the error appropriately.
          
          abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -533,12 +604,18 @@ void HandleException(NSException *exception) {
     NSLog(@"App crashing with exception: %@", exception);
     //Save somewhere that your app has crashed.
     //Note this on launch, so that I can query the server for a clean slate of data
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    [pref setObject:[NSNumber numberWithBool:YES] forKey:@"didCrash"];
+    [pref synchronize];
 }
 
 void HandleSignal(int signal) {
     NSLog(@"We received a signal: %d", signal);
     //Save somewhere that your app has crashed.
     //Note this on launch, so that I can query the server for a clean slate of data
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    [pref setObject:[NSNumber numberWithBool:YES] forKey:@"didCrash"];
+    [pref synchronize];
 }
 
 @end

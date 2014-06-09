@@ -137,8 +137,13 @@
         if (eventNum >= 0){
             FZZEvent *event = [_events objectAtIndex:eventNum];
             
+            NSLog(@"BLAHBLAHBLAH");
+            
             [cell setEventCollapsed:event];
         } else {
+            
+            NSLog(@"BLUHBLUHBLUH");
+            
             [cell setEventCollapsed:NULL];
         }
     

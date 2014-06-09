@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FZZManageFriendsViewController.h"
 
 /*
  
@@ -19,7 +18,7 @@
 
 
 @class FZZChatDelegate;
-@class FZZExpandedEventCell;
+@class FZZExpandedNewEventCell;
 @class FZZBubbleViewController;
 @class FZZNavIcon;
 @class FZZBackspaceResignTextView;
@@ -37,10 +36,9 @@
 
 @property NSMutableArray *events;
 
-@property FZZChatDelegate *chatDelegate;
 //@property FZZMapViewController *mvc;
 @property FZZBubbleViewController *bvc;
-@property FZZManageFriendsViewController *mfvc;
+//@property FZZManageFriendsViewController *mfvc;
 
 typedef enum {
     kOverview,
@@ -51,7 +49,7 @@ typedef enum {
 } ViewMode;
 
 @property NSIndexPath *selectedIndex;
-@property FZZExpandedEventCell *currentCell;
+@property UICollectionViewCell *currentCell;
 @property (nonatomic) ViewMode viewMode;
 
 @property UITextView *activeTextView;
@@ -62,7 +60,7 @@ typedef enum {
 -(void)addIncomingMessageForEvent:(FZZEvent *)event;
 -(void)updateEvent:(FZZEvent *)event;
 
--(void)navButtonPress:(UIButton*)button;
+//-(void)navButtonPress:(UIButton*)button;
 
 -(void)loadToEvent:(FZZEvent *)event;
 

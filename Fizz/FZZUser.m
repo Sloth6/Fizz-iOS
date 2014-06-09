@@ -16,7 +16,6 @@ static NSMutableArray *friends;
 static NSMutableDictionary *users;
 static int kFZZProfilePictureDimension = 50;
 
-static NSString *FZZ_NEW_USER_LOCATION = @"newUserLocation";
 static NSString *FZZ_ADD_FRIEND_LIST = @"addFriendList";
 static NSString *FZZ_REMOVE_FRIEND_LIST = @"removeFriendList";
 
@@ -45,8 +44,14 @@ static FZZUser *me;
 @dynamic facebookID;
 @dynamic name;
 @dynamic phoneNumber;
+@dynamic photoBinary;
 @dynamic userID;
-@dynamic coords;
+@dynamic messages;
+@dynamic creatorOf;
+@dynamic guestOf;
+@dynamic inviteeOf;
+@dynamic suggestedInviteOf;
+@dynamic inClusters;
 
 static FZZUser *currentUser = nil;
 
@@ -55,6 +60,18 @@ static FZZUser *currentUser = nil;
 @synthesize chid = _chid;
 @synthesize isFetchingData = _isFetchingData;
 @synthesize completionHandlers = _completionHandlers;
+
++(void)saveObjects{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    
+    NSError *error = nil;
+    if (![moc save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+}
 
 +(void)setupUserClass{
     if (!users){
@@ -94,7 +111,7 @@ static FZZUser *currentUser = nil;
 //}
 
 
--(NSEntityDescription *)getEntityDescription{
++(NSEntityDescription *)getEntityDescription{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     NSManagedObjectContext *moc = [appDelegate managedObjectContext];
     
@@ -110,9 +127,31 @@ static FZZUser *currentUser = nil;
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     NSManagedObjectContext *moc = [appDelegate managedObjectContext];
     
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
+    NSEntityDescription *entityDescription = [FZZUser getEntityDescription];
     
+    
+    // Check to see if user already exists
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    [fetchRequest setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userID = %@", uID];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error;
+    
+    NSArray *results = [moc executeFetchRequest:fetchRequest error:&error];
+    
+    if ([results count] > 0){
+        
+        self = [results objectAtIndex:0];
+        
+    } else {
+        
+        self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
+    }
+        
     NSLog(@"\n\n%@\n\n", entityDescription);
     
     if (self){
@@ -168,8 +207,31 @@ static FZZUser *currentUser = nil;
 +(FZZUser *)userWithUID:(NSNumber *)uID{
     FZZUser *user = [users objectForKey:uID];
     
+    
     if (!user){
-        user = [[FZZUser alloc] initPrivateWithUserID:uID];
+        // Attempt to load from cache
+        
+        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+        
+        NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [FZZUser getEntityDescription];
+        [fetchRequest setEntity:entity];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userID = %@", uID];
+        
+        [fetchRequest setPredicate:predicate];
+        
+        NSError *error;
+        
+        NSArray *results = [moc executeFetchRequest:fetchRequest error:&error];
+        
+        if ([results count] > 0){
+            user = [results objectAtIndex:0];
+        } else {
+            user = [[FZZUser alloc] initPrivateWithUserID:uID];
+        }
     }
     
     return user;
@@ -454,12 +516,17 @@ static FZZUser *currentUser = nil;
     NSString *photoURL = [self getPhotoURLOfWidth:dimension andHeight:dimension];
     
     image = [self getAndReturnImageFromURL:photoURL];
+    
+    CGDataProviderRef provider = CGImageGetDataProvider(image.CGImage);
+    NSData* data = (id)CFBridgingRelease(CGDataProviderCopyData(provider));
+    
+    [self setPhotoBinary:data];
 }
 
 -(void)fetchProfilePictureIfNeededWithCompletionHandler:(void(^)(UIImage *img))handler{
     // NOTE: copying the completion handler is very important
     // if you'll call the callback asynchronously,
-    // even with garbage collection!
+    // even with ARC-based garbage collection!
     
     if (![self isAppUser]){ // SMS User
         _completionHandler = [handler copy];
@@ -475,6 +542,12 @@ static FZZUser *currentUser = nil;
         return;
     }
     
+    // Attempt to load from cache
+    if (image == NULL){
+        image = [UIImage imageWithData:[self photoBinary]];
+    }
+    
+    // Query Facebook for an image
     if (image == NULL){
         dispatch_async(dispatch_get_main_queue(), ^{
             if (_isFetchingData){
@@ -561,15 +634,6 @@ static FZZUser *currentUser = nil;
     return user;
 }
 
--(void)updateCoordinates:(FZZCoordinate *)coords{
-    self.coords = coords;
-}
-
-+(void)forUserWithUID:(NSNumber *)uID updateCoordinates:(FZZCoordinate *)coords{
-    FZZUser *user = [[self class] userWithUID:uID];
-    [user updateCoordinates:(FZZCoordinate *)coords];
-}
-
 +(NSArray *)getUserIDsFromUsers:(NSArray *)users{
     NSMutableArray *result = [users mutableCopy];
     
@@ -593,6 +657,8 @@ static FZZUser *currentUser = nil;
         FZZUser *user = [FZZUser parseJSON:userJSON];
         [result setObject:user atIndexedSubscript:index];
     }];
+    
+    [self saveObjects];
     
     return result;
 }
@@ -633,22 +699,6 @@ static FZZUser *currentUser = nil;
     return result;
 }
 
-+(void)socketIONewUserLocation:(FZZCoordinate *)coord
-                ForUserWithUID:(NSNumber *)uid
-               WithAcknowledge:(SocketIOCallback)function{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* userLocation : (uid * latlng) */
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    
-    [dict setObject:uid forKey:@"uid"];
-    [dict setObject:[coord jsonDict] forKey:@"latlng"];
-    
-    [json setObject:dict forKey:@"userLocation"];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_USER_LOCATION withData:json andAcknowledge:function];
-}
-
 +(void)socketIOAddFriendsUserArray:(NSArray *)friendList
                    WithAcknowledge:(SocketIOCallback)function{
     
@@ -674,5 +724,619 @@ static FZZUser *currentUser = nil;
     
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_REMOVE_FRIEND_LIST withData:json andAcknowledge:function];
 }
+
+#pragma mark - NSManagedObject Getters and Setters
+/*
+ Apple's autogenerated getters and setters are broken
+ */
+
+//- (void)addMessagesObject:(FZZMessage *)value;
+
+//static NSString *const kItemsKey = @"messages";
+//
+//- (void)insertObject:(FZZMessage *)value inMessagesAtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObject:value atIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeObjectFromMessagesAtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectAtIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)insertMessages:(NSArray *)values atIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObjects:values atIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeMessagesAtIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceObjectInMessagesAtIndex:(NSUInteger)idx withObject:(FZZMessage *)value {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceMessagesAtIndexes:(NSIndexSet *)indexes withMessages:(NSArray *)values {
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:values];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)addMessagesObject:(FZZMessage *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet count];
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    [tmpOrderedSet addObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeMessagesObject:(FZZMessage *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//    if (idx != NSNotFound) {
+//        NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObject:value];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)addMessages:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    NSUInteger valuesCount = [values count];
+//    NSUInteger objectsCount = [tmpOrderedSet count];
+//    for (NSUInteger i = 0; i < valuesCount; ++i) {
+//        [indexes addIndex:(objectsCount + i)];
+//    }
+//    if (valuesCount > 0) {
+//        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet addObjectsFromArray:[values array]];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)removeMessages:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    for (id value in values) {
+//        NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//        if (idx != NSNotFound) {
+//            [indexes addIndex:idx];
+//        }
+//    }
+//    if ([indexes count] > 0) {
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+////- (void)addCreatorOfObject:(FZZEvent *)value;
+//
+//static NSString *const kItemsKey = @"creatorOf";
+//
+//- (void)insertObject:(FZZEvent *)value inCreatorOfAtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObject:value atIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeObjectFromCreatorOfAtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectAtIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)insertCreatorOf:(NSArray *)values atIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObjects:values atIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeCreatorOfAtIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceObjectInCreatorOfAtIndex:(NSUInteger)idx withObject:(FZZEvent *)value {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceCreatorOfAtIndexes:(NSIndexSet *)indexes withCreatorOf:(NSArray *)values {
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:values];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)addCreatorOfObject:(FZZEvent *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet count];
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    [tmpOrderedSet addObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeCreatorOfObject:(FZZEvent *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//    if (idx != NSNotFound) {
+//        NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObject:value];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)addCreatorOf:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    NSUInteger valuesCount = [values count];
+//    NSUInteger objectsCount = [tmpOrderedSet count];
+//    for (NSUInteger i = 0; i < valuesCount; ++i) {
+//        [indexes addIndex:(objectsCount + i)];
+//    }
+//    if (valuesCount > 0) {
+//        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet addObjectsFromArray:[values array]];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)removeCreatorOf:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    for (id value in values) {
+//        NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//        if (idx != NSNotFound) {
+//            [indexes addIndex:idx];
+//        }
+//    }
+//    if ([indexes count] > 0) {
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+////- (void)addGuestOfObject:(FZZEvent *)value;
+//
+//static NSString *const kItemsKey = @"guestOf";
+//
+//- (void)insertObject:(FZZEvent *)value inGuestOfAtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObject:value atIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeObjectFromGuestOfAtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectAtIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)insertGuestOf:(NSArray *)values atIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObjects:values atIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeGuestOfAtIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceObjectInGuestOfAtIndex:(NSUInteger)idx withObject:(FZZEvent *)value {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceGuestOfAtIndexes:(NSIndexSet *)indexes withGuestOf:(NSArray *)values {
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:values];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)addGuestOfObject:(FZZEvent *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet count];
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    [tmpOrderedSet addObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeGuestOfObject:(FZZEvent *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//    if (idx != NSNotFound) {
+//        NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObject:value];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)addGuestOf:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    NSUInteger valuesCount = [values count];
+//    NSUInteger objectsCount = [tmpOrderedSet count];
+//    for (NSUInteger i = 0; i < valuesCount; ++i) {
+//        [indexes addIndex:(objectsCount + i)];
+//    }
+//    if (valuesCount > 0) {
+//        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet addObjectsFromArray:[values array]];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)removeGuestOf:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    for (id value in values) {
+//        NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//        if (idx != NSNotFound) {
+//            [indexes addIndex:idx];
+//        }
+//    }
+//    if ([indexes count] > 0) {
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+////- (void)addInviteeOfObject:(FZZEvent *)value;
+//
+//static NSString *const kItemsKey = @"inviteeOf";
+//
+//- (void)addInviteeOfObject:(FZZEvent *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet count];
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    [tmpOrderedSet addObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeInviteeOfObject:(FZZEvent *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//    if (idx != NSNotFound) {
+//        NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObject:value];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)add<#Property#>:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    NSUInteger valuesCount = [values count];
+//    NSUInteger objectsCount = [tmpOrderedSet count];
+//    for (NSUInteger i = 0; i < valuesCount; ++i) {
+//        [indexes addIndex:(objectsCount + i)];
+//    }
+//    if (valuesCount > 0) {
+//        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet addObjectsFromArray:[values array]];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)remove<#Property#>:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    for (id value in values) {
+//        NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//        if (idx != NSNotFound) {
+//            [indexes addIndex:idx];
+//        }
+//    }
+//    if ([indexes count] > 0) {
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+////- (void)addSuggestedInviteOfObject:(FZZEvent *)value;
+//
+//static NSString *const kItemsKey = @"<#property#>";
+//
+//- (void)insertObject:(<#Type#> *)value in<#Property#>AtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObject:value atIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeObjectFrom<#Property#>AtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectAtIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)insert<#Property#>:(NSArray *)values atIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObjects:values atIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)remove<#Property#>AtIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceObjectIn<#Property#>AtIndex:(NSUInteger)idx withObject:(<#Type#> *)value {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replace<#Property#>AtIndexes:(NSIndexSet *)indexes with<#Property#>:(NSArray *)values {
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:values];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)add<#Property#>Object:(<#Type#> *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet count];
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    [tmpOrderedSet addObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)remove<#Property#>Object:(<#Type#> *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//    if (idx != NSNotFound) {
+//        NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObject:value];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)add<#Property#>:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    NSUInteger valuesCount = [values count];
+//    NSUInteger objectsCount = [tmpOrderedSet count];
+//    for (NSUInteger i = 0; i < valuesCount; ++i) {
+//        [indexes addIndex:(objectsCount + i)];
+//    }
+//    if (valuesCount > 0) {
+//        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet addObjectsFromArray:[values array]];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)remove<#Property#>:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    for (id value in values) {
+//        NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//        if (idx != NSNotFound) {
+//            [indexes addIndex:idx];
+//        }
+//    }
+//    if ([indexes count] > 0) {
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+////- (void)addInClustersObject:(FZZCluster *)value;
+//
+//static NSString *const kItemsKey = @"<#property#>";
+//
+//- (void)insertObject:(<#Type#> *)value in<#Property#>AtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObject:value atIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)removeObjectFrom<#Property#>AtIndex:(NSUInteger)idx {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectAtIndex:idx];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)insert<#Property#>:(NSArray *)values atIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet insertObjects:values atIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)remove<#Property#>AtIndexes:(NSIndexSet *)indexes {
+//    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replaceObjectIn<#Property#>AtIndex:(NSUInteger)idx withObject:(<#Type#> *)value {
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)replace<#Property#>AtIndexes:(NSIndexSet *)indexes with<#Property#>:(NSArray *)values {
+//    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:values];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)add<#Property#>Object:(<#Type#> *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet count];
+//    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    [tmpOrderedSet addObject:value];
+//    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//}
+//
+//- (void)remove<#Property#>Object:(<#Type#> *)value {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//    if (idx != NSNotFound) {
+//        NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObject:value];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)add<#Property#>:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    NSUInteger valuesCount = [values count];
+//    NSUInteger objectsCount = [tmpOrderedSet count];
+//    for (NSUInteger i = 0; i < valuesCount; ++i) {
+//        [indexes addIndex:(objectsCount + i)];
+//    }
+//    if (valuesCount > 0) {
+//        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet addObjectsFromArray:[values array]];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
+//
+//- (void)remove<#Property#>:(NSOrderedSet *)values {
+//    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+//    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+//    for (id value in values) {
+//        NSUInteger idx = [tmpOrderedSet indexOfObject:value];
+//        if (idx != NSNotFound) {
+//            [indexes addIndex:idx];
+//        }
+//    }
+//    if ([indexes count] > 0) {
+//        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//        [tmpOrderedSet removeObjectsAtIndexes:indexes];
+//        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+//        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+//    }
+//}
 
 @end

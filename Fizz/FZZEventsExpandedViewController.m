@@ -9,6 +9,7 @@
 #import "FZZEventsExpandedViewController.h"
 #import "FZZEventCell.h"
 #import "FZZExpandedEventCell.h"
+#import "FZZExpandedNewEventCell.h"
 #import "FZZEvent.h"
 #import "FZZUser.h"
 #import "FZZMessage.h"
@@ -22,8 +23,6 @@
 
 #import "FZZInviteViewController.h"
 
-#import "FZZManageFriendsViewController.h"
-
 #import "FZZBubbleViewController.h"
 
 #import "FZZInteractiveBubble.h"
@@ -36,12 +35,9 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 @interface FZZEventsExpandedViewController ()
 
-@property FZZEventsCondensedViewController *ocvc;
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
 @property (nonatomic) FZZBackspaceResignTextView *eventTextView;
-@property UISwitch *toggleSecret;
-@property UILabel  *secretLabel;
 
 @property NSString *lastInputString;
 
@@ -128,10 +124,10 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         self.automaticallyAdjustsScrollViewInsets = NO;
         
-        self.collectionView.showsVerticalScrollIndicator = YES;
+        self.collectionView.showsHorizontalScrollIndicator = YES;
         self.collectionView.pagingEnabled = YES;
         self.collectionView.bounces = YES;
-        self.collectionView.alwaysBounceVertical = YES;
+        self.collectionView.alwaysBounceHorizontal = YES;
         self.collectionView.delegate = self;
         self.collectionView.dataSource = self;
         self.navigationController.automaticallyAdjustsScrollViewInsets = NO;
@@ -142,10 +138,10 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
         
         // For the new event
-        [self.collectionView registerClass:[FZZExpandedEventCell class] forCellWithReuseIdentifier:@"ExpandedEventCell"];
+        [self.collectionView registerClass:[FZZExpandedNewEventCell class] forCellWithReuseIdentifier:@"ExpandedNewEventCell"];
         
         // For all other events
-        [self.collectionView registerClass:[FZZExpandedEventCell class] forCellWithReuseIdentifier:@"ExpandedEventCell2"];
+        [self.collectionView registerClass:[FZZExpandedEventCell class] forCellWithReuseIdentifier:@"ExpandedEventCell"];
         
         //        self.textCV = [[UICollectionView alloc]
         //                       initWithFrame:self.view.frame
@@ -173,22 +169,16 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         _overviewFlowLayout.itemSize = itemSize;
         
         _events = [[NSMutableArray alloc] init];
-        _chatDelegate = [[FZZChatDelegate alloc] init];
-        _ocvc   = [[FZZEventsCondensedViewController alloc] initWithCollectionViewLayout:_overviewFlowLayout];
+//        _chatDelegate = [[FZZChatDelegate alloc] init];
+//        _ocvc   = [[FZZEventsCondensedViewController alloc] initWithCollectionViewLayout:_overviewFlowLayout];
+//        
+//        _ocvc.useLayoutToLayoutNavigationTransitions = YES;
+//        
+//        _ocvc.esvc = self;
         
-        _ocvc.useLayoutToLayoutNavigationTransitions = YES;
-        
-        _ocvc.esvc = self;
-        
-        [_chatDelegate setupViewForm];
-        
-        _chatDelegate.esvc = self;
+//        _chatDelegate.esvc = self;
         
         //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
-        
-        // Manage Friends View Controller
-        
-        _mfvc = [[FZZManageFriendsViewController alloc] init];
         
     }
     return self;
@@ -272,11 +262,10 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     return 2;
 }
 
-- (FZZExpandedEventCell *)setupExpandedEventCell:(FZZExpandedEventCell *)cell{
+- (FZZExpandedNewEventCell *)setupExpandedEventCell:(FZZExpandedNewEventCell *)cell{
     
     cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-    
-    [cell setupToggle];
+
     [cell.resignTextViewer setPlaceholderText:kFZZPlaceholderText];
     [cell.resignTextViewer setEnablesReturnKeyAutomatically:YES];
     [cell.resignTextViewer setReturnKeyType:UIReturnKeySend];
@@ -299,80 +288,70 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     [cell.resignTextViewer setDelegate:self];
     
     _eventTextView = cell.resignTextViewer;
-    _toggleSecret = cell.toggleSecret;
-    _secretLabel  = cell.label;
     
     return cell;
 }
 
-- (FZZExpandedEventCell *)setupEventCell:(FZZExpandedEventCell *)cell withEvent:(FZZEvent *)event{
-    
-    //[cell setEvent:event];
-    
-    cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
-    
-    if (_lineHeight == -1) {
-        
-        [cell.resignTextViewer setText:@"."];
-        
-        _lineHeight = [self measureHeightOfUITextView:cell.resignTextViewer.textView];
-        
-        [cell.resignTextViewer setText:@""];
-        [cell.resignTextViewer deleteBackward];
-    }
-    
-    [self setupResignTextView:cell.resignTextViewer];
-    
-    FZZMessage *message = [event firstMessage];
-    
-    [cell.resignTextViewer setEditable:NO];
-    [cell.resignTextViewer setText:message.text];
-    
-//    UITextView *tv = object;
-//    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height * [tv zoomScale])/2.0;
-//    topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
-//    tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
-    
-    return cell;
-}
+//- (FZZExpandedEventCell *)setupEventCell:(FZZExpandedEventCell *)cell withEvent:(FZZEvent *)event{
+//    
+//    //[cell setEvent:event];
+//    
+//    cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+//    
+//    FZZMessage *message = [event firstMessage];
+//    
+//    [cell.textView setEditable:NO];
+//    [cell.textView setText:message.text];
+//    
+//    NSLog(@"messageText: <%@>", message.text);
+//    
+////    UITextView *tv = object;
+////    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height * [tv zoomScale])/2.0;
+////    topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
+////    tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
+//    
+//    return cell;
+//}
 
 - (UICollectionViewCell *)timelineCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0){
-        NSString *cellID = @"ExpandedEventCell";
+        NSString *cellID = @"ExpandedNewEventCell";
         
-        FZZExpandedEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+        FZZExpandedNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
         
-        [cell setupExpandedEventCell];
+        [cell setupNewEventTextView];
         cell = [self setupExpandedEventCell:cell];
         
         [cell.resignTextViewer setUserInteractionEnabled:YES];
-        cell.ivc.canBeSelected = NO;
-        
-        cell.chatDelegate = _chatDelegate;
         
         return cell;
     } else {
-        int eventNum = indexPath.item;
+        int eventNum = (int)indexPath.item;
         
-        NSString *cellID = @"ExpandedEventCell2";
+        NSString *cellID = @"ExpandedEventCell";
         
         FZZExpandedEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                              forIndexPath:indexPath];
+                                                                   forIndexPath:indexPath];
         FZZEvent *event = [_events objectAtIndex:eventNum];
-        
-        cell.ivc.canBeSelected = YES;
         
         [cell setEvent:event];
         
-        [self setupEventCell:cell withEvent:event];
+        NSLog(@"HERE_1>>");
         
-        cell.chatDelegate = _chatDelegate;
+//        [self setupEventCell:cell withEvent:event];
+        
+//        cell.chatDelegate = _chatDelegate;
         
         return cell;
     }
 }
 
+/*
+ 
+ TODOAndrew Get rid of viewModes and this function below
+ 
+ */
 - (UICollectionViewCell *)overviewCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0){
 //        NSString *cellID = @"Cell";
@@ -391,7 +370,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         return cell;
     } else {
-        int eventNum = indexPath.item;
+        int eventNum = (int)indexPath.item;
         
         NSString *cellID = @"EventCell";
         
@@ -410,14 +389,14 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (_viewMode == kOverview){
-        return [self overviewCollectionView:cv cellForItemAtIndexPath:indexPath];
-    } else {
+//    if (_viewMode == kOverview){
+//        return [self overviewCollectionView:cv cellForItemAtIndexPath:indexPath];
+//    } else {
     
 //    if (_viewMode == kTimeline){
         return [self timelineCollectionView:cv cellForItemAtIndexPath:indexPath];
 //    }
-    }
+//    }
 }
 
 /*- (UICollectionReusableView *)collectionView:
@@ -462,19 +441,19 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 - (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (_viewMode == kOverview){ // Overview
-        CGFloat width  = [UIScreen mainScreen].bounds.size.width;
-        CGFloat height = 70;//[self calculateHeightForEventAtIndexPath:indexPath];
-        
-        CGSize retval = CGSizeMake(width, height);
-        
-        return retval;
-        
-    } else if (_viewMode == kTimeline){
+//    if (_viewMode == kOverview){ // Overview
+//        CGFloat width  = [UIScreen mainScreen].bounds.size.width;
+//        CGFloat height = 70;//[self calculateHeightForEventAtIndexPath:indexPath];
+//        
+//        CGSize retval = CGSizeMake(width, height);
+//        
+//        return retval;
+//        
+//    } else if (_viewMode == kTimeline){
+//        return [UIScreen mainScreen].bounds.size;
+//    } else {
         return [UIScreen mainScreen].bounds.size;
-    } else {
-        return [UIScreen mainScreen].bounds.size;
-    }
+//    }
 }
 
 - (UIEdgeInsets)collectionView:
@@ -487,23 +466,25 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         FZZEvent *e1 = (FZZEvent *)obj1;
         FZZEvent *e2 = (FZZEvent *)obj2;
         
-        return [[e2 lastUpdate] compare:[e1 lastUpdate]];
+        return [[e2 creationTime] compare:[e1 creationTime]];
+        
+//        return [[e2 lastUpdate] compare:[e1 lastUpdate]];
     }];
     
     return events;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    self.navigationItem.leftBarButtonItem=nil;
-    self.navigationItem.rightBarButtonItem=nil;
-    self.navigationItem.hidesBackButton = YES;
+//    self.navigationItem.leftBarButtonItem=nil;
+//    self.navigationItem.rightBarButtonItem=nil;
+//    self.navigationItem.hidesBackButton = YES;
     
     if (_selectedIndex != NULL){
         [self.collectionView scrollToItemAtIndexPath:_selectedIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
         _selectedIndex = NULL;
     }
     
-    [self.collectionView setScrollsToTop:YES];
+//    [self.collectionView setScrollsToTop:YES];
 //    [[self navigationItem] setLeftBarButtonItem:_burgerButton];
 }
 
@@ -521,6 +502,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 //    }
 //}
 
+// TODOAndrew ViewMode belongs somewhere else, for states of the NavIcon
 -(void)setViewMode:(ViewMode)viewMode{
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -558,162 +540,167 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     }
 }
 
--(void)friendsButtonPress:(UIButton*)button{
-    [button setEnabled:NO];
-    [button setHidden:YES];
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    
-    UIButton *navButton = [appDelegate.navigationBar navButton];
-    
-    // Temporarily disable the back button
-    [navButton setEnabled:NO];
-    
-//    double delayInSeconds = 0.3;
+//-(void)friendsButtonPress:(UIButton*)button{
+//    [button setEnabled:NO];
+//    [button setHidden:YES];
+//    
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    
+//    UIButton *navButton = [appDelegate.navigationBar navButton];
+//    
+//    // Temporarily disable the back button
+//    [navButton setEnabled:NO];
+//    
+////    double delayInSeconds = 0.3;
+////    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+////    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+////        [navButton setEnabled:YES];
+////    });
+//    
+//    
+//    [self setViewMode:kFriendManagement];
+//    
+//    // Present Friend Management Page
+//    // presentViewController
+//    
+//    [self.navigationController presentViewController:_mfvc animated:YES completion:^{
+//        [navButton setEnabled:YES];
+//    }];
+//
+//}
+
+
+/*
+ 
+ TODOAndrew move navButtonPress out of here
+ 
+ */
+//- (void)navButtonPress:(UIButton*)button{
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    
+//    FZZNavIcon *navIcon = [appDelegate.navigationBar navIcon];
+//    UIButton *navButton = [appDelegate.navigationBar navButton];
+//    
+//    [button setEnabled:NO];
+//    
+//    BOOL shouldStartButtonTimer = YES;
+//    
+//    if ([navIcon isEditingText]){
+//        if (_activeTextView){
+//            [_activeTextView resignFirstResponder];
+//            
+//            // If you're resigning the New Event TextView, you should be able to scroll
+//            if(_activeTextView == (UITextView *)_eventTextView){
+//                [self.collectionView setScrollEnabled:YES];
+//            }
+//        } else if (_activeTextField){
+//            [_activeTextField resignFirstResponder];
+//        } else {
+//            [[_chatDelegate chatBox] resignFirstResponder];
+//        }
+//        
+//        [navIcon setIsEditingText:NO];
+//    } else switch (_viewMode) { /* TODOAndrew make viewMode a property of each event/eventCell */
+//        case kFriendManagement:
+//        {
+//            shouldStartButtonTimer = NO;
+//            
+//            [self setViewMode:kOverview];
+//            
+//            [self.navigationController dismissViewControllerAnimated:YES completion:^{
+//                [navButton setEnabled:YES];
+//                [_friendsButton setHidden:NO];
+//                [_friendsButton setEnabled:YES];
+//            }];
+//        }
+//            break;
+//            
+//        case kOverview:
+//        {
+//            [_friendsButton setHidden:YES];
+//            [self expandView];
+//        }
+//            break;
+//            
+//        case kTimeline:
+//        {
+//            [_friendsButton setHidden:NO];
+//            [self contractView];
+//        }
+//            break;
+//            
+//        case kChat:
+//        {
+//            /* TODOAndrew ensure _currentCell can't be newEventCell in chat or invite mode */
+//            [(FZZExpandedEventCell *)_currentCell exitChatMode];
+//            
+//            // Enable main scrolling
+//            self.collectionView.scrollEnabled = YES;
+//        }
+//            break;
+//            
+//        case kInvite:
+//        {
+//            [(FZZExpandedEventCell *)_currentCell exitInviteMode];
+//            
+//            // Enable main scrolling
+//            self.collectionView.scrollEnabled = YES;
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    
+//    // Solve threading issues/spam button issues with simple delay timer
+//    if (shouldStartButtonTimer){
+//        double delayInSeconds = 0.3;
+//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//            [button setEnabled:YES];
+//        });
+//    }
+//    
+//}
+
+//- (void)contractView{
+//    [_eventTextView setText:@""];
+//    [_eventTextView deleteBackward];
+//    
+//    double delayInSeconds = 0.01;
 //    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
 //    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//        [navButton setEnabled:YES];
+//        _ocvc.lastIndex = [[self.collectionView indexPathsForVisibleItems]objectAtIndex:0];
+//        
+//        //    [self.collectionView setCollectionViewLayout:_ocvc.collectionViewLayout
+//        //                                        animated:YES
+//        //                                      completion:nil];
+//        
+//        _ocvc.useLayoutToLayoutNavigationTransitions = YES;
+//        
+//        [self setViewMode:kOverview];
+//        
+//        //    [self setAutomaticallyAdjustsScrollViewInsets:NO];
+//        //    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];
+//        //    [self.navigationController setAutomaticallyAdjustsScrollViewInsets:NO];
+//        [self.collectionView setPagingEnabled:NO];
+//        
+//        NSArray *toReload = [NSArray arrayWithObjects:_ocvc.lastIndex, [NSIndexPath indexPathForItem:0 inSection:0], nil];
+//        
+//        [[self navigationController] pushViewController:_ocvc animated:YES];
+//        [_ocvc.collectionView reloadItemsAtIndexPaths:toReload];
+//        
+//        //    [_ocvc updateEvents:_events];
+//        //    self.collectionView.delegate = _ocvc;
+//        //    self.collectionView.dataSource = _ocvc;
+//        //
+//        //    [_ocvc setCollectionView:self.collectionView];
+//        //
+//        //    [self.collectionView scrollToItemAtIndexPath:_ocvc.lastIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
 //    });
-    
-    
-    [self setViewMode:kFriendManagement];
-    
-    // Present Friend Management Page
-    // presentViewController
-    
-    [self.navigationController presentViewController:_mfvc animated:YES completion:^{
-        [navButton setEnabled:YES];
-    }];
-    
-//    [self.navigationController pushViewController:<#(UIViewController *)#> animated:YES];
-}
-
-
-- (void)navButtonPress:(UIButton*)button{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    
-    FZZNavIcon *navIcon = [appDelegate.navigationBar navIcon];
-    UIButton *navButton = [appDelegate.navigationBar navButton];
-    
-    [button setEnabled:NO];
-    
-    BOOL shouldStartButtonTimer = YES;
-    
-    if ([navIcon isEditingText]){
-        if (_activeTextView){
-            [_activeTextView resignFirstResponder];
-            
-            // If you're resigning the New Event TextView, you should be able to scroll
-            if(_activeTextView == (UITextView *)_eventTextView){
-                [self.collectionView setScrollEnabled:YES];
-            }
-        } else if (_activeTextField){
-            [_activeTextField resignFirstResponder];
-        } else {
-            [[_chatDelegate chatBox] resignFirstResponder];
-        }
-        
-        [navIcon setIsEditingText:NO];
-    } else switch (_viewMode) {
-        case kFriendManagement:
-        {
-            shouldStartButtonTimer = NO;
-            
-            [self setViewMode:kOverview];
-            
-            [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                [navButton setEnabled:YES];
-                [_friendsButton setHidden:NO];
-                [_friendsButton setEnabled:YES];
-            }];
-        }
-            break;
-            
-        case kOverview:
-        {
-            [_friendsButton setHidden:YES];
-            [self expandView];
-        }
-            break;
-            
-        case kTimeline:
-        {
-            [_friendsButton setHidden:NO];
-            [self contractView];
-        }
-            break;
-            
-        case kChat:
-        {
-            [_currentCell exitChatMode];
-            
-            // Enable main scrolling
-            self.collectionView.scrollEnabled = YES;
-        }
-            break;
-            
-        case kInvite:
-        {
-            [_currentCell exitInviteMode];
-            
-            // Enable main scrolling
-            self.collectionView.scrollEnabled = YES;
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    // Solve threading issues/spam button issues with simple delay timer
-    if (shouldStartButtonTimer){
-        double delayInSeconds = 0.3;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [button setEnabled:YES];
-        });
-    }
-    
-}
-
-- (void)contractView{
-    [_eventTextView setText:@""];
-    [_eventTextView deleteBackward];
-    
-    double delayInSeconds = 0.01;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        _ocvc.lastIndex = [[self.collectionView indexPathsForVisibleItems]objectAtIndex:0];
-        
-        //    [self.collectionView setCollectionViewLayout:_ocvc.collectionViewLayout
-        //                                        animated:YES
-        //                                      completion:nil];
-        
-        _ocvc.useLayoutToLayoutNavigationTransitions = YES;
-        
-        [self setViewMode:kOverview];
-        
-        //    [self setAutomaticallyAdjustsScrollViewInsets:NO];
-        //    [_ocvc setAutomaticallyAdjustsScrollViewInsets:NO];
-        //    [self.navigationController setAutomaticallyAdjustsScrollViewInsets:NO];
-        [self.collectionView setPagingEnabled:NO];
-        
-        NSArray *toReload = [NSArray arrayWithObjects:_ocvc.lastIndex, [NSIndexPath indexPathForItem:0 inSection:0], nil];
-        
-        [[self navigationController] pushViewController:_ocvc animated:YES];
-        [_ocvc.collectionView reloadItemsAtIndexPaths:toReload];
-        
-        //    [_ocvc updateEvents:_events];
-        //    self.collectionView.delegate = _ocvc;
-        //    self.collectionView.dataSource = _ocvc;
-        //
-        //    [_ocvc setCollectionView:self.collectionView];
-        //
-        //    [self.collectionView scrollToItemAtIndexPath:_ocvc.lastIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
-    });
-}
+//}
 
 //- (void)expandViewToIndexPath:(NSIndexPath *)indexPath{
 //    self.collectionView.delegate = self;
@@ -724,16 +711,16 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 //    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
 //}
 
-- (void)expandView{
-//    _viewMode = kTimeline;
-    
-    [_ocvc collectionView:_ocvc.collectionView didSelectItemAtIndexPath:_ocvc.lastIndex];
+//- (void)expandView{
+////    _viewMode = kTimeline;
 //    
-//    [self.collectionView setPagingEnabled:YES];
-//    [self expandViewToIndexPath:_ocvc.lastIndex];
-//    
-//    _ocvc.lastIndex = NULL;
-}
+//    [_ocvc collectionView:_ocvc.collectionView didSelectItemAtIndexPath:_ocvc.lastIndex];
+////    
+////    [self.collectionView setPagingEnabled:YES];
+////    [self expandViewToIndexPath:_ocvc.lastIndex];
+////    
+////    _ocvc.lastIndex = NULL;
+//}
 
 // Your code is bad, and you should feel bad!
 // Couldn't get update to work, so I'm just remaking the
@@ -741,212 +728,253 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 // Update code remains below, commented out
 
-- (BOOL)lookingAtAllEvents{
-    if (self.collectionView.delegate == self || self.collectionView.delegate == _ocvc){
-        return YES;
-    }
-    
-    return NO;
-}
-
 
 -(void)addIncomingMessageForEvent:(FZZEvent *)event{
-    [_chatDelegate addIncomingMessageForEvent:event];
+    NSInteger index = [_events indexOfObject:event];
+    
+    if (index != NSNotFound){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+        
+        FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+        
+        [cell.chatDelegate addIncomingMessageForEvent:event];
+    } else {
+        NSLog(@"WOOPS SHOULD NEVER HAPPEN!");
+        exit(1);
+    }
 }
 
+/*
+ 
+ Only updates the event if it's onscreen
+ 
+ */
 -(void)updateEvent:(FZZEvent *)event{
     
+    NSLog(@"<<>>Dickfingers (1");
+    
     if ([_bvc event] == event){
-        NSLog(@"SUCCESSES");
         [_bvc updateBubblesForEvent:event Animated:YES];
         
-        int index = [_events indexOfObject:event];
-        int section = [self.collectionView numberOfSections] - 1;
+        int index = (int)[_events indexOfObject:event];
+        int section = (int)[self.collectionView numberOfSections] - 1;
+        
+        NSLog(@"<<>>Dickfingers 1)");
         
         NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:section];
         
         FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:path];
         
-        [cell.ivc.tableView reloadData];
+        /*
+         
+         TODOAndrew if need be, update chat or invites on updateEvent
+         
+         */
+        
+//        [cell.ivc.tableView reloadData];
 //        [cell.ivc.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
+
 -(void)jumpToMessagesForEvent:(FZZEvent *)event{
-    BOOL delay = NO;
-    BOOL doSomething = NO;
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    
-    UIButton *navButton = [appDelegate.navigationBar navButton];
-    
-    switch (_viewMode) {
-        case kFriendManagement: // Press the button twice
-        {
-            [UIView setAnimationsEnabled:NO];
-            [self navButtonPress:navButton];
-            [self navButtonPress:navButton];
-            [UIView setAnimationsEnabled:YES];
-            
-            delay = YES;
-            doSomething = YES;
-        }
-            break;
-            
-        case kChat:
-            break;
-            
-        case kInvite:
-        {
-            [UIView setAnimationsEnabled:NO];
-            [self navButtonPress:navButton];
-            [_currentCell enterChatMode];
-            [UIView setAnimationsEnabled:YES];
-        }
-            break;
-            
-        case kOverview:
-        {
-            [UIView setAnimationsEnabled:NO];
-            [self navButtonPress:navButton];
-            [UIView setAnimationsEnabled:YES];
-            
-            delay = YES;
-            doSomething = YES;
-        }
-            break;
-            
-        case kTimeline:
-        {
-            doSomething = YES;
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    if (doSomething && [_events containsObject:event]){
-        int index = [_events indexOfObject:event];
-        int numSections = [self.collectionView numberOfSections];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:numSections - 1];
-        
-        NSIndexPath *firstIndex = [NSIndexPath indexPathForItem:0 inSection:0];
-        
-        if (delay){
-            double delayInSeconds = 3;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [UIView setAnimationsEnabled:NO];
-                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
-                [UIView setAnimationsEnabled:YES];
-                
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [UIView setAnimationsEnabled:NO];
-                    
-                    NSLog(@"enter 2");
-                    _currentCell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-//                    [_currentCell enterChatMode];
-                    [_currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
-                    [UIView setAnimationsEnabled:YES];
-                });
-            });
-        } else {
-            double delayInSeconds = 4;
-            
-            [UIView setAnimationsEnabled:NO];
-            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
-            [UIView setAnimationsEnabled:YES];
-            
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [UIView setAnimationsEnabled:NO];
-                _currentCell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-                [_currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
-                
-                NSLog(@"enter 1");
-                
-//                [_currentCell enterChatMode];
-                
-                [UIView setAnimationsEnabled:YES];
-            });
-        }
-    }
+    /*
+     
+     TODOAndrew Get jumping to events and screens setup again
+     
+     */
 }
+
+//-(void)jumpToMessagesForEvent:(FZZEvent *)event{
+//    BOOL delay = NO;
+//    BOOL doSomething = NO;
+//    
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    
+//    UIButton *navButton = [appDelegate.navigationBar navButton];
+//    
+//    switch (_viewMode) {
+//        case kFriendManagement: // Press the button twice
+//        {
+//            [UIView setAnimationsEnabled:NO];
+//            [self navButtonPress:navButton];
+//            [self navButtonPress:navButton];
+//            [UIView setAnimationsEnabled:YES];
+//            
+//            delay = YES;
+//            doSomething = YES;
+//        }
+//            break;
+//            
+//        case kChat:
+//            break;
+//            
+//        case kInvite:
+//        {
+//            [UIView setAnimationsEnabled:NO];
+//            [self navButtonPress:navButton];
+//            [(FZZExpandedEventCell *)_currentCell enterChatMode];
+//            [UIView setAnimationsEnabled:YES];
+//        }
+//            break;
+//            
+//        case kOverview:
+//        {
+//            [UIView setAnimationsEnabled:NO];
+//            [self navButtonPress:navButton];
+//            [UIView setAnimationsEnabled:YES];
+//            
+//            delay = YES;
+//            doSomething = YES;
+//        }
+//            break;
+//            
+//        case kTimeline:
+//        {
+//            doSomething = YES;
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    
+//    if (doSomething && [_events containsObject:event]){
+//        int index = [_events indexOfObject:event];
+//        int numSections = [self.collectionView numberOfSections];
+//        
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:numSections - 1];
+//        
+//        NSIndexPath *firstIndex = [NSIndexPath indexPathForItem:0 inSection:0];
+//        
+//        if (delay){
+//            double delayInSeconds = 3;
+//            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                [UIView setAnimationsEnabled:NO];
+//                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+//                [UIView setAnimationsEnabled:YES];
+//                
+//                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                    [UIView setAnimationsEnabled:NO];
+//                    
+//                    NSLog(@"enter 2");
+//                    _currentCell = [self.collectionView cellForItemAtIndexPath:indexPath];
+////                    [_currentCell enterChatMode];
+//                    
+//                    FZZExpandedEventCell *currentCell = (FZZExpandedEventCell *)_currentCell;
+//                    
+//                    [currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
+//                    [UIView setAnimationsEnabled:YES];
+//                });
+//            });
+//        } else {
+//            double delayInSeconds = 4;
+//            
+//            [UIView setAnimationsEnabled:NO];
+//            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+//            [UIView setAnimationsEnabled:YES];
+//            
+//            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                [UIView setAnimationsEnabled:NO];
+//                
+//                _currentCell = [self.collectionView cellForItemAtIndexPath:indexPath];
+//                
+//                FZZExpandedEventCell *currentCell = (FZZExpandedEventCell *)_currentCell;
+//                
+//                [currentCell.ivc.tableView selectRowAtIndexPath:firstIndex animated:NO scrollPosition:NO];
+//                
+//                NSLog(@"enter 1");
+//                
+////                [_currentCell enterChatMode];
+//                
+//                [UIView setAnimationsEnabled:YES];
+//            });
+//        }
+//    }
+//}
 
 -(void)jumpToEvent:(FZZEvent *)event{
-    BOOL delay = NO;
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    
-    UIButton *navButton = [appDelegate.navigationBar navButton];
-    
-    switch (_viewMode) {
-        case kFriendManagement: // Press the button twice
-        {
-            [UIView setAnimationsEnabled:NO];
-            [self navButtonPress:navButton];
-            [self navButtonPress:navButton];
-            [UIView setAnimationsEnabled:YES];
-            
-            delay = YES;
-        }
-            break;
-            
-        case kChat:
-        {
-            [UIView setAnimationsEnabled:NO];
-            [self navButtonPress:navButton];
-            [UIView setAnimationsEnabled:YES];
-        }
-            break;
-            
-        case kInvite:
-        {
-            [UIView setAnimationsEnabled:NO];
-            [self navButtonPress:navButton];
-            [UIView setAnimationsEnabled:YES];
-        }
-            break;
-            
-        case kOverview:
-        {
-            [UIView setAnimationsEnabled:NO];
-            [self navButtonPress:navButton];
-            [UIView setAnimationsEnabled:YES];
-            
-            delay = YES;
-        }
-            break;
-            
-        case kTimeline:
-            break;
-            
-        default:
-            break;
-    }
-
-    if ([_events containsObject:event]){
-        int index = [_events indexOfObject:event];
-        int numSections = [self.collectionView numberOfSections];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:numSections - 1];
-        
-        if (delay){
-            double delayInSeconds = 1;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
-            });
-        } else {
-            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
-        }
-    }
+    /*
+     
+     TODOAndrew jumpToEvent
+     
+     */
 }
+
+//-(void)jumpToEvent:(FZZEvent *)event{
+//    BOOL delay = NO;
+//    
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    
+//    UIButton *navButton = [appDelegate.navigationBar navButton];
+//    
+//    switch (_viewMode) {
+//        case kFriendManagement: // Press the button twice
+//        {
+//            [UIView setAnimationsEnabled:NO];
+//            [self navButtonPress:navButton];
+//            [self navButtonPress:navButton];
+//            [UIView setAnimationsEnabled:YES];
+//            
+//            delay = YES;
+//        }
+//            break;
+//            
+//        case kChat:
+//        {
+//            [UIView setAnimationsEnabled:NO];
+//            [self navButtonPress:navButton];
+//            [UIView setAnimationsEnabled:YES];
+//        }
+//            break;
+//            
+//        case kInvite:
+//        {
+//            [UIView setAnimationsEnabled:NO];
+//            [self navButtonPress:navButton];
+//            [UIView setAnimationsEnabled:YES];
+//        }
+//            break;
+//            
+//        case kOverview:
+//        {
+//            [UIView setAnimationsEnabled:NO];
+//            [self navButtonPress:navButton];
+//            [UIView setAnimationsEnabled:YES];
+//            
+//            delay = YES;
+//        }
+//            break;
+//            
+//        case kTimeline:
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//
+//    if ([_events containsObject:event]){
+//        int index = [_events indexOfObject:event];
+//        int numSections = [self.collectionView numberOfSections];
+//        
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:numSections - 1];
+//        
+//        if (delay){
+//            double delayInSeconds = 1;
+//            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+//            });
+//        } else {
+//            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+//        }
+//    }
+//}
 
 -(void)loadToEvent:(FZZEvent *)event{
     FZZUser *me = [FZZUser me];
@@ -978,16 +1006,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     
     _activeTextView = textView;
     
-    [_toggleSecret setHidden:NO];
-    [_secretLabel setHidden:NO];
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        
-        [_toggleSecret setAlpha:1.0];
-        [_secretLabel setAlpha:1.0];
-        
-    } completion:^(BOOL finished) {
-    }];
 //    }
     
     return YES;
@@ -995,17 +1013,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView{
     _activeTextView = NULL;
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        
-        [_toggleSecret setAlpha:0.0];
-        [_secretLabel setAlpha:0.0];
-        
-    } completion:^(BOOL finished) {
-        [_toggleSecret setOn:NO animated:NO];
-        [_toggleSecret setHidden:YES];
-        [_secretLabel setHidden:YES];
-    }];
     
     return YES;
 }
@@ -1123,6 +1130,11 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     float minHeight = 2 * _lineHeight;
     float maxHeight = 3 * _lineHeight;
     
+    if ([textView.text hasSuffix:@"  "]){
+        NSString *string = [textView.text substringToIndex:[textView.text length] - 1];
+        [textView setText:string];
+    }
+    
     float textViewHeight = [self measureHeightOfUITextView:textView];
     
     // Limit textview num lines
@@ -1130,9 +1142,9 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         UITextRange *textRange;
         
         if (textView.selectedTextRange.empty) {
-            UITextPosition *pos = [textView positionFromPosition:textRange.start
+            UITextPosition *pos = [textView positionFromPosition:textView.endOfDocument
                                                      inDirection:UITextLayoutDirectionLeft
-                                                          offset:1];
+                                                          offset:0];
             
             //make a 0 length range at position
             textRange = [textView textRangeFromPosition:pos
@@ -1143,6 +1155,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         [textView setText:_lastInputString];
         
         if (textRange != NULL){
+            NSLog(@"{<<%@>>}", textRange);
             [textView setSelectedTextRange:textRange];
         }
     }
@@ -1186,7 +1199,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         UITextRange *textRange;
         
         if (resignTextView.textView.selectedTextRange.empty) {
-            UITextPosition *pos = [resignTextView.textView positionFromPosition:textRange.start
+            UITextPosition *pos = [resignTextView.textView positionFromPosition:resignTextView.textView.endOfDocument
                                                      inDirection:UITextLayoutDirectionLeft
                                                           offset:1];
             
@@ -1231,7 +1244,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     
     [navIcon setIsEditingText:NO];
     [textView setEditable:NO];
-    [_toggleSecret setEnabled:NO];
     
     // Submitting content
     // Scrolling is still disabled
@@ -1240,8 +1252,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     
     [UIView animateWithDuration:0.25 animations:^{
         [textView setTextColor:[UIColor blackColor]];
-        [_toggleSecret setAlpha:0.0];
-        [_secretLabel setAlpha:0.0];
         
         //_currentIndex = [NSIndexPath indexPathForItem:0 inSection:0];
         [self.collectionView setScrollEnabled:YES];
@@ -1249,13 +1259,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 //        FZZExpandedEventCell *nec = (FZZExpandedEventCell *)[self getExpandedEventCell];
 //        
 //        [nec setScrollingEnabled:YES];
-    } completion:^(BOOL finished) {
-        [_toggleSecret removeFromSuperview];
-        [_secretLabel removeFromSuperview];
-        
-        _toggleSecret = NULL;
-        _secretLabel  = NULL;
-    }];
+    } completion:NULL];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -1283,15 +1287,25 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         return NO;
     }
     
+    if ([text rangeOfString:@"\n"].location != NSNotFound){
+        return NO;
+    }
+    
     return YES;
 }
 
+
+/*
+ 
+ TODOAndrew Why is this different if you're deleting or adding? just load them all, sorted from FZZEvent getEvents, and then update the visuals. Compare the old array of where events were to the new one, and insert the new events appropriately visually if this is on screen, else just replace the array.
+ 
+ */
 - (void)updateEvents:(NSMutableArray *)incomingEvents{
     NSLog(@"%dxx!", [incomingEvents count]);
     
     // Re-sort current Events because of messaging activity
     if (incomingEvents == NULL){
-        _events = [FZZEvent getEvents];
+        _events = [[FZZEvent getEvents] mutableCopy];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.collectionView reloadData];

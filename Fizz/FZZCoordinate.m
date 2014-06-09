@@ -27,7 +27,7 @@ static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
     return [NSEntityDescription entityForName:@"FZZCoordinate" inManagedObjectContext:moc];
 }
 
-- (id)initWithLongitude:(float)lng andLatitude:(float)lat
+- (id)initWithLongitude:(float)lng latitude:(float)lat
 {
 //    self = [super init];
     

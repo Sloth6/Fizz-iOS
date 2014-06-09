@@ -15,16 +15,14 @@
 
 @interface FZZEvent : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * eventID;
 @property (nonatomic, retain) NSDate * creationTime;
-
-@property (nonatomic, retain) FZZUser *creator;
-@property (nonatomic, retain) NSOrderedSet *invitees;
-@property (nonatomic, retain) NSOrderedSet *guests;
+@property (nonatomic, retain) NSNumber * eventID;
 @property (nonatomic, retain) NSOrderedSet *clusters;
-@property (nonatomic, retain) NSOrderedSet *suggestedInvites;
-
+@property (nonatomic, retain) FZZUser *creator;
+@property (nonatomic, retain) NSOrderedSet *guests;
+@property (nonatomic, retain) NSOrderedSet *invitees;
 @property (nonatomic, retain) NSOrderedSet *messages;
+@property (nonatomic, retain) NSOrderedSet *suggestedInvites;
 
 @end
 
@@ -32,6 +30,16 @@
 
 +(NSArray *)getEvents;
 
+- (void)insertObject:(FZZCluster *)value inClustersAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromClustersAtIndex:(NSUInteger)idx;
+- (void)insertClusters:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeClustersAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInClustersAtIndex:(NSUInteger)idx withObject:(FZZCluster *)value;
+- (void)replaceClustersAtIndexes:(NSIndexSet *)indexes withClusters:(NSArray *)values;
+- (void)addClustersObject:(FZZCluster *)value;
+- (void)removeClustersObject:(FZZCluster *)value;
+- (void)addClusters:(NSOrderedSet *)values;
+- (void)removeClusters:(NSOrderedSet *)values;
 - (void)insertObject:(FZZUser *)value inGuestsAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromGuestsAtIndex:(NSUInteger)idx;
 - (void)insertGuests:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
@@ -62,17 +70,6 @@
 - (void)removeMessagesObject:(FZZMessage *)value;
 - (void)addMessages:(NSOrderedSet *)values;
 - (void)removeMessages:(NSOrderedSet *)values;
-- (void)insertObject:(FZZCluster *)value inClustersAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromClustersAtIndex:(NSUInteger)idx;
-- (void)insertClusters:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeClustersAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInClustersAtIndex:(NSUInteger)idx withObject:(FZZCluster *)value;
-- (void)replaceClustersAtIndexes:(NSIndexSet *)indexes withClusters:(NSArray *)values;
-- (void)addClustersObject:(FZZCluster *)value;
-- (void)removeClustersObject:(FZZCluster *)value;
-- (void)addClusters:(NSOrderedSet *)values;
-- (void)removeClusters:(NSOrderedSet *)values;
-
 - (void)insertObject:(FZZUser *)value inSuggestedInvitesAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromSuggestedInvitesAtIndex:(NSUInteger)idx;
 - (void)insertSuggestedInvites:(NSArray *)value atIndexes:(NSIndexSet *)indexes;

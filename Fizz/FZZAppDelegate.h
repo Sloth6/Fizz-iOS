@@ -21,7 +21,6 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "FZZFacebookLoginDelegate.h"
 #import "FZZEventsExpandedViewController.h"
-#import "FZZEventsCondensedViewController.h"
 #import "FZZOverlayView.h"
 
 static const UIColor *facebookColor;
@@ -41,8 +40,7 @@ static float const kFZZInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) FBSession *session;
 @property (strong, nonatomic) FZZFacebookLoginDelegate *fbLoginDelegate;
-@property (strong, nonatomic) FZZEventsExpandedViewController *esvc;
-@property (strong, nonatomic) FZZEventsCondensedViewController *ocvc;
+@property (strong, nonatomic) FZZEventsExpandedViewController *eevc;
 @property (strong, nonatomic) FZZBubbleViewController *bvc;
 
 @property (strong, nonatomic) FZZOverlayView *navigationBar;
@@ -51,6 +49,7 @@ static float const kFZZInviteProfilePictureHeight = 50;
 @property BOOL hasLoggedIn;
 @property BOOL isConnecting;
 @property BOOL gotAddressBook;
+@property BOOL hasLoadedDataFromCache;
 
 @property (strong, nonatomic) NSString *userPhoneNumber;
 
@@ -58,6 +57,7 @@ static float const kFZZInviteProfilePictureHeight = 50;
 - (void)sessionStateChanged:(FBSession *)session state:(FBSessionState)state error:(NSError *)error;
 - (void)setupNavigationController;
 - (void)promptForNewFacebookToken;
+- (void)loadDataFromCache;
 
 - (void)reclaimBubbleView;
 

@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "SocketIO.h"
 
-@class FZZCoordinate, FZZEvent;
+@class FZZCoordinate, FZZEvent, FZZMessage, FZZCluster;
 
 /*
  
@@ -31,8 +31,14 @@
 @property (nonatomic, retain) NSNumber * facebookID;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * phoneNumber;
+@property (nonatomic, retain) NSData * photoBinary;
 @property (nonatomic, retain) NSNumber * userID;
-@property (nonatomic, retain) FZZCoordinate *coords;
+@property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) NSSet *creatorOf;
+@property (nonatomic, retain) NSSet *guestOf;
+@property (nonatomic, retain) NSSet *inviteeOf;
+@property (nonatomic, retain) NSSet *suggestedInviteOf;
+@property (nonatomic, retain) NSSet *inClusters;
 
 -(NSString *)initials;
 
@@ -56,7 +62,6 @@
 -(UIImageView *)formatImageView:(UIImageView *)imageView
              ForInitialsForRect:(CGRect)rect;
 
--(void)updateCoordinates:(FZZCoordinate *)coord;
 -(void)setFacebookID:(NSNumber *)fbID;
 -(void)setPhoneNumber:(NSString *)phoneNumber;
 
@@ -94,5 +99,35 @@
 
 +(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
                       WithAcknowledge:(SocketIOCallback)function;
+
+- (void)addMessagesObject:(FZZMessage *)value;
+- (void)removeMessagesObject:(FZZMessage *)value;
+- (void)addMessages:(NSSet *)values;
+- (void)removeMessages:(NSSet *)values;
+
+- (void)addCreatorOfObject:(FZZEvent *)value;
+- (void)removeCreatorOfObject:(FZZEvent *)value;
+- (void)addCreatorOf:(NSSet *)values;
+- (void)removeCreatorOf:(NSSet *)values;
+
+- (void)addGuestOfObject:(FZZEvent *)value;
+- (void)removeGuestOfObject:(FZZEvent *)value;
+- (void)addGuestOf:(NSSet *)values;
+- (void)removeGuestOf:(NSSet *)values;
+
+- (void)addInviteeOfObject:(FZZEvent *)value;
+- (void)removeInviteeOfObject:(FZZEvent *)value;
+- (void)addInviteeOf:(NSSet *)values;
+- (void)removeInviteeOf:(NSSet *)values;
+
+- (void)addSuggestedInviteOfObject:(FZZEvent *)value;
+- (void)removeSuggestedInviteOfObject:(FZZEvent *)value;
+- (void)addSuggestedInviteOf:(NSSet *)values;
+- (void)removeSuggestedInviteOf:(NSSet *)values;
+
+- (void)addInClustersObject:(FZZCluster *)value;
+- (void)removeInClustersObject:(FZZCluster *)value;
+- (void)addInClusters:(NSSet *)values;
+- (void)removeInClusters:(NSSet *)values;
 
 @end

@@ -27,8 +27,6 @@
 
 @property FZZEvent *event;
 
-@property UIButton *addSeatButton;
-
 @property FZZExpandedEventCell *eventCell;
 
 @property UIButton *inviteButton;

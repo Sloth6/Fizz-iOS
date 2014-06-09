@@ -141,7 +141,12 @@ static int kFZZNumRecentInvites = 30;
 //    return YES;
 //}
 
-- (void)updateSeatUI{
+/*
+ 
+ TODOAndrew Unused function because of seats, is this neccessary for updating bubbles via server or local user invitations?
+ 
+ */
+- (void)updateBubbleUI{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [appDelegate.bvc updateBubblesForEvent:_event Animated:YES];
@@ -150,59 +155,59 @@ static int kFZZNumRecentInvites = 30;
 // You can always add a seat
 //- (void)addSeat{
 //    [_event addSeat];
-//    [self updateSeatUI];
+//    [self updateBubbleUI];
 //}
 
 // Attempt to subtract an empty seat. If no empty seats, no subtraction
 //- (void)removeSeat{
 //    if ([_event removeSeat]){
-//        [self updateSeatUI];
+//        [self updateBubbleUI];
 //    }
 //}
 
-- (void)setupSeats{
-    // Get TextView positions
-    float textX = _textView.frame.origin.x;
-    float textXEnd = _textView.frame.size.width + textX;
-    
-    float textY = _textView.frame.origin.y;
-//    float textYEnd = textY + _textView.frame.size.height;
-    
-    float midX = (textX + textXEnd)/2;
-    
-    // AddSeatButton
-    float addSeatWidth = 44;
-    float addSeatX = midX + 110;
-    float addSeatY = textY - 160;
-    float addSeatHeight = addSeatWidth;
-    CGRect addSeatFrame = CGRectMake(addSeatX, addSeatY, addSeatWidth, addSeatHeight);
-    
-    _addSeatButton = [FZZInviteGuestButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
-    
-    [_addSeatButton setFrame:addSeatFrame];
-    
-    //[_inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
-    
-    [_addSeatButton addTarget:self
-                      action:@selector(addSeat)
-            forControlEvents:UIControlEventTouchUpInside];
-    
+//- (void)setupSeats{
+//    // Get TextView positions
+//    float textX = _textView.frame.origin.x;
+//    float textXEnd = _textView.frame.size.width + textX;
 //    
-//    _addSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
-//    _removeSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    float textY = _textView.frame.origin.y;
+////    float textYEnd = textY + _textView.frame.size.height;
 //    
-//    [_addSeatButton setFrame:seatsPlusFrame];
-//    [_removeSeatButton setFrame:seatsMinusFrame];
+//    float midX = (textX + textXEnd)/2;
 //    
-//    [_addSeatButton setTitle:@"ADD" forState:UIControlStateNormal];
-//    [_removeSeatButton setTitle:@"DEL" forState:UIControlStateNormal];
+//    // AddSeatButton
+//    float addSeatWidth = 44;
+//    float addSeatX = midX + 110;
+//    float addSeatY = textY - 160;
+//    float addSeatHeight = addSeatWidth;
+//    CGRect addSeatFrame = CGRectMake(addSeatX, addSeatY, addSeatWidth, addSeatHeight);
 //    
-//    [_addSeatButton addTarget:self action:@selector(addSeat)
-//             forControlEvents:UIControlEventTouchUpInside];
+//    _addSeatButton = [FZZInviteGuestButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
 //    
-//    [_removeSeatButton addTarget:self action:@selector(removeSeat)
-//             forControlEvents:UIControlEventTouchUpInside];
-}
+//    [_addSeatButton setFrame:addSeatFrame];
+//    
+//    //[_inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
+//    
+//    [_addSeatButton addTarget:self
+//                      action:@selector(addSeat)
+//            forControlEvents:UIControlEventTouchUpInside];
+//    
+////    
+////    _addSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
+////    _removeSeatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+////    
+////    [_addSeatButton setFrame:seatsPlusFrame];
+////    [_removeSeatButton setFrame:seatsMinusFrame];
+////    
+////    [_addSeatButton setTitle:@"ADD" forState:UIControlStateNormal];
+////    [_removeSeatButton setTitle:@"DEL" forState:UIControlStateNormal];
+////    
+////    [_addSeatButton addTarget:self action:@selector(addSeat)
+////             forControlEvents:UIControlEventTouchUpInside];
+////    
+////    [_removeSeatButton addTarget:self action:@selector(removeSeat)
+////             forControlEvents:UIControlEventTouchUpInside];
+//}
 
 - (void)setupInvite{
     // Get TextView positions
@@ -215,21 +220,21 @@ static int kFZZNumRecentInvites = 30;
     float midX = (textX + textXEnd)/2;
     
     // InviteButton
-    float inviteWidth = 44;
-    float inviteX = midX + 110;
-    float inviteY = textYEnd + 60;
-    float inviteHeight = inviteWidth;
-    CGRect inviteFrame = CGRectMake(inviteX, inviteY, inviteWidth, inviteHeight);
+//    float inviteWidth = 44;
+//    float inviteX = midX + 110;
+//    float inviteY = textYEnd + 60;
+//    float inviteHeight = inviteWidth;
+//    CGRect inviteFrame = CGRectMake(inviteX, inviteY, inviteWidth, inviteHeight);
     
-    _inviteButton = [FZZInviteGuestButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
+//    _inviteButton = [FZZInviteGuestButton buttonWithType:UIButtonTypeSystem];//UIButtonTypeContactAdd];
     
-    [_inviteButton setFrame:inviteFrame];
+//    [_inviteButton setFrame:inviteFrame];
     
     //[_inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
     
-    [_inviteButton addTarget:self
-                      action:@selector(inviteButtonPress)
-            forControlEvents:UIControlEventTouchUpInside];
+//    [_inviteButton addTarget:self
+//                      action:@selector(inviteButtonPress)
+//            forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)takeBubbleView{
@@ -243,14 +248,20 @@ static int kFZZNumRecentInvites = 30;
     [cell addSubview:(UIView *)appDelegate.bvc.bubbleView];
 }
 
--(void)inviteButtonPress{
-    [self takeBubbleView];
-    
-    [_eventCell enterInviteMode];
-    
-    [self getContacts];
-    [self filterInvitables];
-}
+/*
+ 
+ TODOAndrew perhaps use InviteButtonPress transitional stuff
+ 
+ */
+
+//-(void)inviteButtonPress{
+//    [self takeBubbleView];
+//    
+//    [_eventCell enterInviteMode];
+//    
+//    [self getContacts];
+//    [self filterInvitables];
+//}
 
 -(void)filterContentForSearchText:(NSString*)searchText {
     if (searchText == NULL || [searchText isEqualToString:@""]){
@@ -487,7 +498,7 @@ static int kFZZNumRecentInvites = 30;
 -(void)sendInvitations{
 //    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [_eventCell exitInviteMode];
+//    [_eventCell exitInviteMode];
     [self setIsOnTimeline:YES];
     [_searchTextField setText:@""];
     [self filterContentForSearchText:@""];
@@ -559,7 +570,7 @@ static int kFZZNumRecentInvites = 30;
     if (section == 0){ // Title cell
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        if (appDelegate.esvc.viewMode == kInvite){
+        if (appDelegate.eevc.viewMode == kInvite){
             return 0;
         } else {
             return 1;
@@ -579,16 +590,22 @@ static int kFZZNumRecentInvites = 30;
 }
 
 +(void)updateFriends{
-    for (int i = 0; i < [instances count]; ++i){
-        FZZInviteViewController *ivc = (FZZInviteViewController *)[instances objectAtIndex:i];
+    [instances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        FZZInviteViewController *ivc = obj;
         [ivc setNeedsUpdateFriends];
-    }
+    }];
 }
 
 -(void)setNeedsUpdateFriends{
     _needsUpdateFriends = YES;
 }
 
+
+/*
+ 
+ TODOAndrew this is probably called too often, every time I setEvent for FZZExpandedEventCell. Reduce to "updating friends" when you get new FZZUsers from the server. Also load all users from the cache on launch.
+ 
+ */
 -(void)updateFriends{
     _needsUpdateFriends = NO;
     
@@ -607,12 +624,11 @@ static int kFZZNumRecentInvites = 30;
 
 - (void)setTopCellSubviews:(UITableViewCell *)cell{
     [cell addSubview:_textView];
-    [cell addSubview:_addSeatButton];
     [cell addSubview:_inviteButton];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [self setIsOnTimeline:appDelegate.esvc.viewMode == kTimeline];
+    [self setIsOnTimeline:appDelegate.eevc.viewMode == kTimeline];
 }
 
 - (void)searchChange{
@@ -667,9 +683,9 @@ static int kFZZNumRecentInvites = 30;
             // Configure the cell...
             FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
             
-            if (appDelegate.esvc.viewMode == kInvite){
+            if (appDelegate.eevc.viewMode == kInvite){
                 
-            } else if (appDelegate.esvc.viewMode == kChat){
+            } else if (appDelegate.eevc.viewMode == kChat){
                 
             } else { // Timeline or otherwise
                 [self setTopCellSubviews:cell];
@@ -708,11 +724,11 @@ static int kFZZNumRecentInvites = 30;
     
     BOOL selected;
     
-    int numInvitableFriends = [_filteredFriends count];
+    NSInteger numInvitableFriends = [_filteredFriends count];
     
     // Configure the cell...
     if (indexPath.row < numInvitableFriends) {
-        int index = indexPath.row;
+        NSInteger index = indexPath.row;
         
         FZZUser *friend = [_filteredFriends objectAtIndex:index];
         
@@ -722,7 +738,7 @@ static int kFZZNumRecentInvites = 30;
         
         [cell setHasFriend:YES];
     } else {
-        int index = indexPath.row - numInvitableFriends;
+        NSInteger index = indexPath.row - numInvitableFriends;
         
         NSDictionary *contact = [_filteredContacts objectAtIndex:index];
         
@@ -861,7 +877,7 @@ static int kFZZNumRecentInvites = 30;
 //    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height - 190);
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.navigationBar.navIcon setIsEditingText:YES];
-    [appDelegate.esvc setActiveTextField:_searchTextField];
+    [appDelegate.eevc setActiveTextField:_searchTextField];
 //    [appDelegate.esvc setActiveSearchBar:_searchBar];
     
 //    NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:1];
@@ -872,7 +888,7 @@ static int kFZZNumRecentInvites = 30;
 -(void)searchStopEdit{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.navigationBar.navIcon setIsEditingText:NO];
-    [appDelegate.esvc setActiveTextField:NULL];
+    [appDelegate.eevc setActiveTextField:NULL];
 //    self.tableView.frame = [UIScreen mainScreen].bounds;
 }
 
@@ -898,8 +914,12 @@ static int kFZZNumRecentInvites = 30;
 {
     FZZInviteCell *cell = (FZZInviteCell* )[tableView cellForRowAtIndexPath:indexPath];
     
+    NSLog(@">><<Dickfingers (2");
+    
     if(indexPath.section == [self numberOfSectionsInTableView:tableView] - 1)
     {
+        
+        NSLog(@">><<Dickfingers 2)a");
 //        NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
         NSNumber *cellReference = [self getSelectedReferenceFromIndexPath:indexPath];
         
@@ -939,13 +959,17 @@ static int kFZZNumRecentInvites = 30;
 //        [_searchTextField becomeFirstResponder];
 //    }
     else {
+        
+        NSLog(@">><<Dickfingers 2)b");
+        
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        if (_canBeSelected && appDelegate.esvc.viewMode == kTimeline){
+        if (_canBeSelected && appDelegate.eevc.viewMode == kTimeline){
             if ([_event isInvited:[FZZUser me]]){ // Chat Mode
                 [cell setSelected:NO];
                 [cell setHighlighted:NO];
-                [_eventCell enterChatMode];
+//                [_eventCell enterChatMode];
+                NSLog(@"TODOAndrew WOOPDEEDOO: Update code to make it Scroll to chat mode please");
                 
                 [self setIsOnTimeline:NO];
             }
@@ -959,22 +983,18 @@ static int kFZZNumRecentInvites = 30;
 -(void)setIsOnTimeline:(BOOL)isTimeline{
     if (!isTimeline){
         [_inviteButton setHidden:YES];
-        [_addSeatButton setHidden:YES];
         
     } else {
         
         FZZUser *me = [FZZUser me];
         
         if ([_event isGuest:me]){ // If I'm attending
-            [_addSeatButton setHidden:NO];
             [_inviteButton setHidden:NO];
             
         } else if ([_event isInvited:me]){ // If I'm invited
-            [_addSeatButton setHidden:YES];
             [_inviteButton setHidden:YES];
             
         } else { // If I'm not invited
-            [_addSeatButton setHidden:YES];
             [_inviteButton setHidden:YES];
         }
     }

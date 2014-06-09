@@ -6,6 +6,12 @@
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
+/*
+ 
+ Creating a cluster object allows better logic for storing Events and clusters (or more what would be more difficult, arrays of arrays of users, becomes arrays of clusters)
+ 
+ */
+
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
@@ -13,8 +19,9 @@
 
 @interface FZZCluster : NSManagedObject
 
-@property (nonatomic, retain) NSOrderedSet *users;
 @property (nonatomic, retain) FZZEvent *event;
+@property (nonatomic, retain) NSOrderedSet *users;
+
 @end
 
 @interface FZZCluster (CoreDataGeneratedAccessors)
