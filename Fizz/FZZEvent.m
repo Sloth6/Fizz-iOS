@@ -16,11 +16,12 @@
 
 static NSMutableDictionary *events;
 
-static NSString *FZZ_NEW_EVENT   = @"newEvent";
-static NSString *FZZ_JOIN_EVENT  = @"joinEvent";
-static NSString *FZZ_LEAVE_EVENT = @"leaveEvent";
+static NSString *FZZ_NEW_EVENT    = @"newEvent";
+static NSString *FZZ_DELETE_EVENT = @"deleteEvent";
+static NSString *FZZ_JOIN_EVENT   = @"joinEvent";
+static NSString *FZZ_LEAVE_EVENT  = @"leaveEvent";
 //static NSString *FZZ_SET_SEAT_CAPACITY = @"setSeatCapacity";
-static NSString *FZZ_NEW_INVITES = @"newInvites";
+static NSString *FZZ_NEW_INVITES  = @"newInvites";
 static NSString *FZZ_SUGGEST_INVITED_LIST = @"suggestInvitedList";
 static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 
@@ -542,9 +543,9 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_LEAVE_EVENT withData:json andAcknowledge:function];
 }
 
--(void)socketIOHostInviteWithInviteList:(NSArray *)inviteList
-                      InviteContactList:(NSArray *)contactList
-                         AndAcknowledge:(SocketIOCallback)function{
+-(void)socketIOInviteWithInviteList:(NSArray *)inviteList
+                  InviteContactList:(NSArray *)contactList
+                     AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
     /* eid : int */
@@ -578,6 +579,20 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     [json setObject:contactList forKey:@"pnList"];
     
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_SUGGEST_INVITED_LIST withData:json andAcknowledge:function];
+}
+
+/*
+ 
+ TODOAndrew Delete event from cache as well on delete
+ 
+ */
+-(void)socketIODeleteEventWithAcknowledge:(SocketIOCallback)function{
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+    
+    /* eid : int */
+    [json setObject:self.eventID forKey:@"eid"];
+    
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_DELETE_EVENT withData:json andAcknowledge:function];
 }
 
 //-(void)socketIOSetSeatCapacityToCapacity:(NSNumber *)capacity
@@ -714,17 +729,36 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     creatorUID = nil;
     
     /* Creation Time */
-    NSDate *creationTime = [eventJSON objectForKey:@"creationTime"];
+    NSNumber *creationTimeInterval = [eventJSON objectForKey:@"creationTime"];
+    
+    NSDate *creationTime = [NSDate dateWithTimeIntervalSince1970:[creationTimeInterval longValue]];
     
     NSArray *messages = [eventJSON objectForKey:@"messages"];
     
     /* Allocate Memory and Assign Values */
     FZZEvent *event = [FZZEvent eventWithEID:eid];
     
+    /* Location */
+    NSString *location = [eventJSON objectForKey:@"location"];
+    
+    if (location != nil){
+        event.location = location;
+    }
+    
+    /* Event Time */
+    NSNumber *eventTimeInterval = [eventJSON objectForKey:@"time"];
+    
+    NSDate *time = [NSDate dateWithTimeIntervalSince1970:[eventTimeInterval longValue]];
+    
+    if (time != nil){
+        event.time = time;
+    }
+    
     event.creator = creator;
     [creator addCreatorOfObject:event];
     
     event.creationTime = creationTime;
+    
     
     // load messages if they are contained in the event object
     if (messages != Nil){
@@ -788,7 +822,7 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 }
 
 -(NSDate *)lastUpdate{
-    int count = [self.messages count];
+    NSInteger count = [self.messages count];
     
     if (count != 0){ // Should always be > 0
         FZZMessage *message = [self.messages objectAtIndex:count - 1];

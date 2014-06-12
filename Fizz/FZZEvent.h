@@ -23,6 +23,8 @@
 @property (nonatomic, retain) NSOrderedSet *invitees;
 @property (nonatomic, retain) NSOrderedSet *messages;
 @property (nonatomic, retain) NSOrderedSet *suggestedInvites;
+@property (nonatomic, retain) NSString *location;
+@property (nonatomic, retain) NSDate *time;
 
 @end
 
@@ -83,12 +85,9 @@
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
--(void)socketIOHostInviteWithInviteList:(NSArray *)inviteList
-                      InviteContactList:(NSArray *)contactList
-                         AndAcknowledge:(SocketIOCallback)function;
--(void)socketIOSuggestInviteWithInviteList:(NSArray *)inviteList
-                         InviteContactList:(NSArray *)contactList
-                            AndAcknowledge:(SocketIOCallback)function;
+-(void)socketIOInviteWithInviteList:(NSArray *)inviteList
+                  InviteContactList:(NSArray *)contactList
+                     AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLoadMessagesBeforeMID:(NSNumber *)mid
                       AndAcknowledge:(SocketIOCallback)function;
 //-(void)socketIOSetSeatCapacityToCapacity:(NSNumber *)capacity
