@@ -548,16 +548,9 @@ static int kFZZNumRecentInvites = 30;
     
     if ([userInvites count] > 0 || [phoneInvites count] > 0){
         
-        // If I'm the host, then invite the individuals
-        if ([[_event creator] isEqual:[FZZUser me]]){
-            [_event socketIOHostInviteWithInviteList:userInvites
-                                   InviteContactList:phoneInvites
-                                      AndAcknowledge:nil];
-        } else { // else suggest the invited individuals
-            [_event socketIOSuggestInviteWithInviteList:userInvites
-                                      InviteContactList:phoneInvites
-                                         AndAcknowledge:nil];
-        }
+        [_event socketIOInviteWithInviteList:userInvites
+                           InviteContactList:phoneInvites
+                              AndAcknowledge:nil];
     }
 }
 
