@@ -741,16 +741,16 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     /* Location */
     NSString *location = [eventJSON objectForKey:@"location"];
     
-    if (location != nil){
+    if ((NSObject *)location != [NSNull null]){
         event.location = location;
     }
     
     /* Event Time */
-    NSNumber *eventTimeInterval = [eventJSON objectForKey:@"time"];
+    NSObject *eventTimeInterval = [eventJSON objectForKey:@"time"];
     
-    NSDate *time = [NSDate dateWithTimeIntervalSince1970:[eventTimeInterval longValue]];
-    
-    if (time != nil){
+    if (eventTimeInterval != [NSNull null]){
+        NSNumber *interval = (NSNumber *)eventTimeInterval;
+        NSDate *time = [NSDate dateWithTimeIntervalSince1970:[interval longValue]];
         event.time = time;
     }
     
@@ -761,7 +761,7 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     
     
     // load messages if they are contained in the event object
-    if (messages != Nil){
+    if ((NSObject *)messages != [NSNull null]){
         NSMutableArray *mutMessages = [messages mutableCopy];
         
         [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

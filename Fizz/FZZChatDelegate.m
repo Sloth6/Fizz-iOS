@@ -35,6 +35,9 @@
 
 #import "FZZBounceTableView.h"
 
+#import "FZZExpandedEventCell.h"
+#import "FZZExpandedVerticalTableViewController.h"
+
 static int kFZZNumCellsBeforeMessages = 1;
 
 @interface FZZChatDelegate ()
@@ -114,6 +117,10 @@ static int kFZZNumCellsBeforeMessages = 1;
     CGRect frame = [UIScreen mainScreen].bounds;
     float viewFormHeight = self.viewForm.bounds.size.height;
     
+    // Full screen size frame
+    _view = [[UIView alloc] initWithFrame:frame];
+    
+    // Full screen minus viewForm
     frame.size.height = frame.size.height - viewFormHeight;
     
     _tableView = [[UITableView alloc] initWithFrame:frame];//[[FZZBounceTableView alloc] initWithFrame:frame bounceAtTop:NO bounceAtBottom:YES];
@@ -121,8 +128,6 @@ static int kFZZNumCellsBeforeMessages = 1;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-    
-    _view = [[UIView alloc] initWithFrame:frame];
     [_view addSubview:_tableView];
     [_view addSubview:self.viewForm];
     
@@ -216,7 +221,7 @@ static int kFZZNumCellsBeforeMessages = 1;
 
 - (void)addIncomingMessageForEvent:(FZZEvent *)event{
     NSLog(@"<<6<<");
-    if (_esvc.viewMode == kChat){
+//    if (_esvc.viewMode == kChat){
         if (self.event != event){
             NSLog(@">>6a>>");
             return;
@@ -260,11 +265,12 @@ static int kFZZNumCellsBeforeMessages = 1;
             [newestMessage user]){                     // Not the server's message
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
-    }
+//    }
     NSLog(@">>6b>>");
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{ // DUPLICATE
+    
     NSLog(@"<<7<<");
     if (![chatBox isFirstResponder]) {
         NSLog(@">>7a>>");
@@ -272,6 +278,8 @@ static int kFZZNumCellsBeforeMessages = 1;
     }
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+//    [appDelegate.window addSubview:_view];
     
     [appDelegate.navigationBar.navIcon setIsEditingText:YES];
     
@@ -312,14 +320,17 @@ static int kFZZNumCellsBeforeMessages = 1;
     NSInteger numSections = [_tableView numberOfSections];
     NSInteger numMessages = [_tableView numberOfRowsInSection:numSections - 1];
     
-    NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:numSections - 1];
+    if (numMessages > 0){
     
-    [_tableView scrollToRowAtIndexPath:lastPath
-                          atScrollPosition:UITableViewScrollPositionBottom
-                                  animated:YES];
-    
-	// commit animations
-	[UIView commitAnimations];
+        NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:numSections - 1];
+        
+        [_tableView scrollToRowAtIndexPath:lastPath
+                              atScrollPosition:UITableViewScrollPositionBottom
+                                      animated:YES];
+        
+        // commit animations
+        [UIView commitAnimations];
+    }
     
     //    // get keyboard size and loction
     //	CGRect keyboardBounds = [self getKeyboardBoundsFromNote:note];
@@ -513,6 +524,10 @@ static int kFZZNumCellsBeforeMessages = 1;
 
 - (void)sendMessage{
     NSLog(@"<<11<<");
+    [chatBox resignFirstResponder];
+    
+    NSLog(@"\n\n{%@}\n\n<%@>\n\n", chatBox.text, _event);
+    
     [FZZMessage socketIONewMessage:chatBox.text
                           ForEvent:_event
                    WithAcknowledge:nil];
@@ -562,6 +577,8 @@ static int kFZZNumCellsBeforeMessages = 1;
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
+//    [_view removeFromSuperview];
+    
     [appDelegate.navigationBar.navIcon setIsEditingText:NO];
     
     //    [UIView beginAnimations:nil context:NULL];
@@ -573,8 +590,8 @@ static int kFZZNumCellsBeforeMessages = 1;
     //
     //    [UIView commitAnimations];
     
-    // get keyboard size and loction
     
+    // get keyboard size and location
 	CGRect keyboardBounds;
     
     keyboardBounds = [FZZChatDelegate getKeyboardBoundsFromNote:note];
@@ -784,7 +801,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     {
         NSString *cellID = @"TextCell";
         
-        UINib *nib = [UINib nibWithNibName:@"FZZDetailTextCell" bundle: nil];
+        UINib *nib = [UINib nibWithNibName:@"FZZUserMessageCell" bundle: nil];
         [tableView registerNib:nib forCellReuseIdentifier:cellID];
         
         cellID = @"ServerCell";

@@ -237,4 +237,8 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     return dict;
 }
 
+-(BOOL)isServerMessage{
+    return (self.user == NULL);
+}
+
 @end

@@ -797,6 +797,9 @@ static int kFZZNumRecentInvites = 30;
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{ // DUPLICATE
+    
+    NSLog(@"\n\nONCE\n\n");
+    
     if (![_searchTextField isFirstResponder]) {
         return;
     }

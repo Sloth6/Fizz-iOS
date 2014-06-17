@@ -50,6 +50,7 @@
         _chatDelegate = [[FZZChatDelegate alloc] init];
         [_tvc updateBottomView:[_chatDelegate view]];
         _chatDelegate.tableView.bounces = NO;
+        _chatDelegate.tvc = _tvc;
     }
     return self;
 }
@@ -90,6 +91,8 @@
     
     [_textView setText:text];
     NSLog(@"<<%@>>", text);
+    
+    _chatDelegate.event = event;
     
     [_tvc updateMiddleView:_textView];
     //    [_ivc updateFriends];

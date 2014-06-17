@@ -19,6 +19,7 @@
 
 @class FZZEventsExpandedViewController;
 @class FZZInviteViewController;
+@class FZZExpandedVerticalTableViewController;
 
 @interface FZZChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
@@ -28,6 +29,7 @@
 
 @property (strong, nonatomic) FZZEvent *event;
 @property (strong, nonatomic) FZZEventsExpandedViewController *esvc;
+@property (strong, nonatomic) FZZExpandedVerticalTableViewController *tvc;
 @property (strong, nonatomic) UITableView *tableView;
 
 - (void)addIncomingMessageForEvent:(FZZEvent *)event;

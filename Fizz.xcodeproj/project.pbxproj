@@ -657,6 +657,8 @@
 		496B87B7190D8B2600E100FB /* Unused */ = {
 			isa = PBXGroup;
 			children = (
+				49958A621932BCF300C8F6E1 /* FZZChatViewController.h */,
+				49958A631932BCF300C8F6E1 /* FZZChatViewController.m */,
 				496B87B6190D89E400E100FB /* Speech Bubble */,
 			);
 			name = Unused;
@@ -692,8 +694,6 @@
 				492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */,
 				49958A5E1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.h */,
 				49958A5F1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m */,
-				49958A621932BCF300C8F6E1 /* FZZChatViewController.h */,
-				49958A631932BCF300C8F6E1 /* FZZChatViewController.m */,
 				4954FB1B18D4F0900083D07F /* InviteView */,
 			);
 			name = "Expanded Table View Cell";

@@ -533,7 +533,15 @@ static NSMutableData *data;
     // Suggested Invites
     [suggestedInvites enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSNumber *eid = key;
-        NSArray *userArray = obj;
+        
+        NSDictionary *dict = obj;
+        
+        NSArray *userArray = [dict objectForKey:@"invites"];
+        NSNumber *uID = [dict objectForKey:@"inviter"];
+        
+        FZZUser *inviter = [FZZUser userWithUID:uID];
+        
+        // TODOAndrew add the inviter to the suggestedInvites list, as a dict?
         
         FZZEvent *event = [FZZEvent eventWithEID:eid];
         [event setSuggestedInvites:[NSOrderedSet orderedSetWithArray:userArray]];
@@ -653,7 +661,13 @@ static NSMutableData *data;
     
     FZZEvent *event = [FZZEvent eventWithEID:eID];
     
-    [event setMessages:[NSOrderedSet orderedSetWithArray:messages]];
+    [event addMessages:[NSOrderedSet orderedSetWithArray:messages]];
+
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    FZZEventsExpandedViewController *eevc = [appDelegate eevc];
+//    
+//    [eevc addIncomingMessageForEvent:event];
 }
 
 - (void)incomingUpdateClusters:(NSArray *)args{
