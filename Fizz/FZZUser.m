@@ -25,6 +25,8 @@ static FZZUser *me;
     void (^_completionHandler)(UIImage *image);
 }
 
+@property BOOL hasInitials;
+
 @property (retain, nonatomic) NSData *imageData;
 @property (strong, nonatomic) UIImage *image;
 
@@ -55,6 +57,7 @@ static FZZUser *me;
 
 static FZZUser *currentUser = nil;
 
+@synthesize hasInitials;
 @synthesize image;
 @synthesize hasFetched = _hasFetched;
 @synthesize chid = _chid;
@@ -163,6 +166,8 @@ static FZZUser *currentUser = nil;
         
         [users setObject:self forKey:uID];
     }
+    
+    self.hasInitials = NO;
     
     return self;
 }
@@ -400,7 +405,7 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSString *)initials{
-    if (self.initials){
+    if (self.hasInitials){
         return self.initials;
     }
     
@@ -429,6 +434,8 @@ static FZZUser *currentUser = nil;
     }
     
     [self setInitials:[NSString stringWithFormat:@"%@%@", firstInitial, lastInitial]];
+    
+    self.hasInitials = YES;
     
     return self.initials;
 }
