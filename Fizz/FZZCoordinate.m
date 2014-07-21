@@ -26,11 +26,14 @@ static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
     NSLog(@"Created FZZCoordinate");
     
     NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    FZZCoordinate *result;
     
-    FZZCoordinate *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
-    
-    [context save:nil];
-    
+    @synchronized(context){
+        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+        
+        [context save:nil];
+    }
+        
     return result;
 }
 

@@ -22,9 +22,13 @@
     
     NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
-    FZZCluster *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    FZZCluster *result;
     
-    [context save:nil];
+    @synchronized(context){
+        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+        
+        [context save:nil];
+    }
     
     return result;
 }

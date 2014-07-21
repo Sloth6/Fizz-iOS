@@ -90,26 +90,24 @@
 }
 
 - (void)loadAll{
-    @synchronized([FZZCoreDataStore mainQueueContext]){
-        NSLog(@"here we go!");
-        [FZZEvent fetchAll];
-        NSLog(@"here we go 2");
+    NSLog(@"here we go!");
+    [FZZEvent fetchAll];
+    NSLog(@"here we go 2");
+    
+    NSArray *events = [FZZEvent getEvents];
+    
+    NSLog(@"\n\n");
+    
+    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        FZZEvent *event = obj;
         
-        NSArray *events = [FZZEvent getEvents];
+        FZZMessage *message = [event firstMessage];
         
-        NSLog(@"\n\n");
-        
-        [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            FZZEvent *event = obj;
-            
-            FZZMessage *message = [event firstMessage];
-            
-            NSLog(@"%@", [message text]);
-        }];
-        
-        NSLog(@"\n\n");
+        NSLog(@"%@", [message text]);
+    }];
+    
+    NSLog(@"\n\n");
 //        [FZZUser fetchAll];
-    }
 }
 
 - (void)loadDataFromCache{
@@ -549,12 +547,15 @@
 {
     NSError *error = nil;
     NSManagedObjectContext *managedObjectContext = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    if (managedObjectContext != nil) {
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
+    
+    @synchronized(managedObjectContext){
+        if (managedObjectContext != nil) {
+            if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+                // Replace this implementation with code to handle the error appropriately.
+                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                abort();
+            }
         }
     }
 }

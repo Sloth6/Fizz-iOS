@@ -74,7 +74,7 @@ static FZZUser *currentUser = nil;
 }
 
 +(void)fetchAllUsers{
-    NSManagedObjectContext *moc = [FZZCoreDataStore mainQueueContext];
+    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
@@ -84,8 +84,12 @@ static FZZUser *currentUser = nil;
     
     //    [request setResultType:NSDictionaryResultType];
     
-    NSArray *fetchedObjects = [moc executeFetchRequest:request error:nil];
+    NSArray *fetchedObjects;
     
+    @synchronized(moc){
+        fetchedObjects = [moc executeFetchRequest:request error:nil];
+    }
+        
     for (NSManagedObject *info in fetchedObjects) {
         NSNumber *uID = [info valueForKey:@"userID"];
         
@@ -118,12 +122,16 @@ static FZZUser *currentUser = nil;
     
     NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
-    FZZUser *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    FZZUser *result;
     
-//    [request setRelationshipKeyPathsForPrefetching: [NSArray arrayWithObject:@"locationEntity"]];
-    
-    [context save:nil];
-    
+    @synchronized(context){
+        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+        
+    //    [request setRelationshipKeyPathsForPrefetching: [NSArray arrayWithObject:@"locationEntity"]];
+        
+        [context save:nil];
+    }
+        
     return result;
 }
 
@@ -131,9 +139,12 @@ static FZZUser *currentUser = nil;
     NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     NSError *error = nil;
-    if (![moc save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
+    
+    @synchronized(moc){
+        if (![moc save:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
     }
 }
 

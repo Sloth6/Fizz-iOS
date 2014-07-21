@@ -66,19 +66,22 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 }
 
 +(void)fetchAllEvents{
-    NSManagedObjectContext *moc = [FZZCoreDataStore mainQueueContext];
+    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
+    NSArray *fetchedObjects;
     
     [request setEntity:[NSEntityDescription entityForName:@"FZZEvent" inManagedObjectContext:moc]];
     
     [request setPropertiesToFetch:[NSArray arrayWithObjects:@"creationTime", @"eventID", @"location", @"time", @"creator", nil]];
+        
+    //    [request setResultType:NSDictionaryResultType];
     
-//    [request setResultType:NSDictionaryResultType];
-    
-    NSArray *fetchedObjects = [moc executeFetchRequest:request error:nil];
-    
+    @synchronized(moc){
+        fetchedObjects = [moc executeFetchRequest:request error:nil];
+    }
+        
     for (NSManagedObject *info in fetchedObjects) {
         NSNumber *eID = [info valueForKey:@"eventID"];
         
@@ -94,9 +97,13 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     
     NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
-    FZZEvent *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    FZZEvent *result;
     
-    [context save:nil];
+    @synchronized(context){
+        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+        
+        [context save:nil];
+    }
     
     return result;
 }
@@ -846,7 +853,7 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     NSLog(@">>H>>");
     
     NSLog(@"event after: %@", event);
-    NSLog(@"creator: %@", [event creator]);
+//    NSLog(@"creator: %@", [event creator]);
     
     return event;
 }
@@ -877,14 +884,21 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 }
 
 +(void)saveObjects{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
     NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     NSError *error = nil;
-    if (![moc save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
+    
+    NSLog(@"saveObjects 1");
+    
+    @synchronized(moc){
+        NSLog(@"saveObjects 2");
+        
+        if (![moc save:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+        
+        NSLog(@"saveObjects 3");
     }
 }
 
@@ -893,16 +907,34 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     
 //    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
-    [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSNumber *eID = obj;
+    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    
+    NSLog(@"killEvents 1");
+    
+    @synchronized(moc){
+        NSLog(@"killEvents 2");
         
-        FZZEvent *event = [events objectForKey:eID];
+        [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSNumber *eID = obj;
+            
+            NSLog(@"killEvents 3");
+            
+            FZZEvent *event = [events objectForKey:eID];
+            [moc deleteObject:event];
+            
+            NSLog(@"killEvents 4");
+            
+            [events removeObjectForKey:eID];
+        }];
         
-        [[FZZCoreDataStore getAppropriateManagedObjectContext] deleteObject:event];
-        [events removeObjectForKey:eID];
-    }];
+        NSLog(@"killEvents 5");
+    }
+    
+    NSLog(@"killEvents 6");
     
     [self saveObjects];
+    
+    NSLog(@"killEvents 7");
 }
 
 -(NSDate *)lastUpdate{

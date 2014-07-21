@@ -32,9 +32,13 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     
     NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
-    FZZMessage *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    FZZMessage *result;
     
-    [context save:nil];
+    @synchronized(context){
+        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+        
+        [context save:nil];
+    }
     
     return result;
 }
@@ -44,10 +48,12 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     
     NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
-    NSError *error = nil;
-    if (![moc save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
+    @synchronized(moc){
+        NSError *error = nil;
+        if (![moc save:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
     }
 }
 
