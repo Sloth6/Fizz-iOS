@@ -427,6 +427,11 @@ static NSMutableData *data;
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
     appDelegate.isConnecting = NO;
     
+    if (![appDelegate hasLoadedDataFromCache]){
+        NSLog(@"LOADING DATA!!");
+        [appDelegate loadDataFromCache];
+    }
+    
     NSLog(@"\nONLOGIN INCOMING: %@\n", args);
     
     NSDictionary *json  = [args objectAtIndex:0];
@@ -436,6 +441,8 @@ static NSMutableData *data;
     NSArray *eventListJSON   = [json objectForKey:@"newEventList"];
     NSArray *completeEventIDList = [json objectForKey:@"completeEventList"];
     NSDictionary *messageDictJSON = [json objectForKey:@"newMessages"];
+    
+    NSLog(@"\n1\n");
     
     // User array
     NSDictionary *invitees = [json objectForKey:@"invitees"];
@@ -448,6 +455,7 @@ static NSMutableData *data;
     
     NSDictionary *suggestedInvites = [json objectForKey:@"suggestedInvites"];
     
+    NSLog(@"\n2\n");
     
     // User (me)
     
@@ -455,21 +463,29 @@ static NSMutableData *data;
     
     [FZZUser setMeAs:me];
     
+    NSLog(@"\n3\n");
     
     // User Array (friends)
     NSArray *newFriends = [FZZUser parseUserJSONFriendList:friendListJSON];
     
+    NSLog(@"\n3.5\n");
     
     // Events
     NSArray *newEvents = [FZZEvent parseEventJSONList:eventListJSON];
     
+    NSLog(@"\n4\n");
+    
     // complete Events
     [FZZEvent killEvents:completeEventIDList];
+    
+    NSLog(@"\n5\n");
     
     // After killing events, append new ones, update interface
     [appDelegate updateEvents:newEvents];
     
+    NSLog(@"PARSE THE MESSAGEs!");
     
+    NSLog(@"\n6\n");
     
     // Messages
     // Parses the JSON, places messages in the appropriate events
@@ -477,6 +493,8 @@ static NSMutableData *data;
     
     /* Handle invitees first in order  */
     // newInvitees
+    NSLog(@"invitess: \n\n<%@>\n\n", invitees);
+    
     [invitees enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
         FZZEvent *event = [FZZEvent eventWithEID:eventID];
@@ -551,10 +569,6 @@ static NSMutableData *data;
             [user addSuggestedInviteOfObject:event];
         }];
     }];
-    
-    if (![appDelegate hasLoadedDataFromCache]){
-        [appDelegate loadDataFromCache];
-    }
     
     // TODOAndrew Update visual elements!
     

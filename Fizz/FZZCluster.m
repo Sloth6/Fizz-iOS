@@ -9,27 +9,29 @@
 #import "FZZCluster.h"
 #import "FZZUser.h"
 #import "FZZAppDelegate.h"
-
+#import "FZZCoreDataStore.h"
 
 @implementation FZZCluster
 
 @dynamic event;
 @dynamic users;
 
--(NSEntityDescription *)getEntityDescription{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
++ (instancetype)createManagedObject
+{
+    NSLog(@"Created FZZCluster");
     
-    return [NSEntityDescription entityForName:@"FZZCluster" inManagedObjectContext:moc];
+    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    
+    FZZCluster *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    
+    [context save:nil];
+    
+    return result;
 }
 
 -(id)initPrivateWithUserArray:(NSArray *)users{
     
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
+    self = [FZZCluster createManagedObject];
  
     if (self){
         [self setUsers:[NSOrderedSet orderedSetWithArray:users]];

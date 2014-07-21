@@ -13,7 +13,7 @@
 
 @class FZZMessage, FZZUser;
 
-@interface FZZEvent : NSManagedObject
+@interface FZZEvent :  NSManagedObject
 
 @property (nonatomic, retain) NSDate * creationTime;
 @property (nonatomic, retain) NSNumber * eventID;
@@ -31,6 +31,7 @@
 @interface FZZEvent (CoreDataGeneratedAccessors)
 
 +(NSArray *)getEvents;
++(void)fetchAll;
 
 - (void)insertObject:(FZZCluster *)value inClustersAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromClustersAtIndex:(NSUInteger)idx;

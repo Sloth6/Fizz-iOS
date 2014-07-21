@@ -40,6 +40,7 @@
 @property (nonatomic, retain) NSSet *suggestedInviteOf;
 @property (nonatomic, retain) NSSet *inClusters;
 
++(void)fetchAll;
 -(NSString *)initials;
 
 // Use this to get a profile picture

@@ -14,6 +14,8 @@
 #import "FZZAppDelegate.h"
 #import "FZZCluster.h"
 
+#import "FZZCoreDataStore.h"
+
 static NSMutableDictionary *events;
 
 static NSString *FZZ_NEW_EVENT    = @"newEvent";
@@ -55,40 +57,54 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 @dynamic messages;
 @dynamic suggestedInvites;
 
-//@synthesize haveSeatsChanged = _haveSeatsChanged;
 @synthesize haveExpressedInterest = _haveExpressedInterest;
+
++(void)fetchAll{
+    [FZZEvent fetchAllEvents];
+//    [FZZEvent performSelectorOnMainThread:@selector(fetchAllEvents)
+//                               withObject:nil waitUntilDone:YES];
+}
+
++(void)fetchAllEvents{
+    NSManagedObjectContext *moc = [FZZCoreDataStore mainQueueContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    
+    [request setEntity:[NSEntityDescription entityForName:@"FZZEvent" inManagedObjectContext:moc]];
+    
+    [request setPropertiesToFetch:[NSArray arrayWithObjects:@"creationTime", @"eventID", @"location", @"time", @"creator", nil]];
+    
+//    [request setResultType:NSDictionaryResultType];
+    
+    NSArray *fetchedObjects = [moc executeFetchRequest:request error:nil];
+    
+    for (NSManagedObject *info in fetchedObjects) {
+        NSNumber *eID = [info valueForKey:@"eventID"];
+        
+        if (![events objectForKey:eID]){
+            [events setObject:info forKey:eID];
+        }
+    }
+}
+
++ (instancetype)createManagedObject
+{
+    NSLog(@"Created FZZEvent");
+    
+    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    
+    FZZEvent *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    
+    [context save:nil];
+    
+    return result;
+}
 
 +(void)setupEventClass{
     if (!events){
         events = [[NSMutableDictionary alloc] init];
     }
-}
-
--(NSEntityDescription *)getEntityDescription{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    return [NSEntityDescription entityForName:@"FZZEvent" inManagedObjectContext:moc];
-}
-
--(id)init{
-//    self = [super init];
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    self = [NSEntityDescription insertNewObjectForEntityForName:@"FZZEvent" inManagedObjectContext:moc];
-    
-//    NSEntityDescription *entityDescription = [self getEntityDescription];
-//    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
-    
-    //    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
-    
-    if (self){
-//        _haveSeatsChanged = YES;
-        _haveExpressedInterest = NO;
-    }
-    
-    return self;
 }
 
 -(void)dealloc {
@@ -100,20 +116,10 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     if (!eID){
         return NULL;
     }
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-//    NSEntityDescription *entityDescription = [self getEntityDescription];
-//    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
 
-    self = [NSEntityDescription insertNewObjectForEntityForName:@"FZZEvent" inManagedObjectContext:moc];
-    
-//    self = [super init];
-    //    self = (FZZEvent *)[FZZDataStore insertNewObjectForEntityForName:@"FZZEvent"];
+    self = [FZZEvent createManagedObject];
     
     if (self){
-//        _haveSeatsChanged = YES;
         self.eventID = eID;
         [events setObject:self forKey:eID];
     }
@@ -172,37 +178,58 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 +(FZZEvent *)eventWithEID:(NSNumber *)eID{
     if (!eID) return NULL;
     
-    FZZEvent *event = [events objectForKey:eID];
+    __block FZZEvent *event = [events objectForKey:eID];
     
     if (event == NULL){
+
+        event = [[FZZEvent alloc] initWithEID:eID];
         
-        // Attempt to load from cache
+//        // Attempt to load from cache
+//        
+//        [[FZZCoreDataStore getAppropriateManagedObjectContext] performBlockAndWait:^{
+//            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"FZZEvent"];
+//            
+//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventID = %@", eID];
+//            
+//            [fetchRequest setPredicate:predicate];
+//            
+////            [fetchRequest setRelationshipKeyPathsForPrefetching:[NSArray arrayWithObjects:@"clusters", @"creator", "@guests", @"invitees", @"messages", @"suggestedInvites", nil]];
+//            
+//            NSManagedObjectContext *moc = [FZZCoreDataStore privateQueueContext];
+//            NSArray *results;
+//            
+//            @synchronized([moc persistentStoreCoordinator]) {
+//                results = [moc executeFetchRequest:fetchRequest
+//                                             error:nil];
+//            }
+//            
+//            if ([results count] > 0){
+//                
+//                NSLog(@"GOOD NEWS EVERYONE\n------------\n%@\n\n", results);
+//                
+//                event = [results objectAtIndex:0];
+//            } else {
+//                
+//            }
+//        }];
         
-        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+//        IAThreadSafeContext *moc = [appDelegate managedObjectContext];
+//        
+//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//        NSEntityDescription *entity = [NSEntityDescription
+//                                       entityForName:@"FZZEvent" inManagedObjectContext:moc];
+//        [fetchRequest setEntity:entity];
+//        
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventID = %@", eID];
+//        
+//        [fetchRequest setPredicate:predicate];
+//        
+//        NSArray *results;
+//        NSError *error = nil;
+//        results = [moc executeFetchRequest:fetchRequest error:&error];
         
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [NSEntityDescription
-                                       entityForName:@"FZZEvent" inManagedObjectContext:moc];
-        [fetchRequest setEntity:entity];
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventID = %@", eID];
-        
-        [fetchRequest setPredicate:predicate];
-        
-        NSError *error;
-        
-        NSArray *results = [moc executeFetchRequest:fetchRequest error:&error];
-        
-        if ([results count] > 0){
-            
-            NSLog(@"GOOD NEWS EVERYONE\n------------\n%@\n\n", results);
-            
-            event = [results objectAtIndex:0];
-        } else {
-            event = [[FZZEvent alloc] initWithEID:eID];
-        }
     }
     
     return event;
@@ -712,19 +739,28 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 //}
 
 +(FZZEvent *)parseJSON:(NSDictionary *)eventJSON{
+    NSLog(@"event before: %@", eventJSON);
+    
     if (eventJSON == NULL){
         return NULL;
     }
     
+    NSLog(@">>A>>");
+    
     /* Event ID */
     NSNumber *eid = [eventJSON objectForKey:@"eid"];
     
+    NSLog(@">>A1>>");
     
     /* Creator uID */
     FZZUser *creator;
     
-    NSNumber *creatorUID = [eventJSON objectForKey:@"creator"];
+    NSLog(@">>A2>>");
+    
+    NSNumber *creatorUID = [eventJSON objectForKey:@"creator"]; NSLog(@">>A3>>");
     creator = [FZZUser userWithUID:creatorUID];
+    
+    NSLog(@">>B>>");
     
     creatorUID = nil;
     
@@ -735,11 +771,17 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     
     NSArray *messages = [eventJSON objectForKey:@"messages"];
     
+    NSLog(@">>C>>");
+    
     /* Allocate Memory and Assign Values */
     FZZEvent *event = [FZZEvent eventWithEID:eid];
     
+    NSLog(@"event: %@", event);
+    
     /* Location */
     NSString *location = [eventJSON objectForKey:@"location"];
+    
+    NSLog(@">>D>>");
     
     if ((NSObject *)location != [NSNull null]){
         event.location = location;
@@ -748,23 +790,50 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     /* Event Time */
     NSObject *eventTimeInterval = [eventJSON objectForKey:@"time"];
     
+    NSLog(@">>E>>");
+    
     if (eventTimeInterval != [NSNull null]){
+        
+        NSLog(@"test1");
         NSNumber *interval = (NSNumber *)eventTimeInterval;
+        
+        NSLog(@"test0");
         NSDate *time = [NSDate dateWithTimeIntervalSince1970:[interval longValue]];
+        
+        NSLog(@"test-1");
         event.time = time;
     }
     
+    NSLog(@"test2");
+    
     event.creator = creator;
+    
+    
+    NSLog(@"test3");
+    
+//    NSSet *eventsCreated = [creator creatorOf];
+//    
+//    NSMutableSet *mutEventsCreated = [eventsCreated mutableCopy];
+//    [mutEventsCreated addObject:event];
+    
+//    [creator setCreatorOf:mutEventsCreated];
+    
     [creator addCreatorOfObject:event];
+    
+    NSLog(@"test4");
     
     event.creationTime = creationTime;
     
+    NSLog(@">>F>>");
     
     // load messages if they are contained in the event object
     if ((NSObject *)messages != [NSNull null]){
         NSMutableArray *mutMessages = [messages mutableCopy];
         
         [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            NSLog(@">>G>>");
+            
             FZZMessage *message = [FZZMessage parseJSON:obj];
             
             [message setEvent:event];
@@ -774,6 +843,11 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
         [event setMessages:[NSOrderedSet orderedSetWithArray:mutMessages]];
     }
     
+    NSLog(@">>H>>");
+    
+    NSLog(@"event after: %@", event);
+    NSLog(@"creator: %@", [event creator]);
+    
     return event;
 }
 
@@ -782,12 +856,22 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
         return NULL;
     }
     
+    NSLog(@">>1");
+    
     NSMutableArray *result = [[NSMutableArray alloc] initWithArray:eventListJSON];
     
     [eventListJSON enumerateObjectsUsingBlock:^(id eventJSON, NSUInteger index, BOOL *stop) {
+        
+        NSLog(@">>2");
+        
         FZZEvent *event = [FZZEvent parseJSON:eventJSON];
+        
+        NSLog(@">>3");
+        
         [result setObject:event atIndexedSubscript:index];
     }];
+    
+    NSLog(@">>4");
     
     return result;
 }
@@ -795,7 +879,7 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 +(void)saveObjects{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     NSError *error = nil;
     if (![moc save:&error]) {
@@ -805,16 +889,16 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 }
 
 +(void)killEvents:(NSArray *)deadEvents{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+//    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSNumber *eID = obj;
         
         FZZEvent *event = [events objectForKey:eID];
         
-        [moc deleteObject:event];
+        [[FZZCoreDataStore getAppropriateManagedObjectContext] deleteObject:event];
         [events removeObjectForKey:eID];
     }];
     
@@ -1173,6 +1257,9 @@ static NSString *const kInviteesKey = @"invitees";
 static NSString *const kMessagesKey = @"messages";
 
 - (void)insertObject:(FZZMessage *)value inMessagesAtIndex:(NSUInteger)idx {
+    
+    NSLog(@"PENIS InsertMessage");
+    
     NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
     [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kMessagesKey];
     NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kMessagesKey]];
@@ -1191,6 +1278,9 @@ static NSString *const kMessagesKey = @"messages";
 }
 
 - (void)insertMessages:(NSArray *)values atIndexes:(NSIndexSet *)indexes {
+    
+    NSLog(@"PENIS InsertMessages");
+    
     [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kMessagesKey];
     NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kMessagesKey]];
     [tmpOrderedSet insertObjects:values atIndexes:indexes];
@@ -1224,6 +1314,9 @@ static NSString *const kMessagesKey = @"messages";
 }
 
 - (void)addMessagesObject:(FZZMessage *)value {
+    
+    NSLog(@"PENIS AddMessagesObject");
+    
     NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kMessagesKey]];
     NSUInteger idx = [tmpOrderedSet count];
     NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
@@ -1246,6 +1339,9 @@ static NSString *const kMessagesKey = @"messages";
 }
 
 - (void)addMessages:(NSOrderedSet *)values {
+    
+    NSLog(@"PENIS addMessages");
+    
     NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kMessagesKey]];
     NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
     NSUInteger valuesCount = [values count];

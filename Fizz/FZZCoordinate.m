@@ -10,6 +10,7 @@
 #import "FZZEvent.h"
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
+#import "FZZCoreDataStore.h"
 
 static NSString *FZZ_NEW_MARKER = @"newMarker";
 static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
@@ -20,24 +21,24 @@ static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
 @dynamic longitude;
 @dynamic message;
 
--(NSEntityDescription *)getEntityDescription{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
++ (instancetype)createManagedObject
+{
+    NSLog(@"Created FZZCoordinate");
     
-    return [NSEntityDescription entityForName:@"FZZCoordinate" inManagedObjectContext:moc];
+    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    
+    FZZCoordinate *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    
+    [context save:nil];
+    
+    return result;
 }
 
 - (id)initWithLongitude:(float)lng latitude:(float)lat
 {
-//    self = [super init];
-    
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
     
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
-    
-    //    self = (FZZCoordinate *)[FZZDataStore insertNewObjectForEntityForName:@"FZZCoordinate"];
+    self = [FZZCoordinate createManagedObject];
     
     if (self) {
         self.longitude = [NSNumber numberWithFloat:lng];

@@ -15,14 +15,16 @@
 #import "FZZInviteViewController.h"
 #import "FZZBubbleViewController.h"
 
+#import "FZZMessage.h"
+
+#import "FZZCoreDataStore.h"
+
 #import "FZZOverlayView.h"
 
 #import "TestFlight.h"
 
 @implementation FZZAppDelegate
 
-@synthesize managedObjectContext = _managedObjectContext;
-@synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 @synthesize fbLoginDelegate;
@@ -83,23 +85,30 @@
     // Initial Launch: if didCrash is nil, [didCrash boolValue] returns nil
     if ([didCrash boolValue]){
         
-        NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Fizz.sqlite"];
+        [FZZCoreDataStore deleteCache];
+    }
+}
+
+- (void)loadAll{
+    @synchronized([FZZCoreDataStore mainQueueContext]){
+        NSLog(@"here we go!");
+        [FZZEvent fetchAll];
+        NSLog(@"here we go 2");
         
-        NSString *path = [storeURL path];
+        NSArray *events = [FZZEvent getEvents];
         
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        [fileManager fileExistsAtPath:path];
+        NSLog(@"\n\n");
         
-        NSError *error;
-        BOOL fileExists = [fileManager fileExistsAtPath:path];
+        [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            FZZEvent *event = obj;
+            
+            FZZMessage *message = [event firstMessage];
+            
+            NSLog(@"%@", [message text]);
+        }];
         
-        if (fileExists)
-        {
-            BOOL success = [fileManager removeItemAtPath:path error:&error];
-            if (!success) {
-                NSLog(@"Error trying to delete cache: %@", [error localizedDescription]);
-            }
-        }
+        NSLog(@"\n\n");
+//        [FZZUser fetchAll];
     }
 }
 
@@ -112,26 +121,61 @@
     // Initial Launch: if didCrash is nil, [didCrash boolValue] returns nil
     if ([didCrash boolValue]){
         
+        NSLog(@"didCrash");
+        
         [FZZSocketIODelegate socketIOResetDataFromServerWithAcknowledge:NULL];
         
     } else { // Load data from cache
         
-        NSManagedObjectContext *moc = [self managedObjectContext];
+        NSLog(@"Loading all data...");
         
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        [self performSelectorOnMainThread:@selector(loadAll) withObject:nil waitUntilDone:YES];
         
-        NSEntityDescription *entity = [NSEntityDescription
-                                       entityForName:@"FZZEvent" inManagedObjectContext:moc];
+        NSLog(@"Successfully loaded all data!");
         
-        [fetchRequest setEntity:entity];
+//        IAThreadSafeContext *moc = [self managedObjectContext];
         
-        NSError *error;
+//        NSManagedObjectContext *moc = [FZZCoreDataStore privateQueueContext];
+//        
+//        @synchronized([moc persistentStoreCoordinator]) {
+//            [moc performBlock:^{
+//                NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"FZZEvent"];
+//                [fetchRequest setIncludesSubentities:YES];
+//                
+//                
+//                NSArray *results = [moc executeFetchRequest:fetchRequest
+//                                                      error:nil];
+//                
+//                NSLog(@"\n\nCACHED_EVENTS: %@\n\n\n", results);
+//                
+//                if (results != nil && [results count] > 0){
+//                    
+//                    for (int i = 0; i < [results count]; ++i) {
+//                        FZZEvent *event = [results objectAtIndex:i];
+//                        
+//                        NSLog(@"firstMessage: %@", [event firstMessage]);
+//                    }
+//                    
+//                    [self updateEvents:results];
+//                }
+//
+//            }];
+//        }
+    
         
-        NSArray *results = [moc executeFetchRequest:fetchRequest error:&error];
+//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//        
+//        NSEntityDescription *entity = [NSEntityDescription
+//                                       entityForName:@"FZZEvent" inManagedObjectContext:moc];
+//        
+//        [fetchRequest setIncludesSubentities:YES];
+//        
+//        [fetchRequest setEntity:entity];
         
-        if (results != nil && [results count] > 0){
-            [self updateEvents:results];
-        }
+//        NSArray *results;
+//        NSError *error = nil;
+//        results = [moc executeFetchRequest:fetchRequest error:&error];
+        
     }
     
     // Make sure to only update didCrash when everything is fixed
@@ -453,6 +497,10 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
+    NSLog(@"Saving context");
+    [self saveContext];
+    NSLog(@"Did save context");
+    
 //    [[FZZCoordinate alloc] initWithLongitude:1 andLatitude:2];
 //    
 //    [FZZDataStore synchronize];
@@ -482,7 +530,9 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
+    NSLog(@"Saving context");
     [self saveContext];
+    NSLog(@"Did save context");
 //    [[FBSession activeSession] close];
 }
 
@@ -498,104 +548,15 @@
 - (void)saveContext
 {
     NSError *error = nil;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    NSManagedObjectContext *managedObjectContext = [FZZCoreDataStore getAppropriateManagedObjectContext];
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//            abort();
+            abort();
         }
     }
-}
-
-#pragma mark - Core Data stack
-
-// Returns the managed object context for the application.
-// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
-- (NSManagedObjectContext *)managedObjectContext
-{
-    if (_managedObjectContext != nil) {
-        return _managedObjectContext;
-    }
-    
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-    }
-    return _managedObjectContext;
-}
-
-// Returns the managed object model for the application.
-// If the model doesn't already exist, it is created from the application's model.
-- (NSManagedObjectModel *)managedObjectModel
-{
-    if (_managedObjectModel != nil) {
-        return _managedObjectModel;
-    }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Fizz" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return _managedObjectModel;
-}
-
-// Returns the persistent store coordinator for the application.
-// If the coordinator doesn't already exist, it is created and the application's store added to it.
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
-    if (_persistentStoreCoordinator != nil) {
-        return _persistentStoreCoordinator;
-    }
-    
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Fizz.sqlite"];
-    
-    NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    NSNumber *didCrash = [pref objectForKey:@"didCrash"];
-    
-    if ([didCrash boolValue]){ // Delete the old cache if you've crashed recently
-        
-    }
-    
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        /* TODOAndrew (get rid of all abort() calls before launch)
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
-    
-    return _persistentStoreCoordinator;
-}
-
-#pragma mark - Application's Documents directory
-
-// Returns the URL to the application's Documents directory.
-- (NSURL *)applicationDocumentsDirectory
-{
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 #pragma mark - Crash Handlers

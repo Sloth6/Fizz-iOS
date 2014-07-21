@@ -45,7 +45,7 @@
     <elements>
         <element name="FZZCluster" positionX="0" positionY="0" width="128" height="73"/>
         <element name="FZZCoordinate" positionX="0" positionY="0" width="128" height="88"/>
-        <element name="FZZEvent" positionX="0" positionY="0" width="128" height="195"/>
+        <element name="FZZEvent" positionX="0" positionY="0" width="128" height="193"/>
         <element name="FZZMessage" positionX="0" positionY="0" width="128" height="133"/>
         <element name="FZZUser" positionX="0" positionY="0" width="128" height="208"/>
     </elements>

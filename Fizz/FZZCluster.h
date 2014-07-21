@@ -15,6 +15,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+
 @class FZZEvent, FZZUser;
 
 @interface FZZCluster : NSManagedObject

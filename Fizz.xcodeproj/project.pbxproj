@@ -73,6 +73,13 @@
 		49958A641932BCF300C8F6E1 /* FZZChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49958A631932BCF300C8F6E1 /* FZZChatViewController.m */; };
 		499A8E7F18CD336800842EA7 /* FZZUserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 499A8E7E18CD336800842EA7 /* FZZUserMessageCell.m */; };
 		499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 499A8E8018CD337B00842EA7 /* FZZUserMessageCell.xib */; };
+		49A2EDE4195F941F00D8A323 /* FZZCoreDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A2EDE3195F941F00D8A323 /* FZZCoreDataStore.m */; };
+		49A2EDF4195F965100D8A323 /* NSFileManager+TBDirectories.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A2EDE9195F965100D8A323 /* NSFileManager+TBDirectories.m */; };
+		49A2EDF5195F965100D8A323 /* NSManagedObject+TBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A2EDEB195F965100D8A323 /* NSManagedObject+TBAdditions.m */; };
+		49A2EDF6195F965100D8A323 /* NSManagedObjectContext+TBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A2EDED195F965100D8A323 /* NSManagedObjectContext+TBAdditions.m */; };
+		49A2EDF7195F965100D8A323 /* NSManagedObjectID+TBString.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A2EDEF195F965100D8A323 /* NSManagedObjectID+TBString.m */; };
+		49A2EDF8195F965100D8A323 /* TBCoreDataStoreS1.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A2EDF1195F965100D8A323 /* TBCoreDataStoreS1.m */; };
+		49A2EDF9195F965100D8A323 /* TBCoreDataStoreS2.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A2EDF3195F965100D8A323 /* TBCoreDataStoreS2.m */; };
 		49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F5A18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m */; };
 		49A31F5D18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49A31F5B18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.xib */; };
 		49AA439018E8FBEC006D6830 /* FZZServerMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA438F18E8FBEC006D6830 /* FZZServerMessageCell.m */; };
@@ -215,6 +222,7 @@
 		49069B7A18661555003D003A /* SBJson4StreamTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamTokeniser.m; sourceTree = "<group>"; };
 		49069B7B18661555003D003A /* SBJson4StreamTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamTokeniser.h; sourceTree = "<group>"; };
 		4914ACA1190FEFB300C198B6 /* Fizz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Fizz.xcdatamodel; sourceTree = "<group>"; };
+		4919DDD9195E86450043A669 /* IAThreadSafeCoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IAThreadSafeCoreData.framework; path = "IAThreadSafeCoreData/build/Debug-iphoneos/IAThreadSafeCoreData.framework"; sourceTree = "<group>"; };
 		4921FD3A1943C8400086266E /* FZZBounceTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZBounceTableView.h; sourceTree = "<group>"; };
 		4921FD3B1943C8400086266E /* FZZBounceTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZBounceTableView.m; sourceTree = "<group>"; };
 		4922701F18CA1CA600816AD4 /* FZZEventsExpandedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventsExpandedViewController.h; sourceTree = "<group>"; };
@@ -297,6 +305,20 @@
 		499A8E7D18CD336800842EA7 /* FZZUserMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUserMessageCell.h; sourceTree = "<group>"; };
 		499A8E7E18CD336800842EA7 /* FZZUserMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUserMessageCell.m; sourceTree = "<group>"; };
 		499A8E8018CD337B00842EA7 /* FZZUserMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZUserMessageCell.xib; sourceTree = "<group>"; };
+		49A2EDE2195F941F00D8A323 /* FZZCoreDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCoreDataStore.h; sourceTree = "<group>"; };
+		49A2EDE3195F941F00D8A323 /* FZZCoreDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCoreDataStore.m; sourceTree = "<group>"; };
+		49A2EDE8195F965100D8A323 /* NSFileManager+TBDirectories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+TBDirectories.h"; sourceTree = "<group>"; };
+		49A2EDE9195F965100D8A323 /* NSFileManager+TBDirectories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+TBDirectories.m"; sourceTree = "<group>"; };
+		49A2EDEA195F965100D8A323 /* NSManagedObject+TBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+TBAdditions.h"; sourceTree = "<group>"; };
+		49A2EDEB195F965100D8A323 /* NSManagedObject+TBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+TBAdditions.m"; sourceTree = "<group>"; };
+		49A2EDEC195F965100D8A323 /* NSManagedObjectContext+TBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+TBAdditions.h"; sourceTree = "<group>"; };
+		49A2EDED195F965100D8A323 /* NSManagedObjectContext+TBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+TBAdditions.m"; sourceTree = "<group>"; };
+		49A2EDEE195F965100D8A323 /* NSManagedObjectID+TBString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectID+TBString.h"; sourceTree = "<group>"; };
+		49A2EDEF195F965100D8A323 /* NSManagedObjectID+TBString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectID+TBString.m"; sourceTree = "<group>"; };
+		49A2EDF0195F965100D8A323 /* TBCoreDataStoreS1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBCoreDataStoreS1.h; sourceTree = "<group>"; };
+		49A2EDF1195F965100D8A323 /* TBCoreDataStoreS1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBCoreDataStoreS1.m; sourceTree = "<group>"; };
+		49A2EDF2195F965100D8A323 /* TBCoreDataStoreS2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBCoreDataStoreS2.h; sourceTree = "<group>"; };
+		49A2EDF3195F965100D8A323 /* TBCoreDataStoreS2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBCoreDataStoreS2.m; sourceTree = "<group>"; };
 		49A31F5918CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEnterMessagePrototypeViewController.h; sourceTree = "<group>"; };
 		49A31F5A18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEnterMessagePrototypeViewController.m; sourceTree = "<group>"; };
 		49A31F5B18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZEnterMessagePrototypeViewController.xib; sourceTree = "<group>"; };
@@ -521,7 +543,10 @@
 		4914AC9F190FEF8700C198B6 /* Data Store */ = {
 			isa = PBXGroup;
 			children = (
+				49A2EDE7195F965100D8A323 /* TBCoreDataStore */,
 				4914ACA0190FEFB300C198B6 /* Fizz.xcdatamodeld */,
+				49A2EDE2195F941F00D8A323 /* FZZCoreDataStore.h */,
+				49A2EDE3195F941F00D8A323 /* FZZCoreDataStore.m */,
 			);
 			name = "Data Store";
 			sourceTree = "<group>";
@@ -715,6 +740,26 @@
 			name = "Chat Cells";
 			sourceTree = "<group>";
 		};
+		49A2EDE7195F965100D8A323 /* TBCoreDataStore */ = {
+			isa = PBXGroup;
+			children = (
+				49A2EDE8195F965100D8A323 /* NSFileManager+TBDirectories.h */,
+				49A2EDE9195F965100D8A323 /* NSFileManager+TBDirectories.m */,
+				49A2EDEA195F965100D8A323 /* NSManagedObject+TBAdditions.h */,
+				49A2EDEB195F965100D8A323 /* NSManagedObject+TBAdditions.m */,
+				49A2EDEC195F965100D8A323 /* NSManagedObjectContext+TBAdditions.h */,
+				49A2EDED195F965100D8A323 /* NSManagedObjectContext+TBAdditions.m */,
+				49A2EDEE195F965100D8A323 /* NSManagedObjectID+TBString.h */,
+				49A2EDEF195F965100D8A323 /* NSManagedObjectID+TBString.m */,
+				49A2EDF0195F965100D8A323 /* TBCoreDataStoreS1.h */,
+				49A2EDF1195F965100D8A323 /* TBCoreDataStoreS1.m */,
+				49A2EDF2195F965100D8A323 /* TBCoreDataStoreS2.h */,
+				49A2EDF3195F965100D8A323 /* TBCoreDataStoreS2.m */,
+			);
+			name = TBCoreDataStore;
+			path = "TBCoreDataStack-master/TBCoreDataStore";
+			sourceTree = SOURCE_ROOT;
+		};
 		49AAFC2D18CBD3810029A07C /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -761,6 +806,7 @@
 		49D5C99E186042C2002BB1F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4919DDD9195E86450043A669 /* IAThreadSafeCoreData.framework */,
 				492E5D78192EE6BB00359F11 /* libc++.dylib */,
 				49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */,
 				49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */,
@@ -1109,9 +1155,11 @@
 				494BFB3218E08FD600C59D18 /* CMTPCustomForce.m in Sources */,
 				49958A601932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m in Sources */,
 				49C8B1551889F08600400832 /* FZZEventCell.m in Sources */,
+				49A2EDE4195F941F00D8A323 /* FZZCoreDataStore.m in Sources */,
 				49958A641932BCF300C8F6E1 /* FZZChatViewController.m in Sources */,
 				49F524D218E1C3040019C5DF /* FZZOverlayView.m in Sources */,
 				494BFB3418E08FD600C59D18 /* CMTPIntegrator.m in Sources */,
+				49A2EDF6195F965100D8A323 /* NSManagedObjectContext+TBAdditions.m in Sources */,
 				4954FB2018D4F1010083D07F /* FZZInviteCell.m in Sources */,
 				4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */,
 				49069B1C186517FE003D003A /* SocketIOTransportWebsocket.m in Sources */,
@@ -1121,7 +1169,9 @@
 				494BFB4018E0B88400C59D18 /* FZZInteractiveBubble.m in Sources */,
 				4994FD001929D2D800BD2FB8 /* FZZMessage.m in Sources */,
 				49AA439018E8FBEC006D6830 /* FZZServerMessageCell.m in Sources */,
+				49A2EDF5195F965100D8A323 /* NSManagedObject+TBAdditions.m in Sources */,
 				49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */,
+				49A2EDF7195F965100D8A323 /* NSManagedObjectID+TBString.m in Sources */,
 				49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */,
 				4994FD031929D2EE00BD2FB8 /* FZZUser.m in Sources */,
 				494BFB3D18E093B400C59D18 /* FZZBubbleViewController.m in Sources */,
@@ -1133,7 +1183,9 @@
 				49069B0518651731003D003A /* NSData+SRB64Additions.m in Sources */,
 				4989270618E2A02600AECCF8 /* FZZManageFriendCell.m in Sources */,
 				49BCC49C192D2FAA0085CE16 /* FZZCluster.m in Sources */,
+				49A2EDF4195F965100D8A323 /* NSFileManager+TBDirectories.m in Sources */,
 				4954FB0118D3AAA40083D07F /* FZZInputPhoneViewController.m in Sources */,
+				49A2EDF9195F965100D8A323 /* TBCoreDataStoreS2.m in Sources */,
 				4921FD3C1943C8400086266E /* FZZBounceTableView.m in Sources */,
 				4994FCFD1929D2C000BD2FB8 /* FZZEvent.m in Sources */,
 				499A8E7F18CD336800842EA7 /* FZZUserMessageCell.m in Sources */,
@@ -1143,6 +1195,7 @@
 				49069B7D18661555003D003A /* SBJson4StreamWriter.m in Sources */,
 				494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */,
 				49EEEA9118D932F000BDA605 /* FZZBackspaceResignTextField.m in Sources */,
+				49A2EDF8195F965100D8A323 /* TBCoreDataStoreS1.m in Sources */,
 				49EEEA8E18D8D37300BDA605 /* FZZPhoneInputCell.m in Sources */,
 				4989270318E29E8300AECCF8 /* FZZManageFriendsViewController.m in Sources */,
 				49D5C9DE1860471D002BB1F0 /* BCNInternalUtils.m in Sources */,
@@ -1305,6 +1358,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
+					"$(PROJECT_DIR)/IAThreadSafeCoreData/build/Debug-iphoneos",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
@@ -1333,6 +1387,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
+					"$(PROJECT_DIR)/IAThreadSafeCoreData/build/Debug-iphoneos",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";

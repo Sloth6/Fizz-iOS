@@ -12,6 +12,8 @@
 #import "FZZAppDelegate.h"
 #import "FZZDefaultBubble.h"
 
+#import "FZZCoreDataStore.h"
+
 static NSMutableArray *friends;
 static NSMutableDictionary *users;
 static int kFZZProfilePictureDimension = 50;
@@ -19,6 +21,7 @@ static int kFZZProfilePictureDimension = 50;
 static NSString *FZZ_ADD_FRIEND_LIST = @"addFriendList";
 static NSString *FZZ_REMOVE_FRIEND_LIST = @"removeFriendList";
 
+static bool classHasFetched = NO;
 static FZZUser *me;
 
 @interface FZZUser (){
@@ -64,10 +67,68 @@ static FZZUser *currentUser = nil;
 @synthesize isFetchingData = _isFetchingData;
 @synthesize completionHandlers = _completionHandlers;
 
-+(void)saveObjects{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
++(void)fetchAll{
+    [FZZUser fetchAllUsers];
+    //    [FZZUser performSelectorOnMainThread:@selector(fetchAllUsers)
+//                              withObject:nil waitUntilDone:YES];
+}
+
++(void)fetchAllUsers{
+    NSManagedObjectContext *moc = [FZZCoreDataStore mainQueueContext];
     
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    [request setEntity:[NSEntityDescription entityForName:@"FZZUser" inManagedObjectContext:moc]];
+    
+    [request setPropertiesToFetch:[NSArray arrayWithObjects:@"facebookID", @"name", @"phoneNumber", @"photoBinary", @"userID", nil]];
+    
+    //    [request setResultType:NSDictionaryResultType];
+    
+    NSArray *fetchedObjects = [moc executeFetchRequest:request error:nil];
+    
+    for (NSManagedObject *info in fetchedObjects) {
+        NSNumber *uID = [info valueForKey:@"userID"];
+        
+        if (![users objectForKey:uID]){
+            [users setObject:info forKey:uID];
+        }
+    }
+    
+    //    NSManagedObjectContext *moc = [FZZCoreDataStore mainQueueContext];
+//    
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription
+//                                   entityForName:@"FZZUser" inManagedObjectContext:moc];
+//    [fetchRequest setEntity:entity];
+//    
+//    NSArray *fetchedObjects = [moc executeFetchRequest:fetchRequest error:nil];
+//    
+//    for (NSManagedObject *info in fetchedObjects) {
+//        NSNumber *uID = [info valueForKey:@"userID"];
+//        
+//        if (![users objectForKey:uID]){
+//            [users setObject:info forKey:uID];
+//        }
+//    }
+}
+
++ (instancetype)createManagedObject
+{
+    NSLog(@"Created FZZUser");
+    
+    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    
+    FZZUser *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    
+//    [request setRelationshipKeyPathsForPrefetching: [NSArray arrayWithObject:@"locationEntity"]];
+    
+    [context save:nil];
+    
+    return result;
+}
+
++(void)saveObjects{
+    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     NSError *error = nil;
     if (![moc save:&error]) {
@@ -113,49 +174,15 @@ static FZZUser *currentUser = nil;
 //    }
 //}
 
-
 +(NSEntityDescription *)getEntityDescription{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     return [NSEntityDescription entityForName:@"FZZUser" inManagedObjectContext:moc];
 }
 
 -(id)initPrivateWithUserID:(NSNumber *)uID{
-    //    self = [super init];
     
-    //    self = (FZZUser *)[FZZDataStore insertNewObjectForEntityForName:@"FZZUser"];
-    
-//    self = [super init];
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    NSEntityDescription *entityDescription = [FZZUser getEntityDescription];
-    
-    
-    // Check to see if user already exists
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    
-    [fetchRequest setEntity:entityDescription];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userID = %@", uID];
-    
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *error;
-    
-    NSArray *results = [moc executeFetchRequest:fetchRequest error:&error];
-    
-    if ([results count] > 0){
-        
-        self = [results objectAtIndex:0];
-        
-    } else {
-        
-        self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
-    }
-        
-    NSLog(@"\n\n%@\n\n", entityDescription);
+    self = [FZZUser createManagedObject];
     
     if (self){
         self.userID = uID;
@@ -209,34 +236,101 @@ static FZZUser *currentUser = nil;
     return me;
 }
 
+//+(NSArray *)fetchUserWithUID:(NSNumber *)uID{
+//    NSManagedObjectContext *moc = [FZZCoreDataStore privateQueueContext];
+//    
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [FZZUser getEntityDescription];
+//    [fetchRequest setEntity:entity];
+//    
+//    NSLog(@">>D4>>");
+//    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userID = %@", uID];
+//    
+//    [fetchRequest setPredicate:predicate];
+//    
+//    NSArray *results;
+//    
+//    NSError *error = nil;
+//    
+//    @synchronized([moc persistentStoreCoordinator]) {
+//        results = [moc executeFetchRequest:fetchRequest error:&error];
+//    }
+//
+//    return results;
+//}
+
 +(FZZUser *)userWithUID:(NSNumber *)uID{
+    NSLog(@">>D1>>");
+    
     FZZUser *user = [users objectForKey:uID];
     
+    NSLog(@">>D2>>");
     
     if (!user){
-        // Attempt to load from cache
+        user = [[FZZUser alloc] initPrivateWithUserID:uID];
         
-        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-        
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [FZZUser getEntityDescription];
-        [fetchRequest setEntity:entity];
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userID = %@", uID];
-        
-        [fetchRequest setPredicate:predicate];
-        
-        NSError *error;
-        
-        NSArray *results = [moc executeFetchRequest:fetchRequest error:&error];
-        
-        if ([results count] > 0){
-            user = [results objectAtIndex:0];
-        } else {
-            user = [[FZZUser alloc] initPrivateWithUserID:uID];
-        }
+//        // Attempt to load from cache
+//        NSLog(@">>D3>>");
+//        
+////        NSManagedObjectContext *moc = [FZZCoreDataStore privateQueueContext];
+////        
+////        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+////        NSEntityDescription *entity = [FZZUser getEntityDescription];
+////        [fetchRequest setEntity:entity];
+////        
+////        NSLog(@">>D4>>");
+////        
+////        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userID = %@", uID];
+////        
+////        [fetchRequest setPredicate:predicate];
+//        
+//        NSLog(@">>D5>>");
+//        
+////        __block NSArray *results;
+////        
+////        [moc performBlockAndWait:^{
+////            NSError *error = nil;
+////            results = [moc executeFetchRequest:fetchRequest error:&error];
+////        }];
+//        
+//        
+////        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:uID, @"uID", nil];
+////        
+////        [FZZUser performSelectorOnMainThread:@selector(fetchUserWithUID:)
+////                                 withObject:dict waitUntilDone:YES];
+////        
+////        NSArray *results = [dict objectForKey:@"results"];
+//        
+//        
+////        NSArray *results = [FZZUser performSelectorOnMainThread:@selector(fetchUserWithUID:) withObject: uID waitUntilDone:YES];
+//        
+////        
+////        
+////        NSArray *results;
+////        
+////        NSError *error = nil;
+////        
+////        @synchronized([moc persistentStoreCoordinator]) {
+////            results = [moc executeFetchRequest:fetchRequest error:&error];
+////        }
+//        
+//        NSLog(@">>Dj>>");
+//        
+//        if ([results count] > 0){
+//            
+//            NSLog(@">>D6a>>");
+//            
+//            user = [results objectAtIndex:0];
+//        } else {
+//            
+//            NSLog(@">>D6b>>");
+//            
+//            
+//        }
+//        
+        NSLog(@">>D8>>");
     }
     
     return user;
@@ -630,6 +724,7 @@ static FZZUser *currentUser = nil;
     NSString *name = [userJSON objectForKey:@"name"];
     
     /* Update user info */
+    NSLog(@"USERCREATE");
     FZZUser *user = [FZZUser userWithUID:uid];
     user.facebookID = fbid;
     user.phoneNumber = phoneNumber;

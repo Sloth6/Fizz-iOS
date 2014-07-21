@@ -12,6 +12,7 @@
 #import "FZZUser.h"
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
+#import "FZZCoreDataStore.h"
 
 static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 
@@ -25,10 +26,23 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 @dynamic marker;
 @dynamic user;
 
++ (instancetype)createManagedObject
+{
+    NSLog(@"Created FZZMessage");
+    
+    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    
+    FZZMessage *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    
+    [context save:nil];
+    
+    return result;
+}
+
 +(void)saveObjects{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
+    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
     
     NSError *error = nil;
     if (![moc save:&error]) {
@@ -37,24 +51,11 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     }
 }
 
--(NSEntityDescription *)getEntityDescription{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
-    
-    return [NSEntityDescription entityForName:@"FZZMessage" inManagedObjectContext:moc];
-}
-
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndText:(NSString *)inputText ForEvent:(FZZEvent *)inputEvent{
     
-//    self = [super init];
-    
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
     
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
-
-    //    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
+    self = [FZZMessage createManagedObject];
     
     if (self){
         self.messageID = mID;
@@ -74,15 +75,10 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndMarker:(FZZCoordinate *)marker ForEvent:(FZZEvent *)inputEvent{
-//    self = [super init];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *moc = [appDelegate managedObjectContext];
     
-    NSEntityDescription *entityDescription = [self getEntityDescription];
-    self = [super initWithEntity:entityDescription insertIntoManagedObjectContext:moc];
-    
-    //    self = (FZZMessage *)[FZZDataStore insertNewObjectForEntityForName:@"FZZMessage"];
+    self = [FZZMessage createManagedObject];
     
     if (self){
         self.messageID = mID;
@@ -93,7 +89,8 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
         self.text   = nil;
         
         self.marker = marker;
-        [marker setMessage:marker];
+        
+        [marker setMessage:self];
         
         self.event  = inputEvent;
         [inputEvent addMessagesObject:self];
@@ -182,6 +179,7 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 }
 
 +(NSDictionary *)parseMessageJSONDict:(NSDictionary *)messageDictJSON{
+    
     if (messageDictJSON == NULL){
         return NULL;
     }
