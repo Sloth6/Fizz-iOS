@@ -20,18 +20,18 @@
 
 @class FZZEvent;
 
-@interface FZZCoordinate :  NSManagedObject
+@interface FZZCoordinate :  NSObject
 
-@property (nonatomic, retain) NSNumber * latitude;
-@property (nonatomic, retain) NSNumber * longitude;
-@property (nonatomic, retain) NSManagedObject *message;
+@property (nonatomic, strong) NSNumber * latitude;
+@property (nonatomic, strong) NSNumber * longitude;
 
 - (id)initWithLongitude:(float)lng andLatitude:(float)lat;
 - (NSNumber *)longitude;
 - (NSNumber *)latitude;
 - (NSDictionary *)jsonDict;
 
-- (BOOL)saveObjectWithError:(NSError**)error;
+-(NSDictionary *)asDictionaryForCache;
++(FZZCoordinate *)fromDictionaryForCache:(NSDictionary *)jsonMarker;
 
 +(void)socketIONewMarker:(FZZCoordinate *)coord
                 ForEvent:(FZZEvent *)event

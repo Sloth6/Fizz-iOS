@@ -13,76 +13,17 @@
 
 @class FZZMessage, FZZUser;
 
-@interface FZZEvent :  NSManagedObject
+@interface FZZEvent :  NSObject
 
-@property (nonatomic, retain) NSDate * creationTime;
-@property (nonatomic, retain) NSNumber * eventID;
-@property (nonatomic, retain) NSOrderedSet *clusters;
-@property (nonatomic, retain) FZZUser *creator;
-@property (nonatomic, retain) NSOrderedSet *guests;
-@property (nonatomic, retain) NSOrderedSet *invitees;
-@property (nonatomic, retain) NSOrderedSet *messages;
-@property (nonatomic, retain) NSOrderedSet *suggestedInvites;
-@property (nonatomic, retain) NSString *location;
-@property (nonatomic, retain) NSDate *time;
-
-@end
-
-@interface FZZEvent (CoreDataGeneratedAccessors)
+@property (nonatomic, strong) NSDate * creationTime;
+@property (nonatomic, strong) NSNumber * eventID;
+@property (nonatomic, strong) NSArray *clusters;
+@property (nonatomic, strong) NSArray *guests;
+@property (nonatomic, strong) NSArray *invitees;
+@property (nonatomic, strong) NSArray *messages;
+@property (nonatomic, strong) FZZUser *creator;
 
 +(NSArray *)getEvents;
-+(void)fetchAll;
-
-- (void)insertObject:(FZZCluster *)value inClustersAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromClustersAtIndex:(NSUInteger)idx;
-- (void)insertClusters:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeClustersAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInClustersAtIndex:(NSUInteger)idx withObject:(FZZCluster *)value;
-- (void)replaceClustersAtIndexes:(NSIndexSet *)indexes withClusters:(NSArray *)values;
-- (void)addClustersObject:(FZZCluster *)value;
-- (void)removeClustersObject:(FZZCluster *)value;
-- (void)addClusters:(NSOrderedSet *)values;
-- (void)removeClusters:(NSOrderedSet *)values;
-- (void)insertObject:(FZZUser *)value inGuestsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromGuestsAtIndex:(NSUInteger)idx;
-- (void)insertGuests:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeGuestsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInGuestsAtIndex:(NSUInteger)idx withObject:(FZZUser *)value;
-- (void)replaceGuestsAtIndexes:(NSIndexSet *)indexes withGuests:(NSArray *)values;
-- (void)addGuestsObject:(FZZUser *)value;
-- (void)removeGuestsObject:(FZZUser *)value;
-- (void)addGuests:(NSOrderedSet *)values;
-- (void)removeGuests:(NSOrderedSet *)values;
-- (void)insertObject:(FZZUser *)value inInviteesAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromInviteesAtIndex:(NSUInteger)idx;
-- (void)insertInvitees:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeInviteesAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInInviteesAtIndex:(NSUInteger)idx withObject:(FZZUser *)value;
-- (void)replaceInviteesAtIndexes:(NSIndexSet *)indexes withInvitees:(NSArray *)values;
-- (void)addInviteesObject:(FZZUser *)value;
-- (void)removeInviteesObject:(FZZUser *)value;
-- (void)addInvitees:(NSOrderedSet *)values;
-- (void)removeInvitees:(NSOrderedSet *)values;
-- (void)insertObject:(FZZMessage *)value inMessagesAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromMessagesAtIndex:(NSUInteger)idx;
-- (void)insertMessages:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeMessagesAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInMessagesAtIndex:(NSUInteger)idx withObject:(FZZMessage *)value;
-- (void)replaceMessagesAtIndexes:(NSIndexSet *)indexes withMessages:(NSArray *)values;
-- (void)addMessagesObject:(FZZMessage *)value;
-- (void)removeMessagesObject:(FZZMessage *)value;
-- (void)addMessages:(NSOrderedSet *)values;
-- (void)removeMessages:(NSOrderedSet *)values;
-- (void)insertObject:(FZZUser *)value inSuggestedInvitesAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromSuggestedInvitesAtIndex:(NSUInteger)idx;
-- (void)insertSuggestedInvites:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeSuggestedInvitesAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInSuggestedInvitesAtIndex:(NSUInteger)idx withObject:(FZZUser *)value;
-- (void)replaceSuggestedInvitesAtIndexes:(NSIndexSet *)indexes withSuggestedInvites:(NSArray *)values;
-- (void)addSuggestedInvitesObject:(FZZUser *)value;
-- (void)removeSuggestedInvitesObject:(FZZUser *)value;
-- (void)addSuggestedInvites:(NSOrderedSet *)values;
-- (void)removeSuggestedInvites:(NSOrderedSet *)values;
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
@@ -91,8 +32,6 @@
                      AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLoadMessagesBeforeMID:(NSNumber *)mid
                       AndAcknowledge:(SocketIOCallback)function;
-//-(void)socketIOSetSeatCapacityToCapacity:(NSNumber *)capacity
-//                         WithAcknowledge:(SocketIOCallback)function;
 +(void)socketIONewEventWithMessage:(NSString *)message
                     AndAcknowledge:(SocketIOCallback)function;
 //+(void)socketIONewEventWithMessage:(NSString *)message
@@ -151,5 +90,6 @@
 +(NSArray *)parseEventJSONList:(NSArray *)eventListJSON;
 
 +(void)killEvents:(NSArray *)deadEvents;
+
 
 @end

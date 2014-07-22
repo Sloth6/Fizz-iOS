@@ -26,21 +26,14 @@
  
  */
 
-@interface FZZUser : NSManagedObject
+@interface FZZUser : NSObject
 
-@property (nonatomic, retain) NSNumber * facebookID;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * phoneNumber;
-@property (nonatomic, retain) NSData * photoBinary;
-@property (nonatomic, retain) NSNumber * userID;
-@property (nonatomic, retain) NSSet *messages;
-@property (nonatomic, retain) NSSet *creatorOf;
-@property (nonatomic, retain) NSSet *guestOf;
-@property (nonatomic, retain) NSSet *inviteeOf;
-@property (nonatomic, retain) NSSet *suggestedInviteOf;
-@property (nonatomic, retain) NSSet *inClusters;
+@property (nonatomic, strong) NSNumber * facebookID;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSString * phoneNumber;
+@property (nonatomic, strong) NSData * photoBinary;
+@property (nonatomic, strong) NSNumber * userID;
 
-+(void)fetchAll;
 -(NSString *)initials;
 
 // Use this to get a profile picture
@@ -100,35 +93,4 @@
 
 +(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
                       WithAcknowledge:(SocketIOCallback)function;
-
-- (void)addMessagesObject:(FZZMessage *)value;
-- (void)removeMessagesObject:(FZZMessage *)value;
-- (void)addMessages:(NSSet *)values;
-- (void)removeMessages:(NSSet *)values;
-
-- (void)addCreatorOfObject:(FZZEvent *)value;
-- (void)removeCreatorOfObject:(FZZEvent *)value;
-- (void)addCreatorOf:(NSSet *)values;
-- (void)removeCreatorOf:(NSSet *)values;
-
-- (void)addGuestOfObject:(FZZEvent *)value;
-- (void)removeGuestOfObject:(FZZEvent *)value;
-- (void)addGuestOf:(NSSet *)values;
-- (void)removeGuestOf:(NSSet *)values;
-
-- (void)addInviteeOfObject:(FZZEvent *)value;
-- (void)removeInviteeOfObject:(FZZEvent *)value;
-- (void)addInviteeOf:(NSSet *)values;
-- (void)removeInviteeOf:(NSSet *)values;
-
-- (void)addSuggestedInviteOfObject:(FZZEvent *)value;
-- (void)removeSuggestedInviteOfObject:(FZZEvent *)value;
-- (void)addSuggestedInviteOf:(NSSet *)values;
-- (void)removeSuggestedInviteOf:(NSSet *)values;
-
-- (void)addInClustersObject:(FZZCluster *)value;
-- (void)removeInClustersObject:(FZZCluster *)value;
-- (void)addInClusters:(NSSet *)values;
-- (void)removeInClusters:(NSSet *)values;
-
 @end

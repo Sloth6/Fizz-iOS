@@ -12,94 +12,115 @@
 #import "FZZUser.h"
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
-#import "FZZCoreDataStore.h"
 
 static NSString *FZZ_NEW_MESSAGE = @"newMessage";
 
-
 @implementation FZZMessage
 
-@dynamic creationTime;
-@dynamic messageID;
-@dynamic text;
-@dynamic event;
-@dynamic marker;
-@dynamic user;
-
-+ (instancetype)createManagedObject
-{
-    NSLog(@"Created FZZMessage");
++(NSArray *)convertMessagesFromJSONForCache:(NSArray *)messageJSONs{
+    NSMutableArray *result = [messageJSONs mutableCopy];
     
-    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    
-    FZZMessage *result;
-    
-    @synchronized(context){
-        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    [messageJSONs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSDictionary *jsonMessage = obj;
         
-        [context save:nil];
-    }
+        NSDate *creationTime = [jsonMessage objectForKey:@"creationTime"];
+        NSNumber *messageID = [jsonMessage objectForKey:@"messageID"];
+        NSString *text = [jsonMessage objectForKey:@"text"];
+        
+        // Event
+        NSNumber *eventID = [jsonMessage objectForKey:@"event"];
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        // Marker
+        NSDictionary *jsonMarker = [jsonMessage objectForKey:@"marker"];
+        FZZCoordinate *marker = [FZZCoordinate fromDictionaryForCache:jsonMarker];
+        
+        // User
+        NSNumber *userID = [jsonMessage objectForKey:@"user"];
+        FZZUser *user = [FZZUser userWithUID:userID];
+        
+        FZZMessage *message;
+        
+        if (marker == nil){
+            message = [[FZZMessage alloc] initWithMID:messageID
+                                                 User:user
+                                            AndMarker:marker
+                                             ForEvent:event];
+        } else {
+            message = [[FZZMessage alloc] initWithMID:messageID
+                                                 User:user
+                                              AndText:text
+                                             ForEvent:event];
+        }
+        
+        [message setCreationTime:creationTime];
+        
+        [result setObject:message atIndexedSubscript:idx];
+    }];
     
     return result;
 }
 
-+(void)saveObjects{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
++(NSArray *)convertMessagesToJSONForCache:(NSArray *)messages{
+    NSMutableArray *result = [messages mutableCopy];
     
-    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
+    NSArray *messagesArray = [result copy];
     
-    @synchronized(moc){
-        NSError *error = nil;
-        if (![moc save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }
+    [messagesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        FZZMessage *message = [obj copy];
+        
+        NSDictionary *jsonMessage = [[NSMutableDictionary alloc] init];
+        
+        [jsonMessage setValue:[message creationTime] forKey:@"creationTime"];
+        [jsonMessage setValue:[message messageID] forKey:@"messageID"];
+        [jsonMessage setValue:[message text] forKey:@"text"];
+        
+        // Event
+        NSNumber *eventID = [[message event] eventID];
+        [jsonMessage setValue:eventID forKey:@"event"];
+        
+        // Marker
+        NSDictionary *markerDict = [[message marker] asDictionaryForCache];
+        [jsonMessage setValue:markerDict forKey:@"marker"];
+        
+        // User
+        NSNumber *userID = [[message user] userID];
+        [jsonMessage setValue:userID forKey:@"user"];
+        
+        [result setObject:jsonMessage atIndexedSubscript:idx];
+    }];
+    
+    return result;
 }
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndText:(NSString *)inputText ForEvent:(FZZEvent *)inputEvent{
     
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    self = [FZZMessage createManagedObject];
+    self = [super init];
     
     if (self){
         self.messageID = mID;
-        
         self.user   = inputUser;
-        [inputUser addMessagesObject:self];
-        
         self.text   = inputText;
-        
         self.marker = nil;
+        self.event = inputEvent;
         
-        self.event  = inputEvent;
-        [inputEvent addMessagesObject:self];
+        [inputEvent addMessage:self];
     }
     
     return self;
 }
 
 -(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndMarker:(FZZCoordinate *)marker ForEvent:(FZZEvent *)inputEvent{
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    self = [FZZMessage createManagedObject];
+    self = [super init];
     
     if (self){
         self.messageID = mID;
-        
         self.user   = inputUser;
-        [inputUser addMessagesObject:self];
-        
         self.text   = nil;
-        
         self.marker = marker;
+        self.event = inputEvent;
         
-        [marker setMessage:self];
-        
-        self.event  = inputEvent;
-        [inputEvent addMessagesObject:self];
+        [inputEvent addMessage:self];
     }
     
     return self;
@@ -205,16 +226,8 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
             [messagesForEid addObject:message];
         }
         
-        FZZEvent *event = [FZZEvent eventWithEID:eid];
-        
-        NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:messagesForEid];
-        
-        [event addMessages:orderedSet];
-        
         [result setObject:messagesForEid forKey:eid];
     }];
-    
-    [self saveObjects];
     
     return result;
 }
@@ -241,6 +254,7 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     return dict;
 }
 
+// Returns true if message is from Fizz, not from a user
 -(BOOL)isServerMessage{
     return (self.user == NULL);
 }

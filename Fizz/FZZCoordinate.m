@@ -10,38 +10,32 @@
 #import "FZZEvent.h"
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
-#import "FZZCoreDataStore.h"
 
 static NSString *FZZ_NEW_MARKER = @"newMarker";
 static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
 
 @implementation FZZCoordinate
 
-@dynamic latitude;
-@dynamic longitude;
-@dynamic message;
-
-+ (instancetype)createManagedObject
-{
-    NSLog(@"Created FZZCoordinate");
+-(NSDictionary *)asDictionaryForCache{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
-    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    FZZCoordinate *result;
+    [dict setObject:self.latitude  forKey:@"latitude"];
+    [dict setObject:self.longitude forKey:@"longitude"];
     
-    @synchronized(context){
-        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
-        
-        [context save:nil];
-    }
-        
-    return result;
+    return dict;
 }
 
-- (id)initWithLongitude:(float)lng latitude:(float)lat
-{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
++(FZZCoordinate *)fromDictionaryForCache:(NSDictionary *)jsonMarker{
+    NSNumber *latitude = [jsonMarker objectForKey:@"latitude"];
+    NSNumber *longitude = [jsonMarker objectForKey:@"longitude"];
     
-    self = [FZZCoordinate createManagedObject];
+    return [[FZZCoordinate alloc] initWithLongitude:[longitude floatValue]
+                                        andLatitude:[latitude floatValue]];
+}
+
+- (id)initWithLongitude:(float)lng andLatitude:(float)lat;
+{
+    self = [super init];
     
     if (self) {
         self.longitude = [NSNumber numberWithFloat:lng];

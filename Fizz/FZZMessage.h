@@ -22,14 +22,14 @@
 #import <CoreData/CoreData.h>
 #import "SocketIO.h"
 
-@interface FZZMessage : NSManagedObject
+@interface FZZMessage : NSObject
 
-@property (nonatomic, retain) NSDate * creationTime;
-@property (nonatomic, retain) NSNumber * messageID;
-@property (nonatomic, retain) NSString * text;
-@property (nonatomic, retain) FZZEvent *event;
-@property (nonatomic, retain) FZZCoordinate *marker;
-@property (nonatomic, retain) FZZUser *user;
+@property (nonatomic, strong) NSDate * creationTime;
+@property (nonatomic, strong) NSNumber * messageID;
+@property (nonatomic, strong) NSString * text;
+@property (nonatomic, strong) FZZEvent *event;
+@property (nonatomic, strong) FZZCoordinate *marker;
+@property (nonatomic, strong) FZZUser *user;
 
 -(BOOL)isServerMessage;
 
@@ -38,6 +38,9 @@
 +(void)socketIONewMessage:(NSString *)message
                  ForEvent:(FZZEvent *)event
           WithAcknowledge:(SocketIOCallback)function;
+
++(NSArray *)convertMessagesToJSONForCache:(NSArray *)messages;
++(NSArray *)convertMessagesFromJSONForCache:(NSArray *)messageJSONs;
 
 +(FZZMessage *)parseJSON:(NSDictionary *)messageJSON;
 +(NSDictionary *)parseMessageJSONDict:(NSDictionary *)messageDictJSON;

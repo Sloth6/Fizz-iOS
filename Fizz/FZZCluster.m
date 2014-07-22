@@ -9,36 +9,43 @@
 #import "FZZCluster.h"
 #import "FZZUser.h"
 #import "FZZAppDelegate.h"
-#import "FZZCoreDataStore.h"
 
 @implementation FZZCluster
 
-@dynamic event;
-@dynamic users;
-
-+ (instancetype)createManagedObject
-{
-    NSLog(@"Created FZZCluster");
+- (NSArray *)userIDs{
+    NSArray *usersCopy = [_users copy];
+    NSMutableArray *mutArray = [[NSMutableArray alloc] initWithCapacity:[usersCopy count]];
     
-    NSManagedObjectContext *context = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    
-    FZZCluster *result;
-    
-    @synchronized(context){
-        result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    for (int i = 0; i < [usersCopy count]; ++i){
+        FZZUser *user = [usersCopy objectAtIndex:i];
         
-        [context save:nil];
+        [mutArray addObject:[user userID]];
     }
     
-    return result;
+    return mutArray;
+}
+
++ (FZZCluster *)clusterFromUserIDs:(NSArray *)userIDs{
+    NSMutableArray *users = [[NSMutableArray alloc] initWithCapacity:[userIDs count]];
+    
+    for (int i = 0; i < [userIDs count]; ++i){
+        NSNumber *userID = [userIDs objectAtIndex:i];
+        FZZUser *user = [FZZUser userWithUID:userID];
+        
+        [users addObject:user];
+    }
+    
+    FZZCluster *cluster = [[FZZCluster alloc] initPrivateWithUserArray:users];
+    
+    return cluster;
 }
 
 -(id)initPrivateWithUserArray:(NSArray *)users{
     
-    self = [FZZCluster createManagedObject];
+    self = [super init];
  
     if (self){
-        [self setUsers:[NSOrderedSet orderedSetWithArray:users]];
+        [self setUsers:users];
     }
     
     return self;
@@ -70,116 +77,6 @@
     }];
     
     return result;
-}
-
-#pragma mark - NSManagedObject Getters and Setters
-
-static NSString *const kItemsKey = @"users";
-
-- (void)insertObject:(FZZUser *)value inUsersAtIndex:(NSUInteger)idx {
-    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
-    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    [tmpOrderedSet insertObject:value atIndex:idx];
-    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-}
-
-- (void)removeObjectFromUsersAtIndex:(NSUInteger)idx {
-    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
-    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    [tmpOrderedSet removeObjectAtIndex:idx];
-    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-}
-
-- (void)insertUsers:(NSArray *)values atIndexes:(NSIndexSet *)indexes {
-    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    [tmpOrderedSet insertObjects:values atIndexes:indexes];
-    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-}
-
-- (void)removeUsersAtIndexes:(NSIndexSet *)indexes {
-    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    [tmpOrderedSet removeObjectsAtIndexes:indexes];
-    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-}
-
-- (void)replaceObjectInUsersAtIndex:(NSUInteger)idx withObject:(FZZUser *)value {
-    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
-    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
-    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
-}
-
-- (void)replaceUsersAtIndexes:(NSIndexSet *)indexes withUsers:(NSArray *)values {
-    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:values];
-    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:kItemsKey];
-}
-
-- (void)addUsersObject:(FZZUser *)value {
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    NSUInteger idx = [tmpOrderedSet count];
-    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
-    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-    [tmpOrderedSet addObject:value];
-    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-}
-
-- (void)removeUsersObject:(FZZUser *)value {
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    NSUInteger idx = [tmpOrderedSet indexOfObject:value];
-    if (idx != NSNotFound) {
-        NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
-        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-        [tmpOrderedSet removeObject:value];
-        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-    }
-}
-
-- (void)addUsers:(NSOrderedSet *)values {
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-    NSUInteger valuesCount = [values count];
-    NSUInteger objectsCount = [tmpOrderedSet count];
-    for (NSUInteger i = 0; i < valuesCount; ++i) {
-        [indexes addIndex:(objectsCount + i)];
-    }
-    if (valuesCount > 0) {
-        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-        [tmpOrderedSet addObjectsFromArray:[values array]];
-        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:kItemsKey];
-    }
-}
-
-- (void)removeUsers:(NSOrderedSet *)values {
-    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-    for (id value in values) {
-        NSUInteger idx = [tmpOrderedSet indexOfObject:value];
-        if (idx != NSNotFound) {
-            [indexes addIndex:idx];
-        }
-    }
-    if ([indexes count] > 0) {
-        [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-        [tmpOrderedSet removeObjectsAtIndexes:indexes];
-        [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
-        [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
-    }
 }
 
 @end

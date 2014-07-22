@@ -17,8 +17,6 @@
 
 #import "FZZMessage.h"
 
-#import "FZZCoreDataStore.h"
-
 #import "FZZOverlayView.h"
 
 #import "TestFlight.h"
@@ -85,28 +83,30 @@
     // Initial Launch: if didCrash is nil, [didCrash boolValue] returns nil
     if ([didCrash boolValue]){
         
-        [FZZCoreDataStore deleteCache];
+        [FZZLocalCache deleteCache];
     }
 }
 
 - (void)loadAll{
-    NSLog(@"here we go!");
-    [FZZEvent fetchAll];
-    NSLog(@"here we go 2");
+    NSLog(@"Load all users from cache...");
+    [FZZUser loadAll];
+    NSLog(@"Load all events from cache...");
+    [FZZEvent loadAll];
+    NSLog(@"Load complete.");
     
-    NSArray *events = [FZZEvent getEvents];
-    
-    NSLog(@"\n\n");
-    
-    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        FZZEvent *event = obj;
-        
-        FZZMessage *message = [event firstMessage];
-        
-        NSLog(@"%@", [message text]);
-    }];
-    
-    NSLog(@"\n\n");
+//    NSArray *events = [FZZEvent getEvents];
+//    
+//    NSLog(@"\n\n");
+//    
+//    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        FZZEvent *event = obj;
+//        
+//        FZZMessage *message = [event firstMessage];
+//        
+//        NSLog(@"%@", [message text]);
+//    }];
+//    
+//    NSLog(@"\n\n");
 //        [FZZUser fetchAll];
 }
 
@@ -131,49 +131,7 @@
         
         NSLog(@"Successfully loaded all data!");
         
-//        IAThreadSafeContext *moc = [self managedObjectContext];
-        
-//        NSManagedObjectContext *moc = [FZZCoreDataStore privateQueueContext];
-//        
-//        @synchronized([moc persistentStoreCoordinator]) {
-//            [moc performBlock:^{
-//                NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"FZZEvent"];
-//                [fetchRequest setIncludesSubentities:YES];
-//                
-//                
-//                NSArray *results = [moc executeFetchRequest:fetchRequest
-//                                                      error:nil];
-//                
-//                NSLog(@"\n\nCACHED_EVENTS: %@\n\n\n", results);
-//                
-//                if (results != nil && [results count] > 0){
-//                    
-//                    for (int i = 0; i < [results count]; ++i) {
-//                        FZZEvent *event = [results objectAtIndex:i];
-//                        
-//                        NSLog(@"firstMessage: %@", [event firstMessage]);
-//                    }
-//                    
-//                    [self updateEvents:results];
-//                }
-//
-//            }];
-//        }
-    
-        
-//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//        
-//        NSEntityDescription *entity = [NSEntityDescription
-//                                       entityForName:@"FZZEvent" inManagedObjectContext:moc];
-//        
-//        [fetchRequest setIncludesSubentities:YES];
-//        
-//        [fetchRequest setEntity:entity];
-        
-//        NSArray *results;
-//        NSError *error = nil;
-//        results = [moc executeFetchRequest:fetchRequest error:&error];
-        
+
     }
     
     // Make sure to only update didCrash when everything is fixed
@@ -496,12 +454,8 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
     NSLog(@"Saving context");
-    [self saveContext];
+    [FZZLocalCache saveContext];
     NSLog(@"Did save context");
-    
-//    [[FZZCoordinate alloc] initWithLongitude:1 andLatitude:2];
-//    
-//    [FZZDataStore synchronize];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -541,23 +495,6 @@
 
 - (void)updateEvents:(NSArray *)events{
     [_eevc updateEvents:[events mutableCopy]];
-}
-
-- (void)saveContext
-{
-    NSError *error = nil;
-    NSManagedObjectContext *managedObjectContext = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    
-    @synchronized(managedObjectContext){
-        if (managedObjectContext != nil) {
-            if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-                // Replace this implementation with code to handle the error appropriately.
-                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-                abort();
-            }
-        }
-    }
 }
 
 #pragma mark - Crash Handlers

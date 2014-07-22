@@ -18,25 +18,13 @@
 
 @class FZZEvent, FZZUser;
 
-@interface FZZCluster : NSManagedObject
+@interface FZZCluster : NSObject
 
-@property (nonatomic, retain) FZZEvent *event;
-@property (nonatomic, retain) NSOrderedSet *users;
+@property (nonatomic, strong) FZZEvent *event;
+@property (nonatomic, strong) NSArray *users;
 
-@end
-
-@interface FZZCluster (CoreDataGeneratedAccessors)
-
-- (void)insertObject:(FZZUser *)value inUsersAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromUsersAtIndex:(NSUInteger)idx;
-- (void)insertUsers:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeUsersAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInUsersAtIndex:(NSUInteger)idx withObject:(FZZUser *)value;
-- (void)replaceUsersAtIndexes:(NSIndexSet *)indexes withUsers:(NSArray *)values;
-- (void)addUsersObject:(FZZUser *)value;
-- (void)removeUsersObject:(FZZUser *)value;
-- (void)addUsers:(NSOrderedSet *)values;
-- (void)removeUsers:(NSOrderedSet *)values;
+- (NSArray *)userIDs;
++ (FZZCluster *)clusterFromUserIDs:(NSArray *)userIDs;
 
 + (FZZCluster *)parseJSON:(NSArray *)clusterJSON;
 + (NSArray *)parseClusterJSONList:(NSArray *)clusterJSONlist;
