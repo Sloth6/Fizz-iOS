@@ -14,6 +14,8 @@
 #import "FZZAppDelegate.h"
 #import "FZZCluster.h"
 
+#import "FZZLocalCache.h"
+
 static NSMutableDictionary *events;
 
 static NSString *FZZ_NEW_EVENT    = @"newEvent";
@@ -43,6 +45,11 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 @implementation FZZEvent
 
 @synthesize haveExpressedInterest = _haveExpressedInterest;
+
++(BOOL)saveEventsToFile:(NSString *)eventsURL{
+    NSDictionary *jsonDict = [FZZEvent getEventsJSONForCache];
+    return [jsonDict writeToFile:eventsURL atomically:YES];
+}
 
 +(NSDictionary *)getEventsJSONForCache{
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[events count]];
@@ -108,68 +115,78 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     return dict;
 }
 
+/*
+ For each cached event, loads the cached event data, provided the event doesn't exist in the app already.
+ 
+ Should only be called AFTER parseUsersJSONForCache
+ */
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON{
     
     [eventsJSON enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSDictionary *jsonEvent = obj;
         NSNumber *eventID = key;
         
-        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        BOOL eventExists = [events objectForKey:eventID] != nil;
         
-        @synchronized(event){
-            NSDate *creationTime = [jsonEvent objectForKey:@"creationTime"];
-            [event setCreationTime:creationTime];
+        if (!eventExists){
+            FZZEvent *event = [FZZEvent eventWithEID:eventID];
             
-            // Clusters
-            NSArray *clusterUserIDs = [jsonEvent objectForKey:@"clusters"];
-            NSMutableArray *clusters = [[NSMutableArray alloc] initWithCapacity:[clusterUserIDs count]];
-            
-            for (int i = 0; i < [clusterUserIDs count]; ++i){
-                NSArray *userIDs = [clusterUserIDs objectAtIndex:i];
-                FZZCluster *cluster = [FZZCluster clusterFromUserIDs:userIDs];
+            @synchronized(event){
+                NSDate *creationTime = [jsonEvent objectForKey:@"creationTime"];
+                [event setCreationTime:creationTime];
                 
-                [clusters addObject:cluster];
-            }
-            
-            [event setClusters:clusters];
-            
-            // Guests
-            NSArray *guestIDs = [jsonEvent objectForKey:@"guests"];
-            NSMutableArray *guests = [[NSMutableArray alloc] initWithCapacity:[guestIDs count]];
-            
-            for (int i = 0; i < [guestIDs count]; ++i){
-                NSNumber *userID = [guestIDs objectAtIndex:i];
+                // Clusters
+                NSArray *clusterUserIDs = [jsonEvent objectForKey:@"clusters"];
+                NSMutableArray *clusters = [[NSMutableArray alloc] initWithCapacity:[clusterUserIDs count]];
                 
-                [guests addObject:[FZZUser userWithUID:userID]];
-            }
-            
-            [event setGuests:guests];
-            
-            // Invitees
-            NSArray *inviteeIDs = [jsonEvent objectForKey:@"invitees"];
-            NSMutableArray *invitees = [[NSMutableArray alloc] initWithCapacity:[inviteeIDs count]];
-            
-            for (int i = 0; i < [inviteeIDs count]; ++i){
-                NSNumber *userID = [inviteeIDs objectAtIndex:i];
+                for (int i = 0; i < [clusterUserIDs count]; ++i){
+                    NSArray *userIDs = [clusterUserIDs objectAtIndex:i];
+                    FZZCluster *cluster = [FZZCluster clusterFromUserIDs:userIDs];
+                    
+                    [clusters addObject:cluster];
+                }
                 
-                [invitees addObject:[FZZUser userWithUID:userID]];
+                [event setClusters:clusters];
+                
+                // Guests
+                NSArray *guestIDs = [jsonEvent objectForKey:@"guests"];
+                NSMutableArray *guests = [[NSMutableArray alloc] initWithCapacity:[guestIDs count]];
+                
+                for (int i = 0; i < [guestIDs count]; ++i){
+                    NSNumber *userID = [guestIDs objectAtIndex:i];
+                    
+                    [guests addObject:[FZZUser userWithUID:userID]];
+                }
+                
+                [event setGuests:guests];
+                
+                // Invitees
+                NSArray *inviteeIDs = [jsonEvent objectForKey:@"invitees"];
+                NSMutableArray *invitees = [[NSMutableArray alloc] initWithCapacity:[inviteeIDs count]];
+                
+                for (int i = 0; i < [inviteeIDs count]; ++i){
+                    NSNumber *userID = [inviteeIDs objectAtIndex:i];
+                    
+                    [invitees addObject:[FZZUser userWithUID:userID]];
+                }
+                
+                [event setInvitees:invitees];
+                
+                // Messages
+                NSArray *messageJSONs = [jsonEvent objectForKey:@"messages"];
+                NSArray *messages = [FZZMessage convertMessagesFromJSONForCache:messageJSONs];
+                
+                [event setMessages:messages];
+                
+                // Creator
+                NSNumber *creatorUserID = [jsonEvent objectForKey:@"creator"];
+                FZZUser *creator = [FZZUser userWithUID:creatorUserID];
+                
+                [event setCreator:creator];
             }
-            
-            [event setInvitees:invitees];
-            
-            // Messages
-            NSArray *messageJSONs = [jsonEvent objectForKey:@"messages"];
-            NSArray *messages = [FZZMessage convertMessagesFromJSONForCache:messageJSONs];
-            
-            [event setMessages:messages];
-            
-            // Creator
-            NSNumber *creatorUserID = [jsonEvent objectForKey:@"creator"];
-            FZZUser *creator = [FZZUser userWithUID:creatorUserID];
-            
-            [event setCreator:creator];
         }
     }];
+        
 }
 
 
@@ -494,14 +511,20 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
             FZZCluster *cluster = [self.clusters objectAtIndex:i];
             
             if ([cluster.users containsObject:me]){
-                
-                [cluster removeUsersObject:me];
+                NSMutableArray *users = [[cluster users] mutableCopy];
+                [users removeObject:me];
+                [self setClusters:users];
                 break;
             }
         }
         
-        [self removeGuestsObject:me];
-        [self removeInviteesObject:me];
+        NSMutableArray *guests = [[self guests] mutableCopy];
+        [guests removeObject:me];
+        [self setGuests:guests];
+        
+        NSMutableArray *invitees = [[self invitees] mutableCopy];
+        [invitees removeObject:me];
+        [self setInvitees:invitees];
     }
     
     [self socketIOLeaveEventWithAcknowledge:NULL];
@@ -836,10 +859,6 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
     
 //    [creator setCreatorOf:mutEventsCreated];
     
-    [creator addCreatorOfObject:event];
-    
-    NSLog(@"test4");
-    
     event.creationTime = creationTime;
     
     NSLog(@">>F>>");
@@ -895,40 +914,21 @@ static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
 }
 
 +(void)killEvents:(NSArray *)deadEvents{
-    return true;
-    
-//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-//    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    
-    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    
     NSLog(@"killEvents 1");
     
-    @synchronized(moc){
+    [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSNumber *eID = obj;
+        
         NSLog(@"killEvents 2");
         
-        [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            NSNumber *eID = obj;
-            
-            NSLog(@"killEvents 3");
-            
-            FZZEvent *event = [events objectForKey:eID];
-            [moc deleteObject:event];
-            
-            NSLog(@"killEvents 4");
-            
-            [events removeObjectForKey:eID];
-        }];
-        
-        NSLog(@"killEvents 5");
-    }
+        [events removeObjectForKey:eID];
+    }];
     
-    NSLog(@"killEvents 6");
+    NSLog(@"killEvents 3");
     
-    [self saveObjects];
+    [FZZLocalCache updateCache];
     
-    NSLog(@"killEvents 7");
+    NSLog(@"killEvents 4");
 }
 
 -(NSDate *)lastUpdate{

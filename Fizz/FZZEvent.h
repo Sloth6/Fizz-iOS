@@ -23,6 +23,8 @@
 @property (nonatomic, strong) NSArray *messages;
 @property (nonatomic, strong) FZZUser *creator;
 
++(BOOL)saveEventsToFile:(NSString *)eventsURL;
++(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
 +(NSArray *)getEvents;
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;

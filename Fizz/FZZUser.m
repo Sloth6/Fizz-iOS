@@ -12,6 +12,8 @@
 #import "FZZAppDelegate.h"
 #import "FZZDefaultBubble.h"
 
+#import "FZZLocalCache.h"
+
 static NSMutableArray *friends;
 static NSMutableDictionary *users;
 static int kFZZProfilePictureDimension = 50;
@@ -39,6 +41,9 @@ static FZZUser *me;
 @property (strong, nonatomic) NSMutableArray *completionHandlers;
 @property int chid; // Completion Handler ID
 
+// Used for cache LRU eviction
+@property NSDate *lastUsed;
+
 @end
 
 @implementation FZZUser
@@ -51,9 +56,9 @@ static FZZUser *currentUser = nil;
 @synthesize isFetchingPhoto = _isFetchingPhoto;
 @synthesize completionHandlers = _completionHandlers;
 
-+(BOOL)saveUsersToFile{
++(BOOL)saveUsersToFile:(NSString *)userURL{
     NSDictionary *jsonDict = [FZZUser getUsersJSONForCache];
-    return [jsonDict writeToFile:[FZZLocalCache getUrlForUsers] atomically:yes];
+    return [jsonDict writeToFile:userURL atomically:YES];
 }
 
 +(NSDictionary *)getUsersJSONForCache{
@@ -69,32 +74,56 @@ static FZZUser *currentUser = nil;
         [jsonUser setValue:[user facebookID] forKey:@"facebookID"];
         [jsonUser setValue:[user name] forKey:@"name"];
         [jsonUser setValue:[user phoneNumber] forKey:@"phoneNumber"];
+        [jsonUser setValue:[user lastUsed] forKey:@"lastUsed"];
         
         // Where key = uID
         [dict setObject:jsonUser forKey:key];
     }];
     
+    FZZUser *user = [FZZUser me];
+    
+    [dict setObject:[user userID] forKey:@"myUserID"];
+    
     return dict;
 }
 
+/*
+ For each cached user, loads the cached user data, provided the user doesn't exist in the app already
+ */
 +(void)parseUsersJSONForCache:(NSDictionary *)usersJSON{
     
-    [usersJSON enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    NSMutableDictionary *dict = [usersJSON mutableCopy];
+    
+    // Grab my userID
+    NSNumber *myUserID = [dict objectForKey:@"myUserID"];
+    [dict removeObjectForKey:@"myUserID"];
+    
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSDictionary *jsonUser = obj;
         NSNumber *userID = key;
         
-        NSNumber *facebookID = [jsonUser objectForKey:@"facebookID"];
-        NSString *name = [jsonUser objectForKey:@"name"];
-        NSString *phoneNumber = [jsonUser objectForKey:@"phoneNumber"];
+        BOOL userExists = [users objectForKey:userID] != nil;
         
-        FZZUser *user = [FZZUser userWithUID:userID];
-        
-        [user setFacebookID:facebookID];
-        [user setName:name];
-        [user setPhoneNumber:phoneNumber];
-        
-        [users setObject:user forKey:userID];
+        if (!userExists){
+            NSNumber *facebookID = [jsonUser objectForKey:@"facebookID"];
+            NSString *name = [jsonUser objectForKey:@"name"];
+            NSString *phoneNumber = [jsonUser objectForKey:@"phoneNumber"];
+            NSDate *lastUsed = [jsonUser objectForKey:@"lastUsed"];
+            
+            FZZUser *user = [FZZUser userWithUID:userID];
+            
+            [user setFacebookID:facebookID];
+            [user setName:name];
+            [user setPhoneNumber:phoneNumber];
+            [user setLastUsed:lastUsed];
+            
+            [users setObject:user forKey:userID];
+        }
     }];
+    
+    FZZUser *userMe = [FZZUser userWithUID:myUserID];
+    
+    [FZZUser setMeAs:userMe];
 }
 
 +(void)setupUserClass{
@@ -134,12 +163,6 @@ static FZZUser *currentUser = nil;
 //    }
 //}
 
-+(NSEntityDescription *)getEntityDescription{
-    NSManagedObjectContext *moc = [FZZCoreDataStore getAppropriateManagedObjectContext];
-    
-    return [NSEntityDescription entityForName:@"FZZUser" inManagedObjectContext:moc];
-}
-
 -(id)initPrivateWithUserID:(NSNumber *)uID{
     
     self = [super init];
@@ -173,6 +196,8 @@ static FZZUser *currentUser = nil;
         return NULL;
     }
     
+    [self updateLastUsed];
+    
     return self.facebookID;
 }
 
@@ -184,6 +209,10 @@ static FZZUser *currentUser = nil;
     return me;
 }
 
+-(void)updateLastUsed{
+    self.lastUsed = [NSDate date];
+}
+
 +(FZZUser *)userWithUID:(NSNumber *)uID{
     
     FZZUser *user = [users objectForKey:uID];
@@ -191,6 +220,8 @@ static FZZUser *currentUser = nil;
     if (!user){
         user = [[FZZUser alloc] initPrivateWithUserID:uID];
     }
+    
+    [user updateLastUsed];
     
     return user;
 }
@@ -350,6 +381,8 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSString *)name{
+    [self updateLastUsed];
+    
     return self.name;
 }
 
@@ -358,6 +391,8 @@ static FZZUser *currentUser = nil;
 }
 
 -(NSString *)initials{
+    [self updateLastUsed];
+    
     if (self.hasInitials){
         return self.initials;
     }
@@ -398,10 +433,14 @@ static FZZUser *currentUser = nil;
         return NULL;
     }
     
+    [self updateLastUsed];
+    
     return self.phoneNumber;
 }
 
 -(NSNumber *)userID{
+    [self updateLastUsed];
+    
     return self.userID;
 }
 

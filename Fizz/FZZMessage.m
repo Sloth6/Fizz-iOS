@@ -118,7 +118,7 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
         self.user   = inputUser;
         self.text   = nil;
         self.marker = marker;
-        self.event = inputEvent;
+        self.event  = inputEvent;
         
         [inputEvent addMessage:self];
     }

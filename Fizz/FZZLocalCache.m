@@ -11,26 +11,131 @@
 #import "FZZUser.h"
 #import "FZZEvent.h"
 
+static BOOL hasLoadedData = NO;
+static FZZLocalCache *cache;
+
 @implementation FZZLocalCache
 
-
--(NSString *)getUrlForEvents{
++(FZZLocalCache *)cache{
+    static dispatch_once_t once;
+    dispatch_once(&once, ^ {
+        // Code to run once
+        cache = [[FZZLocalCache alloc] init];
+    });
     
+    return cache;
 }
 
--(NSString *)getUrlForUsers{
++(NSString *)getCacheDirectory{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    FZZUser *user = [FZZUser me];
+    NSNumber *userID = [user userID];
+    
+    [documentsDirectory stringByAppendingPathComponent:[userID stringValue]];
+    
+    return documentsDirectory;
 }
 
--(void)loadFromCache{
++(NSString *)getUrlForEvents{
+    NSString *cacheDirectory = [FZZLocalCache getCacheDirectory];
     
+    NSString* fileName = [cacheDirectory stringByAppendingPathComponent:@"events.out"];
+    
+    return fileName;
+}
+
++(NSString *)getUrlForUsers{
+    NSString *cacheDirectory = [FZZLocalCache getCacheDirectory];
+    
+    NSString* fileName = [cacheDirectory stringByAppendingPathComponent:@"users.out"];
+    
+    return fileName;
+}
+
++(void)updateCache{
+    [[FZZLocalCache cache] updateCache];
+}
+
+-(void)updateCache{
+    @synchronized(self){
+        NSString *bundlePath = [FZZLocalCache getCacheDirectory];
+        
+        NSError * error = nil;
+        [[NSFileManager defaultManager] createDirectoryAtPath:bundlePath
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error != nil) {
+            NSLog(@"error creating directory: %@", error);
+            //..
+        }
+        
+        [FZZUser saveUsersToFile:[FZZLocalCache getUrlForUsers]];
+        [FZZEvent saveEventsToFile:[FZZLocalCache getUrlForEvents]];
+    }
+}
+
++(BOOL)loadFromCache{
+    hasLoadedData = YES;
+    
+    return [[FZZLocalCache cache] loadFromCache];
+}
+
+-(BOOL)loadFromCache{
+    @synchronized(self){
+        NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithContentsOfFile:[FZZLocalCache getUrlForEvents]];
+        
+        NSMutableDictionary *userDict = [[NSMutableDictionary alloc] initWithContentsOfFile:[FZZLocalCache getUrlForUsers]];
+        
+        if ((eventDict == nil) && (userDict == nil)) return NO;
+        if (([eventDict count] == 0) && ([userDict count] == 0)) return NO;
+        
+        [FZZEvent parseEventsJSONForCache:eventDict];
+        [FZZUser parseUsersJSONForCache:userDict];
+    }
+    
+    return YES;
+}
+
++(void)clearCache{
+    [[FZZLocalCache cache] clearCache];
 }
 
 /*
- Delete all photos and the json txt file
+ Delete all cache files
  */
 -(void)clearCache{
-    
+    @synchronized(self){
+        NSFileManager *manager = [NSFileManager defaultManager];
+        
+        // Events Cache
+        NSError *error = nil;
+        
+        [manager removeItemAtPath:[FZZLocalCache getUrlForEvents] error:&error];
+        
+        if (error != nil) {
+            NSLog(@"error deleting events cache: %@", error);
+            //..
+        }
+        
+        // Users Cache
+        error = nil;
+        
+        [manager removeItemAtPath:[FZZLocalCache getUrlForUsers]  error:&error];
+        
+        if (error != nil) {
+            NSLog(@"error deleting users cache: %@", error);
+            //..
+        }
+    }
+}
+
+
++(BOOL)hasLoadedDataFromCache{
+    return hasLoadedData;
 }
 
 @end

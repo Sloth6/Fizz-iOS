@@ -16,6 +16,8 @@
 #import "FZZInviteViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 
+#import "FZZLocalCache.h"
+
 #define SuppressPerformSelectorLeakWarning(Stuff) \
 do { \
 _Pragma("clang diagnostic push") \
@@ -427,16 +429,23 @@ static NSMutableData *data;
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
     appDelegate.isConnecting = NO;
     
-    if (![appDelegate hasLoadedDataFromCache]){
-        NSLog(@"LOADING DATA!!");
-        [appDelegate loadDataFromCache];
-    }
-    
     NSLog(@"\nONLOGIN INCOMING: %@\n", args);
     
     NSDictionary *json  = [args objectAtIndex:0];
     
+    // User (me)
     NSDictionary *userJSON   = [json objectForKey:@"me"];
+    
+    FZZUser *me = [FZZUser parseJSON:userJSON];
+    
+    [FZZUser setMeAs:me];
+
+    if (![FZZLocalCache hasLoadedDataFromCache]){
+        // Load all cached data if user data is cached
+        [FZZLocalCache loadFromCache];
+    }
+    
+
     NSArray *friendListJSON  = [json objectForKey:@"newFriendList"];
     NSArray *eventListJSON   = [json objectForKey:@"newEventList"];
     NSArray *completeEventIDList = [json objectForKey:@"completeEventList"];
@@ -457,11 +466,6 @@ static NSMutableData *data;
     
     NSLog(@"\n2\n");
     
-    // User (me)
-    
-    FZZUser *me = [FZZUser parseJSON:userJSON];
-    
-    [FZZUser setMeAs:me];
     
     NSLog(@"\n3\n");
     
@@ -502,12 +506,6 @@ static NSMutableData *data;
         NSArray *updatedInvitees = (NSArray *)obj;
         
         [event updateInvitees:updatedInvitees];
-        
-        [updatedInvitees enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            FZZUser *user = obj;
-            
-            [user addInviteeOfObject:event];
-        }];
     }];
     
     // guests
@@ -518,12 +516,6 @@ static NSMutableData *data;
         NSArray *updatedGuests = [FZZUser parseUserJSONList:(NSArray *)obj];
         
         [event updateGuests:updatedGuests];
-        
-        [updatedGuests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            FZZUser *user = obj;
-            
-            [user addGuestOfObject:event];
-        }];
     }];
     
     // clusters
@@ -675,7 +667,9 @@ static NSMutableData *data;
     
     FZZEvent *event = [FZZEvent eventWithEID:eID];
     
-    [event addMessages:[NSOrderedSet orderedSetWithArray:messages]];
+    NSMutableArray *updatedMessages = [[event messages] mutableCopy];
+    [updatedMessages addObjectsFromArray:messages];
+    [event setMessages:updatedMessages];
 
 //    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
 //    

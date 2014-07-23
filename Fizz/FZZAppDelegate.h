@@ -71,6 +71,4 @@ static float const kFZZInviteProfilePictureHeight = 50;
 //@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-- (void)saveContext;
-
 @end

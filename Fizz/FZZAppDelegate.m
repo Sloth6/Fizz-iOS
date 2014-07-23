@@ -14,6 +14,7 @@
 #import "FZZEventsExpandedViewController.h"
 #import "FZZInviteViewController.h"
 #import "FZZBubbleViewController.h"
+#import "FZZLocalCache.h"
 
 #import "FZZMessage.h"
 
@@ -82,32 +83,8 @@
     
     // Initial Launch: if didCrash is nil, [didCrash boolValue] returns nil
     if ([didCrash boolValue]){
-        
-        [FZZLocalCache deleteCache];
+        [FZZLocalCache clearCache];
     }
-}
-
-- (void)loadAll{
-    NSLog(@"Load all users from cache...");
-    [FZZUser loadAll];
-    NSLog(@"Load all events from cache...");
-    [FZZEvent loadAll];
-    NSLog(@"Load complete.");
-    
-//    NSArray *events = [FZZEvent getEvents];
-//    
-//    NSLog(@"\n\n");
-//    
-//    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        FZZEvent *event = obj;
-//        
-//        FZZMessage *message = [event firstMessage];
-//        
-//        NSLog(@"%@", [message text]);
-//    }];
-//    
-//    NSLog(@"\n\n");
-//        [FZZUser fetchAll];
 }
 
 - (void)loadDataFromCache{
@@ -127,11 +104,13 @@
         
         NSLog(@"Loading all data...");
         
-        [self performSelectorOnMainThread:@selector(loadAll) withObject:nil waitUntilDone:YES];
+        if ([FZZLocalCache loadFromCache]){
+            NSLog(@"Successfully loaded all data!");
+        } else {
+            NSLog(@"No cached data exists.");
+        }
         
-        NSLog(@"Successfully loaded all data!");
         
-
     }
     
     // Make sure to only update didCrash when everything is fixed
@@ -453,9 +432,9 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
-    NSLog(@"Saving context");
-    [FZZLocalCache saveContext];
-    NSLog(@"Did save context");
+    NSLog(@"Updating local cache...");
+    [FZZLocalCache updateCache];
+    NSLog(@"Did update cache.");
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -482,9 +461,9 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
-    NSLog(@"Saving context");
-    [self saveContext];
-    NSLog(@"Did save context");
+    NSLog(@"Updating local cache...");
+    [FZZLocalCache updateCache];
+    NSLog(@"Did update cache.");
 //    [[FBSession activeSession] close];
 }
 

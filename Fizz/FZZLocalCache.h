@@ -18,11 +18,13 @@
 
 @interface FZZLocalCache : NSObject
 
--(NSString *)getUrlForEvents;
--(NSString *)getUrlForUsers;
-//-(void)savePictureForUser:(FZZUser *)user;
-//-(NSData *)loadPictureForUser:(FZZUser *)user;
--(void)loadFromCache;
--(void)clearCache;
++(NSString *)getUrlForEvents;
++(NSString *)getUrlForUsers;
+
++(void)updateCache;
++(BOOL)loadFromCache;
++(void)clearCache;
+
++(BOOL)hasLoadedDataFromCache;
 
 @end

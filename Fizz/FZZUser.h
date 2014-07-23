@@ -34,6 +34,9 @@
 @property (nonatomic, strong) NSData * photoBinary;
 @property (nonatomic, strong) NSNumber * userID;
 
++(BOOL)saveUsersToFile:(NSString *)userURL;
++(void)parseUsersJSONForCache:(NSDictionary *)usersJSON;
+
 -(NSString *)initials;
 
 // Use this to get a profile picture
