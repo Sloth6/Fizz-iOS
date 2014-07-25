@@ -33,9 +33,6 @@ static NSString *FZZ_INCOMING_COMPLETED_EVENT = @"completedEvent";
 static NSString *FZZ_INCOMING_UPDATE_GUESTS = @"updateGuests";
 static NSString *FZZ_INCOMING_UPDATE_INVITEES = @"updateInvitees";
 static NSString *FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
-static NSString *FZZ_INCOMING_UPDATE_CLUSTERS = @"updateClusters";
-static NSString *FZZ_INCOMING_UPDATE_LOCATION = @"updateLocation";
-static NSString *FZZ_INCOMING_UPDATE_TIME = @"updateTime";
 static NSString *FZZ_INCOMING_UPDATE_EVENT = @"updateEvent";
 
 
@@ -92,15 +89,6 @@ static NSMutableData *data;
     
     [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewMessage:))
                               forKey:FZZ_INCOMING_NEW_MESSAGE];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateClusters:))
-                              forKey:FZZ_INCOMING_UPDATE_CLUSTERS];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateLocation:))
-                              forKey:FZZ_INCOMING_UPDATE_LOCATION];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateTime:))
-                              forKey:FZZ_INCOMING_UPDATE_TIME];
     
     [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateEvent:))
                               forKey:FZZ_INCOMING_UPDATE_EVENT];
@@ -558,45 +546,6 @@ static NSMutableData *data;
 //    FZZEventsExpandedViewController *eevc = [appDelegate eevc];
 //    
 //    [eevc addIncomingMessageForEvent:event];
-}
-
-- (void)incomingUpdateClusters:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSNumber *eID = [json objectForKey:@"eid"];
-    
-    NSArray *clustersJSON = [json objectForKey:@"clusters"];
-    
-    NSArray *localClusters = [FZZCluster parseClusterJSONList:clustersJSON];
-    
-    FZZEvent *event = [FZZEvent eventWithEID:eID];
-    [event updateClusters:localClusters];
-}
-
-- (void)incomingUpdateLocation:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSNumber *eid = [json objectForKey:@"eid"];
-    
-    NSString *location = [json objectForKey:@"location"];
-    
-    FZZEvent *event = [FZZEvent eventWithEID:eid];
-    
-    [event setLocation:location];
-}
-
-- (void)incomingUpdateTime:(NSArray *)args{
-    NSDictionary *json  = [args objectAtIndex:0];
-    
-    NSNumber *eid = [json objectForKey:@"eid"];
-    
-    NSNumber *time = [json objectForKey:@"time"];
-    
-    NSDate *dateTime = [NSDate dateWithTimeIntervalSince1970:[time integerValue]];
-    
-    FZZEvent *event = [FZZEvent eventWithEID:eid];
-    
-    [event setTime:dateTime];
 }
 
 - (void)incomingUpdateEvent:(NSArray *)args{

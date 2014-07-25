@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "SocketIO.h"
 
-@class FZZCoordinate, FZZEvent, FZZMessage, FZZCluster;
+@class FZZCoordinate, FZZEvent, FZZMessage;
 
 /*
  
