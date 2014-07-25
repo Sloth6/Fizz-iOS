@@ -28,42 +28,14 @@
 
 @interface FZZUser : NSObject
 
-@property (nonatomic, strong) NSNumber * facebookID;
 @property (nonatomic, strong) NSString * name;
 @property (nonatomic, strong) NSString * phoneNumber;
-@property (nonatomic, strong) NSData * photoBinary;
 @property (nonatomic, strong) NSNumber * userID;
 
 +(BOOL)saveUsersToFile:(NSString *)userURL;
 +(void)parseUsersJSONForCache:(NSDictionary *)usersJSON;
 
--(NSString *)initials;
-
-// Use this to get a profile picture
--(void)fetchProfilePictureIfNeededWithCompletionHandler:(void(^)(UIImage *image))handler;
-
-// Only call circularImage inside a fetchProfilePictureIfNeeded call
-// Also check if (void(^)(UIImage *image)) is NULL before doing anything
--(UIImageView *)circularImage:(float)scalar;
--(UIImageView *)circularImageForRect:(CGRect)rect;
-
-+(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
-                               withScalar:(float)scalar;
-
--(UIImageView *)formatImageView:(UIImageView *)imageView
-          ForInitialsWithScalar:(float)scalar;
-
-+(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
-                                  forRect:(CGRect)rect;
-
--(UIImageView *)formatImageView:(UIImageView *)imageView
-             ForInitialsForRect:(CGRect)rect;
-
--(void)setFacebookID:(NSNumber *)fbID;
 -(void)setPhoneNumber:(NSString *)phoneNumber;
-
-// Returns true if user has no fb image OR hasn't fetched the image yet
--(BOOL)hasNoImage;
 
 +(id)addUserWithUserID:(NSNumber *)uID andName:(NSString *)strName;
 

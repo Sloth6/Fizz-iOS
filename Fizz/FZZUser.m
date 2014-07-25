@@ -71,7 +71,6 @@ static FZZUser *currentUser = nil;
         
         NSDictionary *jsonUser = [[NSMutableDictionary alloc] init];
         
-        [jsonUser setValue:[user facebookID] forKey:@"facebookID"];
         [jsonUser setValue:[user name] forKey:@"name"];
         [jsonUser setValue:[user phoneNumber] forKey:@"phoneNumber"];
         [jsonUser setValue:[user lastUsed] forKey:@"lastUsed"];
@@ -105,14 +104,12 @@ static FZZUser *currentUser = nil;
         BOOL userExists = [users objectForKey:userID] != nil;
         
         if (!userExists){
-            NSNumber *facebookID = [jsonUser objectForKey:@"facebookID"];
             NSString *name = [jsonUser objectForKey:@"name"];
             NSString *phoneNumber = [jsonUser objectForKey:@"phoneNumber"];
             NSDate *lastUsed = [jsonUser objectForKey:@"lastUsed"];
             
             FZZUser *user = [FZZUser userWithUID:userID];
             
-            [user setFacebookID:facebookID];
             [user setName:name];
             [user setPhoneNumber:phoneNumber];
             [user setLastUsed:lastUsed];
@@ -605,31 +602,13 @@ static FZZUser *currentUser = nil;
     // Phone Number
     NSString *phoneNumber = [userJSON objectForKey:@"pn"];
     
-    // App User Object (NULL if not full user)
-    NSDictionary *appUserDetails = [userJSON objectForKey:@"appUserDetails"];
-    
-    NSNumber *fbid;
-    
-    if (appUserDetails){
-        // Facebook ID number
-        fbid = [appUserDetails objectForKey:@"fbid"];
-        
-    } else {
-        fbid = NULL;
-    }
-    
     // User's Name
     NSString *name = [userJSON objectForKey:@"name"];
     
     /* Update user info */
-    NSLog(@"USERCREATE");
     FZZUser *user = [FZZUser userWithUID:uid];
-    user.facebookID = fbid;
     user.phoneNumber = phoneNumber;
     user.name = name;
-    
-    // Prefetch all images
-    [user fetchProfilePictureIfNeededWithCompletionHandler:nil];
     
     return user;
 }
@@ -674,14 +653,9 @@ static FZZUser *currentUser = nil;
 -(NSDictionary *)toJson{
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
-    [dict setObject:self.userID forKey:@"uid"];
-    [dict setObject:self.phoneNumber forKey:@"pn"];
+    [dict setObject:[self userID] forKey:@"uid"];
+    [dict setObject:[self phoneNumber] forKey:@"pn"];
     [dict setObject:[self name] forKey:@"name"];
-    
-    NSMutableDictionary *appUserDetails = [[NSMutableDictionary alloc] init];
-    [appUserDetails setObject:self.facebookID forKey:@"fbid"];
-    
-    [dict setObject:appUserDetails forKey:@"appUserDetails"];
     
     return dict;
 }

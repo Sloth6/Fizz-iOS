@@ -20,7 +20,7 @@
 
 @class FZZEvent;
 
-@interface FZZCoordinate :  NSObject
+@interface FZZCoordinate : NSObject
 
 @property (nonatomic, strong) NSNumber * latitude;
 @property (nonatomic, strong) NSNumber * longitude;

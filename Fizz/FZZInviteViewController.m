@@ -603,7 +603,7 @@ static int kFZZNumRecentInvites = 30;
     _needsUpdateFriends = NO;
     
     NSMutableArray *friends = [[FZZUser getFriends] mutableCopy];
-    [friends removeObjectsInArray:[[_event invitees] array]];
+    [friends removeObjectsInArray:[_event invitees]];
     
     _invitableFriends = friends;
     [self filterInvitables];

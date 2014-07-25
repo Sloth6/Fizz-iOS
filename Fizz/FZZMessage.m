@@ -31,27 +31,16 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
         NSNumber *eventID = [jsonMessage objectForKey:@"event"];
         FZZEvent *event = [FZZEvent eventWithEID:eventID];
         
-        // Marker
-        NSDictionary *jsonMarker = [jsonMessage objectForKey:@"marker"];
-        FZZCoordinate *marker = [FZZCoordinate fromDictionaryForCache:jsonMarker];
-        
         // User
         NSNumber *userID = [jsonMessage objectForKey:@"user"];
         FZZUser *user = [FZZUser userWithUID:userID];
         
         FZZMessage *message;
         
-        if (marker == nil){
-            message = [[FZZMessage alloc] initWithMID:messageID
-                                                 User:user
-                                            AndMarker:marker
-                                             ForEvent:event];
-        } else {
-            message = [[FZZMessage alloc] initWithMID:messageID
-                                                 User:user
-                                              AndText:text
-                                             ForEvent:event];
-        }
+        message = [[FZZMessage alloc] initWithMID:messageID
+                                             User:user
+                                          AndText:text
+                                         ForEvent:event];
         
         [message setCreationTime:creationTime];
         
@@ -79,10 +68,6 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
         NSNumber *eventID = [[message event] eventID];
         [jsonMessage setValue:eventID forKey:@"event"];
         
-        // Marker
-        NSDictionary *markerDict = [[message marker] asDictionaryForCache];
-        [jsonMessage setValue:markerDict forKey:@"marker"];
-        
         // User
         NSNumber *userID = [[message user] userID];
         [jsonMessage setValue:userID forKey:@"user"];
@@ -103,24 +88,6 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
         self.text   = inputText;
         self.marker = nil;
         self.event = inputEvent;
-        
-        [inputEvent addMessage:self];
-    }
-    
-    return self;
-}
-
--(id)initWithMID:(NSNumber *)mID User:(FZZUser *)inputUser AndMarker:(FZZCoordinate *)marker ForEvent:(FZZEvent *)inputEvent{
-    self = [super init];
-    
-    if (self){
-        self.messageID = mID;
-        self.user   = inputUser;
-        self.text   = nil;
-        self.marker = marker;
-        self.event  = inputEvent;
-        
-        [inputEvent addMessage:self];
     }
     
     return self;
@@ -172,12 +139,6 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     // Text of the message sent
     NSString *text = [messageJSON objectForKey:@"text"];
     
-    FZZCoordinate *marker;
-    
-    if (!text){
-        marker = [FZZCoordinate parseJSON:[messageJSON objectForKey:@"marker"]];
-    }
-    
     // When this message was created
     NSDate *creationTime;
     
@@ -188,17 +149,10 @@ static NSString *FZZ_NEW_MESSAGE = @"newMessage";
     FZZMessage *message;
     
     // Message can either contain a marker or text
-    if (text){
-        message = [[FZZMessage alloc] initWithMID:mid
-                                             User:user
-                                          AndText:text
-                                         ForEvent:event];
-    } else {
-        message = [[FZZMessage alloc] initWithMID:mid
-                                             User:user
-                                        AndMarker:marker
-                                         ForEvent:event];
-    }
+    message = [[FZZMessage alloc] initWithMID:mid
+                                         User:user
+                                      AndText:text
+                                     ForEvent:event];
     
     message.creationTime = creationTime;
     

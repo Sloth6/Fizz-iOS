@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "SocketIO.h"
-#import "FZZCluster.h"
 
 @class FZZMessage, FZZUser;
 
@@ -17,11 +16,11 @@
 
 @property (nonatomic, strong) NSDate * creationTime;
 @property (nonatomic, strong) NSNumber * eventID;
-@property (nonatomic, strong) NSArray *clusters;
 @property (nonatomic, strong) NSArray *guests;
 @property (nonatomic, strong) NSArray *invitees;
 @property (nonatomic, strong) NSArray *messages;
 @property (nonatomic, strong) FZZUser *creator;
+@property (nonatomic, strong) NSString *description;
 
 +(BOOL)saveEventsToFile:(NSString *)eventsURL;
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
@@ -34,6 +33,7 @@
                      AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLoadMessagesBeforeMID:(NSNumber *)mid
                       AndAcknowledge:(SocketIOCallback)function;
+-(void)socketIOUpdateEventWithAcknowledge:(SocketIOCallback)function;
 +(void)socketIONewEventWithMessage:(NSString *)message
                     AndAcknowledge:(SocketIOCallback)function;
 //+(void)socketIONewEventWithMessage:(NSString *)message
@@ -54,7 +54,6 @@
 
 -(BOOL)isInvited:(FZZUser *)user;
 -(BOOL)isGuest:(FZZUser *)user;
--(BOOL)isAtEvent:(FZZUser *)user;
 
 //-(BOOL)hasSeats;
 //-(NSNumber *)pendingNumSeats;
@@ -70,9 +69,8 @@
 -(BOOL)leaveEvent;
 
 // Updates called from the server updates
--(void)updateClusters:(NSArray *)clusters;
 -(void)updateGuests:(NSArray *)guests;
--(void)updateInvitees:(NSArray *)invitees;
+-(void)updateAddInvitees:(NSArray *)invitees;
 
 //-(void)updateNumberOfSeats:(NSNumber *)numSeats;
 -(void)updateAddMessage:(FZZMessage *)message;
@@ -89,7 +87,7 @@
 //-(void)updateEngaged;
 
 +(FZZEvent *)parseJSON:(NSDictionary *)eventJSON;
-+(NSArray *)parseEventJSONList:(NSArray *)eventListJSON;
++(NSArray *)parseEventIDList:(NSArray *)eventIDList;
 
 +(void)killEvents:(NSArray *)deadEvents;
 
