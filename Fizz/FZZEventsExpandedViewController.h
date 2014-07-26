@@ -19,7 +19,6 @@
 
 @class FZZChatDelegate;
 @class FZZExpandedNewEventCell;
-@class FZZBubbleViewController;
 @class FZZNavIcon;
 @class FZZBackspaceResignTextView;
 @class FZZEvent;
@@ -37,7 +36,6 @@
 @property NSMutableArray *events;
 
 //@property FZZMapViewController *mvc;
-@property FZZBubbleViewController *bvc;
 //@property FZZManageFriendsViewController *mfvc;
 
 typedef enum {

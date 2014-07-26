@@ -23,10 +23,6 @@
 
 #import "FZZInviteViewController.h"
 
-#import "FZZBubbleViewController.h"
-
-#import "FZZInteractiveBubble.h"
-
 #import "FZZEnterMessagePrototypeViewController.h"
 
 static int kFZZNumCellsBeforeEvents = 1; // Add New Event
@@ -214,28 +210,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     return 0.0;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    CGPoint pos = [[self.collectionView.layer presentationLayer] bounds].origin;
-    
-    float maxY = [[UIScreen mainScreen] bounds].size.height;
-    
-    float y = pos.y - maxY;
-    
-    float p = fmodf(y, maxY);
-    if (p < 0) p += maxY;
-    
-    [_bvc viewDidScroll:(UIScrollView *)scrollView];
-//    if (y < 0) y = -y;
-//    
-//    float opacity = [self mapPositionToOpacity:y];
-//    
-//    [self.collectionView setBackgroundColor:[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:opacity]];
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    [self scrollViewDidScroll:scrollView];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -271,7 +245,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     [cell.resignTextViewer setReturnKeyType:UIReturnKeySend];
     [cell.resignTextViewer setEditable:YES];
     
-    [cell.resignTextViewer setESVC:self];
+    [cell.resignTextViewer setEEVC:self];
     
     if (_lineHeight == -1) {
         
@@ -291,27 +265,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     
     return cell;
 }
-
-//- (FZZExpandedEventCell *)setupEventCell:(FZZExpandedEventCell *)cell withEvent:(FZZEvent *)event{
-//    
-//    //[cell setEvent:event];
-//    
-//    cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
-//    
-//    FZZMessage *message = [event firstMessage];
-//    
-//    [cell.textView setEditable:NO];
-//    [cell.textView setText:message.text];
-//    
-//    NSLog(@"messageText: <%@>", message.text);
-//    
-////    UITextView *tv = object;
-////    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height * [tv zoomScale])/2.0;
-////    topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
-////    tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
-//    
-//    return cell;
-//}
 
 - (UICollectionViewCell *)timelineCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0){

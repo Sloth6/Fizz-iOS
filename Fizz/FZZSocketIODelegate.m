@@ -14,7 +14,6 @@
 #import "FZZMessage.h"
 #import "FZZAppDelegate.h"
 #import "FZZInviteViewController.h"
-#import <FacebookSDK/FacebookSDK.h>
 
 #import "FZZLocalCache.h"
 
@@ -29,7 +28,7 @@ _Pragma("clang diagnostic pop") \
 // Incoming Server Communication
 static NSString *FZZ_INCOMING_ON_LOGIN = @"onLogin";
 static NSString *FZZ_INCOMING_NEW_EVENT = @"newEvent";
-static NSString *FZZ_INCOMING_COMPLETED_EVENT = @"completedEvent";
+static NSString *FZZ_INCOMING_COMPLETE_EVENT = @"completeEvent";
 static NSString *FZZ_INCOMING_UPDATE_GUESTS = @"updateGuests";
 static NSString *FZZ_INCOMING_UPDATE_INVITEES = @"updateInvitees";
 static NSString *FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
@@ -78,8 +77,8 @@ static NSMutableData *data;
     [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewEvent:))
                               forKey:FZZ_INCOMING_NEW_EVENT];
     
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingCompletedEvent:))
-                              forKey:FZZ_INCOMING_COMPLETED_EVENT];
+    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingCompleteEvent:))
+                              forKey:FZZ_INCOMING_COMPLETE_EVENT];
     
     [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateGuests:))
                               forKey:FZZ_INCOMING_UPDATE_GUESTS];
@@ -139,31 +138,24 @@ static NSMutableData *data;
     
     appDelegate.isConnecting = YES;
     
-    NSString *fbToken = [FBSession activeSession].accessTokenData.accessToken;
-    
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     NSString *iosToken = [pref objectForKey:@"iosToken"];
     
     NSString *phoneNumber = [pref objectForKey:@"phoneNumber"];
     
-    if (fbToken){
-        
+    // TODOAndrew if you don't have a working cached session token, then return NO
+    if (phoneNumber != nil){
         NSLog(@"sending AJAX");
         
-        // FB Session Token
-        // TODOAndrew Remove all fbToken
-        NSMutableArray *keys = [[NSMutableArray alloc] initWithObjects:@"fbToken", nil];
-        NSMutableArray *objects = [[NSMutableArray alloc] initWithObjects:fbToken, nil];
-        
-        NSLog(@"fbToken: %@", fbToken);
+        NSMutableArray *keys = [[NSMutableArray alloc] init];
+        NSMutableArray *objects = [[NSMutableArray alloc] init];
         
         // Phone Number
-        if (phoneNumber != NULL){
-            [keys addObject:@"pn"];
-            [objects addObject:phoneNumber];
-            
-            NSLog(@"pn: %@", phoneNumber);
-        }
+        [keys addObject:@"pn"];
+        [objects addObject:phoneNumber];
+        
+        NSLog(@"pn: %@", phoneNumber);
+        
         
         // iOS Token
         if (iosToken != NULL){
@@ -276,7 +268,7 @@ static NSMutableData *data;
         
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        [appDelegate promptForNewFacebookToken];
+        // TODOAndrew Prompt server for new login token
     }
 }
 
@@ -495,7 +487,7 @@ static NSMutableData *data;
     [appDelegate updateEvents:newEvents];
 }
 
-- (void)incomingCompletedEvent:(NSArray *)args{
+- (void)incomingCompleteEvent:(NSArray *)args{
     NSDictionary *json = [args objectAtIndex:0];
     
     NSNumber *eID = [json objectForKey:@"eid"];

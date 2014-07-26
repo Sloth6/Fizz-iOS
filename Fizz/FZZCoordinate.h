@@ -33,10 +33,6 @@
 -(NSDictionary *)asDictionaryForCache;
 +(FZZCoordinate *)fromDictionaryForCache:(NSDictionary *)jsonMarker;
 
-+(void)socketIONewMarker:(FZZCoordinate *)coord
-                ForEvent:(FZZEvent *)event
-         WithAcknowledge:(SocketIOCallback)function;
-
 +(void)socketIOUpdateLocationWithAcknowledge:(SocketIOCallback)function;
 
 + (FZZCoordinate *)parseJSON:(NSDictionary *)coordJSON;

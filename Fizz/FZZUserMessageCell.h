@@ -20,7 +20,6 @@
 @interface FZZUserMessageCell : UITableViewCell
 
 @property IBOutlet UILabel *label;
-@property IBOutlet UIImageView *profileImageView;
 
 + (CGSize)getTextBoxForText:(NSString *)text withLabelWidth:(float)labelWidth;
 

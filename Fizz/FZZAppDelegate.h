@@ -18,30 +18,13 @@
 #import <UIKit/UIKit.h>
 #import "SocketIO.h"
 #import "FZZSocketIODelegate.h"
-#import <FacebookSDK/FacebookSDK.h>
-#import "FZZFacebookLoginDelegate.h"
 #import "FZZEventsExpandedViewController.h"
 #import "FZZOverlayView.h"
-
-static const UIColor *facebookColor;
-static const UIColor *fizzColor;
-
-static float const kFZZCreatorProfilePictureWidth = 50;
-static float const kFZZCreatorProfilePictureHeight = 50;
-static float const kFZZCommentProfilePictureWidth = 50;
-static float const kFZZCommentProfilePictureHeight = 50;
-static float const kFZZInviteProfilePictureWidth = 50;
-static float const kFZZInviteProfilePictureHeight = 50;
-
-@class FZZBubbleViewController;
 
 @interface FZZAppDelegate : UIResponder <UIApplicationDelegate, SocketIODelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) FBSession *session;
-@property (strong, nonatomic) FZZFacebookLoginDelegate *fbLoginDelegate;
 @property (strong, nonatomic) FZZEventsExpandedViewController *eevc;
-@property (strong, nonatomic) FZZBubbleViewController *bvc;
 
 @property (strong, nonatomic) FZZOverlayView *navigationBar;
 @property (strong, nonatomic) UITextField *searchTextField;
@@ -54,12 +37,9 @@ static float const kFZZInviteProfilePictureHeight = 50;
 @property (strong, nonatomic) NSString *userPhoneNumber;
 
 + (BOOL)isRetinaDisplay;
-- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState)state error:(NSError *)error;
 - (void)setupNavigationController;
-- (void)promptForNewFacebookToken;
+- (void)promptForLogin;
 - (void)loadDataFromCache;
-
-- (void)reclaimBubbleView;
 
 // Server Handlers, recieving and handing out information
 - (void)updateEvents:(NSArray *)events;

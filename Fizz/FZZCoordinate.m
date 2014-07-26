@@ -11,8 +11,7 @@
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
 
-static NSString *FZZ_NEW_MARKER = @"newMarker";
-static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
+static NSString *FZZ_UPDATE_LOCATION = @"postUpdateLocation";
 
 @implementation FZZCoordinate
 
@@ -61,20 +60,6 @@ static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
     return dict;
 }
 
-+(void)socketIONewMarker:(FZZCoordinate *)coord
-                ForEvent:(FZZEvent *)event
-         WithAcknowledge:(SocketIOCallback)function{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* eid : int */
-    [json setObject:[event eventID] forKey:@"eid"];
-    
-    /* latlng : latlng */
-    [json setObject:[coord jsonDict] forKey:@"latlng"];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_MARKER withData:json andAcknowledge:function];
-}
-
 +(void)socketIOUpdateLocationWithAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
@@ -84,7 +69,7 @@ static NSString *FZZ_LOCATION_CHANGE = @"locationChange";
     /* latlng : latlng */
     [json setObject:coord forKey:@"latlng"];
     
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_LOCATION_CHANGE withData:json andAcknowledge:function];
+    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_UPDATE_LOCATION withData:json andAcknowledge:function];
 }
 
 + (FZZCoordinate *)parseJSON:(NSDictionary *)coordJSON{

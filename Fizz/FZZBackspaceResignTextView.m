@@ -11,7 +11,7 @@
 
 @interface FZZBackspaceResignTextView ()
 
-@property FZZEventsExpandedViewController *esvc;
+@property FZZEventsExpandedViewController *eevc;
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UITextView *placeholderTextView;
 
@@ -112,8 +112,8 @@
     if ([_textView.text isEqualToString:@""]){
         [self showPlaceholder:YES];
         
-        if (_esvc != NULL){
-            [_esvc exitNewEventPrompt:self];
+        if (_eevc != NULL){
+            [_eevc exitNewEventPrompt:self];
         }
     }
 }
@@ -123,7 +123,7 @@
 }
 
 -(void)setESVC:(FZZEventsExpandedViewController *)esvc{
-    _esvc = esvc;
+    _eevc = esvc;
 }
 
 - (void)showPlaceholder:(BOOL)shouldShow{

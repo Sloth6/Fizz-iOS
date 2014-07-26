@@ -17,14 +17,13 @@
 
 static NSMutableDictionary *events;
 
-static NSString *FZZ_NEW_EVENT    = @"newEvent";
-static NSString *FZZ_DELETE_EVENT = @"deleteEvent";
-static NSString *FZZ_JOIN_EVENT   = @"joinEvent";
-static NSString *FZZ_LEAVE_EVENT  = @"leaveEvent";
-static NSString *FZZ_NEW_INVITES  = @"newInvites";
-static NSString *FZZ_GET_MORE_MESSAGES = @"getMoreMessages";
-static NSString *FZZ_UPDATE_EVENT = @"updateEvent";
-static NSString *FZZ_REQUEST_EVENTS = @"requestEvents";
+static NSString *FZZ_NEW_EVENT    = @"postNewEvent";
+static NSString *FZZ_DELETE_EVENT = @"postDeleteEvent";
+static NSString *FZZ_JOIN_EVENT   = @"postJoinEvent";
+static NSString *FZZ_LEAVE_EVENT  = @"postLeaveEvent";
+static NSString *FZZ_NEW_INVITES  = @"postNewInvites";
+static NSString *FZZ_UPDATE_EVENT = @"postUpdateEvent";
+static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 
 
 @interface FZZEvent ()
@@ -300,89 +299,6 @@ static NSString *FZZ_REQUEST_EVENTS = @"requestEvents";
 }
 
 
-//-(void)updateRemoveGuest:(FZZUser *)guest{
-//    @synchronized(self){
-//        [self removePresentAtEvent:[NSOrderedSet orderedSetWithObject:guest]];
-////        [self.guestsNotPresent removeObject:guest];
-//    }
-//}
-//
-//-(void)updateAtEvent:(NSArray *)attendees{
-//    @synchronized(self){
-//        NSOrderedSet *attendeesOrderedSet = [NSOrderedSet orderedSetWithArray:attendees];
-//        
-//        self.presentAtEvent = attendeesOrderedSet;
-//        
-//        [self removeGuestsNotPresent:attendeesOrderedSet];
-//        [self removeInviteesNotGuest:attendeesOrderedSet];
-//    }
-//}
-//
-//-(void)updateGuests:(NSArray *)guests{
-//    @synchronized(self){
-//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-//        
-//        NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:guests];
-//        
-//        self.guestsNotPresent = orderedSet;
-//        [self removePresentAtEvent:orderedSet];
-//        [self removeInviteesNotGuest:orderedSet];
-//    }
-//}
-//
-//-(void)updateAddInvitees:(NSArray *)invitees{
-//    @synchronized(self){
-//        // Ensure no duplicates
-//        
-//        
-//        [self.invitees removeObjectsInArray:invitees];
-//        [self.invitees addObjectsFromArray:invitees];
-//        
-//        [self.inviteesSet addObjectsFromArray:invitees];
-//    }
-//}
-//
-//-(void)updateToAttendees:(NSArray *)toAttendees{
-//    @synchronized(self){
-//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-//        
-//        [presentAtEvent removeObjectsInArray:toAttendees];
-//        [presentAtEvent addObjectsFromArray:toAttendees];
-//        self.presentAtEvent = presentAtEvent;
-//        
-//        [self.guests removeObjectsInArray:toAttendees];
-//        [self.invitees removeObjectsInArray:toAttendees];
-//    }
-//}
-//
-//-(void)updateToGuests:(NSArray *)toGuests{
-//    @synchronized(self){
-//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-//        
-//        [presentAtEvent removeObjectsInArray:toGuests];
-//        self.presentAtEvent = presentAtEvent;
-//        
-//        [self.guests removeObjectsInArray:toGuests];
-//        [self.invitees removeObjectsInArray:toGuests];
-//        
-//        [self.guests addObjectsFromArray:toGuests];
-//    }
-//}
-//
-//-(void)updateToInvitees:(NSArray *)toInvitees{
-//    @synchronized(self){
-//        NSMutableArray *presentAtEvent = [self.presentAtEvent mutableCopy];
-//        
-//        [presentAtEvent removeObjectsInArray:toInvitees];
-//        self.presentAtEvent = presentAtEvent;
-//        
-//        [self.guests removeObjectsInArray:toInvitees];
-//        [self.invitees removeObjectsInArray:toInvitees];
-//        
-//        [self.invitees addObjectsFromArray:toInvitees];
-//    }
-//}
-
 -(void)updateAddMessage:(FZZMessage *)message{
     @synchronized(self){
         
@@ -398,6 +314,12 @@ static NSString *FZZ_REQUEST_EVENTS = @"requestEvents";
         }];
         
         self.messages = items;
+    }
+}
+
+-(void)updateDescription:(NSString *)description{
+    @synchronized(self){
+        [self setDescription:description];
     }
 }
 
@@ -444,19 +366,6 @@ static NSString *FZZ_REQUEST_EVENTS = @"requestEvents";
     [json setObject:self.eventID forKey:@"eid"];
     
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_JOIN_EVENT withData:json andAcknowledge:function];
-}
-
--(void)socketIOLoadMessagesBeforeMID:(NSNumber *)mid
-                      AndAcknowledge:(SocketIOCallback)function{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* eid : int */
-    [json setObject:self.eventID forKey:@"eid"];
-    
-    /* mid : int */
-    [json setObject:mid forKey:@"oldestMid"];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_GET_MORE_MESSAGES withData:json andAcknowledge:function];
 }
 
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function{

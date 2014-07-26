@@ -14,7 +14,6 @@
 #import "FZZEventsExpandedViewController.h"
 #import "FZZAppDelegate.h"
 #import "FZZExpandedEventCell.h"
-#import "FZZBubbleViewController.h"
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import "FZZNavIcon.h"

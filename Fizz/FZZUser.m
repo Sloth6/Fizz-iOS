@@ -10,16 +10,11 @@
 #import "FZZCoordinate.h"
 #import "FZZEvent.h"
 #import "FZZAppDelegate.h"
-#import "FZZDefaultBubble.h"
 
 #import "FZZLocalCache.h"
 
 static NSMutableArray *friends;
 static NSMutableDictionary *users;
-static int kFZZProfilePictureDimension = 50;
-
-static NSString *FZZ_ADD_FRIEND_LIST = @"addFriendList";
-static NSString *FZZ_REMOVE_FRIEND_LIST = @"removeFriendList";
 
 static FZZUser *me;
 
@@ -187,17 +182,6 @@ static FZZUser *currentUser = nil;
     return user;
 }
 
-- (NSNumber *)facebookID
-{
-    if ([self.facebookID integerValue] == 0){
-        return NULL;
-    }
-    
-    [self updateLastUsed];
-    
-    return self.facebookID;
-}
-
 +(void)setMeAs:(FZZUser *)user{
     me = user;
 }
@@ -239,142 +223,6 @@ static FZZUser *currentUser = nil;
 
 -(BOOL)hasNoImage{
     return (!_hasFetchedPhoto || image == NULL);
-}
-
--(BOOL)isAppUser{
-    return (self.facebookID != NULL);
-}
-
-+(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
-                               withScalar:(float)scalar{
-    
-    float x = imageView.frame.origin.x;
-    float y = imageView.frame.origin.y;
-    
-    UIImage *image = [imageView image];
-    
-    CGSize imageSize = [image size];
-    
-    CGRect imageRect;
-    
-    float cornerRadius;
-    
-    if ([FZZAppDelegate isRetinaDisplay]){
-        imageRect = CGRectMake(x, y, (imageSize.width/2.0) * scalar,
-                               (imageSize.height/2.0) * scalar);
-        cornerRadius = MAX((imageSize.width/4.0) * scalar,
-                           (imageSize.height/4.0) * scalar);//MAX(imageSize.width/4.0, imageSize.height/4.0);
-    } else {
-        imageRect = CGRectMake(x, y, imageSize.width * scalar, imageSize.height * scalar);
-        cornerRadius = MAX(imageSize.width * scalar/2.0, imageSize.height * scalar/2.0);
-    }
-    
-    imageView.frame = imageRect;
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.layer.cornerRadius = cornerRadius;
-    imageView.layer.masksToBounds = YES;
-    //    imageView.layer.borderColor = [UIColor blackColor].CGColor;
-    //    imageView.layer.borderWidth = 1.0;
-    
-    return imageView;
-}
-
--(UIImageView *)formatImageView:(UIImageView *)imageView ForInitialsWithScalar:(float)scalar{
-    
-    CGRect rect = CGRectMake(0, 0, 104, 104);
-    
-    //    NSArray *subviews = [imageView subviews];
-    //
-    //    for (int i = 0; i < [subviews count]; ++i){
-    //        UIView *subview = [subviews objectAtIndex:i];
-    //        [subview removeFromSuperview];
-    //    }
-    
-    FZZDefaultBubble *bubble = [[FZZDefaultBubble alloc] initWithFrame:rect];
-    
-    UIImage *image2 = [bubble imageFromBubble];
-    [imageView setImage:image2];
-    imageView = [FZZUser formatImageViewToCircular:imageView withScalar:1.0];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
-    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
-    
-    [label setFont:font];
-    [label setTextColor:[UIColor whiteColor]];
-    [label setText:[self initials]];
-    label.textAlignment = NSTextAlignmentCenter;
-    [imageView addSubview:label];
-    return imageView;
-}
-
-+(UIImageView *)formatImageViewToCircular:(UIImageView *)imageView
-                                  forRect:(CGRect)rect{
-    
-    float x = imageView.frame.origin.x;
-    float y = imageView.frame.origin.y;
-    
-    CGSize imageSize = rect.size;
-    
-    CGRect imageRect;
-    
-    float cornerRadius;
-    
-    imageRect = CGRectMake(x, y, imageSize.width, imageSize.height);
-    cornerRadius = MAX(imageSize.width/2.0, imageSize.height/2.0);
-    
-    imageView.frame = imageRect;
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.layer.cornerRadius = cornerRadius;
-    imageView.layer.masksToBounds = YES;
-    //    imageView.layer.borderColor = [UIColor blackColor].CGColor;
-    //    imageView.layer.borderWidth = 1.0;
-    
-    return imageView;
-}
-
--(UIImageView *)formatImageView:(UIImageView *)imageView
-             ForInitialsForRect:(CGRect)rect{
-    
-    NSArray *subviews = [imageView subviews];
-    
-    for (int i = 0; i < [subviews count]; ++i){
-        UIView *subview = [subviews objectAtIndex:i];
-        [subview removeFromSuperview];
-    }
-    
-    FZZDefaultBubble *bubble = [[FZZDefaultBubble alloc] initWithFrame:rect];
-    
-    UIImage *image2 = [bubble imageFromBubble];
-    [imageView setImage:image2];
-    imageView = [FZZUser formatImageViewToCircular:imageView forRect:rect];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
-    //    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:28];
-    
-    UIFont* font = [UIFont fontWithName:@"helveticaNeue-light" size:(5*rect.size.width)/9];
-    
-    [label setFont:font];
-    [label setTextColor:[UIColor whiteColor]];
-    [label setText:[self initials]];
-    label.textAlignment = NSTextAlignmentCenter;
-    [imageView addSubview:label];
-    return imageView;
-}
-
--(UIImageView *)circularImage:(float)scalar{
-    
-    if (image == NULL) return NULL;
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    
-    return [FZZUser formatImageViewToCircular:imageView withScalar:scalar];
-}
-
--(UIImageView *)circularImageForRect:(CGRect)rect{
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    
-    return [FZZUser formatImageViewToCircular:imageView forRect:rect];
 }
 
 -(NSString *)name{
@@ -460,134 +308,6 @@ static FZZUser *currentUser = nil;
     return [UIImage imageWithData:data];
 }
 
--(NSString *)getPhotoURLOfWidth:(int)width andHeight:(int)height{
-    NSString *urlStr = [NSString stringWithFormat:@"http://graph.facebook.com/%lld?fields=picture.width(%d).height(%d)", [self.facebookID longLongValue], width, height];
-    
-    //NSString *urlStr = [NSString stringWithFormat:@"http://graph.facebook.com/%d?fields=picture,name", [facebookID integerValue]];
-    
-    NSURL *url = [[NSURL alloc] initWithString:urlStr];
-    
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    
-    if (data != NULL){
-        NSError *error = nil;
-        
-        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options: NSJSONReadingMutableContainers error:&error];
-        
-        //name = [response objectForKey:@"name"];
-        
-        NSDictionary *picture = [response objectForKey:@"picture"];
-        
-        NSDictionary *pictureData = [picture objectForKey:@"data"];
-        
-        NSString *imageURL = [pictureData objectForKey:@"url"];
-        
-        //NSNumber *isSilhouette = [pictureData objectForKey:@"is_silhouette"];
-        
-        //if ([isSilhouette boolValue]){
-        //    [self getAndSetImage:imageURL ForUser:user];
-        //} else {
-        //}
-        
-        return imageURL;
-    }
-    
-    return NULL;
-}
-
--(void)getAndSetUserDataSynchronously{
-    if (self.facebookID == NULL || [self.facebookID isEqualToNumber:[NSNumber numberWithInt:0]]){
-        image = NULL;
-        return;
-    }
-    
-    int dimension;
-    
-    if ([FZZAppDelegate isRetinaDisplay]){
-        dimension = kFZZProfilePictureDimension * 2;
-    } else {
-        dimension = kFZZProfilePictureDimension;
-    }
-    
-    NSString *photoURL = [self getPhotoURLOfWidth:dimension andHeight:dimension];
-    
-    image = [self getAndReturnImageFromURL:photoURL];
-    
-    CGDataProviderRef provider = CGImageGetDataProvider(image.CGImage);
-    NSData* data = (id)CFBridgingRelease(CGDataProviderCopyData(provider));
-    
-    [self setPhotoBinary:data];
-}
-
--(void)fetchProfilePictureIfNeededWithCompletionHandler:(void(^)(UIImage *img))handler{
-    // NOTE: copying the completion handler is very important
-    // if you'll call the callback asynchronously,
-    // even with ARC-based garbage collection!
-    
-    if (![self isAppUser]){ // SMS User
-        _completionHandler = [handler copy];
-        if (_completionHandler != NULL){
-            
-            // Call completion handler.
-            _completionHandler(NULL);
-            
-            // Clean up.
-            _completionHandler = nil;
-        }
-        
-        return;
-    }
-    
-    // Attempt to load from cache
-    if (image == NULL){
-        image = [UIImage imageWithData:[self photoBinary]];
-    }
-    
-    // Query Facebook for an image
-    if (image == NULL){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (_isFetchingPhoto){
-                
-                [_completionHandlers addObject:[handler copy]];
-                
-            } else {
-                _isFetchingPhoto = true;
-                _completionHandler = [handler copy];
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    [self getAndSetUserDataSynchronously];
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        // Call completion handler.
-                        if (_completionHandler != nil){
-                            _completionHandler(image);
-                            
-                            for (int i = 0; i < [_completionHandlers count]; ++i){
-                                _completionHandler = [_completionHandlers objectAtIndex:i];
-                                _completionHandler(image);
-                            }
-                        }
-                        
-                        // Clean up.
-                        _completionHandler = nil;
-                        _isFetchingPhoto = false;
-                    });
-                });
-            }
-        });
-    } else {
-        _completionHandler = [handler copy];
-        if (_completionHandler != NULL){
-            
-            // Call completion handler.
-            _completionHandler(image);
-            
-            // Clean up.
-            _completionHandler = nil;
-        }
-    }
-}
-
 +(FZZUser *)parseJSON:(NSDictionary *)userJSON{
     if (userJSON == NULL){
         return NULL;
@@ -669,32 +389,6 @@ static FZZUser *currentUser = nil;
     }];
     
     return result;
-}
-
-+(void)socketIOAddFriendsUserArray:(NSArray *)friendList
-                   WithAcknowledge:(SocketIOCallback)function{
-    
-    NSArray *uids = [FZZUser getUserIDsFromUsers:friendList];
-    
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* Array of UIDs */
-    [json setObject:uids forKey:@"friendList"];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_ADD_FRIEND_LIST withData:json andAcknowledge:function];
-}
-
-+(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
-                      WithAcknowledge:(SocketIOCallback)function{
-    
-    NSArray *uids = [FZZUser getUserIDsFromUsers:friendList];
-    
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    /* Array of UIDs */
-    [json setObject:uids forKey:@"friendList"];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_REMOVE_FRIEND_LIST withData:json andAcknowledge:function];
 }
 
 @end

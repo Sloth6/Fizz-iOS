@@ -20,7 +20,7 @@
 
 -(UITextView *)textView;
 
--(void)setESVC:(FZZEventsExpandedViewController *)esvc;
+-(void)setEEVC:(FZZEventsExpandedViewController *)eevc;
 -(void)setPlaceholderText:(NSString *)placeholderText;
 
 -(NSTextContainer *)textContainer;

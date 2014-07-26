@@ -59,13 +59,4 @@
 
 +(NSArray *)getUserIDsFromUsers:(NSArray *)users;
 
-+(void)socketIONewUserLocation:(FZZCoordinate *)coord
-                ForUserWithUID:(NSNumber *)uid
-               WithAcknowledge:(SocketIOCallback)function;
-
-+(void)socketIOAddFriendsUserArray:(NSArray *)friendList
-                   WithAcknowledge:(SocketIOCallback)function;
-
-+(void)socketIORemoveFriendsUserArray:(NSArray *)friendList
-                      WithAcknowledge:(SocketIOCallback)function;
 @end

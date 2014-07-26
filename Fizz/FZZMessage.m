@@ -13,7 +13,7 @@
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
 
-static NSString *FZZ_NEW_MESSAGE = @"newMessage";
+static NSString *FZZ_NEW_MESSAGE = @"postNewMessage";
 
 @implementation FZZMessage
 

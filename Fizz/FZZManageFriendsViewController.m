@@ -122,12 +122,6 @@
     // Configure the cell...
     [cell.friendName setText:[user name]];
     
-    [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
-        [cell.profilePic setImage:image];
-//        [FZZUser formatImageViewToCircular:cell.profilePic withScalar:1.0];
-        [FZZUser formatImageViewToCircular:cell.profilePic forRect:cell.profilePic.frame];
-    }];
-    
     if ([self isFriend:user]){
         [cell.textLabel setTextColor:[UIColor blackColor]];
         [cell.imageView setAlpha:1.0];

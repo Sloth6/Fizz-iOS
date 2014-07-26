@@ -55,15 +55,6 @@
 -(BOOL)isInvited:(FZZUser *)user;
 -(BOOL)isGuest:(FZZUser *)user;
 
-//-(BOOL)hasSeats;
-//-(NSNumber *)pendingNumSeats;
-//-(NSNumber *)numSeats;
-//-(NSNumber *)pendingNumEmptySeats;
-//-(NSNumber *)numEmptySeats;
-//-(void)addSeat;
-//-(BOOL)removeSeat;
-
-//-(BOOL)expressInterest;
 -(BOOL)haveExpressedInterest;
 -(BOOL)joinEvent;
 -(BOOL)leaveEvent;
@@ -74,6 +65,8 @@
 
 //-(void)updateNumberOfSeats:(NSNumber *)numSeats;
 -(void)updateAddMessage:(FZZMessage *)message;
+
+-(void)updateDescription:(NSString *)description;
 
 //-(BOOL)haveSeatsChangedSinceLastCheck;
 

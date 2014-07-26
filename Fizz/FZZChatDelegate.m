@@ -39,11 +39,11 @@
 #import "FZZExpandedVerticalTableViewController.h"
 
 static int kFZZNumCellsBeforeMessages = 1;
+static int kFZZMinChatCellHeight = 58;
 
 @interface FZZChatDelegate ()
 
 @property NSMutableSet *nibTextCellLoaded;
-@property float pictureDimension;
 @property float textLabelWidth;
 @property BOOL didGetDimensionsFromCell;
 @property CGRect keyboardRect;
@@ -71,8 +71,6 @@ static int kFZZNumCellsBeforeMessages = 1;
         _nibTextCellLoaded = [[NSMutableSet alloc] init];
         
         _didGetDimensionsFromCell = NO;
-        
-        _pictureDimension = 52;
         
         [self setupKeyboard];
         
@@ -149,7 +147,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     float y = [UIScreen mainScreen].bounds.size.height - height;
     
     //Magic Number 68
-    _textLabelWidth = [UIScreen mainScreen].bounds.size.width - _pictureDimension - 68;
+    _textLabelWidth = [UIScreen mainScreen].bounds.size.width - 68;
     
     CGRect viewFormRect = CGRectMake(x, y, width, height);
     
@@ -785,7 +783,7 @@ static int kFZZNumCellsBeforeMessages = 1;
     float height = [FZZUserMessageCell getTextBoxForText:text withLabelWidth:labelWidth].height;
     
     // Fit the profile picture at least
-    height = MAX(height, 52 + 6);
+    height = MAX(height, kFZZMinChatCellHeight);
     
     return height + 14;
 }
@@ -835,7 +833,6 @@ static int kFZZNumCellsBeforeMessages = 1;
     if (!_didGetDimensionsFromCell){
         _didGetDimensionsFromCell = YES;
         _textLabelWidth = cell.label.bounds.size.width;
-        _pictureDimension = cell.profileImageView.bounds.size.width;
     }
     
     float x = cell.bounds.origin.x;
@@ -848,27 +845,6 @@ static int kFZZNumCellsBeforeMessages = 1;
     
     NSString *text = [message text];
     FZZUser  *user = [message user];
-    
-    //NSString *userName = [user name];
-    
-    [user fetchProfilePictureIfNeededWithCompletionHandler:^(UIImage *image) {
-        if (image != NULL){
-            // Set image
-            [cell.profileImageView removeFromSuperview];
-            CGRect frame = cell.profileImageView.frame;
-            
-            cell.profileImageView = [user circularImageForRect:frame];
-            [cell.profileImageView setImage:image];
-            [cell addSubview:cell.profileImageView];
-            [cell.profileImageView setFrame:frame];
-        } else {
-            [user formatImageView:cell.profileImageView
-               ForInitialsForRect:cell.profileImageView.frame];
-//            [user formatImageView:cell.profileImageView ForInitialsWithScalar:1.0];
-        }
-        
-        [cell.profileImageView setNeedsDisplay];
-    }];
     
     [cell.label setText:text];
     

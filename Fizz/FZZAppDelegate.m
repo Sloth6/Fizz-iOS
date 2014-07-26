@@ -10,11 +10,13 @@
 #import "FZZUser.h"
 #import "SBJson4.h"
 #import "FZZEvent.h"
-#import "FZZLoginViewController.h"
 #import "FZZEventsExpandedViewController.h"
 #import "FZZInviteViewController.h"
-#import "FZZBubbleViewController.h"
 #import "FZZLocalCache.h"
+
+#import "FZZLoginDelegate.h"
+
+#import "FZZInputPhoneViewController.h"
 
 #import "FZZMessage.h"
 
@@ -25,8 +27,6 @@
 @implementation FZZAppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-@synthesize fbLoginDelegate;
 
 - (void)setupNavigationBar{
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -65,11 +65,6 @@
 //    navigationController.automaticallyAdjustsScrollViewInsets = NO;
     [self.window setRootViewController:navigationController];
     [self.window setBackgroundColor:[UIColor whiteColor]];
-    
-    _bvc = [[FZZBubbleViewController alloc] init];
-    _eevc.bvc = _bvc;
-    
-    [self.window addSubview:(UIView *)_bvc.bubbleView];
     
     [self.window addSubview:self.navigationBar];
     [self.window addSubview:_searchTextField];
@@ -158,14 +153,6 @@
     
     [FZZInviteViewController setupClass];
     
-    // Load the FBLoginView Class
-    [FBLoginView class];
-    
-    fbLoginDelegate = [[FZZFacebookLoginDelegate alloc] init];
-    
-    facebookColor = [UIColor colorWithRed:59.0/256.0 green:89.0/256.0 blue:152.0/256.0 alpha:1.0];
-    fizzColor = [UIColor colorWithRed:128.0/256.0 green:128.0/256.0 blue:128.0/256.0 alpha:1.0];
-    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
@@ -189,81 +176,17 @@
     }
     
     // Whenever a person opens the app, check for a cached session
-    if (hasRegistered &&
-        FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
+    if (hasRegistered && [FZZLoginDelegate authenticate]) {
         NSLog(@"\n\nActive Session Loaded\n\n");
         
         [FZZSocketIODelegate openConnectionCheckingForInternet];
         [self setupNavigationController];
-//         // If there's one, just open the session silently, without showing the user the login UI
-//         [FBSession openActiveSessionWithReadPermissions:@[@"user_friends",
-//         @"user_groups",
-//         @"email",
-//         @"xmpp_login"
-//         ]
-//         allowLoginUI:NO
-//         completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
-//         
-//             _hasLoggedIn = YES;
-//             
-//             NSLog(@"\n\n\nFBSession: %@\n\n\n", session);
-//             
-//             // Handler for session state changes
-//             // This method will be called EACH time the session state changes,
-//             // also for intermediate states and NOT just when the session open
-//             [fbLoginDelegate sessionStateChanged:session state:state error:error];
-//         }];
-     } else { // Send to Login View Controller
+
+    } else { // Send to Login View Controller
          NSLog(@"\n\nSend To Login View Controller\n\n");
          
-         [self promptForNewFacebookToken];
-//        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FZZMapViewController alloc] initWithNibName:@"FZZMapViewController" bundle:Nil]];
-     }
-    
-    
-    
-    ////self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:_evvc];
-    
-    
-    
-    //FZZCollectionView *collectionView = [[FZZCollectionView alloc] initWithFrame:self.window.frame
-    //collectionViewLayout:[[UICollectionViewLayout alloc] init]];
-    
-    
-    //FZZScrollViewController *timelineVC = [[FZZScrollViewController alloc] init];
-    
-    //self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:timelineVC];
-    
-    
-    
-    
-    // Whenever a person opens the app, check for a cached session
-    /*if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-        
-        // If there's one, just open the session silently, without showing the user the login UI
-        [FBSession openActiveSessionWithReadPermissions:@[@"user_friends",
-                                                          @"user_groups",
-                                                          @"email",
-                                                          @"xmpp_login"
-                                                          ]
-                                           allowLoginUI:NO
-                                      completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
-                                          
-                                          NSLog(@"\n\n\nFBSession: %@\n\n\n", session);
-                                          
-                                          // Handler for session state changes
-                                          // This method will be called EACH time the session state changes,
-                                          // also for intermediate states and NOT just when the session open
-                                          //[fbLoginDelegate sessionStateChanged:session state:state error:error];
-                                          
-                                      }];
-    } else {*/ // Send to Login View Controller
-        //self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FZZMapViewController alloc] initWithNibName:@"FZZMapViewController" bundle:Nil]];
-    //}
-    
-    /*
-     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FZZLoginViewController alloc] initWithNibName:@"FZZLoginViewController" bundle:Nil]];
-     */
+         [self promptForLogin];
+    }
     
     NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
     
@@ -373,20 +296,22 @@
     }
 }
 
-- (void)promptForNewFacebookToken{
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FZZLoginViewController alloc] initWithNibName:@"FZZLoginViewController" bundle:nil]];
+- (void)promptForLogin{
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FZZInputPhoneViewController alloc] initWithNibName:@"FZZInputPhoneViewController" bundle:nil]];
 }
 
 -(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    return NO;
+    
     if (url != nil)
     {
         // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
-        BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+//        BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
         
         // You can add your app-specific url handling code here if needed
         
-        return wasHandled;
+//        return wasHandled;
         
         //return [[FBSession activeSession] handleOpenURL:url];
     }
@@ -413,11 +338,6 @@
     }
     
     return [token copy];
-}
-
-- (void)reclaimBubbleView{
-    [(UIView *)_bvc.bubbleView removeFromSuperview];
-    [self.window addSubview:(UIView *)_bvc.bubbleView];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -449,12 +369,9 @@
     _gotAddressBook = NO;
     
     if ((![FZZSocketIODelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
-//    if ((![ioSocketDelegate isConnectionOpen]) && !_hasLoggedIn){
         NSLog(@"Connection is not open");
         [FZZSocketIODelegate openConnectionCheckingForInternet];
     }
-    
-//        [[FBSession activeSession] handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -464,7 +381,6 @@
     NSLog(@"Updating local cache...");
     [FZZLocalCache updateCache];
     NSLog(@"Did update cache.");
-//    [[FBSession activeSession] close];
 }
 
 + (BOOL)isRetinaDisplay{
