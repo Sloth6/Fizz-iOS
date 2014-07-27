@@ -7,6 +7,7 @@
 //
 
 #import "FZZSocketIODelegate.h"
+#import "FZZAjaxPostDelegate.h"
 #import "FZZ_Reachability.h"
 #import "SBJson4.h"
 #import "FZZEvent.h"
@@ -39,7 +40,7 @@ static NSString *FZZ_INCOMING_UPDATE_EVENT = @"updateEvent";
 static NSString *FZZ_RESET = @"reset";
 
 static BOOL hasMadeDelegate = NO;
-static FZZSocketIODelegate *delegate;
+static FZZSocketIODelegate *socketIODelegate;
 
 static SocketIO *socketIO;
 
@@ -48,8 +49,6 @@ static NSDictionary *incomingEventResponses;
 static int reconnectDelay;
 static BOOL connected;
 static BOOL resignedActive;
-static BOOL didAjax;
-static NSURLConnection *connection;
 static NSMutableData *data;
 
 @interface FZZSocketIODelegate ()
@@ -58,15 +57,18 @@ static NSMutableData *data;
 
 @implementation FZZSocketIODelegate
 
++(FZZSocketIODelegate *)socketIODelegate{
+    return socketIODelegate;
+}
+
 + (void)initialize{
     // Once-only initializion
-    delegate = [[FZZSocketIODelegate alloc] init];
+    socketIODelegate = [[FZZSocketIODelegate alloc] init];
     hasMadeDelegate = YES;
     
     reconnectDelay = kFZZDefaultReconnectDelay;
-    socketIO = [[SocketIO alloc] initWithDelegate:delegate];
+    socketIO = [[SocketIO alloc] initWithDelegate:socketIODelegate];
     connected = NO;
-    didAjax = NO;
     resignedActive = NO;
     
     incomingEventResponses = [[NSMutableDictionary alloc] init];
@@ -119,121 +121,19 @@ static NSMutableData *data;
     if ([reachability isReachable]){
         NSLog(@"isReachable");
         
-        [delegate openConnection];
+        [socketIODelegate openConnection];
     } else {
         NSLog(@"is NOT reachable");
         
         [self performSelector:@selector(openConnectionCheckingForInternet) withObject:nil afterDelay:reconnectDelay];
         
-        [delegate updateReconnectDelay];
+        [socketIODelegate updateReconnectDelay];
     }
-}
-
-/* AJAX */
-
-- (BOOL)ajaxPostRequest{
-    NSLog(@"AJAX REQUEST");
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    appDelegate.isConnecting = YES;
-    
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    NSString *iosToken = [pref objectForKey:@"iosToken"];
-    
-    NSString *phoneNumber = [pref objectForKey:@"phoneNumber"];
-    
-    // TODOAndrew if you don't have a working cached session token, then return NO
-    if (phoneNumber != nil){
-        NSLog(@"sending AJAX");
-        
-        NSMutableArray *keys = [[NSMutableArray alloc] init];
-        NSMutableArray *objects = [[NSMutableArray alloc] init];
-        
-        // Phone Number
-        [keys addObject:@"pn"];
-        [objects addObject:phoneNumber];
-        
-        NSLog(@"pn: %@", phoneNumber);
-        
-        
-        // iOS Token
-        if (iosToken != NULL){
-            [keys addObject:@"iosToken"];
-            [objects addObject:iosToken];
-            
-            NSLog(@"iosToken: %@", iosToken);
-        }
-        
-        // Version Number
-        NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
-        NSString *version = [info objectForKey:@"CFBundleShortVersionString"];
-        
-        [keys addObject:@"appVersion"];
-        [objects addObject:version];
-        
-        NSDictionary *jsonDictionary = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-
-        SBJson4Writer *writer = [[SBJson4Writer alloc] init];
-        
-        NSString *jsonString = [writer stringWithObject:jsonDictionary];
-        
-        NSLog(@"\n\n%@\n\n", jsonString);
-        
-        NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/login", kFZZSocketHost, kFZZSocketPort]]];
-        [request setHTTPMethod:@"POST"];
-        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[jsonData length]] forHTTPHeaderField:@"Content-Length"];
-        [request setHTTPBody:jsonData];
-        
-        connection = [[NSURLConnection alloc]
-                      initWithRequest:request
-                      delegate:delegate
-                      startImmediately:NO];
-        
-        /*[connection scheduleInRunLoop:[NSRunLoop mainRunLoop]
-                              forMode:NSDefaultRunLoopMode];*/
-        
-        [connection start];
-        appDelegate.hasLoggedIn = YES;
-        
-        return YES;
-    }
-    
-    return NO;
 }
 
 + (SocketIO *)socketIO{
     return socketIO;
 }
-
-//+ (void)logout{
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-//    
-//    NSString *url = [NSString stringWithFormat:@"http://%@:%d/logout", kFZZSocketHost, kFZZSocketPort];
-//    
-//    [request setHTTPMethod:@"GET"];
-//    [request setURL:[NSURL URLWithString:url]];
-//    
-//    NSError *error = [[NSError alloc] init];
-//    NSHTTPURLResponse *responseCode = nil;
-//    
-//    NSData *oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&responseCode error:&error];
-//    
-//    if([responseCode statusCode] != 200){
-//        NSLog(@"Error getting %@, HTTP status code %i", url, [responseCode statusCode]);
-//        return;
-//    }
-//    
-//    didAjax = NO;
-//    NSLog(@"Logged out");
-//    
-//    
-//    NSLog(@"%@",[[NSString alloc] initWithData:oResponseData encoding:NSUTF8StringEncoding]);
-//}
 
 - (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten
 {
@@ -257,19 +157,8 @@ static NSMutableData *data;
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     [data setLength:0];
-    NSHTTPURLResponse *resp= (NSHTTPURLResponse *) response;
-    NSLog(@"got response with status @push %ld",(long)[resp statusCode]);
     
-    if ([resp statusCode] == 200){
-        didAjax = YES;
-        [FZZSocketIODelegate openConnectionCheckingForInternet];
-    } else {
-        // AJAX failed
-        
-        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-        
-        // TODOAndrew Prompt server for new login token
-    }
+    [FZZAjaxPostDelegate connection:connection didRecieveResponse:response];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)d
@@ -311,18 +200,29 @@ static NSMutableData *data;
 }
 
 
-- (void) openConnection{
+- (void)openConnection{
     resignedActive = NO;
     
-    if (didAjax){
-        [socketIO connectToHost:kFZZSocketHost onPort:kFZZSocketPort];
-    } else {
-        if (![delegate ajaxPostRequest]){
-            // Get the fb token and post an AJAX Request Again
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSNumber *didRegister = [pref objectForKey:@"didRegister"];
+    
+    if ([didRegister boolValue]){
+        NSLog(@"postLogin 1");
+        if ([FZZAjaxPostDelegate postLogin]){
+            NSLog(@"POST LOGIN WAS TRUE");
+            [socketIO connectToHost:kFZZSocketHost onPort:kFZZSocketPort];
+        } else {
+            // Send user to the registration screen again
+            FZZAppDelegate *delegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
             
-            /* TODOAndrew Reconnect has issues, especially if you fail to connect in the first place */
+            // TODOAndrew implement the app forcing you to jump to registration
+            //[delegate forceUserRegistration];
         }
+        return;
     }
+    
+    NSLog(@"Cannot open connection without having registered");
+    exit(1);
 }
 
 /* Connect */
@@ -339,7 +239,7 @@ static NSMutableData *data;
     connected = NO;
     NSLog(@"\n[socketIO] Connection Disconnected\n");
     if (!resignedActive){ NSLog(@"\n[socketIO] Attempting to Reconnect\n");
-        [delegate performSelector:@selector(reconnect) withObject:nil afterDelay:reconnectDelay];
+        [socketIODelegate performSelector:@selector(reconnect) withObject:nil afterDelay:reconnectDelay];
     }
 }
 
@@ -365,7 +265,7 @@ static NSMutableData *data;
         [socketIO disconnect];
         connected = NO;
     } else {
-        [NSObject cancelPreviousPerformRequestsWithTarget:delegate];
+        [NSObject cancelPreviousPerformRequestsWithTarget:socketIODelegate];
         reconnectDelay = kFZZDefaultReconnectDelay;
     }
 }
@@ -396,7 +296,7 @@ static NSMutableData *data;
         SEL function = NSSelectorFromString(functionName);
         
         SuppressPerformSelectorLeakWarning(
-            [delegate performSelectorInBackground:function withObject:args];
+            [socketIODelegate performSelectorInBackground:function withObject:args];
         );
     }
 }

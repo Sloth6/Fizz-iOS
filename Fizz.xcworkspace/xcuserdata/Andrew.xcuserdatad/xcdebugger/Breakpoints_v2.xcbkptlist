@@ -73,7 +73,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "733"
             endingLineNumber = "733"
-            landmarkName = "-addIncomingMessageForEvent:"
+            landmarkName = "-jumpToMessagesForEvent:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -84,13 +84,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Fizz/FZZSocketIODelegate.m"
-            timestampString = "426895812.97264"
+            timestampString = "428120709.078123"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "663"
-            endingLineNumber = "663"
-            landmarkName = "-incomingNewMessage:"
-            landmarkType = "5">
+            startingLineNumber = "674"
+            endingLineNumber = "674">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -133,6 +131,22 @@
             continueAfterRunningActions = "No"
             scope = "0"
             stopOnStyle = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Fizz/FZZInputPhoneViewController.m"
+            timestampString = "428119167.882204"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "-finishPhoneSetup"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -164,19 +164,18 @@
     [FZZEvent setupEventClass];
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    NSNumber *registered = [pref objectForKey:@"registered"];
-    [pref synchronize];
+    NSNumber *registered = [pref objectForKey:@"didRegister"];
     
     BOOL hasRegistered;
     
-    if (registered != NULL){
+    if (registered != nil){
         hasRegistered = [registered boolValue];
     } else {
         hasRegistered = NO;
     }
     
     // Whenever a person opens the app, check for a cached session
-    if (hasRegistered && [FZZLoginDelegate authenticate]) {
+    if (hasRegistered) {
         NSLog(@"\n\nActive Session Loaded\n\n");
         
         [FZZSocketIODelegate openConnectionCheckingForInternet];
@@ -185,7 +184,7 @@
     } else { // Send to Login View Controller
          NSLog(@"\n\nSend To Login View Controller\n\n");
          
-         [self promptForLogin];
+         [self promptForRegistration];
     }
     
     NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -296,7 +295,7 @@
     }
 }
 
-- (void)promptForLogin{
+- (void)promptForRegistration{
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FZZInputPhoneViewController alloc] initWithNibName:@"FZZInputPhoneViewController" bundle:nil]];
 }
 

@@ -42,7 +42,6 @@
 -(void)filterContentForSearchText:(NSString*)searchText;
 
 -(void)setNeedsUpdateFriends;
--(void)takeBubbleView;
 
 -(void)setupInterface;
 

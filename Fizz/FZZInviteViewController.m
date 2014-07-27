@@ -140,16 +140,6 @@ static int kFZZNumRecentInvites = 30;
 //    return YES;
 //}
 
-/*
- 
- TODOAndrew Unused function because of seats, is this neccessary for updating bubbles via server or local user invitations?
- 
- */
-- (void)updateBubbleUI{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    [appDelegate.bvc updateBubblesForEvent:_event Animated:YES];
-}
 
 // You can always add a seat
 //- (void)addSeat{
@@ -234,17 +224,6 @@ static int kFZZNumRecentInvites = 30;
 //    [_inviteButton addTarget:self
 //                      action:@selector(inviteButtonPress)
 //            forControlEvents:UIControlEventTouchUpInside];
-}
-
--(void)takeBubbleView{
-    NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    [(UIView *)appDelegate.bvc.bubbleView removeFromSuperview];
-    [cell addSubview:(UIView *)appDelegate.bvc.bubbleView];
 }
 
 /*

@@ -1,5 +1,5 @@
 //
-//  SocketIO.h
+//  SocketIO.h  https://github.com/pkyeck/socket.IO-objc
 //  v0.4.1 ARC
 //
 //  based on 

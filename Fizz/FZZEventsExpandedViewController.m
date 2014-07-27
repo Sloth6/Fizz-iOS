@@ -705,28 +705,28 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 -(void)updateEvent:(FZZEvent *)event{
     
     NSLog(@"<<>>Dickfingers (1");
-    
-    if ([_bvc event] == event){
-        [_bvc updateBubblesForEvent:event Animated:YES];
-        
-        int index = (int)[_events indexOfObject:event];
-        int section = (int)[self.collectionView numberOfSections] - 1;
-        
-        NSLog(@"<<>>Dickfingers 1)");
-        
-        NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:section];
-        
-        FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:path];
-        
-        /*
-         
-         TODOAndrew if need be, update chat or invites on updateEvent
-         
-         */
-        
-//        [cell.ivc.tableView reloadData];
-//        [cell.ivc.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    }
+    //TODOAndrew if the event is onscreen, do visual updates differently
+//    if ([_bvc event] == event){
+//        [_bvc updateBubblesForEvent:event Animated:YES];
+//        
+//        int index = (int)[_events indexOfObject:event];
+//        int section = (int)[self.collectionView numberOfSections] - 1;
+//        
+//        NSLog(@"<<>>Dickfingers 1)");
+//        
+//        NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:section];
+//        
+//        FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self.collectionView cellForItemAtIndexPath:path];
+//        
+//        /*
+//         
+//         TODOAndrew if need be, update chat or invites on updateEvent
+//         
+//         */
+//        
+////        [cell.ivc.tableView reloadData];
+////        [cell.ivc.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+//    }
 }
 
 
@@ -1291,7 +1291,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         FZZEvent *event = [_events objectAtIndex:i];
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:1];
-        [_bvc updateBubblesForEvent:event AtIndex:indexPath Animated:NO];
         
         if (i < numIncomingEvents){
             NSString *firstMessage = [[event firstMessage] text];

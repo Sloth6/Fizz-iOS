@@ -30,6 +30,8 @@
 		4922702118CA1CA600816AD4 /* FZZEventsExpandedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4922702018CA1CA600816AD4 /* FZZEventsExpandedViewController.m */; };
 		4925ED80197DAF1D0024247C /* FZZLocalCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4925ED7F197DAF1D0024247C /* FZZLocalCache.m */; };
 		4925ED83198439B40024247C /* FZZLoginDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4925ED82198439B40024247C /* FZZLoginDelegate.m */; };
+		4925ED851984533F0024247C /* FZZInputVerificationCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4925ED841984533F0024247C /* FZZInputVerificationCodeViewController.xib */; };
+		4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4925ED87198466BF0024247C /* FZZAjaxPostDelegate.m */; };
 		492E5D79192EE6BB00359F11 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 492E5D78192EE6BB00359F11 /* libc++.dylib */; };
 		492E5D8019327E5800359F11 /* FZZExpandedEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */; };
 		494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */; };
@@ -41,6 +43,7 @@
 		494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2B18E08FD600C59D18 /* CMTPParticleSystem.m */; };
 		494BFB3818E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2D18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m */; };
 		494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2F18E08FD600C59D18 /* CMTPSpring.m */; };
+		4950411C1984826F002DE44C /* FZZInputVerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4950411B1984826F002DE44C /* FZZInputVerificationCodeViewController.m */; };
 		4950F8AE18D0E41900E6D798 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E983E9186A5C7900D37B2A /* libz.dylib */; };
 		4954FB0118D3AAA40083D07F /* FZZInputPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4954FAFF18D3AAA40083D07F /* FZZInputPhoneViewController.m */; };
 		4954FB0218D3AAA40083D07F /* FZZInputPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4954FB0018D3AAA40083D07F /* FZZInputPhoneViewController.xib */; };
@@ -58,7 +61,6 @@
 		4989270318E29E8300AECCF8 /* FZZManageFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270218E29E8300AECCF8 /* FZZManageFriendsViewController.m */; };
 		4989270618E2A02600AECCF8 /* FZZManageFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270518E2A02600AECCF8 /* FZZManageFriendCell.m */; };
 		4989270818E2A8DC00AECCF8 /* FZZManageFriendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4989270718E2A8DC00AECCF8 /* FZZManageFriendCell.xib */; };
-		498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498E5E6D18B42CB300487898 /* FacebookSDK.framework */; };
 		4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */; };
 		4994FCFD1929D2C000BD2FB8 /* FZZEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFC1929D2C000BD2FB8 /* FZZEvent.m */; };
 		4994FD001929D2D800BD2FB8 /* FZZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFF1929D2D800BD2FB8 /* FZZMessage.m */; };
@@ -213,6 +215,9 @@
 		4925ED7F197DAF1D0024247C /* FZZLocalCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZLocalCache.m; sourceTree = "<group>"; };
 		4925ED81198439B40024247C /* FZZLoginDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZLoginDelegate.h; sourceTree = "<group>"; };
 		4925ED82198439B40024247C /* FZZLoginDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZLoginDelegate.m; sourceTree = "<group>"; };
+		4925ED841984533F0024247C /* FZZInputVerificationCodeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZInputVerificationCodeViewController.xib; sourceTree = "<group>"; };
+		4925ED86198466BF0024247C /* FZZAjaxPostDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZAjaxPostDelegate.h; sourceTree = "<group>"; };
+		4925ED87198466BF0024247C /* FZZAjaxPostDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZAjaxPostDelegate.m; sourceTree = "<group>"; };
 		492E5D78192EE6BB00359F11 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		492E5D7E19327E5800359F11 /* FZZExpandedEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZExpandedEventCell.h; sourceTree = "<group>"; };
 		492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZExpandedEventCell.m; sourceTree = "<group>"; };
@@ -236,6 +241,8 @@
 		494BFB2E18E08FD600C59D18 /* CMTPSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPSpring.h; path = CMTraerPhysics/CMTraerPhysics/CMTPSpring.h; sourceTree = SOURCE_ROOT; };
 		494BFB2F18E08FD600C59D18 /* CMTPSpring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPSpring.m; path = CMTraerPhysics/CMTraerPhysics/CMTPSpring.m; sourceTree = SOURCE_ROOT; };
 		494BFB3018E08FD600C59D18 /* CMTraerPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTraerPhysics.h; path = CMTraerPhysics/CMTraerPhysics/CMTraerPhysics.h; sourceTree = SOURCE_ROOT; };
+		4950411A1984826F002DE44C /* FZZInputVerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInputVerificationCodeViewController.h; sourceTree = "<group>"; };
+		4950411B1984826F002DE44C /* FZZInputVerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInputVerificationCodeViewController.m; sourceTree = "<group>"; };
 		4954FAFE18D3AAA40083D07F /* FZZInputPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInputPhoneViewController.h; sourceTree = "<group>"; };
 		4954FAFF18D3AAA40083D07F /* FZZInputPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInputPhoneViewController.m; sourceTree = "<group>"; };
 		4954FB0018D3AAA40083D07F /* FZZInputPhoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZInputPhoneViewController.xib; sourceTree = "<group>"; };
@@ -360,7 +367,6 @@
 				49D5C9A4186042C2002BB1F0 /* UIKit.framework in Frameworks */,
 				4960803D18EFE03700CF72DB /* libTestFlight.a in Frameworks */,
 				49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */,
-				498E5E6E18B42CB300487898 /* FacebookSDK.framework in Frameworks */,
 				49D5C9A2186042C2002BB1F0 /* CoreGraphics.framework in Frameworks */,
 				E9F3EDDBFEE744F3845ACCE1 /* libPods.a in Frameworks */,
 			);
@@ -491,6 +497,9 @@
 				4954FAFE18D3AAA40083D07F /* FZZInputPhoneViewController.h */,
 				4954FAFF18D3AAA40083D07F /* FZZInputPhoneViewController.m */,
 				4954FB0018D3AAA40083D07F /* FZZInputPhoneViewController.xib */,
+				4950411A1984826F002DE44C /* FZZInputVerificationCodeViewController.h */,
+				4950411B1984826F002DE44C /* FZZInputVerificationCodeViewController.m */,
+				4925ED841984533F0024247C /* FZZInputVerificationCodeViewController.xib */,
 				4925ED81198439B40024247C /* FZZLoginDelegate.h */,
 				4925ED82198439B40024247C /* FZZLoginDelegate.m */,
 			);
@@ -849,6 +858,8 @@
 				49D5C9DF186048A3002BB1F0 /* External */,
 				49069B1E18651FFA003D003A /* FZZSocketIODelegate.h */,
 				49069B1F18651FFA003D003A /* FZZSocketIODelegate.m */,
+				4925ED86198466BF0024247C /* FZZAjaxPostDelegate.h */,
+				4925ED87198466BF0024247C /* FZZAjaxPostDelegate.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -996,6 +1007,7 @@
 				499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */,
 				49D5E6D418616A56002BB1F0 /* package.json in Resources */,
 				4989270818E2A8DC00AECCF8 /* FZZManageFriendCell.xib in Resources */,
+				4925ED851984533F0024247C /* FZZInputVerificationCodeViewController.xib in Resources */,
 				49D5C9AA186042C2002BB1F0 /* InfoPlist.strings in Resources */,
 				4954FB0218D3AAA40083D07F /* FZZInputPhoneViewController.xib in Resources */,
 				49D5C9B2186042C2002BB1F0 /* Images.xcassets in Resources */,
@@ -1102,6 +1114,7 @@
 				494BFB3618E08FD600C59D18 /* CMTPParticle.m in Sources */,
 				494BFB3818E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m in Sources */,
 				49C9618E18D28E3F0061A903 /* FZZEventsCondensedViewController.m in Sources */,
+				4950411C1984826F002DE44C /* FZZInputVerificationCodeViewController.m in Sources */,
 				497F349518E07F1200B70FD4 /* FZZInviteGuestButton.m in Sources */,
 				492E5D8019327E5800359F11 /* FZZExpandedEventCell.m in Sources */,
 				4922702118CA1CA600816AD4 /* FZZEventsExpandedViewController.m in Sources */,
@@ -1112,6 +1125,7 @@
 				494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */,
 				49069B7E18661555003D003A /* SBJson4StreamParser.m in Sources */,
 				49069B0418651731003D003A /* base64.c in Sources */,
+				4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */,
 				49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */,
 				497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */,
 			);
@@ -1250,16 +1264,12 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/**",
-					"$(PROJECT_DIR)/IAThreadSafeCoreData/build/Debug-iphoneos",
-				);
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Fizz/Fizz-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/TestFlightSDK3.0.0";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-lc++";
@@ -1279,16 +1289,12 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/**",
-					"$(PROJECT_DIR)/IAThreadSafeCoreData/build/Debug-iphoneos",
-				);
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Fizz/Fizz-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/TestFlightSDK3.0.0";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-lc++";

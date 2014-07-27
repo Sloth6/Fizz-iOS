@@ -53,6 +53,9 @@ static FZZUser *currentUser = nil;
 
 +(BOOL)saveUsersToFile:(NSString *)userURL{
     NSDictionary *jsonDict = [FZZUser getUsersJSONForCache];
+    
+    NSLog(@"saving: \n\n%@\n\n", jsonDict);
+    
     return [jsonDict writeToFile:userURL atomically:YES];
 }
 

@@ -122,8 +122,8 @@
     return [_textView resignFirstResponder];
 }
 
--(void)setESVC:(FZZEventsExpandedViewController *)esvc{
-    _eevc = esvc;
+-(void)setEEVC:(FZZEventsExpandedViewController *)eevc{
+    _eevc = eevc;
 }
 
 - (void)showPlaceholder:(BOOL)shouldShow{

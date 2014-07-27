@@ -8,6 +8,9 @@
 
 #import "FZZInputPhoneViewController.h"
 #import "PhoneNumberFormatter.h"
+#import "FZZAjaxPostDelegate.h"
+
+#import "FZZInputVerificationCodeViewController.h"
 
 #import "FZZAppDelegate.h"
 
@@ -31,9 +34,13 @@
 }
 
 - (void)finishPhoneSetup{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    if ([FZZAjaxPostDelegate postRegistration]){
+        FZZInputVerificationCodeViewController *ivcvc = [[FZZInputVerificationCodeViewController alloc] initWithNibName:@"FZZInputVerificationCodeViewController" bundle:nil];
         
-    [appDelegate setupNavigationController];
+        [[self navigationController] pushViewController:ivcvc animated:NO];
+    } else {
+        NSLog(@"Registration failed! Try again");
+    }
 }
 
 - (void)viewDidLoad
@@ -47,14 +54,13 @@
      addObserver:self
      selector:@selector(phoneChange)
      name:UITextFieldTextDidChangeNotification
-     object:_textField];
-    
-    /**** PUSH NOTIFY ****/
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+     object:_phoneNumberField];
 }
 
 - (IBAction)savePhoneNumber:(id)sender{
-    NSString *phoneNumber = _textField.text;
+    NSLog(@"SAVE PHONE NUMBER!");
+    
+    NSString *phoneNumber = _phoneNumberField.text;
     
     NSString *cleanedString = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
     
@@ -63,14 +69,20 @@
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
 //    appDelegate.userPhoneNumber = phoneNumber;
     
+    NSString *firstName = _firstNameField.text;
+    NSString *lastName  = _lastNameField.text;
+    
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    [pref setObject:[NSNumber numberWithBool:YES] forKey:@"registered"];
     [pref setObject:phoneNumber forKey:@"phoneNumber"];
+    [pref setObject:firstName forKey:@"firstName"];
+    [pref setObject:lastName forKey:@"lastName"];
     [pref synchronize];
     
-    [FZZSocketIODelegate openConnectionCheckingForInternet];
+    NSLog(@"get here 1");
     
     [self finishPhoneSetup];
+
+    NSLog(@"get here 2");
 }
 
 - (BOOL)isValidUSPhoneNumber:(NSString *)phoneNumber{
@@ -108,9 +120,16 @@
 }
 
 - (void)phoneChange {
-    _textField.text = [_phoneNumberFormat format:_textField.text withLocale:_country];
+    _phoneNumberField.text = [_phoneNumberFormat format:_phoneNumberField.text withLocale:_country];
     
-    if ([self isValidUSPhoneNumber:_textField.text]){
+    NSString *firstName = [_firstNameField text];
+    NSString *lastName = [_lastNameField text];
+    
+    BOOL validFirstName = [firstName length] > 0;
+    BOOL validLastName  = [lastName length] > 0;
+    BOOL validName = validFirstName && validLastName;
+    
+    if (validName && [self isValidUSPhoneNumber:_phoneNumberField.text]){
         [_confirmPhoneButton setEnabled:YES];
         return;
     }

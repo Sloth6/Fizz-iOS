@@ -16,7 +16,10 @@
 
 @interface FZZInputPhoneViewController : UIViewController <UITextFieldDelegate>
 
-@property IBOutlet UITextField *textField;
+@property IBOutlet UITextField *firstNameField;
+@property IBOutlet UITextField *lastNameField;
+
+@property IBOutlet UITextField *phoneNumberField;
 
 //@property IBOutlet UIButton *test;
 @property IBOutlet UIButton *confirmPhoneButton;
