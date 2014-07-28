@@ -22,8 +22,6 @@ static FZZUser *me;
     void (^_completionHandler)(UIImage *image);
 }
 
-@property BOOL hasInitials;
-
 @property (strong, nonatomic) NSData *imageData;
 @property (strong, nonatomic) UIImage *image;
 
@@ -45,7 +43,6 @@ static FZZUser *me;
 
 static FZZUser *currentUser = nil;
 
-@synthesize hasInitials;
 @synthesize image;
 @synthesize chid = _chid;
 @synthesize isFetchingPhoto = _isFetchingPhoto;
@@ -65,7 +62,7 @@ static FZZUser *currentUser = nil;
     NSDictionary *userDict = [users copy];
     
     [userDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        FZZUser *user = [obj copy];
+        FZZUser *user = obj;
         
         NSDictionary *jsonUser = [[NSMutableDictionary alloc] init];
         
@@ -172,8 +169,6 @@ static FZZUser *currentUser = nil;
         [users setObject:self forKey:uID];
     }
     
-    self.hasInitials = NO;
-    
     return self;
 }
 
@@ -194,7 +189,7 @@ static FZZUser *currentUser = nil;
 }
 
 -(void)updateLastUsed{
-    self.lastUsed = [NSDate date];
+    _lastUsed = [NSDate date];
 }
 
 +(FZZUser *)userWithUID:(NSNumber *)uID{
@@ -231,65 +226,23 @@ static FZZUser *currentUser = nil;
 -(NSString *)name{
     [self updateLastUsed];
     
-    return self.name;
-}
-
-- (void)setInitials:(NSString *)initials{
-    self.initials = initials;
-}
-
--(NSString *)initials{
-    [self updateLastUsed];
-    
-    if (self.hasInitials){
-        return self.initials;
-    }
-    
-    NSArray *terms = [self.name componentsSeparatedByString:@" "];
-    
-    NSString *firstName;
-    NSString *lastName;
-    
-    if ([terms count] > 0){
-        firstName = [terms objectAtIndex:0];
-    }
-    
-    if ([terms count] > 1){
-        lastName = [terms objectAtIndex:[terms count] - 1];
-    }
-    
-    NSString *firstInitial = @"";
-    NSString *lastInitial = @"";
-    
-    if ([firstName length] > 0){
-        firstInitial = [firstName substringToIndex:1];
-    }
-    
-    if ([lastName length] > 0){
-        lastInitial = [lastName substringToIndex:1];
-    }
-    
-    [self setInitials:[NSString stringWithFormat:@"%@%@", firstInitial, lastInitial]];
-    
-    self.hasInitials = YES;
-    
-    return self.initials;
+    return _name;
 }
 
 -(NSString *)phoneNumber{
-    if ([self.phoneNumber isEqualToString:@""]){
+    if ([_phoneNumber isEqualToString:@""]){
         return NULL;
     }
     
     [self updateLastUsed];
     
-    return self.phoneNumber;
+    return _phoneNumber;
 }
 
 -(NSNumber *)userID{
     [self updateLastUsed];
     
-    return self.userID;
+    return _userID;
 }
 
 -(void)setCurrentUser:(FZZUser *)user{

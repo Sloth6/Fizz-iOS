@@ -54,6 +54,9 @@
     [pref synchronize];
     
     NSLog(@"postLogin 2");
+    
+    [FZZSocketIODelegate openConnectionCheckingForInternet];
+    
     if ([FZZAjaxPostDelegate postLogin]){
         [self finishVerificationStep];
     } else {

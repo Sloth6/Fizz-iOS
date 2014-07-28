@@ -11,7 +11,7 @@
 #import "FZZInviteCell.h"
 #import "FZZUser.h"
 #import "FZZEvent.h"
-#import "FZZEventsExpandedViewController.h"
+#import "FZZEventsViewController.h"
 #import "FZZAppDelegate.h"
 #import "FZZExpandedEventCell.h"
 #import <AddressBook/AddressBook.h>
@@ -541,7 +541,7 @@ static int kFZZNumRecentInvites = 30;
     if (section == 0){ // Title cell
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        if (appDelegate.eevc.viewMode == kInvite){
+        if (appDelegate.evc.viewMode == kInvite){
             return 0;
         } else {
             return 1;
@@ -599,7 +599,7 @@ static int kFZZNumRecentInvites = 30;
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [self setIsOnTimeline:appDelegate.eevc.viewMode == kTimeline];
+    [self setIsOnTimeline:appDelegate.evc.viewMode == kTimeline];
 }
 
 - (void)searchChange{
@@ -654,9 +654,9 @@ static int kFZZNumRecentInvites = 30;
             // Configure the cell...
             FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
             
-            if (appDelegate.eevc.viewMode == kInvite){
+            if (appDelegate.evc.viewMode == kInvite){
                 
-            } else if (appDelegate.eevc.viewMode == kChat){
+            } else if (appDelegate.evc.viewMode == kChat){
                 
             } else { // Timeline or otherwise
                 [self setTopCellSubviews:cell];
@@ -851,7 +851,7 @@ static int kFZZNumRecentInvites = 30;
 //    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height - 190);
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.navigationBar.navIcon setIsEditingText:YES];
-    [appDelegate.eevc setActiveTextField:_searchTextField];
+    [appDelegate.evc setActiveTextField:_searchTextField];
 //    [appDelegate.esvc setActiveSearchBar:_searchBar];
     
 //    NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:1];
@@ -862,7 +862,7 @@ static int kFZZNumRecentInvites = 30;
 -(void)searchStopEdit{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.navigationBar.navIcon setIsEditingText:NO];
-    [appDelegate.eevc setActiveTextField:NULL];
+    [appDelegate.evc setActiveTextField:NULL];
 //    self.tableView.frame = [UIScreen mainScreen].bounds;
 }
 
@@ -938,7 +938,7 @@ static int kFZZNumRecentInvites = 30;
         
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        if (_canBeSelected && appDelegate.eevc.viewMode == kTimeline){
+        if (_canBeSelected && appDelegate.evc.viewMode == kTimeline){
             if ([_event isInvited:[FZZUser me]]){ // Chat Mode
                 [cell setSelected:NO];
                 [cell setHighlighted:NO];

@@ -29,7 +29,9 @@ static int const kFZZMaximumReconnectDelay = 300; // 5 minutes
 
 + (void)initialize;
 
+// Perform the ajax post for login
 + (void) openConnectionCheckingForInternet;
+
 + (void) willResignActive;
 //+ (void) logout;
 + (BOOL) isConnectionOpen;

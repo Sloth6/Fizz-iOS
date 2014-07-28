@@ -13,7 +13,7 @@
 +(BOOL)postRegistration;
 +(BOOL)postLogin;
 
-+ (void)connection:(NSURLConnection *)connection
++ (BOOL)connection:(NSURLConnection *)connection
 didRecieveResponse:(NSURLResponse *)response;
 
 @end

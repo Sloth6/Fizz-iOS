@@ -1,5 +1,5 @@
 //
-//  FZZEventsExpandedViewController.h
+//  FZZEventsViewController.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/7/14.
@@ -23,7 +23,7 @@
 @class FZZBackspaceResignTextView;
 @class FZZEvent;
 
-@interface FZZEventsExpandedViewController : UICollectionViewController
+@interface FZZEventsViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
 
 // Server handlers

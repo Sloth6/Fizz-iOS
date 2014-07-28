@@ -10,9 +10,10 @@
 #import "FZZUser.h"
 #import "SBJson4.h"
 #import "FZZEvent.h"
-#import "FZZEventsExpandedViewController.h"
+#import "FZZEventsViewController.h"
 #import "FZZInviteViewController.h"
 #import "FZZLocalCache.h"
+#import "FZZLocationManager.h"
 
 #import "FZZLoginDelegate.h"
 
@@ -58,7 +59,7 @@
 //    _esvc.automaticallyAdjustsScrollViewInsets = NO;
     
     UINavigationController *navigationController = [[UINavigationController alloc]
-                                initWithRootViewController:_eevc];
+                                initWithRootViewController:_evc];
    
     [navigationController setNavigationBarHidden:YES];
     
@@ -149,7 +150,7 @@
     
     [self setupNavigationBar];
     
-    _eevc = [[FZZEventsExpandedViewController alloc] initWithCollectionViewLayout:flowLayout];
+    _evc = [[FZZEventsViewController alloc] initWithCollectionViewLayout:flowLayout];
     
     [FZZInviteViewController setupClass];
     
@@ -290,7 +291,7 @@
         if (eid){
             FZZEvent *event = [FZZEvent eventWithEID:eid];
             
-            [_eevc loadToEvent:event];
+            [_evc loadToEvent:event];
         }
     }
 }
@@ -365,6 +366,8 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
+    
     _gotAddressBook = NO;
     
     if ((![FZZSocketIODelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
@@ -388,7 +391,7 @@
 }
 
 - (void)updateEvents:(NSArray *)events{
-    [_eevc updateEvents:[events mutableCopy]];
+    [_evc updateEvents:[events mutableCopy]];
 }
 
 #pragma mark - Crash Handlers

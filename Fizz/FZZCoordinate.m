@@ -10,6 +10,7 @@
 #import "FZZEvent.h"
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
+#import "FZZLocationManager.h"
 
 static NSString *FZZ_UPDATE_LOCATION = @"postUpdateLocation";
 
@@ -63,8 +64,16 @@ static NSString *FZZ_UPDATE_LOCATION = @"postUpdateLocation";
 +(void)socketIOUpdateLocationWithAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
-    // TODOAndrew get my actual location
-    NSDictionary *coord = Nil;
+    CLLocation *location = [FZZLocationManager currentLocation];
+    
+    CLLocationCoordinate2D locationCord = [location coordinate];
+    
+    NSNumber *longitude = [NSNumber numberWithFloat:locationCord.longitude];
+    NSNumber *latitude = [NSNumber numberWithFloat:locationCord.latitude];
+    
+    NSDictionary *coord = [[NSDictionary alloc] initWithObjectsAndKeys:
+                           longitude, @"lng",
+                           latitude,  @"lat", nil];
     
     /* latlng : latlng */
     [json setObject:coord forKey:@"latlng"];

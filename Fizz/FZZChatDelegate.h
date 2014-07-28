@@ -17,7 +17,7 @@
  
  */
 
-@class FZZEventsExpandedViewController;
+@class FZZEventsViewController;
 @class FZZInviteViewController;
 @class FZZExpandedVerticalTableViewController;
 
@@ -28,7 +28,7 @@
 @property (nonatomic, retain) UITextView *chatBox;
 
 @property (strong, nonatomic) FZZEvent *event;
-@property (strong, nonatomic) FZZEventsExpandedViewController *esvc;
+@property (strong, nonatomic) FZZEventsViewController *esvc;
 @property (strong, nonatomic) FZZExpandedVerticalTableViewController *tvc;
 @property (strong, nonatomic) UITableView *tableView;
 

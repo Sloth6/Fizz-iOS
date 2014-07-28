@@ -1,5 +1,5 @@
 //
-//  SocketIO.h  https://github.com/pkyeck/socket.IO-objc
+//  SocketIO.h
 //  v0.4.1 ARC
 //
 //  based on 
@@ -53,7 +53,7 @@ typedef enum {
 - (void) socketIO:(SocketIO *)socket didSendMessage:(SocketIOPacket *)packet;
 - (void) socketIO:(SocketIO *)socket onError:(NSError *)error;
 
-// TODOAndrew: deprecated -> to be removed
+// TODO: deprecated -> to be removed
 - (void) socketIO:(SocketIO *)socket failedToConnectWithError:(NSError *)error __attribute__((deprecated));
 - (void) socketIOHandshakeFailed:(SocketIO *)socket __attribute__((deprecated));
 @end

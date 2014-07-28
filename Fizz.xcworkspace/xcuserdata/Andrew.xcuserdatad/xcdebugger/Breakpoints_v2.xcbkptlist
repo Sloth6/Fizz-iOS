@@ -67,12 +67,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Fizz/FZZEventsExpandedViewController.m"
-            timestampString = "424668812.735235"
+            filePath = "Fizz/FZZEventsViewController.m"
+            timestampString = "428276615.578873"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "733"
-            endingLineNumber = "733"
+            startingLineNumber = "732"
+            endingLineNumber = "732"
             landmarkName = "-jumpToMessagesForEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -84,11 +84,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Fizz/FZZSocketIODelegate.m"
-            timestampString = "428120709.078123"
+            timestampString = "428276615.578873"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "674"
-            endingLineNumber = "674">
+            startingLineNumber = "694"
+            endingLineNumber = "694">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

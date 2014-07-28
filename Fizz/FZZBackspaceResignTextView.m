@@ -7,11 +7,11 @@
 //
 
 #import "FZZBackspaceResignTextView.h"
-#import "FZZEventsExpandedViewController.h"
+#import "FZZEventsViewController.h"
 
 @interface FZZBackspaceResignTextView ()
 
-@property FZZEventsExpandedViewController *eevc;
+@property FZZEventsViewController *evc;
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UITextView *placeholderTextView;
 
@@ -112,8 +112,8 @@
     if ([_textView.text isEqualToString:@""]){
         [self showPlaceholder:YES];
         
-        if (_eevc != NULL){
-            [_eevc exitNewEventPrompt:self];
+        if (_evc != NULL){
+            [_evc exitNewEventPrompt:self];
         }
     }
 }
@@ -122,8 +122,8 @@
     return [_textView resignFirstResponder];
 }
 
--(void)setEEVC:(FZZEventsExpandedViewController *)eevc{
-    _eevc = eevc;
+-(void)setEVC:(FZZEventsViewController *)evc{
+    _evc = evc;
 }
 
 - (void)showPlaceholder:(BOOL)shouldShow{

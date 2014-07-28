@@ -50,7 +50,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     NSDictionary *eventDict = [events copy];
     
     [eventDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        FZZEvent *event = [obj copy];
+        FZZEvent *event = obj;
         
         NSDictionary *jsonEvent = [[NSMutableDictionary alloc] init];
         
@@ -441,8 +441,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
                     AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
     
-    /* text : string */
-    [json setObject:message forKey:@"text"];
+    /* description : string */
+    [json setObject:message forKey:@"description"];
     
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_NEW_EVENT withData:json andAcknowledge:function];
 }

@@ -62,7 +62,7 @@
 
 - (void)hideCommitInvites{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.eevc.navigationItem setRightBarButtonItem:NULL animated:YES];
+    [appDelegate.evc.navigationItem setRightBarButtonItem:NULL animated:YES];
 }
 
 - (void)updateFriends{

@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "ViewController.h"
-
 @interface FZZInputVerificationCodeViewController : UIViewController <UITextFieldDelegate>
 
 @property IBOutlet UITextField *verificationCodeField;

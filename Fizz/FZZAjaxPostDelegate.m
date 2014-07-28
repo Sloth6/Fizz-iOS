@@ -15,15 +15,19 @@ static NSURLConnection *connection;
 
 @implementation FZZAjaxPostDelegate
 
-+ (void)connection:(NSURLConnection *)connection didRecieveResponse:(NSURLResponse *)response{
++ (BOOL)connection:(NSURLConnection *)connection didRecieveResponse:(NSURLResponse *)response{
     
     NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
     NSLog(@"got response with status @push %ld",(long)[resp statusCode]);
     
+    NSLog(@"\n\n<<%@>>\n\n", resp);
+    
     if ([resp statusCode] == 200){
-        didAjax = YES;
-        
-//        [FZZSocketIODelegate openConnectionCheckingForInternet];
+        if (!didAjax){
+            didAjax = YES;
+            
+            return YES;
+        }
     } else {
         // AJAX failed
         
@@ -31,7 +35,8 @@ static NSURLConnection *connection;
         
         // TODOAndrew Prompt server for new login token
     }
-
+    
+    return NO;
 }
 
 + (BOOL)postRegistration{
@@ -135,6 +140,9 @@ static NSURLConnection *connection;
     }
 }
 
+/*
+ Attempts to post a login, returns true if it has a password cached locally and will attempt to login
+ */
 + (BOOL)postLogin{
     NSLog(@"AJAX POST LOGIN");
     
@@ -148,7 +156,6 @@ static NSURLConnection *connection;
     NSString *phoneNumber = [pref objectForKey:@"phoneNumber"];
     NSString *password = [pref objectForKey:@"password"];
     
-    // TODOAndrew if you don't have a working cached session token, then return NO
     if (password != nil){
         NSLog(@"sending AJAX");
         
@@ -198,39 +205,18 @@ static NSURLConnection *connection;
         [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[jsonData length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:jsonData];
         
-        
-        NSHTTPURLResponse *response;
-        NSError *error;
-        
         NSLog(@"Attempting login...");
+            
+        NSURLConnection *connection = [[NSURLConnection alloc]
+                                       initWithRequest:request
+                                       delegate:[FZZSocketIODelegate socketIODelegate]
+                                       startImmediately:NO];
         
-        [NSURLConnection sendSynchronousRequest:request
-                              returningResponse:&response
-                                          error:&error];
+        [connection start];
         
-        if ([response statusCode] == 200){
-            NSLog(@"successfully logged in");
-            
-//            [FZZSocketIODelegate openConnectionCheckingForInternet];
-            
-            NSURLConnection *connection = [[NSURLConnection alloc]
-                                           initWithRequest:request
-                                           delegate:[FZZSocketIODelegate socketIODelegate]
-                                           startImmediately:NO];
-            
-            /*[connection scheduleInRunLoop:[NSRunLoop mainRunLoop]
-             forMode:NSDefaultRunLoopMode];*/
-            
-            [connection start];
-            
-            appDelegate.hasLoggedIn = YES;
-            
-            return YES;
-        } else {
-            NSLog(@"failed to login with status code: %ld", (long)[response statusCode]);
-            
-            return NO;
-        }
+        appDelegate.hasLoggedIn = YES;
+        
+        return YES;
     }
     
     return NO;

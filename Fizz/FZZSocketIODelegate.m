@@ -15,6 +15,7 @@
 #import "FZZMessage.h"
 #import "FZZAppDelegate.h"
 #import "FZZInviteViewController.h"
+#import "FZZLocationManager.h"
 
 #import "FZZLocalCache.h"
 
@@ -62,41 +63,44 @@ static NSMutableData *data;
 }
 
 + (void)initialize{
-    // Once-only initializion
-    socketIODelegate = [[FZZSocketIODelegate alloc] init];
-    hasMadeDelegate = YES;
-    
-    reconnectDelay = kFZZDefaultReconnectDelay;
-    socketIO = [[SocketIO alloc] initWithDelegate:socketIODelegate];
-    connected = NO;
-    resignedActive = NO;
-    
-    incomingEventResponses = [[NSMutableDictionary alloc] init];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingOnLogin:))
-                              forKey:FZZ_INCOMING_ON_LOGIN];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewEvent:))
-                              forKey:FZZ_INCOMING_NEW_EVENT];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingCompleteEvent:))
-                              forKey:FZZ_INCOMING_COMPLETE_EVENT];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateGuests:))
-                              forKey:FZZ_INCOMING_UPDATE_GUESTS];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateInvitees:))
-                              forKey:FZZ_INCOMING_UPDATE_INVITEES];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewMessage:))
-                              forKey:FZZ_INCOMING_NEW_MESSAGE];
-    
-    [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateEvent:))
-                              forKey:FZZ_INCOMING_UPDATE_EVENT];
-    
-    
-    
-    // Initialization for this class and any subclasses
+    if (self == [FZZSocketIODelegate class])
+    {
+        // Once-only initializion
+        socketIODelegate = [[FZZSocketIODelegate alloc] init];
+        hasMadeDelegate = YES;
+        
+        reconnectDelay = kFZZDefaultReconnectDelay;
+        socketIO = [[SocketIO alloc] initWithDelegate:socketIODelegate];
+        connected = NO;
+        resignedActive = NO;
+        
+        incomingEventResponses = [[NSMutableDictionary alloc] init];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingOnLogin:))
+                                  forKey:FZZ_INCOMING_ON_LOGIN];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewEvent:))
+                                  forKey:FZZ_INCOMING_NEW_EVENT];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingCompleteEvent:))
+                                  forKey:FZZ_INCOMING_COMPLETE_EVENT];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateGuests:))
+                                  forKey:FZZ_INCOMING_UPDATE_GUESTS];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateInvitees:))
+                                  forKey:FZZ_INCOMING_UPDATE_INVITEES];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewMessage:))
+                                  forKey:FZZ_INCOMING_NEW_MESSAGE];
+        
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateEvent:))
+                                  forKey:FZZ_INCOMING_UPDATE_EVENT];
+        
+        
+        
+        // Initialization for this class and any subclasses
+    }
 }
 
 // Generally does not allow FZZSocketIODelegate to exist outside of the class
@@ -116,12 +120,15 @@ static NSMutableData *data;
 
 /* Check for a network connection. Attempt to connect to network with increasing time intervals. */
 + (void) openConnectionCheckingForInternet{
+    if ([self isConnectionOpen]) return;
+    
     FZZ_Reachability *reachability = [FZZ_Reachability reachabilityForInternetConnection];
     
     if ([reachability isReachable]){
         NSLog(@"isReachable");
         
-        [socketIODelegate openConnection];
+        [FZZAjaxPostDelegate postLogin];
+        
     } else {
         NSLog(@"is NOT reachable");
         
@@ -158,7 +165,9 @@ static NSMutableData *data;
 {
     [data setLength:0];
     
-    [FZZAjaxPostDelegate connection:connection didRecieveResponse:response];
+    if ([FZZAjaxPostDelegate connection:connection didRecieveResponse:response]){
+        [[FZZSocketIODelegate socketIODelegate] openConnection];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)d
@@ -207,17 +216,26 @@ static NSMutableData *data;
     NSNumber *didRegister = [pref objectForKey:@"didRegister"];
     
     if ([didRegister boolValue]){
-        NSLog(@"postLogin 1");
-        if ([FZZAjaxPostDelegate postLogin]){
-            NSLog(@"POST LOGIN WAS TRUE");
-            [socketIO connectToHost:kFZZSocketHost onPort:kFZZSocketPort];
-        } else {
-            // Send user to the registration screen again
-            FZZAppDelegate *delegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-            
-            // TODOAndrew implement the app forcing you to jump to registration
-            //[delegate forceUserRegistration];
-        }
+        NSLog(@"userDidRegister in the past");
+        
+        NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+        
+        // pass cookie(s) to handshake endpoint (e.g. for auth)
+        [FZZSocketIODelegate socketIO].cookies = [cookieJar cookies];
+        
+        NSLog(@"\n\nCOOKIES: <%@>\n\n", [FZZSocketIODelegate socketIO].cookies);
+        
+        [[FZZSocketIODelegate socketIO] connectToHost:kFZZSocketHost onPort:kFZZSocketPort];
+        
+        [FZZLocationManager initialize];
+        
+//        } else {
+//            // Send user to the registration screen again
+//            FZZAppDelegate *delegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//            
+//            // TODOAndrew implement the app forcing you to jump to registration
+//            //[delegate forceUserRegistration];
+//        }
         return;
     }
     
@@ -253,7 +271,7 @@ static NSMutableData *data;
 }
 
 - (void) reconnect{
-    [socketIO disconnect];
+    [[FZZSocketIODelegate socketIO] disconnect];
     [FZZSocketIODelegate openConnectionCheckingForInternet];
     NSLog(@"OPENCONN 2");
 }
@@ -262,7 +280,7 @@ static NSMutableData *data;
     resignedActive = YES;
     
     if (connected){
-        [socketIO disconnect];
+        [[FZZSocketIODelegate socketIO] disconnect];
         connected = NO;
     } else {
         [NSObject cancelPreviousPerformRequestsWithTarget:socketIODelegate];
@@ -326,10 +344,10 @@ static NSMutableData *data;
     NSArray *completeEventIDList = [json objectForKey:@"completeEventList"];
     NSDictionary *messageDictJSON = [json objectForKey:@"newMessages"];
     
-    // User array
-    NSDictionary *invitees = [json objectForKey:@"invitees"];
+    // User array (additive)
+    NSDictionary *invitees = [json objectForKey:@"newInvitees"];
     
-    // uid arrays
+    // uid arrays (absolute)
     NSDictionary *guests   = [json objectForKey:@"guests"];
     
     // Events
@@ -425,6 +443,8 @@ static NSMutableData *data;
     
     NSDictionary *json  = [args objectAtIndex:0];
     
+    NSLog(@"NEW MESSAGE: %@", json);
+    
     NSDictionary *messageDict = [json objectForKey:@"message"];
     
     FZZMessage *message = [FZZMessage parseJSON:messageDict];
@@ -435,9 +455,9 @@ static NSMutableData *data;
 
 //    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
 //    
-//    FZZEventsExpandedViewController *eevc = [appDelegate eevc];
+//    FZZEventsExpandedViewController *evc = [appDelegate evc];
 //    
-//    [eevc addIncomingMessageForEvent:event];
+//    [evc addIncomingMessageForEvent:event];
 }
 
 - (void)incomingUpdateEvent:(NSArray *)args{

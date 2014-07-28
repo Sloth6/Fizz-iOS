@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZEventsExpandedViewController.h"
+#import "FZZEventsViewController.h"
 #import "FZZEventCell.h"
 #import "FZZExpandedEventCell.h"
 #import "FZZExpandedNewEventCell.h"
@@ -18,7 +18,6 @@
 #import "FZZNavIcon.h"
 
 #import "FZZChatDelegate.h"
-#import "FZZEventsCondensedViewController.h"
 #import "FZZBackspaceResignTextView.h"
 
 #import "FZZInviteViewController.h"
@@ -29,7 +28,7 @@ static int kFZZNumCellsBeforeEvents = 1; // Add New Event
 static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 
-@interface FZZEventsExpandedViewController ()
+@interface FZZEventsViewController ()
 
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
@@ -46,7 +45,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 @end
 
-@implementation FZZEventsExpandedViewController
+@implementation FZZEventsViewController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout{
     self = [super initWithCollectionViewLayout:layout];
@@ -245,7 +244,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     [cell.resignTextViewer setReturnKeyType:UIReturnKeySend];
     [cell.resignTextViewer setEditable:YES];
     
-    [cell.resignTextViewer setEEVC:self];
+    [cell.resignTextViewer setEVC:self];
     
     if (_lineHeight == -1) {
         
@@ -1197,6 +1196,8 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     
     [navIcon setIsEditingText:NO];
     [textView setEditable:NO];
+    
+    NSLog(@"SEND EVENT!");
     
     // Submitting content
     // Scrolling is still disabled

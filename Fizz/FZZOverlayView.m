@@ -58,7 +58,7 @@
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [_navButton addTarget:appDelegate.eevc action:@selector(navButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+    [_navButton addTarget:appDelegate.evc action:@selector(navButtonPress:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:_navButton];
 }

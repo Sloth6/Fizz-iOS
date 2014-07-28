@@ -18,13 +18,13 @@
 #import <UIKit/UIKit.h>
 #import "SocketIO.h"
 #import "FZZSocketIODelegate.h"
-#import "FZZEventsExpandedViewController.h"
+#import "FZZEventsViewController.h"
 #import "FZZOverlayView.h"
 
 @interface FZZAppDelegate : UIResponder <UIApplicationDelegate, SocketIODelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) FZZEventsExpandedViewController *eevc;
+@property (strong, nonatomic) FZZEventsViewController *evc;
 
 @property (strong, nonatomic) FZZOverlayView *navigationBar;
 @property (strong, nonatomic) UITextField *searchTextField;
