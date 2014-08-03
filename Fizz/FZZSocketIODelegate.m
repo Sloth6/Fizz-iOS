@@ -453,11 +453,13 @@ static NSMutableData *data;
     
     [event updateAddMessage:message];
 
-//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-//    
-//    FZZEventsExpandedViewController *evc = [appDelegate evc];
-//    
-//    [evc addIncomingMessageForEvent:event];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+
+    FZZEventsViewController *evc = [appDelegate evc];
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [evc addIncomingMessageForEvent:event];
+    });
 }
 
 - (void)incomingUpdateEvent:(NSArray *)args{
@@ -465,12 +467,12 @@ static NSMutableData *data;
     
     NSNumber *eid = [json objectForKey:@"eid"];
     
-    NSString *description = [json objectForKey:@"descriptions"];
+    NSString *eventDescription = [json objectForKey:@"description"];
     
     FZZEvent *event = [FZZEvent eventWithEID:eid];
     
     // Update visually too
-    [event updateDescription:description];
+    [event updateEventDescription:eventDescription];
 }
 
 //- (void)incomingNewUserLocationList:(NSArray *)args{

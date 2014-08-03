@@ -15,9 +15,10 @@
 #import "FZZMessage.h"
 #import "FZZAppDelegate.h"
 
+#import "FZZUtilities.h"
+
 #import "FZZNavIcon.h"
 
-#import "FZZChatDelegate.h"
 #import "FZZBackspaceResignTextView.h"
 
 #import "FZZInviteViewController.h"
@@ -164,16 +165,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         _overviewFlowLayout.itemSize = itemSize;
         
         _events = [[NSMutableArray alloc] init];
-//        _chatDelegate = [[FZZChatDelegate alloc] init];
-//        _ocvc   = [[FZZEventsCondensedViewController alloc] initWithCollectionViewLayout:_overviewFlowLayout];
-//        
-//        _ocvc.useLayoutToLayoutNavigationTransitions = YES;
-//        
-//        _ocvc.esvc = self;
-        
-//        _chatDelegate.esvc = self;
-        
-        //[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         
     }
     return self;
@@ -269,13 +260,16 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     if (indexPath.section == 0){
         NSString *cellID = @"ExpandedNewEventCell";
         
-        FZZExpandedNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
+        __block FZZExpandedNewEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                               forIndexPath:indexPath];
         
         [cell setupNewEventTextView];
-        cell = [self setupExpandedEventCell:cell];
         
-        [cell.resignTextViewer setUserInteractionEnabled:YES];
+        runOnMainQueueWithoutDeadlocking(^{
+            cell = [self setupExpandedEventCell:cell];
+            
+            [cell.resignTextViewer setUserInteractionEnabled:YES];
+        });
         
         return cell;
     } else {
@@ -288,12 +282,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         FZZEvent *event = [_events objectAtIndex:eventNum];
         
         [cell setEvent:event];
-        
-        NSLog(@"HERE_1>>");
-        
-//        [self setupEventCell:cell withEvent:event];
-        
-//        cell.chatDelegate = _chatDelegate;
         
         return cell;
     }
@@ -685,11 +673,18 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     NSInteger index = [_events indexOfObject:event];
     
     if (index != NSNotFound){
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+        
+        NSLog(@"index: %d", index);
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:1];
         
         FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
         
-        [cell.chatDelegate addIncomingMessageForEvent:event];
+        NSLog(@"cell: <<%@>>", cell);
+        
+        [cell updateMessages];
+        
+//        [cell.chatDelegate addIncomingMessageForEvent:event];
     } else {
         NSLog(@"WOOPS SHOULD NEVER HAPPEN!");
         exit(1);

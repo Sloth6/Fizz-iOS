@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSArray *invitees;
 @property (nonatomic, strong) NSArray *messages;
 @property (nonatomic, strong) FZZUser *creator;
-@property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSString *eventDescription;
 
 +(BOOL)saveEventsToFile:(NSString *)eventsURL;
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
@@ -66,7 +66,7 @@
 //-(void)updateNumberOfSeats:(NSNumber *)numSeats;
 -(void)updateAddMessage:(FZZMessage *)message;
 
--(void)updateDescription:(NSString *)description;
+-(void)updateEventDescription:(NSString *)eventDescription;
 
 //-(BOOL)haveSeatsChangedSinceLastCheck;
 

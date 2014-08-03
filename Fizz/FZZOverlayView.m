@@ -37,6 +37,10 @@
     [self makeNavButton];
 }
 
+-(void)setIsEditingText:(BOOL)isEditingText{
+    [[self navIcon] setIsEditingText:isEditingText];
+}
+
 - (void)makeNavButton{
     // nav Button
     

@@ -13,38 +13,44 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="89"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.97999999999999998" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="fA3-00-0y0">
-                        <rect key="frame" x="20" y="8" width="280" height="73"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.97999999999999998" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="294" translatesAutoresizingMaskIntoConstraints="NO" id="fA3-00-0y0">
+                        <rect key="frame" x="13" y="8" width="294" height="61"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="280" id="bVd-fb-bKz"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NXj-ao-EQX" userLabel="Line">
-                        <rect key="frame" x="66" y="89" width="254" height="1"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fcg-Jb-1yP">
+                        <rect key="frame" x="13" y="68" width="219" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="0.84778225806451613" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="1" id="Ojq-Vm-nTc"/>
-                            <constraint firstAttribute="width" constant="254" id="Rfu-cd-YzM"/>
+                            <constraint firstAttribute="width" constant="219" id="bVo-K6-qJx"/>
+                            <constraint firstAttribute="height" constant="21" id="jS8-6e-RM6"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <attributedString key="attributedText">
+                            <fragment content="ANDREW SWEET">
+                                <attributes>
+                                    <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <font key="NSFont" size="10" name="Futura-Medium"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
+                                </attributes>
+                            </fragment>
+                        </attributedString>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="NXj-ao-EQX" secondAttribute="trailing" id="3Dw-KB-bXz"/>
-                    <constraint firstItem="fA3-00-0y0" firstAttribute="top" secondItem="bDh-Wl-8ZK" secondAttribute="top" constant="8" id="7eV-k1-7CB"/>
-                    <constraint firstAttribute="bottom" secondItem="fA3-00-0y0" secondAttribute="bottom" constant="8" id="N8E-5n-bVY"/>
-                    <constraint firstAttribute="bottom" secondItem="NXj-ao-EQX" secondAttribute="bottom" constant="-1" id="Nbc-6l-djO"/>
-                    <constraint firstAttribute="trailing" secondItem="fA3-00-0y0" secondAttribute="trailing" constant="20" id="rZz-Eb-ho9"/>
+                    <constraint firstItem="fA3-00-0y0" firstAttribute="leading" secondItem="bDh-Wl-8ZK" secondAttribute="leading" constant="13" id="M6G-cg-o4O"/>
+                    <constraint firstItem="fcg-Jb-1yP" firstAttribute="leading" secondItem="bDh-Wl-8ZK" secondAttribute="leading" constant="13" id="NyY-M3-gHi"/>
+                    <constraint firstAttribute="bottom" secondItem="fcg-Jb-1yP" secondAttribute="bottom" id="Y9d-57-4e6"/>
+                    <constraint firstAttribute="bottom" secondItem="fA3-00-0y0" secondAttribute="bottom" constant="20" id="aJK-fK-uhJ"/>
+                    <constraint firstItem="fA3-00-0y0" firstAttribute="top" secondItem="bDh-Wl-8ZK" secondAttribute="top" constant="8" id="bdc-Ag-S2X"/>
+                    <constraint firstAttribute="trailing" secondItem="fA3-00-0y0" secondAttribute="trailing" constant="13" id="oii-SG-Tqd"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="label" destination="fA3-00-0y0" id="AL7-3g-9NR"/>
+                <outlet property="messageLabel" destination="fA3-00-0y0" id="bQz-5r-obY"/>
+                <outlet property="userLabel" destination="fcg-Jb-1yP" id="jw9-hj-w5l"/>
             </connections>
         </tableViewCell>
     </objects>

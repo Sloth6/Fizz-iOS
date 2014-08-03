@@ -12,13 +12,13 @@
 
 @interface FZZExpandedVerticalTableViewController : UITableViewController
 
+- (void)updateMessages;
+- (void)setEvent:(FZZEvent *)event;
 @property (strong, nonatomic) FZZEvent *event;
 
-- (UIView *)topCell;
 - (UIView *)middleCell;
 - (UIView *)bottomCell;
 
-- (void)updateTopView:(UIView *)view;
 - (void)updateMiddleView:(UIView *)view;
 - (void)updateBottomView:(UIView *)view;
 

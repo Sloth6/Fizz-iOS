@@ -21,4 +21,6 @@
 @property UIButton *navButton;
 @property FZZNavIcon *navIcon;
 
+-(void)setIsEditingText:(BOOL)isEditingText;
+
 @end

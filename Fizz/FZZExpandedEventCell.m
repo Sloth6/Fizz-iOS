@@ -10,8 +10,9 @@
 #import "FZZInviteViewController.h"
 #import "FZZExpandedVerticalTableViewController.h"
 #import "FZZAppDelegate.h"
-#import "FZZChatDelegate.h"
 #import "FZZMessage.h"
+
+#import "FZZEvent.h"
 
 @interface FZZExpandedEventCell ()
 
@@ -28,8 +29,8 @@
         // Initialization code
         [self setupExpandedEventCell];
         
-//        _ivc = [[FZZInviteViewController alloc] init];
-//        [_tvc updateTopView:[_ivc tableView]];
+        //_ivc = [[FZZInviteViewController alloc] init];
+        //[_tvc updateTopView:[_ivc tableView]];
         
         CGRect topFrame = [UIScreen mainScreen].bounds;
         
@@ -42,21 +43,27 @@
         topFrame.size.height -= offset;
         
         UITableView *tableView = [[UITableView alloc] initWithFrame:topFrame];
-        [_tvc updateTopView:tableView];
+        [_tvc updateBottomView:tableView];
         tableView.bounces = NO;
         
-        _chatDelegate = [[FZZChatDelegate alloc] init];
-        [_tvc updateBottomView:[_chatDelegate view]];
-        _chatDelegate.tableView.bounces = NO;
-        _chatDelegate.tvc = _tvc;
+//        _chatDelegate = [[FZZChatDelegate alloc] init];
+//        [_tvc updateTopView:[_chatDelegate view]];
+//        _chatDelegate.tableView.bounces = NO;
+//        _chatDelegate.tvc = _tvc;
     }
     return self;
 }
 
+- (void)updateMessages{
+    [_tvc updateMessages];
+}
+
 - (void)setupExpandedEventCell{
+    
     [self setupTextView];
     
     [self setupTableview];
+    
 }
 
 
@@ -85,17 +92,16 @@
 
 - (void)setEvent:(FZZEvent *)event{
     _event = event;
-    _tvc.event = event;
+    [_tvc setEvent:event];
     
     NSString *text = [[event firstMessage] text];
     
     [_textView setText:text];
     NSLog(@"<<%@>>", text);
     
-    _chatDelegate.event = event;
+//    _chatDelegate.event = event;
     
     [_tvc updateMiddleView:_textView];
-    //    [_ivc updateFriends];
 }
 
 - (void)sendInvitations{
@@ -117,13 +123,15 @@
     float y = vInset;
     float height = sHeight - y - vOutset;
     
-    _textView = [[UITextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
-    
-    [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
-    [_textView setEditable:NO];
-    [_textView setScrollEnabled:NO];
-    [_textView setUserInteractionEnabled:NO];
-    [_textView setBackgroundColor:[UIColor clearColor]];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        _textView = [[UITextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
+        
+        [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
+        [_textView setEditable:NO];
+        [_textView setScrollEnabled:NO];
+        [_textView setUserInteractionEnabled:NO];
+        [_textView setBackgroundColor:[UIColor clearColor]];
+    });
 }
 
 /*

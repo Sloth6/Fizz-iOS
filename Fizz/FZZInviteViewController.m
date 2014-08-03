@@ -626,15 +626,15 @@ static int kFZZNumRecentInvites = 30;
 
 - (void)setupKeyboard{
     //set notification for when keyboard shows/hides
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillShow:)
+//                                                 name:UIKeyboardWillShowNotification
+//                                               object:nil];
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillHide:)
+//                                                 name:UIKeyboardWillHideNotification
+//                                               object:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -729,87 +729,6 @@ static int kFZZNumRecentInvites = 30;
     [cell setIsSelected:selected];
     
     return cell;
-}
-
-
--(void) keyboardWillShow:(NSNotification *)note{ // DUPLICATE
-    if (![_searchTextField isFirstResponder]) {
-        return;
-    }
-    
-    NSLog(@"%d>>>", [self.tableView numberOfRowsInSection:1]);
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    [appDelegate.navigationBar.navIcon setIsEditingText:YES];
-    
-    // get keyboard size and loction
-	CGRect keyboardBounds = [FZZChatDelegate getKeyboardBoundsFromNote:note];
-    
-	// get the height since this is the main value that we need.
-	NSInteger kbSizeH = keyboardBounds.size.height;
-    
-	// get a rect for the table/main frame
-	CGRect tableFrame = self.tableView.frame;
-    
-	tableFrame.size.height -= kbSizeH;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[note.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[note.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-	// set views with new info
-	self.tableView.frame = tableFrame;
-    
-    if ([self.tableView numberOfRowsInSection:1] > 0){
-        NSIndexPath *searchPath = [NSIndexPath indexPathForItem:0 inSection:1];
-        
-        [self.tableView scrollToRowAtIndexPath:searchPath
-                              atScrollPosition:UITableViewScrollPositionMiddle
-                                      animated:YES];
-    }
-    
-	// commit animations
-	[UIView commitAnimations];
-}
-
--(void) keyboardWillHide:(NSNotification *)note{ // DUPLICATE
-    
-    NSLog(@"\n\nONCE\n\n");
-    
-    if (![_searchTextField isFirstResponder]) {
-        return;
-    }
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    [appDelegate.navigationBar.navIcon setIsEditingText:NO];
-    
-    // get keyboard size and location
-    
-	CGRect keyboardBounds;
-    
-    keyboardBounds = [FZZChatDelegate getKeyboardBoundsFromNote:note];
-    
-	// get the height since this is the main value that we need.
-	NSInteger kbSizeH = keyboardBounds.size.height;
-    
-	// get a rect for the table/main frame
-	CGRect tableFrame = self.tableView.frame;
-    
-	tableFrame.size.height += kbSizeH;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[note.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[note.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-	// set views with new info
-	self.tableView.frame = tableFrame;
-	
-    // commit animations
-	[UIView commitAnimations];
 }
 
 

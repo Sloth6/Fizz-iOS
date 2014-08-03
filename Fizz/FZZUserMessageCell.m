@@ -1,5 +1,5 @@
 //
-//  FZZDetailTextCell.m
+//  FZZUserMessageCell.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/9/14.
@@ -7,6 +7,12 @@
 //
 
 #import "FZZUserMessageCell.h"
+#import "FZZUser.h"
+#import "FZZMessage.h"
+
+static UIFont *userCellMessageFont;
+static UIFont *userCellNameFont;
+static float messageLabelWidth;
 
 @implementation FZZUserMessageCell
 
@@ -15,19 +21,35 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
-        UIFont *font = [UIFont systemFontOfSize:16.0];
-        
-        [_label setFont:font];
+        static dispatch_once_t once;
+        dispatch_once(&once, ^{
+            userCellMessageFont = [[self messageLabel] font];
+            userCellNameFont = [[self userLabel] font];
+            messageLabelWidth = [[self messageLabel] frame].size.width;
+        });
     }
     return self;
 }
 
-+ (CGSize)getTextBoxForText:(NSString *)text withLabelWidth:(float)textWidth
++ (CGSize)getTextBoxForMessage:(FZZMessage *)message withLabelWidth:(float)textWidth
 {
     //CGFloat textWidth = [UIScreen mainScreen].bounds.size.width - (52 + (7 * 3) + 47);
     
-    UIFont *font = [UIFont systemFontOfSize:16.0];
+    UIFont *font;
+    
+    if (userCellMessageFont){
+        font = userCellMessageFont;
+    } else {
+        font = [UIFont fontWithName:@"Futura-Medium" size:15.0];
+    }
+    
+    FZZUser *me = [FZZUser me];
+    
+    if ([[message user] isEqual:me]){
+        font = [UIFont fontWithName:@"Futura-MediumItalic" size:15.0];
+    }
+    
+    NSString *text = [message text];
     
     CGFloat width = textWidth;
     NSAttributedString *attributedText =
@@ -41,6 +63,10 @@
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
     return rect.size;
+}
+
++ (float)messageLabelWidth{
+    return messageLabelWidth;
 }
 
 /*

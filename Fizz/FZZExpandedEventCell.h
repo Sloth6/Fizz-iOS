@@ -59,5 +59,6 @@
 
 - (void)setupToggle;
 - (void)setupExpandedEventCell;
+- (void)updateMessages;
 
 @end

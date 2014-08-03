@@ -29,15 +29,13 @@
 		4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4925ED87198466BF0024247C /* FZZAjaxPostDelegate.m */; };
 		492E5D79192EE6BB00359F11 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 492E5D78192EE6BB00359F11 /* libc++.dylib */; };
 		492E5D8019327E5800359F11 /* FZZExpandedEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */; };
-		494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */; };
-		494BFB3218E08FD600C59D18 /* CMTPCustomForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2118E08FD600C59D18 /* CMTPCustomForce.m */; };
-		494BFB3318E08FD600C59D18 /* CMTPForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2318E08FD600C59D18 /* CMTPForce.m */; };
-		494BFB3418E08FD600C59D18 /* CMTPIntegrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2518E08FD600C59D18 /* CMTPIntegrator.m */; };
-		494BFB3518E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2718E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m */; };
-		494BFB3618E08FD600C59D18 /* CMTPParticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2918E08FD600C59D18 /* CMTPParticle.m */; };
-		494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2B18E08FD600C59D18 /* CMTPParticleSystem.m */; };
-		494BFB3818E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2D18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m */; };
-		494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */ = {isa = PBXBuildFile; fileRef = 494BFB2F18E08FD600C59D18 /* CMTPSpring.m */; };
+		493B07401987FC4600EC61E4 /* FZZUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B073F1987FC4600EC61E4 /* FZZUtilities.m */; };
+		493B074719897ED400EC61E4 /* FZZKeyboardNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B074619897ED400EC61E4 /* FZZKeyboardNotificationCenter.m */; };
+		493B074B19898F0600EC61E4 /* FZZChatScreenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B074A19898F0600EC61E4 /* FZZChatScreenCell.m */; };
+		493B074E19898F3D00EC61E4 /* FZZChatScreenTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B074D19898F3D00EC61E4 /* FZZChatScreenTableViewController.m */; };
+		493B075119898F6900EC61E4 /* FZZEventMainCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B075019898F6900EC61E4 /* FZZEventMainCell.m */; };
+		493B075519898FA600EC61E4 /* FZZInviteScreenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B075419898FA600EC61E4 /* FZZInviteScreenCell.m */; };
+		493B075819898FC500EC61E4 /* FZZInviteScreenTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B075719898FC500EC61E4 /* FZZInviteScreenTableViewController.m */; };
 		4950411C1984826F002DE44C /* FZZInputVerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4950411B1984826F002DE44C /* FZZInputVerificationCodeViewController.m */; };
 		49504139198593B1002DE44C /* SocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 4950412F198593B1002DE44C /* SocketIO.m */; };
 		4950413A198593B1002DE44C /* SocketIOJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 49504131198593B1002DE44C /* SocketIOJSONSerialization.m */; };
@@ -59,9 +57,6 @@
 		4960803F18EFE03700CF72DB /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 4960803918EFE03700CF72DB /* release_notes.md */; };
 		497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */; };
 		497F349518E07F1200B70FD4 /* FZZInviteGuestButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349418E07F1200B70FD4 /* FZZInviteGuestButton.m */; };
-		4989270318E29E8300AECCF8 /* FZZManageFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270218E29E8300AECCF8 /* FZZManageFriendsViewController.m */; };
-		4989270618E2A02600AECCF8 /* FZZManageFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4989270518E2A02600AECCF8 /* FZZManageFriendCell.m */; };
-		4989270818E2A8DC00AECCF8 /* FZZManageFriendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4989270718E2A8DC00AECCF8 /* FZZManageFriendCell.xib */; };
 		4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */; };
 		4994FCFD1929D2C000BD2FB8 /* FZZEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFC1929D2C000BD2FB8 /* FZZEvent.m */; };
 		4994FD001929D2D800BD2FB8 /* FZZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFF1929D2D800BD2FB8 /* FZZMessage.m */; };
@@ -175,26 +170,20 @@
 		492E5D78192EE6BB00359F11 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		492E5D7E19327E5800359F11 /* FZZExpandedEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZExpandedEventCell.h; sourceTree = "<group>"; };
 		492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FZZExpandedEventCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		494BFB1D18E08FD600C59D18 /* CMTPAttraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPAttraction.h; path = CMTraerPhysics/CMTraerPhysics/CMTPAttraction.h; sourceTree = SOURCE_ROOT; };
-		494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPAttraction.m; path = CMTraerPhysics/CMTraerPhysics/CMTPAttraction.m; sourceTree = SOURCE_ROOT; };
-		494BFB1F18E08FD600C59D18 /* CMTPCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPCommon.h; path = CMTraerPhysics/CMTraerPhysics/CMTPCommon.h; sourceTree = SOURCE_ROOT; };
-		494BFB2018E08FD600C59D18 /* CMTPCustomForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPCustomForce.h; path = CMTraerPhysics/CMTraerPhysics/CMTPCustomForce.h; sourceTree = SOURCE_ROOT; };
-		494BFB2118E08FD600C59D18 /* CMTPCustomForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPCustomForce.m; path = CMTraerPhysics/CMTraerPhysics/CMTPCustomForce.m; sourceTree = SOURCE_ROOT; };
-		494BFB2218E08FD600C59D18 /* CMTPForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPForce.h; path = CMTraerPhysics/CMTraerPhysics/CMTPForce.h; sourceTree = SOURCE_ROOT; };
-		494BFB2318E08FD600C59D18 /* CMTPForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPForce.m; path = CMTraerPhysics/CMTraerPhysics/CMTPForce.m; sourceTree = SOURCE_ROOT; };
-		494BFB2418E08FD600C59D18 /* CMTPIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPIntegrator.h; path = CMTraerPhysics/CMTraerPhysics/CMTPIntegrator.h; sourceTree = SOURCE_ROOT; };
-		494BFB2518E08FD600C59D18 /* CMTPIntegrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPIntegrator.m; path = CMTraerPhysics/CMTraerPhysics/CMTPIntegrator.m; sourceTree = SOURCE_ROOT; };
-		494BFB2618E08FD600C59D18 /* CMTPModifiedEulerIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPModifiedEulerIntegrator.h; path = CMTraerPhysics/CMTraerPhysics/CMTPModifiedEulerIntegrator.h; sourceTree = SOURCE_ROOT; };
-		494BFB2718E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPModifiedEulerIntegrator.m; path = CMTraerPhysics/CMTraerPhysics/CMTPModifiedEulerIntegrator.m; sourceTree = SOURCE_ROOT; };
-		494BFB2818E08FD600C59D18 /* CMTPParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPParticle.h; path = CMTraerPhysics/CMTraerPhysics/CMTPParticle.h; sourceTree = SOURCE_ROOT; };
-		494BFB2918E08FD600C59D18 /* CMTPParticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPParticle.m; path = CMTraerPhysics/CMTraerPhysics/CMTPParticle.m; sourceTree = SOURCE_ROOT; };
-		494BFB2A18E08FD600C59D18 /* CMTPParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPParticleSystem.h; path = CMTraerPhysics/CMTraerPhysics/CMTPParticleSystem.h; sourceTree = SOURCE_ROOT; };
-		494BFB2B18E08FD600C59D18 /* CMTPParticleSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPParticleSystem.m; path = CMTraerPhysics/CMTraerPhysics/CMTPParticleSystem.m; sourceTree = SOURCE_ROOT; };
-		494BFB2C18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPRungeKuttaIntegrator.h; path = CMTraerPhysics/CMTraerPhysics/CMTPRungeKuttaIntegrator.h; sourceTree = SOURCE_ROOT; };
-		494BFB2D18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPRungeKuttaIntegrator.m; path = CMTraerPhysics/CMTraerPhysics/CMTPRungeKuttaIntegrator.m; sourceTree = SOURCE_ROOT; };
-		494BFB2E18E08FD600C59D18 /* CMTPSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTPSpring.h; path = CMTraerPhysics/CMTraerPhysics/CMTPSpring.h; sourceTree = SOURCE_ROOT; };
-		494BFB2F18E08FD600C59D18 /* CMTPSpring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMTPSpring.m; path = CMTraerPhysics/CMTraerPhysics/CMTPSpring.m; sourceTree = SOURCE_ROOT; };
-		494BFB3018E08FD600C59D18 /* CMTraerPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMTraerPhysics.h; path = CMTraerPhysics/CMTraerPhysics/CMTraerPhysics.h; sourceTree = SOURCE_ROOT; };
+		493B073E1987FC4600EC61E4 /* FZZUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUtilities.h; sourceTree = "<group>"; };
+		493B073F1987FC4600EC61E4 /* FZZUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUtilities.m; sourceTree = "<group>"; };
+		493B074519897ED400EC61E4 /* FZZKeyboardNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZKeyboardNotificationCenter.h; sourceTree = "<group>"; };
+		493B074619897ED400EC61E4 /* FZZKeyboardNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZKeyboardNotificationCenter.m; sourceTree = "<group>"; };
+		493B074919898F0600EC61E4 /* FZZChatScreenCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZChatScreenCell.h; sourceTree = "<group>"; };
+		493B074A19898F0600EC61E4 /* FZZChatScreenCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZChatScreenCell.m; sourceTree = "<group>"; };
+		493B074C19898F3D00EC61E4 /* FZZChatScreenTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZChatScreenTableViewController.h; sourceTree = "<group>"; };
+		493B074D19898F3D00EC61E4 /* FZZChatScreenTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZChatScreenTableViewController.m; sourceTree = "<group>"; };
+		493B074F19898F6900EC61E4 /* FZZEventMainCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventMainCell.h; sourceTree = "<group>"; };
+		493B075019898F6900EC61E4 /* FZZEventMainCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEventMainCell.m; sourceTree = "<group>"; };
+		493B075319898FA600EC61E4 /* FZZInviteScreenCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteScreenCell.h; sourceTree = "<group>"; };
+		493B075419898FA600EC61E4 /* FZZInviteScreenCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteScreenCell.m; sourceTree = "<group>"; };
+		493B075619898FC500EC61E4 /* FZZInviteScreenTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteScreenTableViewController.h; sourceTree = "<group>"; };
+		493B075719898FC500EC61E4 /* FZZInviteScreenTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteScreenTableViewController.m; sourceTree = "<group>"; };
 		4950411A1984826F002DE44C /* FZZInputVerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInputVerificationCodeViewController.h; sourceTree = "<group>"; };
 		4950411B1984826F002DE44C /* FZZInputVerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInputVerificationCodeViewController.m; sourceTree = "<group>"; };
 		4950412E198593B1002DE44C /* SocketIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketIO.h; path = "socket.IO-objc-master/SocketIO.h"; sourceTree = SOURCE_ROOT; };
@@ -234,11 +223,6 @@
 		497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZChatDelegate.m; sourceTree = "<group>"; };
 		497F349318E07F1200B70FD4 /* FZZInviteGuestButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteGuestButton.h; sourceTree = "<group>"; };
 		497F349418E07F1200B70FD4 /* FZZInviteGuestButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteGuestButton.m; sourceTree = "<group>"; };
-		4989270118E29E8300AECCF8 /* FZZManageFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZManageFriendsViewController.h; sourceTree = "<group>"; };
-		4989270218E29E8300AECCF8 /* FZZManageFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZManageFriendsViewController.m; sourceTree = "<group>"; };
-		4989270418E2A02600AECCF8 /* FZZManageFriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZManageFriendCell.h; sourceTree = "<group>"; };
-		4989270518E2A02600AECCF8 /* FZZManageFriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZManageFriendCell.m; sourceTree = "<group>"; };
-		4989270718E2A8DC00AECCF8 /* FZZManageFriendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZManageFriendCell.xib; sourceTree = "<group>"; };
 		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		4994FCF51929D23900BD2FB8 /* FZZCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCoordinate.h; sourceTree = "<group>"; };
 		4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCoordinate.m; sourceTree = "<group>"; };
@@ -395,42 +379,45 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
-		494BFB1B18E08FBF00C59D18 /* Physics */ = {
+		493B074119897C0000EC61E4 /* ChatViewOLD */ = {
 			isa = PBXGroup;
 			children = (
-				494BFB1D18E08FD600C59D18 /* CMTPAttraction.h */,
-				494BFB1E18E08FD600C59D18 /* CMTPAttraction.m */,
-				494BFB1F18E08FD600C59D18 /* CMTPCommon.h */,
-				494BFB2018E08FD600C59D18 /* CMTPCustomForce.h */,
-				494BFB2118E08FD600C59D18 /* CMTPCustomForce.m */,
-				494BFB2218E08FD600C59D18 /* CMTPForce.h */,
-				494BFB2318E08FD600C59D18 /* CMTPForce.m */,
-				494BFB2418E08FD600C59D18 /* CMTPIntegrator.h */,
-				494BFB2518E08FD600C59D18 /* CMTPIntegrator.m */,
-				494BFB2618E08FD600C59D18 /* CMTPModifiedEulerIntegrator.h */,
-				494BFB2718E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m */,
-				494BFB2818E08FD600C59D18 /* CMTPParticle.h */,
-				494BFB2918E08FD600C59D18 /* CMTPParticle.m */,
-				494BFB2A18E08FD600C59D18 /* CMTPParticleSystem.h */,
-				494BFB2B18E08FD600C59D18 /* CMTPParticleSystem.m */,
-				494BFB2C18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.h */,
-				494BFB2D18E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m */,
-				494BFB2E18E08FD600C59D18 /* CMTPSpring.h */,
-				494BFB2F18E08FD600C59D18 /* CMTPSpring.m */,
-				494BFB3018E08FD600C59D18 /* CMTraerPhysics.h */,
+				497F348F18DCB75D00B70FD4 /* FZZChatDelegate.h */,
+				497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */,
 			);
-			name = Physics;
+			name = ChatViewOLD;
 			sourceTree = "<group>";
 		};
-		4954FB1B18D4F0900083D07F /* InviteView */ = {
+		493B074819898ED200EC61E4 /* Chat View */ = {
+			isa = PBXGroup;
+			children = (
+				499A8E7918CD32B000842EA7 /* Chat Cells */,
+				493B074919898F0600EC61E4 /* FZZChatScreenCell.h */,
+				493B074A19898F0600EC61E4 /* FZZChatScreenCell.m */,
+				493B074C19898F3D00EC61E4 /* FZZChatScreenTableViewController.h */,
+				493B074D19898F3D00EC61E4 /* FZZChatScreenTableViewController.m */,
+			);
+			name = "Chat View";
+			sourceTree = "<group>";
+		};
+		493B075219898F8D00EC61E4 /* Invite View */ = {
+			isa = PBXGroup;
+			children = (
+				493B075319898FA600EC61E4 /* FZZInviteScreenCell.h */,
+				493B075419898FA600EC61E4 /* FZZInviteScreenCell.m */,
+				493B075619898FC500EC61E4 /* FZZInviteScreenTableViewController.h */,
+				493B075719898FC500EC61E4 /* FZZInviteScreenTableViewController.m */,
+			);
+			name = "Invite View";
+			sourceTree = "<group>";
+		};
+		4954FB1B18D4F0900083D07F /* InviteViewOLD */ = {
 			isa = PBXGroup;
 			children = (
 				4954FB1618D4EFFF0083D07F /* FZZInviteViewController.h */,
 				4954FB1718D4EFFF0083D07F /* FZZInviteViewController.m */,
 				4921FD3A1943C8400086266E /* FZZBounceTableView.h */,
 				4921FD3B1943C8400086266E /* FZZBounceTableView.m */,
-				497F348F18DCB75D00B70FD4 /* FZZChatDelegate.h */,
-				497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */,
 				49EEEA8C18D8D37300BDA605 /* FZZPhoneInputCell.h */,
 				49EEEA8D18D8D37300BDA605 /* FZZPhoneInputCell.m */,
 				49EEEA8918D8D1E600BDA605 /* FZZPhoneInputCell.xib */,
@@ -442,14 +429,14 @@
 				4954FB1F18D4F1010083D07F /* FZZInviteCell.m */,
 				4954FB1C18D4F0A30083D07F /* FZZInviteCell.xib */,
 			);
-			name = InviteView;
+			name = InviteViewOLD;
 			sourceTree = "<group>";
 		};
 		495E9D23187BAD83008F7CC7 /* Main View */ = {
 			isa = PBXGroup;
 			children = (
 				497F349218E07EE300B70FD4 /* Buttons */,
-				49C8B0E91888B3C500400832 /* Collection View Cells */,
+				49C8B0E91888B3C500400832 /* Event Cells */,
 				4922701F18CA1CA600816AD4 /* FZZEventsViewController.h */,
 				4922702018CA1CA600816AD4 /* FZZEventsViewController.m */,
 				496B87B7190D8B2600E100FB /* Unused */,
@@ -524,28 +511,21 @@
 			name = Buttons;
 			sourceTree = "<group>";
 		};
-		4989270018E29E4300AECCF8 /* Friend Management */ = {
+		49958A611932B64B00C8F6E1 /* Event Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				4989270118E29E8300AECCF8 /* FZZManageFriendsViewController.h */,
-				4989270218E29E8300AECCF8 /* FZZManageFriendsViewController.m */,
-				4989270418E2A02600AECCF8 /* FZZManageFriendCell.h */,
-				4989270518E2A02600AECCF8 /* FZZManageFriendCell.m */,
-				4989270718E2A8DC00AECCF8 /* FZZManageFriendCell.xib */,
-			);
-			name = "Friend Management";
-			sourceTree = "<group>";
-		};
-		49958A611932B64B00C8F6E1 /* Expanded Table View Cell */ = {
-			isa = PBXGroup;
-			children = (
+				493B074F19898F6900EC61E4 /* FZZEventMainCell.h */,
+				493B075019898F6900EC61E4 /* FZZEventMainCell.m */,
+				493B075219898F8D00EC61E4 /* Invite View */,
+				493B074819898ED200EC61E4 /* Chat View */,
 				492E5D7E19327E5800359F11 /* FZZExpandedEventCell.h */,
 				492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */,
 				49958A5E1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.h */,
 				49958A5F1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m */,
-				4954FB1B18D4F0900083D07F /* InviteView */,
+				493B074119897C0000EC61E4 /* ChatViewOLD */,
+				4954FB1B18D4F0900083D07F /* InviteViewOLD */,
 			);
-			name = "Expanded Table View Cell";
+			name = "Event Subviews";
 			sourceTree = "<group>";
 		};
 		499A8E7918CD32B000842EA7 /* Chat Cells */ = {
@@ -573,17 +553,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		49C8B0E91888B3C500400832 /* Collection View Cells */ = {
+		49C8B0E91888B3C500400832 /* Event Cells */ = {
 			isa = PBXGroup;
 			children = (
 				49C8B1531889F08600400832 /* FZZEventCell.h */,
 				49C8B1541889F08600400832 /* FZZEventCell.m */,
-				49958A611932B64B00C8F6E1 /* Expanded Table View Cell */,
+				49958A611932B64B00C8F6E1 /* Event Subviews */,
 				4954FB0918D4BD280083D07F /* FZZExpandedNewEventCell.h */,
 				4954FB0A18D4BD280083D07F /* FZZExpandedNewEventCell.m */,
-				499A8E7918CD32B000842EA7 /* Chat Cells */,
 			);
-			name = "Collection View Cells";
+			name = "Event Cells";
 			sourceTree = "<group>";
 		};
 		49D5C993186042C2002BB1F0 = {
@@ -644,7 +623,6 @@
 				49F524D018E1C3040019C5DF /* FZZOverlayView.h */,
 				49F524D118E1C3040019C5DF /* FZZOverlayView.m */,
 				495E9D23187BAD83008F7CC7 /* Main View */,
-				4989270018E29E4300AECCF8 /* Friend Management */,
 				49D5C9B1186042C2002BB1F0 /* Images.xcassets */,
 				49D5C9A6186042C2002BB1F0 /* Supporting Files */,
 			);
@@ -684,10 +662,11 @@
 			isa = PBXGroup;
 			children = (
 				496B87B5190D872A00E100FB /* PhoneNumberFormatter */,
-				494BFB1B18E08FBF00C59D18 /* Physics */,
 				496B87B4190D86B700E100FB /* Fizz Objects */,
 				4925ED7E197DAF1D0024247C /* FZZLocalCache.h */,
 				4925ED7F197DAF1D0024247C /* FZZLocalCache.m */,
+				493B073E1987FC4600EC61E4 /* FZZUtilities.h */,
+				493B073F1987FC4600EC61E4 /* FZZUtilities.m */,
 			);
 			name = Internal;
 			sourceTree = "<group>";
@@ -746,6 +725,8 @@
 				4925ED87198466BF0024247C /* FZZAjaxPostDelegate.m */,
 				4950413E1986F292002DE44C /* FZZLocationManager.h */,
 				4950413F1986F292002DE44C /* FZZLocationManager.m */,
+				493B074519897ED400EC61E4 /* FZZKeyboardNotificationCenter.h */,
+				493B074619897ED400EC61E4 /* FZZKeyboardNotificationCenter.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -881,7 +862,6 @@
 				4960803F18EFE03700CF72DB /* release_notes.md in Resources */,
 				499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */,
 				49D5E6D418616A56002BB1F0 /* package.json in Resources */,
-				4989270818E2A8DC00AECCF8 /* FZZManageFriendCell.xib in Resources */,
 				4925ED851984533F0024247C /* FZZInputVerificationCodeViewController.xib in Resources */,
 				49D5C9AA186042C2002BB1F0 /* InfoPlist.strings in Resources */,
 				4954FB0218D3AAA40083D07F /* FZZInputPhoneViewController.xib in Resources */,
@@ -943,23 +923,21 @@
 			files = (
 				4950413A198593B1002DE44C /* SocketIOJSONSerialization.m in Sources */,
 				49504139198593B1002DE44C /* SocketIO.m in Sources */,
-				494BFB3118E08FD600C59D18 /* CMTPAttraction.m in Sources */,
 				49069B2018651FFA003D003A /* FZZSocketIODelegate.m in Sources */,
 				49F524D518E212840019C5DF /* FZZNavIcon.m in Sources */,
 				4954FB0818D3AB800083D07F /* PhoneNumberFormatter.m in Sources */,
 				49EEEA9718D972FB00BDA605 /* FZZBackspaceResignTextView.m in Sources */,
-				494BFB3318E08FD600C59D18 /* CMTPForce.m in Sources */,
-				494BFB3218E08FD600C59D18 /* CMTPCustomForce.m in Sources */,
 				49958A601932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m in Sources */,
 				49C8B1551889F08600400832 /* FZZEventCell.m in Sources */,
+				493B075819898FC500EC61E4 /* FZZInviteScreenTableViewController.m in Sources */,
 				49F524D218E1C3040019C5DF /* FZZOverlayView.m in Sources */,
-				494BFB3418E08FD600C59D18 /* CMTPIntegrator.m in Sources */,
+				493B075519898FA600EC61E4 /* FZZInviteScreenCell.m in Sources */,
 				4954FB2018D4F1010083D07F /* FZZInviteCell.m in Sources */,
 				4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */,
 				49069B8218661555003D003A /* SBJson4StreamTokeniser.m in Sources */,
-				494BFB3518E08FD600C59D18 /* CMTPModifiedEulerIntegrator.m in Sources */,
 				4954FB0B18D4BD280083D07F /* FZZExpandedNewEventCell.m in Sources */,
 				4994FD001929D2D800BD2FB8 /* FZZMessage.m in Sources */,
+				493B074719897ED400EC61E4 /* FZZKeyboardNotificationCenter.m in Sources */,
 				49AA439018E8FBEC006D6830 /* FZZServerMessageCell.m in Sources */,
 				49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */,
 				49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */,
@@ -971,23 +949,20 @@
 				4925ED83198439B40024247C /* FZZLoginDelegate.m in Sources */,
 				49D5C9B0186042C2002BB1F0 /* FZZAppDelegate.m in Sources */,
 				49069B0518651731003D003A /* NSData+SRB64Additions.m in Sources */,
-				4989270618E2A02600AECCF8 /* FZZManageFriendCell.m in Sources */,
 				4950413B198593B1002DE44C /* SocketIOPacket.m in Sources */,
 				49BCC49C192D2FAA0085CE16 /* FZZCluster.m in Sources */,
 				4954FB0118D3AAA40083D07F /* FZZInputPhoneViewController.m in Sources */,
 				4921FD3C1943C8400086266E /* FZZBounceTableView.m in Sources */,
+				493B074E19898F3D00EC61E4 /* FZZChatScreenTableViewController.m in Sources */,
 				4994FCFD1929D2C000BD2FB8 /* FZZEvent.m in Sources */,
 				499A8E7F18CD336800842EA7 /* FZZUserMessageCell.m in Sources */,
 				495E9D28187BAF98008F7CC7 /* FZZSpeechBubble.m in Sources */,
+				493B074B19898F0600EC61E4 /* FZZChatScreenCell.m in Sources */,
 				49069B8018661555003D003A /* SBJson4Writer.m in Sources */,
 				49069B7D18661555003D003A /* SBJson4StreamWriter.m in Sources */,
-				494BFB3918E08FD600C59D18 /* CMTPSpring.m in Sources */,
 				49EEEA9118D932F000BDA605 /* FZZBackspaceResignTextField.m in Sources */,
 				49EEEA8E18D8D37300BDA605 /* FZZPhoneInputCell.m in Sources */,
-				4989270318E29E8300AECCF8 /* FZZManageFriendsViewController.m in Sources */,
-				494BFB3618E08FD600C59D18 /* CMTPParticle.m in Sources */,
 				495041401986F292002DE44C /* FZZLocationManager.m in Sources */,
-				494BFB3818E08FD600C59D18 /* CMTPRungeKuttaIntegrator.m in Sources */,
 				4950411C1984826F002DE44C /* FZZInputVerificationCodeViewController.m in Sources */,
 				497F349518E07F1200B70FD4 /* FZZInviteGuestButton.m in Sources */,
 				4950413C198593B1002DE44C /* SocketIOTransportWebsocket.m in Sources */,
@@ -995,9 +970,10 @@
 				4922702118CA1CA600816AD4 /* FZZEventsViewController.m in Sources */,
 				4925ED80197DAF1D0024247C /* FZZLocalCache.m in Sources */,
 				4954FB1918D4EFFF0083D07F /* FZZInviteViewController.m in Sources */,
-				494BFB3718E08FD600C59D18 /* CMTPParticleSystem.m in Sources */,
 				49069B7E18661555003D003A /* SBJson4StreamParser.m in Sources */,
 				49069B0418651731003D003A /* base64.c in Sources */,
+				493B075119898F6900EC61E4 /* FZZEventMainCell.m in Sources */,
+				493B07401987FC4600EC61E4 /* FZZUtilities.m in Sources */,
 				4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */,
 				49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */,
 				497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */,

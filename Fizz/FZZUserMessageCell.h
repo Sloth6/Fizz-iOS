@@ -1,5 +1,5 @@
 //
-//  FZZDetailTextCell.h
+//  FZZUserMessageCell.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/9/14.
@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class FZZMessage;
 
 /*
  
@@ -19,8 +20,11 @@
 
 @interface FZZUserMessageCell : UITableViewCell
 
-@property IBOutlet UILabel *label;
+@property IBOutlet UILabel *messageLabel;
+@property IBOutlet UILabel *userLabel;
 
-+ (CGSize)getTextBoxForText:(NSString *)text withLabelWidth:(float)labelWidth;
++ (CGSize)getTextBoxForMessage:(FZZMessage *)message withLabelWidth:(float)labelWidth;
+
++ (float)messageLabelWidth;
 
 @end

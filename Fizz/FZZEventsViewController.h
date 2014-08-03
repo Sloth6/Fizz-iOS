@@ -17,7 +17,6 @@
  */
 
 
-@class FZZChatDelegate;
 @class FZZExpandedNewEventCell;
 @class FZZNavIcon;
 @class FZZBackspaceResignTextView;
@@ -34,9 +33,6 @@
 - (void)exitNewEventPrompt:(FZZBackspaceResignTextView *)textView;
 
 @property NSMutableArray *events;
-
-//@property FZZMapViewController *mvc;
-//@property FZZManageFriendsViewController *mfvc;
 
 typedef enum {
     kOverview,

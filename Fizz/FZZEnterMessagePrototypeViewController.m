@@ -1,5 +1,5 @@
 //
-//  FZZTestViewController.m
+//  FZZEnterMessagePrototypeViewController.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/11/14.

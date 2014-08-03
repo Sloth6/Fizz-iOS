@@ -8,9 +8,10 @@
 
 #import "FZZExpandedVerticalTableViewController.h"
 
+#import "FZZChatScreenCell.h"
+
 @interface FZZExpandedVerticalTableViewController ()
 
-@property UIView *topView;
 @property UIView *middleView;
 @property UIView *bottomView;
 
@@ -25,8 +26,26 @@
         // Custom initialization
         [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
         [self.tableView setSeparatorColor:[UIColor clearColor]];
+        
+        [self.tableView registerClass:[FZZChatScreenCell class] forCellReuseIdentifier:@"chatCell"];
     }
     return self;
+}
+
+- (FZZChatScreenCell *)getChatScreenCell{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    return (FZZChatScreenCell *)[self tableView:[self tableView] cellForRowAtIndexPath:indexPath];
+}
+
+- (void)setEvent:(FZZEvent *)event{
+    _event = event;
+    NSLog(@"RELOAD DATA NOWSS");
+    [[self tableView] reloadData];
+    
+    FZZChatScreenCell *cell = [self getChatScreenCell];
+    
+    [cell setEvent:event];
 }
 
 - (void)viewDidLoad
@@ -38,6 +57,12 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+// TODOAndrew figure out what else I'm missing when I override this
+// Overriding viewWillAppear to stop the view from jumping around on Keyboard show/hide
+- (void)viewWillAppear:(BOOL)animated{
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,7 +87,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    UITableViewCell *cell;
+    
+    switch (indexPath.row) {
+        case 0:
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"chatCell" forIndexPath:indexPath];
+            [(FZZChatScreenCell *)cell setEvent:_event];
+        }
+            break;
+            
+        default:
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+        }
+            break;
+    }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -73,12 +113,6 @@
 //    }];
     
     return cell;
-}
-
-- (UIView *)topCell{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    return [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
 }
 
 - (UIView *)middleCell{
@@ -93,12 +127,9 @@
     return [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
 }
 
-- (void)updateTopView:(UIView *)view{
-    if (_topView != view){
-        [_topView removeFromSuperview];
-        _topView = view;
-        [[self topCell] addSubview:view];
-    }
+- (void)updateMessages{
+    FZZChatScreenCell *cell = [self getChatScreenCell];
+    [cell updateMessages];
 }
 
 - (void)updateMiddleView:(UIView *)view{

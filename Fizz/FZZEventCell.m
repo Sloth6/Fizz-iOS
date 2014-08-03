@@ -47,14 +47,14 @@
     }
     
     // Text
-    NSString *text = [event description];
+    NSString *text = [event eventDescription];
     
     _label.text = text;
 }
 
 - (void)setEvent:(FZZEvent *)event {
     // Text
-    NSString *text = [event description];
+    NSString *text = [event eventDescription];
     
     _label.text = text;
 }

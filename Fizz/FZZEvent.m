@@ -306,6 +306,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
             self.messages = [[NSArray alloc] init];
         }
         
+        self.messages = [self.messages arrayByAddingObject:message];
+        
         NSArray *items = [self.messages sortedArrayWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(id obj1, id obj2) {
             FZZMessage *m1 = obj1;
             FZZMessage *m2 = obj2;
@@ -317,9 +319,9 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     }
 }
 
--(void)updateDescription:(NSString *)description{
+-(void)updateEventDescription:(NSString *)eventDescription{
     @synchronized(self){
-        [self setDescription:description];
+        [self setEventDescription:eventDescription];
     }
 }
 
@@ -411,7 +413,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     [json setObject:[self eventID] forKey:@"eid"];
     
     /* descriptions : string */
-    [json setObject:[self description] forKey:@"description"];
+    [json setObject:[self eventDescription] forKey:@"description"];
     
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_UPDATE_EVENT withData:json andAcknowledge:function];
 }
@@ -527,7 +529,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         [guests setObject:user atIndexedSubscript:idx];
     }];
     
-    NSString *description = [eventJSON objectForKey:@"description"];
+    NSString *eventDescription = [eventJSON objectForKey:@"description"];
     
     /* Allocate Memory and Assign Values */
     FZZEvent *event = [FZZEvent eventWithEID:eid];
@@ -535,7 +537,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     [event setCreator:creator];
     [event setCreationTime:creationTime];
     
-    [event setDescription:description];
+    [event setEventDescription:eventDescription];
     [event setInvitees:invites];
     [event setGuests:guests];
     

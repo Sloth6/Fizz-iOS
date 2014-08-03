@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FZZEvent.h"
+#import "FZZKeyboardNotificationCenter.h"
 
 /*
  
@@ -21,21 +22,24 @@
 @class FZZInviteViewController;
 @class FZZExpandedVerticalTableViewController;
 
-@interface FZZChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
+@interface FZZChatDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, FZZKeyboardManagedObject> //UITextViewDelegate, FZZKeyboardManagedObject>
 
-@property (strong, nonatomic) UIView *view;
-@property (nonatomic, retain) UIView *viewForm;
-@property (nonatomic, retain) UITextView *chatBox;
-
-@property (strong, nonatomic) FZZEvent *event;
-@property (strong, nonatomic) FZZEventsViewController *esvc;
-@property (strong, nonatomic) FZZExpandedVerticalTableViewController *tvc;
-@property (strong, nonatomic) UITableView *tableView;
-
-- (void)addIncomingMessageForEvent:(FZZEvent *)event;
-
-+ (CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;
-
-//- (void)popView;
+//@property (strong, nonatomic) UITableViewCell *view;
+//@property (nonatomic, retain) UIView *viewForm;
+//@property (nonatomic, retain) UITextView *chatBox;
+//
+//@property (strong, nonatomic) FZZEvent *event;
+//@property (strong, nonatomic) FZZEventsViewController *esvc;
+//@property (strong, nonatomic) FZZExpandedVerticalTableViewController *tvc;
+//@property (strong, nonatomic) UITableView *tableView;
+//
+//- (void)addIncomingMessageForEvent:(FZZEvent *)event;
+//
+//+ (CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;
+//
+-(void) keyboardWillShow:(NSNotification *)note;
+-(void) keyboardWillHide:(NSNotification *)note;
+//
+////- (void)popView;
 
 @end
