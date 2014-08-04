@@ -35,6 +35,8 @@ static int kFZZMinChatCellHeight = 58;
         [_tableView setDelegate:self];
         [_tableView setDataSource:self];
         [_tableView setSeparatorColor:[UIColor clearColor]];
+        [_tableView setBackgroundColor:[UIColor clearColor]];
+        [_tableView setOpaque:NO];
         
         _tableView.keyboardDismissMode  = UIScrollViewKeyboardDismissModeInteractive;
         
@@ -206,7 +208,7 @@ static int kFZZMinChatCellHeight = 58;
     [cell.messageLabel setFont:messageFont];
     [cell.userLabel setFont:userFont];
     
-    cell.backgroundColor = [UIColor whiteColor];
+    cell.backgroundColor = [UIColor clearColor];
     
     return cell;
 }

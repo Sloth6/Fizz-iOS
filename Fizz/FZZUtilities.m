@@ -22,4 +22,26 @@ void runOnMainQueueWithoutDeadlocking(void (^block)(void))
     }
 }
 
+UIImage* crop(UIImage *image, CGRect rect) {
+    UIGraphicsBeginImageContextWithOptions(rect.size, false, [image scale]);
+    [image drawAtPoint:CGPointMake(-rect.origin.x, -rect.origin.y)];
+    UIImage *cropped_image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return cropped_image;
+}
+
+UIImage *centeredCrop(UIImage *image){
+    CGFloat imageHeight = image.size.height;
+    CGFloat imageWidth  = image.size.width;
+    
+    CGRect screenRect = [UIScreen mainScreen].bounds;
+    CGFloat screenHeight = screenRect.size.height * 2;
+    CGFloat screenWidth  = screenRect.size.width * 2;
+    
+    screenRect.origin.y = (imageHeight/2) - (screenHeight/2);
+    screenRect.origin.x = (imageWidth/2) - (screenWidth/2);
+    
+    return crop(image, screenRect);
+}
+
 @end

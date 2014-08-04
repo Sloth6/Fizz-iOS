@@ -51,12 +51,18 @@ static FZZUser *currentUser = nil;
 +(BOOL)saveUsersToFile:(NSString *)userURL{
     NSDictionary *jsonDict = [FZZUser getUsersJSONForCache];
     
-    NSLog(@"saving: \n\n%@\n\n", jsonDict);
+    if (jsonDict == nil) return NO;
+    
+    NSLog(@"saving: \n%@\n", jsonDict);
     
     return [jsonDict writeToFile:userURL atomically:YES];
 }
 
 +(NSDictionary *)getUsersJSONForCache{
+    FZZUser *user = [FZZUser me];
+    
+    if (user == nil) return nil;
+    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[users count]];
     
     NSDictionary *userDict = [users copy];
@@ -73,8 +79,6 @@ static FZZUser *currentUser = nil;
         // Where key = uID
         [dict setObject:jsonUser forKey:key];
     }];
-    
-    FZZUser *user = [FZZUser me];
     
     [dict setObject:[user userID] forKey:@"myUserID"];
     

@@ -21,7 +21,7 @@
 +(NSString *)getUrlForEvents;
 +(NSString *)getUrlForUsers;
 
-+(void)updateCache;
++(BOOL)updateCache;
 +(BOOL)loadFromCache;
 +(void)clearCache;
 

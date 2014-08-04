@@ -55,11 +55,11 @@ static FZZLocalCache *cache;
     return fileName;
 }
 
-+(void)updateCache{
-    [[FZZLocalCache cache] updateCache];
++(BOOL)updateCache{
+    return [[FZZLocalCache cache] updateCache];
 }
 
--(void)updateCache{
+-(BOOL)updateCache{
     @synchronized(self){
         NSString *bundlePath = [FZZLocalCache getCacheDirectory];
         
@@ -73,8 +73,15 @@ static FZZLocalCache *cache;
             //..
         }
         
-        [FZZUser saveUsersToFile:[FZZLocalCache getUrlForUsers]];
-        [FZZEvent saveEventsToFile:[FZZLocalCache getUrlForEvents]];
+        if ([FZZUser saveUsersToFile:[FZZLocalCache getUrlForUsers]]){
+            if ([FZZEvent saveEventsToFile:[FZZLocalCache getUrlForEvents]]){
+                return YES;
+            }
+        }
+        
+        NSLog(@"Cache update failed!");
+        
+        return NO;
     }
 }
 

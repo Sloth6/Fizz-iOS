@@ -353,8 +353,11 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
     NSLog(@"Updating local cache...");
-    [FZZLocalCache updateCache];
-    NSLog(@"Did update cache.");
+    if ([FZZLocalCache updateCache]){
+        NSLog(@"Did update cache.");
+    } else{
+        NSLog(@"Failed to update cache.");
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -381,8 +384,11 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
     NSLog(@"Updating local cache...");
-    [FZZLocalCache updateCache];
-    NSLog(@"Did update cache.");
+    if ([FZZLocalCache updateCache]){
+        NSLog(@"Did update cache.");
+    } else {
+        NSLog(@"Failed to update cache.");
+    }
 }
 
 + (BOOL)isRetinaDisplay{

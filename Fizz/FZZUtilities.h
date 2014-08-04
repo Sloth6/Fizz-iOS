@@ -11,5 +11,7 @@
 @interface FZZUtilities : NSObject
 
 void runOnMainQueueWithoutDeadlocking(void (^block)(void));
+UIImage *centeredCrop(UIImage *image);
+UIImage *crop(UIImage *image, CGRect rect);
 
 @end

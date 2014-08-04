@@ -26,6 +26,7 @@
         // Custom initialization
         [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
         [self.tableView setSeparatorColor:[UIColor clearColor]];
+        [self.tableView setBackgroundColor:[UIColor clearColor]];
         
         [self.tableView registerClass:[FZZChatScreenCell class] forCellReuseIdentifier:@"chatCell"];
     }
@@ -105,6 +106,10 @@
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
+    backView.backgroundColor = [UIColor clearColor];
+    cell.backgroundView = backView;
     
 //    // Configure the cell...
 //    [cell.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

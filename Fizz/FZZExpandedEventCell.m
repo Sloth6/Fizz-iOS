@@ -11,12 +11,14 @@
 #import "FZZExpandedVerticalTableViewController.h"
 #import "FZZAppDelegate.h"
 #import "FZZMessage.h"
+#import "FZZUtilities.h"
 
 #import "FZZEvent.h"
 
 @interface FZZExpandedEventCell ()
 
 @property (strong, nonatomic) UIButton *sendInviteButton;
+@property (strong, nonatomic) UIImageView *imageView;
 
 @end
 
@@ -60,10 +62,24 @@
 
 - (void)setupExpandedEventCell{
     
+    [self setupImageView];
+    
     [self setupTextView];
     
     [self setupTableview];
     
+}
+
+- (void)setupImageView{
+    CGRect window = [UIScreen mainScreen].bounds;
+    
+    _imageView = [[UIImageView alloc] initWithFrame:window];
+    UIImage *image = [UIImage imageNamed:@"testImage"];
+    
+    image = centeredCrop(image);
+    
+    [_imageView setImage:image];
+    [self.contentView addSubview:_imageView];
 }
 
 
@@ -82,21 +98,24 @@
     _tvc = [[FZZExpandedVerticalTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
-    
-    [_tvc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     [[_tvc tableView] setPagingEnabled:YES];
     
     [_tvc.tableView setFrame:self.bounds];
+    [_tvc.tableView setBackgroundColor:[UIColor clearColor]];
+    [_tvc.tableView setOpaque:NO];
     [self.contentView addSubview:_tvc.tableView];
+    
+    [_tvc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 - (void)setEvent:(FZZEvent *)event{
     _event = event;
     [_tvc setEvent:event];
     
-    NSString *text = [[event firstMessage] text];
+    NSString *text = [event eventDescription];
     
     [_textView setText:text];
+    [_textView sizeToFit];
     NSLog(@"<<%@>>", text);
     
 //    _chatDelegate.event = event;

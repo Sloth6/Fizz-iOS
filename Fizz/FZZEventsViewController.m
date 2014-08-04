@@ -139,6 +139,9 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         // For all other events
         [self.collectionView registerClass:[FZZExpandedEventCell class] forCellWithReuseIdentifier:@"ExpandedEventCell"];
         
+        [self.collectionView setBackgroundColor:[UIColor clearColor]];
+        [self.collectionView setOpaque:NO];
+        
         //        self.textCV = [[UICollectionView alloc]
         //                       initWithFrame:self.view.frame
         //                       collectionViewLayout:flowLayout
@@ -307,6 +310,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         
         [cell.label setText:@"Create a New Event"];
+        [cell.label sizeToFit];
         
         return cell;
     } else {
@@ -1197,7 +1201,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     // Submitting content
     // Scrolling is still disabled
     [FZZEvent socketIONewEventWithMessage:textView.text
-                           AndAcknowledge:Nil];
+                           AndAcknowledge:nil];
     
     [UIView animateWithDuration:0.25 animations:^{
         [textView setTextColor:[UIColor blackColor]];
@@ -1288,17 +1292,17 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:1];
         
-        if (i < numIncomingEvents){
-            NSString *firstMessage = [[event firstMessage] text];
-            FZZUser *creator = [event creator];
-            
-            if (creator == [FZZUser me] && [firstMessage isEqualToString:_lastInputString]){
-                // Need to jump to proper view in Main Queue, QED
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
-                });
-            }
-        }
+//        if (i < numIncomingEvents){
+//            NSString *firstMessage = [[event firstMessage] text];
+//            FZZUser *creator = [event creator];
+//            
+//            if (creator == [FZZUser me] && [firstMessage isEqualToString:_lastInputString]){
+//                // Need to jump to proper view in Main Queue, QED
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+//                });
+//            }
+//        }
     }
     
     return;

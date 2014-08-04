@@ -41,10 +41,15 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 
 +(BOOL)saveEventsToFile:(NSString *)eventsURL{
     NSDictionary *jsonDict = [FZZEvent getEventsJSONForCache];
+    
+    if (jsonDict == nil) return NO;
+    
     return [jsonDict writeToFile:eventsURL atomically:YES];
 }
 
 +(NSDictionary *)getEventsJSONForCache{
+    if ([events count] < 1) return nil;
+    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[events count]];
     
     NSDictionary *eventDict = [events copy];
@@ -87,6 +92,10 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         // Creator
         FZZUser *creator = [event creator];
         [jsonEvent setValue:[creator userID] forKey:@"creator"];
+        
+        // Description
+        NSString *eventDescription = [event eventDescription];
+        [jsonEvent setValue:eventDescription forKeyPath:@"eventDescription"];
         
         
         // Where key = uID
@@ -151,6 +160,10 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
                 FZZUser *creator = [FZZUser userWithUID:creatorUserID];
                 
                 [event setCreator:creator];
+                
+                // Description
+                NSString *eventDescription = [jsonEvent objectForKey:@"eventDescription"];
+                [event setEventDescription:eventDescription];
             }
         }
     }];

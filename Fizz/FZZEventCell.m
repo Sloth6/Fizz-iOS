@@ -27,6 +27,9 @@
         
         _label.textAlignment = NSTextAlignmentCenter;
         
+        [_label setLineBreakMode:NSLineBreakByWordWrapping];
+        _label.numberOfLines = 0;
+        
         [self.contentView addSubview:_label];
     }
     return self;
@@ -42,6 +45,7 @@
 -(void)setEventCollapsed:(FZZEvent *)event{
     if (event == NULL){
         _label.text = @"Create A New Event";
+        [_label sizeToFit];
         
         return;
     }
@@ -50,6 +54,7 @@
     NSString *text = [event eventDescription];
     
     _label.text = text;
+    [_label sizeToFit];
 }
 
 - (void)setEvent:(FZZEvent *)event {
@@ -57,6 +62,7 @@
     NSString *text = [event eventDescription];
     
     _label.text = text;
+    [_label sizeToFit];
 }
 
 @end
