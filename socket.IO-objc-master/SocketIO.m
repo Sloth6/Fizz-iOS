@@ -94,6 +94,10 @@ NSString* const SocketIOException = @"SocketIOException";
     return self;
 }
 
+- (BOOL) isConnectionOpen{
+    return _isConnected;
+}
+
 - (void) connectToHost:(NSString *)host onPort:(NSInteger)port
 {
     [self connectToHost:host onPort:port withParams:nil withNamespace:@"" withConnectionTimeout:defaultConnectionTimeout];

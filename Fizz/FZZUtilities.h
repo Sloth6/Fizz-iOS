@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+static UIFont *kFZZEventFont;
+
 @interface FZZUtilities : NSObject
 
 void runOnMainQueueWithoutDeadlocking(void (^block)(void));

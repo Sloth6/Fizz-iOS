@@ -34,6 +34,8 @@ static NSURLConnection *connection;
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
         // TODOAndrew Prompt server for new login token
+        
+        NSLog(@"FAILED LOGIN, FORCE LOGOUT");
     }
     
     return NO;

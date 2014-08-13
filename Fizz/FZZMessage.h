@@ -40,7 +40,8 @@
           WithAcknowledge:(SocketIOCallback)function;
 
 +(NSArray *)convertMessagesToJSONForCache:(NSArray *)messages;
-+(NSArray *)convertMessagesFromJSONForCache:(NSArray *)messageJSONs;
++(NSArray *)convertMessagesFromJSONForCache:(NSArray *)messageJSONs
+                                   forEvent:(FZZEvent *)event;
 
 +(FZZMessage *)parseJSON:(NSDictionary *)messageJSON;
 +(NSDictionary *)parseMessageJSONDict:(NSDictionary *)messageDictJSON;

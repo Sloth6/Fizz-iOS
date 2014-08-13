@@ -17,7 +17,6 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import "FZZNavIcon.h"
-#import "FZZChatDelegate.h"
 #import <CoreData/CoreData.h>
 
 #import "FZZInviteGuestButton.h"
@@ -725,6 +724,8 @@ static int kFZZNumRecentInvites = 30;
         
         [cell setHasFriend:NO];
     }
+    
+    [[cell label] setNeedsDisplay];
     
     [cell setIsSelected:selected];
     

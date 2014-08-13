@@ -25,6 +25,8 @@
 +(BOOL)loadFromCache;
 +(void)clearCache;
 
++(BOOL)containsInvalidData;
+
 +(BOOL)hasLoadedDataFromCache;
 
 @end

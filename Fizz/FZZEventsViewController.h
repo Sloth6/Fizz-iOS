@@ -19,20 +19,18 @@
 
 @class FZZExpandedNewEventCell;
 @class FZZNavIcon;
-@class FZZBackspaceResignTextView;
+@class FZZTextViewWithPlaceholder;
 @class FZZEvent;
 
 @interface FZZEventsViewController : UICollectionViewController
         <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate>
 
 // Server handlers
-- (void)updateEvents:(NSMutableArray *)incomingEvents;
+- (void)updateEvents;
 
 - (void)expandView;
 - (void)enterCellDetail;
-- (void)exitNewEventPrompt:(FZZBackspaceResignTextView *)textView;
-
-@property NSMutableArray *events;
+- (void)exitNewEventPrompt:(FZZTextViewWithPlaceholder *)textView;
 
 typedef enum {
     kOverview,
@@ -50,7 +48,6 @@ typedef enum {
 @property UITextField *activeTextField;
 //@property UISearchBar *activeSearchBar;
 
--(void)setViewMode:(ViewMode)viewMode;
 -(void)addIncomingMessageForEvent:(FZZEvent *)event;
 -(void)updateEvent:(FZZEvent *)event;
 

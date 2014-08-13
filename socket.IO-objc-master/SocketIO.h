@@ -119,4 +119,6 @@ typedef enum {
 
 - (void) setResourceName:(NSString *)name;
 
+- (BOOL) isConnectionOpen;
+
 @end

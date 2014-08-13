@@ -42,7 +42,8 @@
 - (void)loadDataFromCache;
 
 // Server Handlers, recieving and handing out information
-- (void)updateEvents:(NSArray *)events;
+- (void)updateEvents;
+- (void)updateEvent:(FZZEvent *)event;
 
 
 // Core Data

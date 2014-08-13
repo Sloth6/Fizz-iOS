@@ -77,6 +77,8 @@ static FZZLocalCache *cache;
             if ([FZZEvent saveEventsToFile:[FZZLocalCache getUrlForEvents]]){
                 return YES;
             }
+            
+            NSLog(@"Saved users!");
         }
         
         NSLog(@"Cache update failed!");
@@ -100,8 +102,13 @@ static FZZLocalCache *cache;
         if ((eventDict == nil) && (userDict == nil)) return NO;
         if (([eventDict count] == 0) && ([userDict count] == 0)) return NO;
         
+        NSLog(@"Load events...");
         [FZZEvent parseEventsJSONForCache:eventDict];
+        
+        NSLog(@"Load users...");
         [FZZUser parseUsersJSONForCache:userDict];
+        
+        NSLog(@"Complete users.");
     }
     
     return YES;
@@ -140,6 +147,22 @@ static FZZLocalCache *cache;
     }
 }
 
++(BOOL)containsInvalidData{
+    NSArray *events = [FZZEvent getEvents];
+    
+    for (int i = 0; i < [events count]; ++i){
+        FZZEvent *event = [events objectAtIndex:i];
+        
+        if ([event description] == nil){
+            // TODOAndrew read the print statement
+            NSLog(@"NULL DATA IS BAD DATA FIX THIS!!");
+            
+            return YES;
+        }
+    }
+    
+    return NO;
+}
 
 +(BOOL)hasLoadedDataFromCache{
     return hasLoadedData;

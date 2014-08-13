@@ -15,11 +15,13 @@
 #import "FZZMessage.h"
 #import "FZZAppDelegate.h"
 
+#import "FZZExpandedVerticalTableViewController.h"
+
 #import "FZZUtilities.h"
 
 #import "FZZNavIcon.h"
 
-#import "FZZBackspaceResignTextView.h"
+#import "FZZTextViewWithPlaceholder.h"
 
 #import "FZZInviteViewController.h"
 
@@ -33,16 +35,16 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 @property UICollectionViewFlowLayout *overviewFlowLayout;
 
-@property (nonatomic) FZZBackspaceResignTextView *eventTextView;
+@property (nonatomic) FZZTextViewWithPlaceholder *eventTextView;
 
 @property NSString *lastInputString;
 
 @property float lineHeight;
 
 @property UICollectionView *textCV;
-@property UIButton *friendsButton;
 
 @property BOOL firstAppear;
+@property NSArray *events;
 
 @end
 
@@ -122,7 +124,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         self.collectionView.showsHorizontalScrollIndicator = YES;
         self.collectionView.pagingEnabled = YES;
-        self.collectionView.bounces = YES;
+        self.collectionView.alwaysBounceVertical = NO;
         self.collectionView.alwaysBounceHorizontal = YES;
         self.collectionView.delegate = self;
         self.collectionView.dataSource = self;
@@ -167,8 +169,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         _overviewFlowLayout.collectionView.pagingEnabled = NO;
         _overviewFlowLayout.itemSize = itemSize;
         
-        _events = [[NSMutableArray alloc] init];
-        
+        _events = [[NSArray alloc] init];
     }
     return self;
 }
@@ -230,31 +231,28 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 }
 
 - (FZZExpandedNewEventCell *)setupExpandedEventCell:(FZZExpandedNewEventCell *)cell{
+    [cell.textView setPlaceholderText:kFZZPlaceholderText];
+    [cell.textView setEnablesReturnKeyAutomatically:YES];
+    [cell.textView setReturnKeyType:UIReturnKeySend];
+    [cell.textView setEditable:YES];
     
-    cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-
-    [cell.resignTextViewer setPlaceholderText:kFZZPlaceholderText];
-    [cell.resignTextViewer setEnablesReturnKeyAutomatically:YES];
-    [cell.resignTextViewer setReturnKeyType:UIReturnKeySend];
-    [cell.resignTextViewer setEditable:YES];
-    
-    [cell.resignTextViewer setEVC:self];
+    [cell.textView setEVC:self];
     
     if (_lineHeight == -1) {
         
-        [cell.resignTextViewer setText:@"."];
+        [cell.textView setText:@"."];
         
-        _lineHeight = [self measureHeightOfUITextView:cell.resignTextViewer.textView];
+        _lineHeight = [self measureHeightOfUITextView:cell.textView.textView];
         
-        [cell.resignTextViewer setText:@""];
-        [cell.resignTextViewer deleteBackward];
+        [cell.textView setText:@""];
+        [cell.textView deleteBackward];
     }
     
-    [self setupResignTextView:cell.resignTextViewer];
+    [self setupTextView:cell.textView];
     
-    [cell.resignTextViewer setDelegate:self];
+    [cell.textView setDelegate:self];
     
-    _eventTextView = cell.resignTextViewer;
+    _eventTextView = cell.textView;
     
     return cell;
 }
@@ -271,64 +269,31 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         runOnMainQueueWithoutDeadlocking(^{
             cell = [self setupExpandedEventCell:cell];
             
-            [cell.resignTextViewer setUserInteractionEnabled:YES];
+            [cell.textView setUserInteractionEnabled:YES];
         });
         
         return cell;
     } else {
-        int eventNum = (int)indexPath.item;
-        
         NSString *cellID = @"ExpandedEventCell";
         
         FZZExpandedEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                                    forIndexPath:indexPath];
-        FZZEvent *event = [_events objectAtIndex:eventNum];
+//        FZZEvent *event = [FZZEvent getEventAtIndexPath:indexPath];
         
-        [cell setEvent:event];
+        [cell setEventIndexPath:indexPath];
+        
+        [cell setNeedsDisplay];
         
         return cell;
     }
 }
 
-/*
- 
- TODOAndrew Get rid of viewModes and this function below
- 
- */
-- (UICollectionViewCell *)overviewCollectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0){
-//        NSString *cellID = @"Cell";
-//        
-//        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-//                                                                   forIndexPath:indexPath];
-
-        NSString *cellID = @"EventCell";
-        
-        FZZEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                           forIndexPath:indexPath];
-        
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-        
-        [cell.label setText:@"Create a New Event"];
-        [cell.label sizeToFit];
-        
-        return cell;
-    } else {
-        int eventNum = (int)indexPath.item;
-        
-        NSString *cellID = @"EventCell";
-        
-        FZZEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
-                                                           forIndexPath:indexPath];
-        
-        cell.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-        
-        FZZEvent *event = [_events objectAtIndex:eventNum];
-        
-        [cell setEventCollapsed:event];
-        
-        return cell;
-    }
+-(FZZEvent *)getEventAtIndexPath:(NSIndexPath *)indexPath{
+    int eventNum = (int)indexPath.item;
+    
+    FZZEvent *event = [_events objectAtIndex:eventNum];
+    
+    return event;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -445,44 +410,6 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 //        self.collectionView.contentOffset = offsetPoint;
 //    }
 //}
-
-// TODOAndrew ViewMode belongs somewhere else, for states of the NavIcon
--(void)setViewMode:(ViewMode)viewMode{
-    
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    
-    FZZNavIcon *navIcon = [appDelegate.navigationBar navIcon];
-    
-    _viewMode = viewMode;
-    
-    switch (viewMode) {
-        case kTimeline:
-        {
-            [_friendsButton setHidden:YES];
-            [navIcon setState:kCollapsed];
-        }
-            break;
-            
-        case kOverview:
-        {
-            [navIcon setState:kExpanded];
-        }
-            break;
-            
-        case kChat:
-            
-        case kInvite:
-            
-        case kFriendManagement:
-            
-        default:
-        {
-            [navIcon setState:kCancel];
-        }
-            break;
-    }
-}
 
 //-(void)friendsButtonPress:(UIButton*)button{
 //    [button setEnabled:NO];
@@ -673,6 +600,13 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 // Update code remains below, commented out
 
 
+-(NSIndexPath *)currentIndexPath{
+    CGFloat width = [self collectionView].frame.size.width;
+    NSInteger page = ([self collectionView].contentOffset.x + (0.5f * width)) / width;
+    
+    return [NSIndexPath indexPathForItem:page inSection:0];
+}
+
 -(void)addIncomingMessageForEvent:(FZZEvent *)event{
     NSInteger index = [_events indexOfObject:event];
     
@@ -680,13 +614,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         NSLog(@"index: %d", index);
         
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:1];
-        
-        FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
-        
-        NSLog(@"cell: <<%@>>", cell);
-        
-        [cell updateMessages];
+        [self updateEvent:event];
         
 //        [cell.chatDelegate addIncomingMessageForEvent:event];
     } else {
@@ -701,8 +629,26 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
  
  */
 -(void)updateEvent:(FZZEvent *)event{
+    NSInteger index = [_events indexOfObject:event];
     
-    NSLog(@"<<>>Dickfingers (1");
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:1];
+    
+    NSIndexPath *currentIndexPath = [self currentIndexPath];
+    
+    //TODOAndrew, check if it's onscreen better, maybe the 3 events that could be on screen
+    if (false){//[indexPath isEqual:currentIndexPath]){
+        FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+        
+        [cell updateMessages];
+    } else {
+        FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+        
+        [[cell vtvc] reloadChat];
+    }
+    
+    
+//    XXXX
+    
     //TODOAndrew if the event is onscreen, do visual updates differently
 //    if ([_bvc event] == event){
 //        [_bvc updateBubblesForEvent:event Animated:YES];
@@ -1011,31 +957,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     return measuredHeight;
 }
 
--(void) setupResignTextView:(FZZBackspaceResignTextView *)resignTextView
-{
-    float endY = resignTextView.frame.origin.y + resignTextView.frame.size.height;
-    
-    //    UIEdgeInsets inset = textView.contentInset;
-    
-    float minHeight = 2 * _lineHeight;
-    float maxHeight = 3 * _lineHeight;
-    
-    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:resignTextView.textView]),
-                       maxHeight) + 20;
-    
-    //float height = textView.frame.size.height-insetDelta;
-    
-    float y = endY - height;
-    
-    float x = resignTextView.frame.origin.x;
-    float width = resignTextView.frame.size.width;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [resignTextView setFrame:CGRectMake(x, y, width, height)];
-    });
-}
-
--(void) setupTextView:(UITextView *)textView
+-(void) setupTextView:(FZZTextViewWithPlaceholder *)textView
 {
     float endY = textView.frame.origin.y + textView.frame.size.height;
     
@@ -1044,7 +966,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     float minHeight = 2 * _lineHeight;
     float maxHeight = 3 * _lineHeight;
     
-    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:textView]),
+    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:textView.textView]),
                        maxHeight) + 20;
     
     //float height = textView.frame.size.height-insetDelta;
@@ -1060,8 +982,8 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 }
 
 // Call when TextView will resign First Responder status
-- (void)exitNewEventPrompt:(FZZBackspaceResignTextView *)resignTextView{
-    [resignTextView setText:@""];
+- (void)exitNewEventPrompt:(FZZTextViewWithPlaceholder *)textView{
+    [textView setText:@""];
     
     [self.collectionView setScrollEnabled:YES];
     
@@ -1069,7 +991,8 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 //    [_toggleSecret setAlpha:0.0];
 //    [_secretLabel setAlpha:0.0];
     
-    [self textViewDidChange:resignTextView.textView];
+//    [self textViewDidChange:textView];
+    [self textViewDidChange:textView.textView];
 }
 
 -(void) textViewDidChange:(UITextView *)textView
@@ -1134,51 +1057,51 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 //    [textView setNeedsLayout];
 }
 
--(void) resignTextViewDidChange:(FZZBackspaceResignTextView *)resignTextView
-{
-    float endY = resignTextView.frame.origin.y + resignTextView.frame.size.height;
-    
-    //    UIEdgeInsets inset = textView.contentInset;
-    
-    float minHeight = 2 * _lineHeight;
-    float maxHeight = 3 * _lineHeight;
-    
-    float textViewHeight = [self measureHeightOfUITextView:resignTextView.textView];
-    
-    // Limit textview num lines
-    if (textViewHeight > maxHeight){
-        UITextRange *textRange;
-        
-        if (resignTextView.textView.selectedTextRange.empty) {
-            UITextPosition *pos = [resignTextView.textView positionFromPosition:resignTextView.textView.endOfDocument
-                                                     inDirection:UITextLayoutDirectionLeft
-                                                          offset:1];
-            
-            //make a 0 length range at position
-            textRange = [resignTextView.textView textRangeFromPosition:pos
-                                                            toPosition:pos];
-            
-        }
-        
-        [resignTextView setText:_lastInputString];
-        
-        if (textRange != NULL){
-            [resignTextView.textView setSelectedTextRange:textRange];
-        }
-    }
-    
-    float height = MIN(MAX(minHeight, textViewHeight),
-                       maxHeight) + 20;
-    
-    //float height = textView.frame.size.height-insetDelta;
-    
-    float y = endY - height;
-    
-    float x = resignTextView.frame.origin.x;
-    float width = resignTextView.frame.size.width;
-    
-    [resignTextView setFrame:CGRectMake(x, y, width, height)];
-}
+//-(void) textViewDidChange:(FZZTextViewWithPlaceholder *)textView
+//{
+//    float endY = textView.frame.origin.y + textView.frame.size.height;
+//    
+//    //    UIEdgeInsets inset = textView.contentInset;
+//    
+//    float minHeight = 2 * _lineHeight;
+//    float maxHeight = 3 * _lineHeight;
+//    
+//    float textViewHeight = [self measureHeightOfUITextView:textView.textView];
+//    
+//    // Limit textview num lines
+//    if (textViewHeight > maxHeight){
+//        UITextRange *textRange;
+//        
+//        if (textView.textView.selectedTextRange.empty) {
+//            UITextPosition *pos = [textView.textView positionFromPosition:textView.textView.endOfDocument
+//                                                     inDirection:UITextLayoutDirectionLeft
+//                                                          offset:1];
+//            
+//            //make a 0 length range at position
+//            textRange = [textView.textView textRangeFromPosition:pos
+//                                                            toPosition:pos];
+//            
+//        }
+//        
+//        [textView setText:_lastInputString];
+//        
+//        if (textRange != NULL){
+//            [textView.textView setSelectedTextRange:textRange];
+//        }
+//    }
+//    
+//    float height = MIN(MAX(minHeight, textViewHeight),
+//                       maxHeight) + 20;
+//    
+//    //float height = textView.frame.size.height-insetDelta;
+//    
+//    float y = endY - height;
+//    
+//    float x = textView.frame.origin.x;
+//    float width = textView.frame.size.width;
+//    
+//    [textView setFrame:CGRectMake(x, y, width, height)];
+//}
 
 
 - (UICollectionViewCell *)getExpandedEventCell{
@@ -1253,59 +1176,12 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
  TODOAndrew Why is this different if you're deleting or adding? just load them all, sorted from FZZEvent getEvents, and then update the visuals. Compare the old array of where events were to the new one, and insert the new events appropriately visually if this is on screen, else just replace the array.
  
  */
-- (void)updateEvents:(NSMutableArray *)incomingEvents{
-    NSLog(@"%dxx!", [incomingEvents count]);
-    
-    // Re-sort current Events because of messaging activity
-    if (incomingEvents == NULL){
-        _events = [[FZZEvent getEvents] mutableCopy];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView reloadData];
-        });
-        
-        return;
-    }
-    
-    // Incoming events are unsorted
-    NSMutableArray *updatedEvents = [incomingEvents mutableCopy];
-    
-    @synchronized(_events){
-        [_events removeObjectsInArray:incomingEvents];
-        [updatedEvents addObjectsFromArray:_events];
-        
-        [self sortEvents:updatedEvents];
-        
-        _events = updatedEvents;
-    }
+- (void)updateEvents{
+    _events = [FZZEvent getEvents];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
     });
-    
-    int numIncomingEvents = [incomingEvents count];
-    
-    NSLog(@"%d!!!", [_events count]);
-    
-    for (int i = 0; i < [_events count]; ++i){
-        FZZEvent *event = [_events objectAtIndex:i];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:1];
-        
-//        if (i < numIncomingEvents){
-//            NSString *firstMessage = [[event firstMessage] text];
-//            FZZUser *creator = [event creator];
-//            
-//            if (creator == [FZZUser me] && [firstMessage isEqualToString:_lastInputString]){
-//                // Need to jump to proper view in Main Queue, QED
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
-//                });
-//            }
-//        }
-    }
-    
-    return;
 }
 
 @end

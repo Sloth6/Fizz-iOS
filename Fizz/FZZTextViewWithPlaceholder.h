@@ -1,5 +1,5 @@
 //
-//  FZZBackspaceResignTextView.h
+//  FZZTextViewWithPlaceholder.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/19/14.
@@ -16,7 +16,7 @@
 
 @class FZZEventsViewController;
 
-@interface FZZBackspaceResignTextView : UIView
+@interface FZZTextViewWithPlaceholder : UIView
 
 -(UITextView *)textView;
 

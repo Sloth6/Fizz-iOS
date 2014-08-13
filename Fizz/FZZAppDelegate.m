@@ -14,6 +14,7 @@
 #import "FZZInviteViewController.h"
 #import "FZZLocalCache.h"
 #import "FZZLocationManager.h"
+#import "FZZUtilities.h"
 
 #import "FZZLoginDelegate.h"
 
@@ -65,22 +66,10 @@
     
 //    navigationController.automaticallyAdjustsScrollViewInsets = NO;
     [self.window setRootViewController:navigationController];
-    [self.window setBackgroundColor:[UIColor whiteColor]];
+    [self.window setBackgroundColor:[UIColor clearColor]];
     
     [self.window addSubview:self.navigationBar];
     [self.window addSubview:_searchTextField];
-}
-
-- (void)handleDidCrash{
-    _hasLoadedDataFromCache = YES;
-    
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    NSNumber *didCrash = [pref objectForKey:@"didCrash"];
-    
-    // Initial Launch: if didCrash is nil, [didCrash boolValue] returns nil
-    if ([didCrash boolValue]){
-        [FZZLocalCache clearCache];
-    }
 }
 
 - (void)loadDataFromCache{
@@ -94,6 +83,7 @@
         
         NSLog(@"didCrash");
         
+        [FZZLocalCache clearCache];
         [FZZSocketIODelegate socketIOResetDataFromServerWithAcknowledge:NULL];
         
     } else { // Load data from cache
@@ -102,6 +92,12 @@
         
         if ([FZZLocalCache loadFromCache]){
             NSLog(@"Successfully loaded all data!");
+            
+            if ([FZZLocalCache containsInvalidData]){
+                [FZZLocalCache clearCache];
+                [FZZSocketIODelegate socketIOResetDataFromServerWithAcknowledge:NULL];
+            }
+            
         } else {
             NSLog(@"No cached data exists.");
         }
@@ -130,7 +126,12 @@
     // Install TestFlight
     [TestFlight takeOff:@"c57d6a81-8946-4632-977e-9b92f7d0802a"];
     
-    [self handleDidCrash];
+    @synchronized([FZZEvent class]){
+        [self loadDataFromCache];
+    }
+    
+    // Initialize Class Variables
+    [FZZUtilities class];
     
     _hasLoadedDataFromCache = NO;
     _hasLoggedIn = NO;
@@ -157,7 +158,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = [UIColor clearColor];
     [self.window makeKeyAndVisible];
     
     /* Initialize their dictionaries of all existing instances */
@@ -376,6 +377,8 @@
     if ((![FZZSocketIODelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
         NSLog(@"Connection is not open");
         [FZZSocketIODelegate openConnectionCheckingForInternet];
+    } else {
+        NSLog(@"!isConnectionOpen: %d, hasLoggedIn: %d, !isConnecting: %d", (![FZZSocketIODelegate isConnectionOpen]), _hasLoggedIn, !_isConnecting);
     }
 }
 
@@ -396,8 +399,16 @@
     && [[UIScreen mainScreen] scale] == 2.0;
 }
 
-- (void)updateEvents:(NSArray *)events{
-    [_evc updateEvents:[events mutableCopy]];
+// Called when an event has been removed or added
+- (void)updateEvents{
+    [_evc updateEvents];
+    
+    NSLog(@"Updating local cache...");
+    if ([FZZLocalCache updateCache]){
+        NSLog(@"Did update cache.");
+    } else {
+        NSLog(@"Failed to update cache.");
+    }
 }
 
 #pragma mark - Crash Handlers

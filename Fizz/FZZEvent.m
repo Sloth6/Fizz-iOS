@@ -12,10 +12,14 @@
 #import "SocketIO.h"
 #import "FZZSocketIODelegate.h"
 #import "FZZAppDelegate.h"
+#import "FZZEventsViewController.h"
 
 #import "FZZLocalCache.h"
 
 static NSMutableDictionary *events;
+static NSArray *sortedEvents;
+
+static BOOL sorted = NO;
 
 static NSString *FZZ_NEW_EVENT    = @"postNewEvent";
 static NSString *FZZ_DELETE_EVENT = @"postDeleteEvent";
@@ -28,7 +32,6 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 
 @interface FZZEvent ()
 
-
 @property (nonatomic) BOOL haveExpressedInterest;
 
 @property (strong, nonatomic) NSDate *lastUpdate;
@@ -38,6 +41,51 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 @implementation FZZEvent
 
 @synthesize haveExpressedInterest = _haveExpressedInterest;
+
++(FZZEvent *)getEventAtIndexPath:(NSIndexPath *)indexPath{
+    @synchronized(self){
+        NSArray *sortedEvents = [FZZEvent getSortedEvents];
+        
+        NSInteger numEvents = [sortedEvents count];
+        NSInteger itemNum = (numEvents - 1) - indexPath.item;
+        
+        if (itemNum < 0){
+            NSLog(@"SHOULDN'T TRY TO ACCESS NEGATIVE INDEX EVENTS!!");
+            return nil;
+        }
+        
+        FZZEvent *event = [sortedEvents objectAtIndex:itemNum];
+        return event;
+    }
+}
+
+//+(FZZEvent *)getEventOnScreen{
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    UICollectionView *collectionView = [[appDelegate evc] collectionView];
+//    
+////    [collectionView sc]
+//    
+//    return [FZZEvent getEventAtIndexPath:indexPath];
+//}
+
++(NSArray *)getSortedEvents{
+    @synchronized(self){
+        if (sorted){
+            return sortedEvents;
+        }
+    
+        NSArray *sortedKeys = [[events allKeys] sortedArrayUsingSelector: @selector(compare:)];
+        NSMutableArray *sortedValues = [NSMutableArray array];
+        for (NSString *key in sortedKeys)
+            [sortedValues addObject: [events objectForKey:key]];
+        
+        sorted = YES;
+        sortedEvents = sortedValues;
+        
+        return sortedEvents;
+    }
+}
 
 +(BOOL)saveEventsToFile:(NSString *)eventsURL{
     NSDictionary *jsonDict = [FZZEvent getEventsJSONForCache];
@@ -56,6 +104,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     
     [eventDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         FZZEvent *event = obj;
+        NSNumber *eventID = (NSNumber *)key;
+        NSString *eventIDString = [eventID stringValue];
         
         NSDictionary *jsonEvent = [[NSMutableDictionary alloc] init];
         
@@ -96,10 +146,19 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         // Description
         NSString *eventDescription = [event eventDescription];
         [jsonEvent setValue:eventDescription forKeyPath:@"eventDescription"];
+        NSLog(@"\nSaving Event:");
+        
+//        NSString *printResult = @"";
+//        
+//        // To print out all key-value pairs in the NSDictionary myDict
+//        for(id key in jsonEvent)
+//            [printResult stringByAppendingString:[NSString stringWithFormat:@"\"%@\": %@\n", key, [jsonEvent objectForKey:key]]];
+        
+        NSLog(@"%@\n\n", jsonEvent);
         
         
         // Where key = uID
-        [dict setObject:jsonEvent forKey:key];
+        [dict setObject:jsonEvent forKey:eventIDString];
     }];
     
     return dict;
@@ -112,13 +171,19 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
  */
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON{
     
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
     [eventsJSON enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSDictionary *jsonEvent = obj;
-        NSNumber *eventID = key;
+        NSString *eventIDString = key;
+        
+        NSNumber *eventID = [numberFormatter numberFromString:eventIDString];
         
         BOOL eventExists = [events objectForKey:eventID] != nil;
         
         if (!eventExists){
+            
             FZZEvent *event = [FZZEvent eventWithEID:eventID];
             
             @synchronized(event){
@@ -151,23 +216,26 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
                 
                 // Messages
                 NSArray *messageJSONs = [jsonEvent objectForKey:@"messages"];
-                NSArray *messages = [FZZMessage convertMessagesFromJSONForCache:messageJSONs];
+                NSArray *messages = [FZZMessage convertMessagesFromJSONForCache:messageJSONs
+                                                                       forEvent:event];
                 
                 [event setMessages:messages];
                 
                 // Creator
                 NSNumber *creatorUserID = [jsonEvent objectForKey:@"creator"];
+                
                 FZZUser *creator = [FZZUser userWithUID:creatorUserID];
                 
                 [event setCreator:creator];
                 
                 // Description
                 NSString *eventDescription = [jsonEvent objectForKey:@"eventDescription"];
+//                NSLog(@"Event: %@", jsonEvent);
                 [event setEventDescription:eventDescription];
+                
             }
         }
     }];
-        
 }
 
 
@@ -184,14 +252,19 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 
 -(id)initWithEID:(NSNumber *)eID{
     if (!eID){
-        return NULL;
+        return nil;
     }
 
     self = [super init];
     
     if (self){
-        self.eventID = eID;
-        [events setObject:self forKey:eID];
+        @synchronized([FZZUser class]){
+            sorted = NO;
+            
+            self.eventID = eID;
+            self.scrollPosition = [NSIndexPath indexPathForItem:1 inSection:0];
+            [events setObject:self forKey:eID];
+        }
     }
     
     return self;
@@ -246,11 +319,11 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 //}
 
 +(FZZEvent *)eventWithEID:(NSNumber *)eID{
-    if (!eID) return NULL;
+    if (!eID) return nil;
     
     FZZEvent *event = [events objectForKey:eID];
     
-    if (event == NULL){
+    if (event == nil){
         event = [[FZZEvent alloc] initWithEID:eID];
     }
     
@@ -315,6 +388,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 -(void)updateAddMessage:(FZZMessage *)message{
     @synchronized(self){
         
+        NSLog(@"%d messages BEFORE", [self.messages count]);
+        
         if (!self.messages){
             self.messages = [[NSArray alloc] init];
         }
@@ -329,6 +404,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         }];
         
         self.messages = items;
+        
+        NSLog(@"%d messages now in the event", [self.messages count]);
     }
 }
 
@@ -592,21 +669,19 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 }
 
 +(void)killEvents:(NSArray *)deadEvents{
-    NSLog(@"killEvents 1");
-    
-    [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSNumber *eID = obj;
-        
-        NSLog(@"killEvents 2");
-        
-        [events removeObjectForKey:eID];
-    }];
-    
-    NSLog(@"killEvents 3");
-    
-    [FZZLocalCache updateCache];
-    
-    NSLog(@"killEvents 4");
+    if (deadEvents != nil && [deadEvents count] > 0){
+        @synchronized(self){
+            sorted = NO;
+            
+            [deadEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSNumber *eID = obj;
+                
+                [events removeObjectForKey:eID];
+            }];
+            
+            [FZZLocalCache updateCache];
+        }
+    }
 }
 
 -(NSDate *)lastUpdate{

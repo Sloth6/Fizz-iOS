@@ -16,8 +16,9 @@
 @interface FZZChatScreenCell ()
 
 @property CGRect keyboardRect;
+@property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
-@property FZZChatScreenTableViewController *tvc;
+@property FZZChatScreenTableViewController *ctvc;
 
 // Whether or nor placeholder text is showing
 @property BOOL placeholder;
@@ -44,7 +45,7 @@
 }
 
 - (void)updateMessages{
-    [_tvc updateMessages];
+    [_ctvc updateMessages];
 }
 
 - (void)setupView{
@@ -69,12 +70,19 @@
     // Full screen minus viewForm
     frame.size.height = frame.size.height - viewFormHeight;
     
-    _tvc = [[FZZChatScreenTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    [self setBackgroundColor:[UIColor clearColor]];
+    [self setOpaque:NO];
     
-    [[_tvc tableView] setFrame:frame];
+    _ctvc = [[FZZChatScreenTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    [self addSubview:[_tvc tableView]];
+    [[_ctvc tableView] setFrame:frame];
+    
+    [self addSubview:[_ctvc tableView]];
     [self addSubview:self.viewForm];
+}
+
+-(void)setParentScrollView:(UIScrollView *)scrollView{
+    [_ctvc setParentScrollView:scrollView];
 }
 
 /*
@@ -92,15 +100,15 @@
     
     CGRect viewFormRect = CGRectMake(x, y, width, height);
     
-    FZZEnterMessagePrototypeViewController *tvc = [[FZZEnterMessagePrototypeViewController alloc] initWithNibName:@"FZZEnterMessagePrototypeViewController" bundle:nil];
-    viewForm = tvc.view;
-    chatBox  = tvc.textView;
-    _placeholderView = tvc.placeholderTV;
+    FZZEnterMessagePrototypeViewController *mProtoTVC = [[FZZEnterMessagePrototypeViewController alloc] initWithNibName:@"FZZEnterMessagePrototypeViewController" bundle:nil];
+    viewForm = mProtoTVC.view;
+    chatBox  = mProtoTVC.textView;
+    _placeholderView = mProtoTVC.placeholderTV;
     [chatBox setBackgroundColor:[UIColor clearColor]];
     
     [chatBox setDelegate:self];
     
-    [tvc setFont:[UIFont fontWithName:@"Helvetica" size:14]];
+    [mProtoTVC setFont:[UIFont fontWithName:@"Helvetica" size:14]];
     
     //turn off scrolling and set the font details.
     [chatBox setReturnKeyType:UIReturnKeySend];
@@ -109,7 +117,7 @@
     
     //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
-    [tvc.view setFrame:viewFormRect];
+    [mProtoTVC.view setFrame:viewFormRect];
 }
 
 -(void)handlePlaceholder{
@@ -228,26 +236,27 @@
     viewForm.frame = formFrame;
     
     // table view
-    CGRect tableFrame = [_tvc tableView].frame;
+    CGRect tableFrame = [_ctvc tableView].frame;
     NSInteger viewTableH = tableFrame.size.height;
     //NSLog(@"TABLE VIEW HEIGHT : %d", viewTableH);
     tableFrame.size.height = formFrame.origin.y;
     //tableFrame.size.height = 199 - (newSizeH - 18);
-    [_tvc tableView].frame = tableFrame;
+    [_ctvc tableView].frame = tableFrame;
 }
 
 -(void)textViewDidChange:(UITextView *)textView{
     [self keyPressed];
 }
 
--(void)setEvent:(FZZEvent *)event{
-    [_tvc setEvent:event];
+-(void)setEventIndexPath:(NSIndexPath *)indexPath{
+    _eventIndexPath = indexPath;
+    [_ctvc setEventIndexPath:indexPath];
 }
 
 - (void)sendMessage{
     [chatBox resignFirstResponder];
     
-    FZZEvent *event = [_tvc event];
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
     
     NSLog(@"\n\n{%@}\n\n<%@>\n\n", chatBox.text, event);
     
@@ -276,7 +285,7 @@
 	formFrame.origin.y = screenY - formFrame.size.height;
 	viewForm.frame = formFrame;
     
-    [_tvc updateTableViewToHeight:formFrame.origin.y];
+    [_ctvc updateTableViewToHeight:formFrame.origin.y];
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{ // DUPLICATE
@@ -299,7 +308,7 @@
 	NSInteger kbSizeH = keyboardBounds.size.height;
     
 	// get a rect for the table/main frame
-	CGRect tableFrame = [_tvc tableView].frame;
+	CGRect tableFrame = [_ctvc tableView].frame;
 	tableFrame.size.height -= kbSizeH;
     
 	// get a rect for the form frame
@@ -312,17 +321,17 @@
     [UIView setAnimationBeginsFromCurrentState:YES];
     
 	// set views with new info
-    [_tvc updateTableViewToHeight:tableFrame.size.height];
+    [_ctvc updateTableViewToHeight:tableFrame.size.height];
     viewForm.frame = formFrame;
     
-    NSInteger numSections = [[_tvc tableView] numberOfSections];
-    NSInteger numMessages = [[_tvc tableView] numberOfRowsInSection:numSections - 1];
+    NSInteger numSections = [[_ctvc tableView] numberOfSections];
+    NSInteger numMessages = [[_ctvc tableView] numberOfRowsInSection:numSections - 1];
     
     if (numMessages > 0){
         
         NSIndexPath *lastPath = [NSIndexPath indexPathForItem:numMessages - 1 inSection:numSections - 1];
         
-        [[_tvc tableView] scrollToRowAtIndexPath:lastPath
+        [[_ctvc tableView] scrollToRowAtIndexPath:lastPath
                                 atScrollPosition:UITableViewScrollPositionBottom
                                         animated:YES];
     }
@@ -351,7 +360,7 @@
 	NSInteger kbSizeH = keyboardBounds.size.height;
     
 	// get a rect for the table/main frame
-	CGRect tableFrame = [_tvc tableView].frame;
+	CGRect tableFrame = [_ctvc tableView].frame;
 	tableFrame.size.height += kbSizeH;
     
 	// get a rect for the form frame
@@ -364,7 +373,7 @@
     [UIView setAnimationBeginsFromCurrentState:YES];
     
 	// set views with new info
-    [_tvc updateTableViewToHeight:tableFrame.size.height];
+    [_ctvc updateTableViewToHeight:tableFrame.size.height];
 	viewForm.frame = formFrame;
     
 	// commit animations
@@ -404,8 +413,8 @@
     return YES;
 }
 
-- (void)addIncomingMessageForEvent:(FZZEvent *)event{
-    [_tvc addIncomingMessageForEvent:event];
+- (void)addIncomingMessage{
+    [_ctvc addIncomingMessage];
 }
 
 +(CGRect) getKeyboardBoundsFromNote:(NSNotification *)note{

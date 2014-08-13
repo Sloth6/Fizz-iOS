@@ -70,6 +70,8 @@
 		49AA439218E8FBFE006D6830 /* FZZServerMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA439118E8FBFE006D6830 /* FZZServerMessageCell.xib */; };
 		49B1C17818E4C6F2007C5D44 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */; };
 		49B1C17B18E4C6F8007C5D44 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */; };
+		49B562F91993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B562F81993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m */; };
+		49B562FB1993CFEB008302E5 /* FZZDescriptionScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B562FA1993CFEA008302E5 /* FZZDescriptionScreenTableViewCell.xib */; };
 		49BCC49C192D2FAA0085CE16 /* FZZCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BCC49B192D2FAA0085CE16 /* FZZCluster.m */; };
 		49C8B1551889F08600400832 /* FZZEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C8B1541889F08600400832 /* FZZEventCell.m */; };
 		49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C99F186042C2002BB1F0 /* Foundation.framework */; };
@@ -97,7 +99,7 @@
 		49EEEA8A18D8D1E600BDA605 /* FZZPhoneInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EEEA8918D8D1E600BDA605 /* FZZPhoneInputCell.xib */; };
 		49EEEA8E18D8D37300BDA605 /* FZZPhoneInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA8D18D8D37300BDA605 /* FZZPhoneInputCell.m */; };
 		49EEEA9118D932F000BDA605 /* FZZBackspaceResignTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9018D932F000BDA605 /* FZZBackspaceResignTextField.m */; };
-		49EEEA9718D972FB00BDA605 /* FZZBackspaceResignTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9618D972FB00BDA605 /* FZZBackspaceResignTextView.m */; };
+		49EEEA9718D972FB00BDA605 /* FZZTextViewWithPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9618D972FB00BDA605 /* FZZTextViewWithPlaceholder.m */; };
 		49F524D218E1C3040019C5DF /* FZZOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D118E1C3040019C5DF /* FZZOverlayView.m */; };
 		49F524D518E212840019C5DF /* FZZNavIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D418E212840019C5DF /* FZZNavIcon.m */; };
 		E9F3EDDBFEE744F3845ACCE1 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77ABE3261F854F65A5295960 /* libPods.a */; };
@@ -246,6 +248,9 @@
 		49AAFC2B18CBD3260029A07C /* MapView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MapView.xcodeproj; path = "/Users/Andrew/Beacon App/Beacon/MapView/mapbox-ios-example/MapBox-iOS-SDK/MapView/MapView.xcodeproj"; sourceTree = "<absolute>"; };
 		49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		49B562F71993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZDescriptionScreenTableViewCell.h; sourceTree = "<group>"; };
+		49B562F81993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZDescriptionScreenTableViewCell.m; sourceTree = "<group>"; };
+		49B562FA1993CFEA008302E5 /* FZZDescriptionScreenTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZDescriptionScreenTableViewCell.xib; sourceTree = "<group>"; };
 		49BCC49A192D2FAA0085CE16 /* FZZCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCluster.h; sourceTree = "<group>"; };
 		49BCC49B192D2FAA0085CE16 /* FZZCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCluster.m; sourceTree = "<group>"; };
 		49C8B1531889F08600400832 /* FZZEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventCell.h; sourceTree = "<group>"; };
@@ -284,8 +289,8 @@
 		49EEEA8D18D8D37300BDA605 /* FZZPhoneInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPhoneInputCell.m; sourceTree = "<group>"; };
 		49EEEA8F18D932F000BDA605 /* FZZBackspaceResignTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZBackspaceResignTextField.h; sourceTree = "<group>"; };
 		49EEEA9018D932F000BDA605 /* FZZBackspaceResignTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZBackspaceResignTextField.m; sourceTree = "<group>"; };
-		49EEEA9518D972FB00BDA605 /* FZZBackspaceResignTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FZZBackspaceResignTextView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		49EEEA9618D972FB00BDA605 /* FZZBackspaceResignTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FZZBackspaceResignTextView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		49EEEA9518D972FB00BDA605 /* FZZTextViewWithPlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FZZTextViewWithPlaceholder.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		49EEEA9618D972FB00BDA605 /* FZZTextViewWithPlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FZZTextViewWithPlaceholder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		49F524D018E1C3040019C5DF /* FZZOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZOverlayView.h; sourceTree = "<group>"; };
 		49F524D118E1C3040019C5DF /* FZZOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FZZOverlayView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		49F524D318E212840019C5DF /* FZZNavIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZNavIcon.h; sourceTree = "<group>"; };
@@ -423,8 +428,8 @@
 				49EEEA8918D8D1E600BDA605 /* FZZPhoneInputCell.xib */,
 				49EEEA8F18D932F000BDA605 /* FZZBackspaceResignTextField.h */,
 				49EEEA9018D932F000BDA605 /* FZZBackspaceResignTextField.m */,
-				49EEEA9518D972FB00BDA605 /* FZZBackspaceResignTextView.h */,
-				49EEEA9618D972FB00BDA605 /* FZZBackspaceResignTextView.m */,
+				49EEEA9518D972FB00BDA605 /* FZZTextViewWithPlaceholder.h */,
+				49EEEA9618D972FB00BDA605 /* FZZTextViewWithPlaceholder.m */,
 				4954FB1E18D4F1000083D07F /* FZZInviteCell.h */,
 				4954FB1F18D4F1010083D07F /* FZZInviteCell.m */,
 				4954FB1C18D4F0A30083D07F /* FZZInviteCell.xib */,
@@ -516,6 +521,7 @@
 			children = (
 				493B074F19898F6900EC61E4 /* FZZEventMainCell.h */,
 				493B075019898F6900EC61E4 /* FZZEventMainCell.m */,
+				49B562F61993CF3E008302E5 /* Description Screen */,
 				493B075219898F8D00EC61E4 /* Invite View */,
 				493B074819898ED200EC61E4 /* Chat View */,
 				492E5D7E19327E5800359F11 /* FZZExpandedEventCell.h */,
@@ -551,6 +557,16 @@
 				4964C7BE18CBFCD60099E5C6 /* MapBox.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		49B562F61993CF3E008302E5 /* Description Screen */ = {
+			isa = PBXGroup;
+			children = (
+				49B562F71993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.h */,
+				49B562F81993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m */,
+				49B562FA1993CFEA008302E5 /* FZZDescriptionScreenTableViewCell.xib */,
+			);
+			name = "Description Screen";
 			sourceTree = "<group>";
 		};
 		49C8B0E91888B3C500400832 /* Event Cells */ = {
@@ -862,6 +878,7 @@
 				4960803F18EFE03700CF72DB /* release_notes.md in Resources */,
 				499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */,
 				49D5E6D418616A56002BB1F0 /* package.json in Resources */,
+				49B562FB1993CFEB008302E5 /* FZZDescriptionScreenTableViewCell.xib in Resources */,
 				4925ED851984533F0024247C /* FZZInputVerificationCodeViewController.xib in Resources */,
 				49D5C9AA186042C2002BB1F0 /* InfoPlist.strings in Resources */,
 				4954FB0218D3AAA40083D07F /* FZZInputPhoneViewController.xib in Resources */,
@@ -926,8 +943,9 @@
 				49069B2018651FFA003D003A /* FZZSocketIODelegate.m in Sources */,
 				49F524D518E212840019C5DF /* FZZNavIcon.m in Sources */,
 				4954FB0818D3AB800083D07F /* PhoneNumberFormatter.m in Sources */,
-				49EEEA9718D972FB00BDA605 /* FZZBackspaceResignTextView.m in Sources */,
+				49EEEA9718D972FB00BDA605 /* FZZTextViewWithPlaceholder.m in Sources */,
 				49958A601932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m in Sources */,
+				49B562F91993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m in Sources */,
 				49C8B1551889F08600400832 /* FZZEventCell.m in Sources */,
 				493B075819898FC500EC61E4 /* FZZInviteScreenTableViewController.m in Sources */,
 				49F524D218E1C3040019C5DF /* FZZOverlayView.m in Sources */,

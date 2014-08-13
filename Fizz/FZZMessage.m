@@ -17,7 +17,8 @@ static NSString *FZZ_NEW_MESSAGE = @"postNewMessage";
 
 @implementation FZZMessage
 
-+(NSArray *)convertMessagesFromJSONForCache:(NSArray *)messageJSONs{
++(NSArray *)convertMessagesFromJSONForCache:(NSArray *)messageJSONs
+                                   forEvent:(FZZEvent *)event{
     NSMutableArray *result = [messageJSONs mutableCopy];
     
     [messageJSONs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -28,7 +29,7 @@ static NSString *FZZ_NEW_MESSAGE = @"postNewMessage";
         NSString *text = [jsonMessage objectForKey:@"text"];
         
         // Event
-        NSNumber *eventID = [jsonMessage objectForKey:@"event"];
+        NSNumber *eventID = [event eventID];//[jsonMessage objectForKey:@"event"];
         FZZEvent *event = [FZZEvent eventWithEID:eventID];
         
         // User
@@ -52,11 +53,10 @@ static NSString *FZZ_NEW_MESSAGE = @"postNewMessage";
 
 +(NSArray *)convertMessagesToJSONForCache:(NSArray *)messages{
     NSMutableArray *result = [messages mutableCopy];
+    NSArray *messagesArray = [messages copy];
     
-    NSArray *messagesArray = [result copy];
-    
-    [messagesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        FZZMessage *message = [obj copy];
+    [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        FZZMessage *message = (FZZMessage *)obj;
         
         NSDictionary *jsonMessage = [[NSMutableDictionary alloc] init];
         
@@ -65,8 +65,8 @@ static NSString *FZZ_NEW_MESSAGE = @"postNewMessage";
         [jsonMessage setValue:[message text] forKey:@"text"];
         
         // Event
-        NSNumber *eventID = [[message event] eventID];
-        [jsonMessage setValue:eventID forKey:@"event"];
+//        NSNumber *eventID = [[message event] eventID];
+//        [jsonMessage setValue:eventID forKey:@"event"];
         
         // User
         NSNumber *userID = [[message user] userID];

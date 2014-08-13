@@ -25,7 +25,6 @@
 
 @class FZZInviteViewController;
 @class FZZEvent;
-@class FZZChatDelegate;
 @class FZZExpandedVerticalTableViewController;
 
 @interface FZZExpandedEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
@@ -37,15 +36,15 @@
 
 @property UILabel *attendeesLabel;
 
-@property FZZChatDelegate *chatDelegate;
-
-@property FZZExpandedVerticalTableViewController *tvc;
+@property FZZExpandedVerticalTableViewController *vtvc;
 @property FZZInviteViewController *ivc;
 @property (strong, nonatomic) FZZEvent *event;
 
 - (void)scrollToTopAnimated:(BOOL)isAnimated;
 - (void)setScrollingEnabled:(BOOL)canScroll;
 - (void)sendInvitations;
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath;
 
 //- (void)enterInviteMode;
 //- (void)exitInviteMode;

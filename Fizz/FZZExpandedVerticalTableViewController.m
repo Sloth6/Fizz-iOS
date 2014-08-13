@@ -8,12 +8,14 @@
 
 #import "FZZExpandedVerticalTableViewController.h"
 
+#import "FZZEvent.h"
 #import "FZZChatScreenCell.h"
+#import "FZZDescriptionScreenTableViewCell.h"
 
 @interface FZZExpandedVerticalTableViewController ()
 
-@property UIView *middleView;
 @property UIView *bottomView;
+@property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
 @end
 
@@ -29,6 +31,10 @@
         [self.tableView setBackgroundColor:[UIColor clearColor]];
         
         [self.tableView registerClass:[FZZChatScreenCell class] forCellReuseIdentifier:@"chatCell"];
+        
+        [self.tableView registerNib:[UINib nibWithNibName:@"FZZDescriptionScreenTableViewCell" bundle:nil] forCellReuseIdentifier:@"descriptionCell"];
+        
+//        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
     return self;
 }
@@ -39,15 +45,59 @@
     return (FZZChatScreenCell *)[self tableView:[self tableView] cellForRowAtIndexPath:indexPath];
 }
 
-- (void)setEvent:(FZZEvent *)event{
-    _event = event;
-    NSLog(@"RELOAD DATA NOWSS");
-    [[self tableView] reloadData];
+-(NSIndexPath *)getCurrentCellIndex{
+    CGFloat height = [self tableView].frame.size.height;
+    NSInteger page = ([self tableView].contentOffset.y + (0.5f * height)) / height;
     
-    FZZChatScreenCell *cell = [self getChatScreenCell];
-    
-    [cell setEvent:event];
+    return [NSIndexPath indexPathForItem:page inSection:0];
 }
+
+- (void)reloadChat{
+    NSIndexPath *topCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:topCellIndexPath];
+    
+    
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    NSIndexPath *scrollPosition = [self getCurrentCellIndex];
+    
+    NSLog(@"Page number: %@", scrollPosition);
+    [event setScrollPosition:scrollPosition];
+}
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath{
+    _eventIndexPath = indexPath;
+    [[self tableView] reloadData];
+}
+
+//- (void)setEvent:(FZZEvent *)event{
+//    NSLog(@"Shouldn't set event!");
+//    exit(1);
+//    
+//    if (![[_event eventID] isEqual:[event eventID]]){
+//        _event = event;
+//        
+//        // TODOAndrew fill these out for main and invite screens
+//        // Chat Screen
+//        FZZChatScreenCell *chatCell = [self getChatScreenCell];
+//        
+//        [chatCell setEvent:event];
+//        
+//        // Main Screen
+//        FZZDescriptionScreenTableViewCell *descriptionCell = [self getDescriptionScreenCell];
+//        
+//        [descriptionCell setText:[event eventDescription]];
+//        
+//        
+//        // Invite Screen
+//        
+//        [[self tableView] reloadData];
+//    }
+//}
 
 - (void)viewDidLoad
 {
@@ -90,26 +140,49 @@
 {
     UITableViewCell *cell;
     
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
     switch (indexPath.row) {
-        case 0:
+        case 0: // Chat Cell
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"chatCell" forIndexPath:indexPath];
-            [(FZZChatScreenCell *)cell setEvent:_event];
+            [(FZZChatScreenCell *)cell setEventIndexPath:_eventIndexPath];
+            [(FZZChatScreenCell *)cell setParentScrollView:[self tableView]];
         }
             break;
             
-        default:
+        case 1: // Description/Title Cell
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"descriptionCell" forIndexPath:indexPath];
+            
+            NSString *title = [event eventDescription];
+            [(FZZDescriptionScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
+            
+//            [(FZZDescriptionScreenTableViewCell *)cell setText:title];
+            [cell setBackgroundColor:[UIColor clearColor]];
+            [cell setOpaque:NO];
+        }
+            break;
+            
+        default: // Invite List Cell
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+//            [cell setEvent:event];
+//            [(FZZCellType *)cell setEventIndexPath:_eventIndexPath];
+            
+            [cell setBackgroundColor:[UIColor clearColor]];
+            [cell setOpaque:NO];
+//            [(FZZCellType *)cell setParentScrollView:[self tableView]];
         }
             break;
     }
     
+    // TODOAndrew set this on setup
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
-    backView.backgroundColor = [UIColor clearColor];
-    cell.backgroundView = backView;
+//    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
+//    backView.backgroundColor = [UIColor clearColor];
+//    cell.backgroundView = backView;
     
 //    // Configure the cell...
 //    [cell.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -120,10 +193,10 @@
     return cell;
 }
 
-- (UIView *)middleCell{
+- (FZZDescriptionScreenTableViewCell *)getDescriptionScreenCell{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     
-    return [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+    return (FZZDescriptionScreenTableViewCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
 }
 
 - (UIView *)bottomCell{
@@ -137,12 +210,8 @@
     [cell updateMessages];
 }
 
-- (void)updateMiddleView:(UIView *)view{
-    if (_middleView != view){
-        [_middleView removeFromSuperview];
-        _middleView = view;
-        [[self middleCell] addSubview:view];
-    }
+- (void)updateMiddleViewText:(NSString *)text{
+    [[(FZZDescriptionScreenTableViewCell *)[self middleCell] textView] setText:text];
 }
 
 - (void)updateBottomView:(UIView *)view{

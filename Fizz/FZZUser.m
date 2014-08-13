@@ -51,17 +51,21 @@ static FZZUser *currentUser = nil;
 +(BOOL)saveUsersToFile:(NSString *)userURL{
     NSDictionary *jsonDict = [FZZUser getUsersJSONForCache];
     
+//    NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSDate date] forKey:@"date"];
+//    
+//    NSDictionary *jsonDict = [NSDictionary dictionaryWithObject:dict forKey:@"key"];
+    
     if (jsonDict == nil) return NO;
     
-    NSLog(@"saving: \n%@\n", jsonDict);
+    NSLog(@"saving: \n%@\n to url <%@>", jsonDict, userURL);
     
     return [jsonDict writeToFile:userURL atomically:YES];
 }
 
 +(NSDictionary *)getUsersJSONForCache{
-    FZZUser *user = [FZZUser me];
+    FZZUser *me = [FZZUser me];
     
-    if (user == nil) return nil;
+    if (me == nil) return nil;
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[users count]];
     
@@ -69,6 +73,8 @@ static FZZUser *currentUser = nil;
     
     [userDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         FZZUser *user = obj;
+        NSNumber *userID = key;
+        NSString *userIDString = [userID stringValue];
         
         NSDictionary *jsonUser = [[NSMutableDictionary alloc] init];
         
@@ -77,10 +83,10 @@ static FZZUser *currentUser = nil;
         [jsonUser setValue:[user lastUsed] forKey:@"lastUsed"];
         
         // Where key = uID
-        [dict setObject:jsonUser forKey:key];
+        [dict setObject:jsonUser forKey:userIDString];
     }];
     
-    [dict setObject:[user userID] forKey:@"myUserID"];
+    [dict setObject:[me userID] forKey:@"myUserID"];
     
     return dict;
 }
@@ -96,9 +102,14 @@ static FZZUser *currentUser = nil;
     NSNumber *myUserID = [dict objectForKey:@"myUserID"];
     [dict removeObjectForKey:@"myUserID"];
     
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
     [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSDictionary *jsonUser = obj;
-        NSNumber *userID = key;
+        NSString *userIDString = key;
+        
+        NSNumber *userID = [numberFormatter numberFromString:userIDString];
         
         BOOL userExists = [users objectForKey:userID] != nil;
         
@@ -160,6 +171,10 @@ static FZZUser *currentUser = nil;
 //}
 
 -(id)initPrivateWithUserID:(NSNumber *)uID{
+    if (uID == nil){
+        exit(1);
+        return nil;
+    }
     
     self = [super init];
     
@@ -176,14 +191,6 @@ static FZZUser *currentUser = nil;
     return self;
 }
 
--(id)initPrivateWithUserID:(NSNumber *)uID andName:(NSString *)strName{
-    
-    FZZUser *user = [self initPrivateWithUserID:uID];
-    user.name = strName;
-    
-    return user;
-}
-
 +(void)setMeAs:(FZZUser *)user{
     me = user;
 }
@@ -197,6 +204,7 @@ static FZZUser *currentUser = nil;
 }
 
 +(FZZUser *)userWithUID:(NSNumber *)uID{
+    if (uID == nil) return nil;
     
     FZZUser *user = [users objectForKey:uID];
     
@@ -213,11 +221,10 @@ static FZZUser *currentUser = nil;
     FZZUser *user = [users objectForKey:uID];
     
     if (!user){
-        user = [[FZZUser alloc] initPrivateWithUserID:uID
-                                              andName:strName];
-    } else {
-        user.name = strName;
+        user = [[FZZUser alloc] initPrivateWithUserID:uID];
     }
+    
+    user.name = strName;
     
     return user;
 }
@@ -300,6 +307,20 @@ static FZZUser *currentUser = nil;
         FZZUser *user = (FZZUser *)obj;
         
         [result setObject:[user userID] atIndexedSubscript:idx];
+    }];
+    
+    return result;
+}
+
++(NSArray *)getUsersFromUIDs:(NSArray *)UIDs{
+    NSMutableArray *result = [users mutableCopy];
+    
+    [UIDs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSNumber *uid = (NSNumber *)obj;
+        
+        FZZUser *user = [FZZUser userWithUID:uid];
+        
+        [result setObject:user atIndexedSubscript:idx];
     }];
     
     return result;

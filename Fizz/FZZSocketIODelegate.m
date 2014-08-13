@@ -48,7 +48,6 @@ static SocketIO *socketIO;
 static NSDictionary *incomingEventResponses;
 
 static int reconnectDelay;
-static BOOL connected;
 static BOOL resignedActive;
 static NSMutableData *data;
 
@@ -71,7 +70,6 @@ static NSMutableData *data;
         
         reconnectDelay = kFZZDefaultReconnectDelay;
         socketIO = [[SocketIO alloc] initWithDelegate:socketIODelegate];
-        connected = NO;
         resignedActive = NO;
         
         incomingEventResponses = [[NSMutableDictionary alloc] init];
@@ -246,7 +244,6 @@ static NSMutableData *data;
 /* Connect */
 
 - (void) socketIODidConnect:(SocketIO *)socket{
-    connected = YES;
     NSLog(@"\n[socketIO] Connection Opened\n");
     reconnectDelay = kFZZDefaultReconnectDelay;
 }
@@ -254,7 +251,6 @@ static NSMutableData *data;
 /* Disconnect */
 
 - (void) socketIODidDisconnect:(SocketIO *)socket disconnectedWithError:(NSError *)error{
-    connected = NO;
     NSLog(@"\n[socketIO] Connection Disconnected\n");
     if (!resignedActive){ NSLog(@"\n[socketIO] Attempting to Reconnect\n");
         [socketIODelegate performSelector:@selector(reconnect) withObject:nil afterDelay:reconnectDelay];
@@ -279,9 +275,8 @@ static NSMutableData *data;
 + (void) willResignActive{
     resignedActive = YES;
     
-    if (connected){
+    if ([socketIO isConnected]){
         [[FZZSocketIODelegate socketIO] disconnect];
-        connected = NO;
     } else {
         [NSObject cancelPreviousPerformRequestsWithTarget:socketIODelegate];
         reconnectDelay = kFZZDefaultReconnectDelay;
@@ -334,11 +329,6 @@ static NSMutableData *data;
     FZZUser *me = [FZZUser parseJSON:userJSON];
     
     [FZZUser setMeAs:me];
-
-    if (![FZZLocalCache hasLoadedDataFromCache]){
-        // Load all cached data if user data is cached
-        [FZZLocalCache loadFromCache];
-    }
     
     NSArray *eventIDList = [json objectForKey:@"eventList"];
     NSArray *completeEventIDList = [json objectForKey:@"completeEventList"];
@@ -350,14 +340,11 @@ static NSMutableData *data;
     // uid arrays (absolute)
     NSDictionary *guests   = [json objectForKey:@"guests"];
     
-    // Events
-    NSArray *newEvents = [FZZEvent parseEventIDList:eventIDList];
-    
     // complete Events
     [FZZEvent killEvents:completeEventIDList];
     
-    // After killing events, append new ones, update interface
-    [appDelegate updateEvents:newEvents];
+    // Events
+    NSArray *newEvents = [FZZEvent parseEventIDList:eventIDList];
     
     // Messages
     // Parses the JSON, places messages in the appropriate events
@@ -372,6 +359,8 @@ static NSMutableData *data;
         
         NSArray *updatedInvitees = (NSArray *)obj;
         
+        updatedInvitees = [FZZUser parseUserJSONList:(NSArray *)obj];
+        
         [event updateAddInvitees:updatedInvitees];
     }];
     
@@ -380,7 +369,7 @@ static NSMutableData *data;
         NSNumber *eventID = [NSNumber numberWithInt:[(NSString *)key intValue]];
         FZZEvent *event = [FZZEvent eventWithEID:eventID];
         
-        NSArray *updatedGuests = [FZZUser parseUserJSONList:(NSArray *)obj];
+        NSArray *updatedGuests = [FZZUser getUsersFromUIDs:(NSArray *)obj];
         
         [event updateGuests:updatedGuests];
     }];
@@ -390,6 +379,8 @@ static NSMutableData *data;
     // After all users are loaded in, update available friends to invite
     // TODOAndrew Check out what update friends is doing, cache the friendslist?
     [FZZInviteViewController updateFriends];
+
+    [appDelegate updateEvents];
 }
 
 - (void)incomingNewEvent:(NSArray *)args{
@@ -397,12 +388,12 @@ static NSMutableData *data;
     
     NSDictionary *json  = [args objectAtIndex:0];
     
-    FZZEvent *event = [FZZEvent parseJSON:json];
+    //FZZEvent *event =
+    [FZZEvent parseJSON:json];
     
-    NSArray *newEvents = [NSArray arrayWithObject:event];
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate updateEvents:newEvents];
+    [appDelegate updateEvents];
 }
 
 - (void)incomingCompleteEvent:(NSArray *)args{
@@ -411,10 +402,10 @@ static NSMutableData *data;
     NSNumber *eID = [json objectForKey:@"eid"];
     
     [FZZEvent killEvents:[NSArray arrayWithObject:eID]];
-
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[[UIApplication sharedApplication] delegate];
-    // TODOAndrew get rid of this hack to relead events, have killEvents actually update the eventsList visually
-    [appDelegate updateEvents:[[NSArray alloc] init]];
+    
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate updateEvents];
 }
 
 - (void)incomingUpdateGuests:(NSArray *)args{
@@ -450,14 +441,14 @@ static NSMutableData *data;
     FZZMessage *message = [FZZMessage parseJSON:messageDict];
     
     FZZEvent *event = [message event];
-    
-    [event updateAddMessage:message];
 
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
 
     FZZEventsViewController *evc = [appDelegate evc];
     
     dispatch_sync(dispatch_get_main_queue(), ^{
+        [event updateAddMessage:message];
+        
         [evc addIncomingMessageForEvent:event];
     });
 }
@@ -501,7 +492,7 @@ static NSMutableData *data;
 }
 
 + (BOOL) isConnectionOpen{
-    return connected;
+    return [socketIO isConnected];
 }
 
 +(void)socketIOResetDataFromServerWithAcknowledge:(SocketIOCallback)function{

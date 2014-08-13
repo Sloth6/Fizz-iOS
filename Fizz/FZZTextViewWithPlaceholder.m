@@ -1,15 +1,15 @@
 //
-//  FZZBackspaceResignTextView.m
+//  FZZTextViewWithPlaceholder.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 3/19/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZBackspaceResignTextView.h"
+#import "FZZTextViewWithPlaceholder.h"
 #import "FZZEventsViewController.h"
 
-@interface FZZBackspaceResignTextView ()
+@interface FZZTextViewWithPlaceholder ()
 
 @property FZZEventsViewController *evc;
 @property (strong, nonatomic) UITextView *textView;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation FZZBackspaceResignTextView
+@implementation FZZTextViewWithPlaceholder
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -32,7 +32,7 @@
         [_placeholderTextView setUserInteractionEnabled:NO];
         [_placeholderTextView setEditable:NO];
         [_placeholderTextView setBackgroundColor:[UIColor clearColor]];
-        _placeholderTextView.textColor = [UIColor lightGrayColor];
+        _placeholderTextView.textColor = [UIColor colorWithWhite:1.0 alpha:0.7];
         [self setBackgroundColor:[UIColor clearColor]];
         
         [self addSubview:_placeholderTextView];
@@ -42,7 +42,7 @@
         _textView = [[UITextView alloc] initWithFrame:bounds];
         [_textView setUserInteractionEnabled:YES];
         [_textView setBackgroundColor:[UIColor clearColor]];
-        [_textView setTextColor:[UIColor darkTextColor]];
+        [_textView setTextColor:[UIColor whiteColor]];
         
         [self addSubview:_textView];
         

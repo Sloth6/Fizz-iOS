@@ -23,6 +23,15 @@ static int kFZZMinChatCellHeight = 58;
 @property BOOL didGetDimensionsFromCell;
 @property float textLabelWidth;
 
+// Used when scrolling the parentScrollView
+@property BOOL shouldScrollParent;
+
+@property (strong, nonatomic) NSIndexPath *eventIndexPath;
+@property (strong, nonatomic) UIScrollView *parentScrollView;
+@property (strong, nonatomic) UIGestureRecognizer *parentScrollViewGesture;
+@property (strong, nonatomic) UIGestureRecognizer *scrollViewGesture;
+@property CGPoint lastOffset;
+
 @end
 
 @implementation FZZChatScreenTableViewController
@@ -47,8 +56,108 @@ static int kFZZMinChatCellHeight = 58;
         //Magic Number 68
         _textLabelWidth = [UIScreen mainScreen].bounds.size.width - 68;
 
+        for (UIGestureRecognizer *gesture in [self tableView].gestureRecognizers)
+            if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]){
+                _scrollViewGesture = gesture;
+            }
+
     }
     return self;
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+//    [_parentScrollView setPagingEnabled:YES];
+     [scrollView setExclusiveTouch:NO];
+    _shouldScrollParent = NO;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    [_parentScrollView setPagingEnabled:NO];
+    
+    CGFloat height = _tableView.contentSize.height;
+    CGFloat frameHeight = _tableView.bounds.size.height;
+    
+    CGFloat contentOffset = _tableView.contentOffset.y;
+    
+    if (![scrollView isDecelerating]){
+        if (contentOffset > height - frameHeight){
+            
+            [_scrollViewGesture setState:UIGestureRecognizerStateEnded];
+            [_parentScrollViewGesture setState:UIGestureRecognizerStateBegan];
+            
+            
+            CGPoint offsetPoint = CGPointMake(0, height - frameHeight);
+            [_tableView setContentOffset:offsetPoint];
+            
+            CGFloat offset = contentOffset - offsetPoint.y;
+            
+            CGFloat currentParentOffset = _parentScrollView.contentOffset.y;
+            CGPoint parentOffsetPoint = CGPointMake(_parentScrollView.contentOffset.x, currentParentOffset + offset);
+            
+            //                _parentScrollView.bounces = NO;
+    //        [[self tableView] resignFirstResponder];
+    //        [[self tableView] setScrollEnabled:NO];
+    //        [_parentScrollView setScrollEnabled:YES];
+            
+        }
+    }
+    
+//    else {
+//        [[self tableView] setScrollEnabled:YES];
+//        [_parentScrollView setScrollEnabled:NO];
+//    }
+    
+    return;
+    
+    if (scrollView == _tableView) {
+        
+        if ([_parentScrollView contentOffset].y > 0){
+            
+            [_parentScrollView becomeFirstResponder];
+            
+//            self.lastOffset.y;
+            
+            
+            
+            CGFloat height = _tableView.contentSize.height;
+            CGFloat frameHeight = _tableView.bounds.size.height;
+            
+            CGFloat contentOffset = _tableView.contentOffset.y;
+            
+        } else {
+        
+            CGFloat height = _tableView.contentSize.height;
+            CGFloat frameHeight = _tableView.bounds.size.height;
+            
+            CGFloat contentOffset = _tableView.contentOffset.y;
+            
+            if (contentOffset > height - frameHeight){
+                CGPoint offsetPoint = CGPointMake(0, height - frameHeight);
+                [_tableView setContentOffset:offsetPoint];
+                
+                CGFloat offset = contentOffset - offsetPoint.y;
+                
+                CGFloat currentParentOffset = _parentScrollView.contentOffset.y;
+                CGPoint parentOffsetPoint = CGPointMake(_parentScrollView.contentOffset.x, currentParentOffset + offset);
+                
+//                _parentScrollView.bounces = NO;
+                [_parentScrollView becomeFirstResponder];
+//                [_parentScrollView setContentOffset:parentOffsetPoint];
+        }
+//            [_tableView setPagingEnabled:NO];
+        }
+        
+//        CGFloat offsetChange = _lastOffset - scrollView.contentOffset.y;
+//        CGRect f = _floatingBarView.frame;
+//        f.origin.y += offsetChange;
+//        if (f.origin.y < -kFloatingBarHeight) f.origin.y = -kFloatingBarHeight;
+//        if (f.origin.y > 0) f.origin.y = 0;
+//        if (scrollView.contentOffset.y <= 0) f.origin.y = 0; //Deal with "bouncing" at the top
+//        if (scrollView.contentOffset.y + scrollView.bounds.size.height >= scrollView.contentSize.height) f.origin.y = -kFloatingBarHeight; //Deal with "bouncing" at the bottom
+//        _floatingBarView.frame = f;
+//        
+//        _lastOffset = scrollView.contentOffset.y;
+    }
 }
 
 //- (void)viewDidLoad
@@ -78,23 +187,75 @@ static int kFZZMinChatCellHeight = 58;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_event == nil) {
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    if (event == nil) {
         exit(1); // shouldn't happen
     }
     
-    return [[_event messages] count];
+    return [[event messages] count];
 }
 
--(void)setEvent:(FZZEvent *)event{
-    if (![_event isEqual:event]){
-        _event = event;
+//-(void)setEvent:(FZZEvent *)event{
+//    _event = event;
+//    
+//    NSLog(@"Reload chat for <%@>", [event description]);
+//    [[self tableView] reloadData];
+//}
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath{
+    _eventIndexPath = indexPath;
+    
+    [[self tableView] reloadData];
+}
+
+- (void)setParentScrollView:(UIScrollView *)parentScrollView{
+    [_parentScrollView removeGestureRecognizer:_parentScrollViewGesture];
+    _parentScrollView = parentScrollView;
+    
+    _parentScrollViewGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:nil];
+    
+//    panGestureRecognizer.minimumNumberOfTouches = 2;
+    _parentScrollViewGesture.delegate = self;
+    [_parentScrollView addGestureRecognizer:_parentScrollViewGesture];
+//    
+//    for (UIGestureRecognizer *gesture in _parentScrollView.gestureRecognizers)
+//        if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]){
+//            gesture.delegate = self;
+//            _parentScrollViewGesture = gesture;
+//        }
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    
+    if (gestureRecognizer == _parentScrollViewGesture){
+        if (_shouldScrollParent){
+            return YES;
+        }
         
-        NSLog(@"UGH UPDATING TO THIS EVENT");
-        [[self tableView] reloadData];
+        CGFloat height = _tableView.contentSize.height;
+        CGFloat frameHeight = _tableView.bounds.size.height;
+        
+        CGFloat contentOffset = _tableView.contentOffset.y;
+        
+        if (contentOffset > height - frameHeight){
+            _shouldScrollParent = YES;
+            return YES;
+        }
+        
+        return NO;
     }
+    
+    return YES;
 }
 
 -(void)updateMessages{
+//    [[self tableView] reloadData];
+    [self addIncomingMessage];
 //    NSLog(@"It should be inserting rows!");
     
 //    @synchronized(self){
@@ -125,7 +286,9 @@ static int kFZZMinChatCellHeight = 58;
 -(FZZMessage *)getMessageAtIndexPath:(NSIndexPath *)indexPath{
     if (!indexPath) return nil;
     
-    NSArray *messages = [_event messages];
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    NSArray *messages = [event messages];
     
     if (indexPath.row < [messages count]){
         return [messages objectAtIndex:[indexPath row]];
@@ -233,12 +396,10 @@ static int kFZZMinChatCellHeight = 58;
     return height + 14;
 }
 
-- (void)addIncomingMessageForEvent:(FZZEvent *)event{
-    
-    if (self.event != event){
-        return;
-    }
-    
+- (void)addIncomingMessage{
+//    NSLog(@"Incoming Message Doing Nothing!");
+//    return;
+//    exit(1);
     CGPoint offset = [self tableView].contentOffset;
     CGRect bounds = [self tableView].bounds;
     CGSize size = [self tableView].contentSize;
@@ -253,12 +414,15 @@ static int kFZZMinChatCellHeight = 58;
     
     BOOL scroll = NO;
     
+    [[self tableView] beginUpdates];
+    
     if (offset.y + bounds.size.height > size.height - threshold){
         [[self tableView] insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
         scroll = YES;
     } else {
         [[self tableView] insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
     }
+    [[self tableView] endUpdates];
     
     CGFloat newCellHeight = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
     CGSize newContentSize = CGSizeMake([self tableView].contentSize.width, [self tableView].contentSize.height + newCellHeight);
@@ -271,7 +435,9 @@ static int kFZZMinChatCellHeight = 58;
         [[self tableView] scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
     
-    FZZMessage *newestMessage = [[_event messages] lastObject];
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    FZZMessage *newestMessage = [[event messages] lastObject];
     
     if (!([newestMessage user] == [FZZUser me]) && // Not my message
         [newestMessage user]){                     // Not the server's message

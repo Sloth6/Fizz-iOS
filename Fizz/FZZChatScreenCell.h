@@ -16,7 +16,9 @@
 @property (nonatomic, retain) UIView *viewForm;
 @property (nonatomic, retain) UITextView *chatBox;
 
--(void)setEvent:(FZZEvent *)event;
+-(void)setEventIndexPath:(NSIndexPath *)indexPath;
 -(void)updateMessages;
+
+-(void)setParentScrollView:(UIScrollView *)scrollView;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "FZZEnterMessagePrototypeViewController.h"
-#import "FZZBackspaceResignTextView.h"
+#import "FZZTextViewWithPlaceholder.h"
 
 @interface FZZEnterMessagePrototypeViewController ()
 

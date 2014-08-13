@@ -25,12 +25,11 @@
 
 @class FZZInviteViewController;
 @class FZZEvent;
-@class FZZBackspaceResignTextView;
-@class FZZChatDelegate;
+@class FZZTextViewWithPlaceholder;
 
 @interface FZZExpandedNewEventCell : UICollectionViewCell <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property FZZBackspaceResignTextView *resignTextViewer;
+@property FZZTextViewWithPlaceholder *textView;
 //@property float lineHeight;
 //@property UISwitch *toggleSecret;
 //@property UILabel *label;

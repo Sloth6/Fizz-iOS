@@ -10,6 +10,11 @@
 
 @implementation FZZUtilities
 
++ (void)initialize{
+    kFZZEventFont = [UIFont fontWithName:@"Futura-Heavy"
+                                    size:38];
+}
+
 void runOnMainQueueWithoutDeadlocking(void (^block)(void))
 {
     if ([NSThread isMainThread])

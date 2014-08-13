@@ -14,6 +14,8 @@
 
 @interface FZZEvent :  NSObject
 
+@property (strong, nonatomic) NSIndexPath *scrollPosition;
+
 @property (nonatomic, strong) NSDate * creationTime;
 @property (nonatomic, strong) NSNumber * eventID;
 @property (nonatomic, strong) NSArray *guests;
@@ -84,5 +86,6 @@
 
 +(void)killEvents:(NSArray *)deadEvents;
 
++(FZZEvent *)getEventAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

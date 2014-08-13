@@ -26,7 +26,7 @@
 
 @property UICollectionView *collectionView;
 
-@property UILabel *label;
+@property UITextView *textView;
 
 //-(void)setupCollectionViewForEvent:(FZZEvent *)event;
 -(void)setEvent:(FZZEvent *)event;

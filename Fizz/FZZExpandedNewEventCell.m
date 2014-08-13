@@ -9,14 +9,16 @@
 #import "FZZExpandedNewEventCell.h"
 #import "FZZInviteViewController.h"
 #import "FZZAppDelegate.h"
-#import "FZZChatDelegate.h"
+#import "FZZUtilities.h"
 
-#import "FZZBackspaceResignTextView.h"
+#import "FZZTextViewWithPlaceholder.h"
 
 @interface FZZExpandedNewEventCell ()
 
 @property (strong, nonatomic) UIButton *sendInviteButton;
 @property BOOL isSetup;
+
+@property UIImageView *imageView;
 
 @end
 
@@ -28,10 +30,23 @@
     if (self) {
         // Initialization code
         _isSetup = NO;
+        [self setupImageView];
         
         [self setupNewEventTextView];
     }
     return self;
+}
+
+- (void)setupImageView{
+    CGRect window = [UIScreen mainScreen].bounds;
+    
+    _imageView = [[UIImageView alloc] initWithFrame:window];
+    UIImage *image = [UIImage imageNamed:@"testImage"];
+    
+    image = centeredCrop(image);
+    
+    [_imageView setImage:image];
+    [self.contentView addSubview:_imageView];
 }
 
 - (void)setupNewEventTextView{
@@ -56,25 +71,25 @@
         float y = vInset;
         float height = sHeight - y - vOutset;
         
-        _resignTextViewer = [[FZZBackspaceResignTextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
+        _textView = [[FZZTextViewWithPlaceholder alloc] initWithFrame:CGRectMake(x, y, width, height)];
         
-        [_resignTextViewer setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
+        [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
         
-        [self addSubview:_resignTextViewer];
+        [self addSubview:_textView];
         
-        [_resignTextViewer textContainer].maximumNumberOfLines = 3;
+        [_textView textContainer].maximumNumberOfLines = 3;
         
-        [_resignTextViewer setBackgroundColor:[UIColor clearColor]];
+        [_textView setBackgroundColor:[UIColor clearColor]];
     }
     
-    [_resignTextViewer setEditable:NO];
-    [_resignTextViewer setScrollEnabled:NO];
-    [_resignTextViewer setUserInteractionEnabled:NO];
-    [_resignTextViewer setBackgroundColor:[UIColor clearColor]];
+    [_textView setEditable:NO];
+    [_textView setScrollEnabled:NO];
+    [_textView setUserInteractionEnabled:NO];
+    [_textView setBackgroundColor:[UIColor clearColor]];
     
     // Enable the placeholder text
-    [_resignTextViewer setText:@""];
-    [_resignTextViewer deleteBackward];
+    [_textView setText:@""];
+    [_textView deleteBackward];
 }
 
 /*

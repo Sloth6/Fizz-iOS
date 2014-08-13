@@ -13,17 +13,18 @@
 @class FZZInviteViewController;
 @class FZZExpandedVerticalTableViewController;
 
-@interface FZZChatScreenTableViewController : NSObject <UITableViewDelegate, UITableViewDataSource>
+@interface FZZChatScreenTableViewController : NSObject <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UITableViewCell *view;
 
-@property (strong, nonatomic) FZZEvent *event;
 @property (strong, nonatomic) FZZEventsViewController *esvc;
-@property (strong, nonatomic) FZZExpandedVerticalTableViewController *tvc;
 @property (strong, nonatomic) UITableView *tableView;
 
-- (void)addIncomingMessageForEvent:(FZZEvent *)event;
+- (void)addIncomingMessage;
 - (void)updateMessages;
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath;
+- (void)setParentScrollView:(UIScrollView *)parentScrollView;
 
 + (CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;
 
@@ -31,7 +32,6 @@
 -(void) keyboardWillHide:(NSNotification *)note;
 
 -(void)updateTableViewToHeight:(CGFloat)height;
-
 
 - (id)initWithStyle:(UITableViewStyle)style;
 

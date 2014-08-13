@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FZZBounceTableView : UITableView
+@interface FZZBounceTableView : UITableView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) BOOL bounce;
+@property (nonatomic, strong) UIScrollView *parentScrollView;
 
-- (id)initWithFrame:(CGRect)frame bounceAtTop:(BOOL)bounceAtTop bounceAtBottom:(BOOL)bounceAtBottom;
+- (id)initWithFrame:(CGRect)frame shouldBounceAtTop:(BOOL)bounceAtTop shouldBounceAtBottom:(BOOL)bounceAtBottom;
 
 
 @end

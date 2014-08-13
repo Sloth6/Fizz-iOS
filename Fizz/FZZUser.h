@@ -58,5 +58,6 @@
 +(NSMutableArray *)parseUserJSONList:(NSArray *)userListJSON;
 
 +(NSArray *)getUserIDsFromUsers:(NSArray *)users;
++(NSArray *)getUsersFromUIDs:(NSArray *)UIDs;
 
 @end

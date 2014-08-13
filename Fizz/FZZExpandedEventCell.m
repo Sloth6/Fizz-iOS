@@ -12,6 +12,7 @@
 #import "FZZAppDelegate.h"
 #import "FZZMessage.h"
 #import "FZZUtilities.h"
+#import "FZZBounceTableView.h"
 
 #import "FZZEvent.h"
 
@@ -19,6 +20,8 @@
 
 @property (strong, nonatomic) UIButton *sendInviteButton;
 @property (strong, nonatomic) UIImageView *imageView;
+
+@property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
 @end
 
@@ -32,32 +35,53 @@
         [self setupExpandedEventCell];
         
         //_ivc = [[FZZInviteViewController alloc] init];
-        //[_tvc updateTopView:[_ivc tableView]];
+        //[_vtvc updateTopView:[_ivc tableView]];
         
-        CGRect topFrame = [UIScreen mainScreen].bounds;
+        CGRect topBounds = [UIScreen mainScreen].bounds;
         
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
         UITextField *textField = appDelegate.searchTextField;
         CGFloat offset = textField.frame.origin.y + textField.frame.size.height;
         
-        topFrame.origin.y    += offset;
-        topFrame.size.height -= offset;
+        topBounds.origin.y    += offset;
+        topBounds.size.height -= offset;
         
-        UITableView *tableView = [[UITableView alloc] initWithFrame:topFrame];
-        [_tvc updateBottomView:tableView];
+        UITableView *tableView = [[UITableView alloc] initWithFrame:topBounds];
+        
+//        [[FZZBounceTableView alloc] initWithFrame:topFrame
+//                                                         shouldBounceAtTop:NO
+//                                                      shouldBounceAtBottom:YES];
+        
+        [_vtvc updateBottomView:tableView];
         tableView.bounces = NO;
+        [self setBackgroundColor:[UIColor clearColor]];
+        [self setOpaque:NO];
         
-//        _chatDelegate = [[FZZChatDelegate alloc] init];
-//        [_tvc updateTopView:[_chatDelegate view]];
-//        _chatDelegate.tableView.bounces = NO;
-//        _chatDelegate.tvc = _tvc;
+//        UITableView *tableView = [[UITableView alloc] initWithFrame:topFrame];
+//        [_vtvc updateBottomView:tableView];
+//        tableView.bounces = NO;
+//        [self setBackgroundColor:[UIColor clearColor]];
+//        [self setOpaque:NO];
+        
     }
     return self;
 }
 
 - (void)updateMessages{
-    [_tvc updateMessages];
+    [_vtvc updateMessages];
+}
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath{
+    _eventIndexPath = indexPath;
+    
+    [_vtvc setEventIndexPath:indexPath];
+    
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    NSIndexPath *scrollPosition = [event scrollPosition];
+    
+    [_vtvc.tableView scrollToRowAtIndexPath:scrollPosition atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 - (void)setupExpandedEventCell{
@@ -95,32 +119,14 @@
 }
 
 - (void)setupTableview{
-    _tvc = [[FZZExpandedVerticalTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    _vtvc = [[FZZExpandedVerticalTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
-    [[_tvc tableView] setPagingEnabled:YES];
+    [[_vtvc tableView] setPagingEnabled:YES];
     
-    [_tvc.tableView setFrame:self.bounds];
-    [_tvc.tableView setBackgroundColor:[UIColor clearColor]];
-    [_tvc.tableView setOpaque:NO];
-    [self.contentView addSubview:_tvc.tableView];
-    
-    [_tvc.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-}
-
-- (void)setEvent:(FZZEvent *)event{
-    _event = event;
-    [_tvc setEvent:event];
-    
-    NSString *text = [event eventDescription];
-    
-    [_textView setText:text];
-    [_textView sizeToFit];
-    NSLog(@"<<%@>>", text);
-    
-//    _chatDelegate.event = event;
-    
-    [_tvc updateMiddleView:_textView];
+    [_vtvc.tableView setFrame:self.bounds];
+    [_vtvc.tableView setBackgroundColor:[UIColor clearColor]];
+    [_vtvc.tableView setOpaque:NO];
+    [self.contentView addSubview:_vtvc.tableView];
 }
 
 - (void)sendInvitations{

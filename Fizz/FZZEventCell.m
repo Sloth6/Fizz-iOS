@@ -18,34 +18,30 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _label = [[UILabel alloc] initWithFrame:self.bounds];
-        _label.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-        UIViewAutoresizingFlexibleHeight;
+        _textView = [[UITextView alloc] initWithFrame:self.bounds];
+        _textView.autoresizingMask = UIViewAutoresizingNone;
+        _textView.contentMode = UIViewContentModeScaleToFill;
+        _textView.userInteractionEnabled = NO;
+        _textView.textAlignment = NSTextAlignmentNatural;
         
-//        _prevLabel = [[UILabel alloc] initWithFrame:self.bounds];
-//        _nextLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        
-        _label.textAlignment = NSTextAlignmentCenter;
-        
-        [_label setLineBreakMode:NSLineBreakByWordWrapping];
-        _label.numberOfLines = 0;
-        
-        [self.contentView addSubview:_label];
+        [self.contentView addSubview:_textView];
     }
     return self;
 }
 
 -(void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    [_label setFrame:frame];
-    [_label sizeToFit];
+    
+    CGRect textViewFrame = CGRectMake(0,0, frame.size.width, frame.size.height);
+    
+    [_textView setFrame:textViewFrame];
+    [_textView setNeedsDisplay];
     [self setNeedsDisplay]; // force drawRect:
 }
 
 -(void)setEventCollapsed:(FZZEvent *)event{
     if (event == NULL){
-        _label.text = @"Create A New Event";
-        [_label sizeToFit];
+        [_textView setText:@"Create A New Event"];
         
         return;
     }
@@ -53,16 +49,15 @@
     // Text
     NSString *text = [event eventDescription];
     
-    _label.text = text;
-    [_label sizeToFit];
+    [_textView setText:text];
 }
 
 - (void)setEvent:(FZZEvent *)event {
     // Text
     NSString *text = [event eventDescription];
     
-    _label.text = text;
-    [_label sizeToFit];
+    [_textView setText:text];
+    [self.contentView setNeedsDisplay];
 }
 
 @end
