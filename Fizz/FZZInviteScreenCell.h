@@ -10,4 +10,6 @@
 
 @interface FZZInviteScreenCell : UITableViewCell
 
+- (void)setEventIndexPath:(NSIndexPath *)indexPath;
+
 @end

@@ -45,6 +45,7 @@
 - (void)updateEvents;
 - (void)updateEvent:(FZZEvent *)event;
 
+- (void)setNavigationScrollEnabled:(BOOL)isEnabled;
 
 // Core Data
 

@@ -68,7 +68,12 @@
     float viewFormHeight = self.viewForm.bounds.size.height;
     
     // Full screen minus viewForm
+    CGFloat xOffset = 40;
+    
+    frame.origin.x = xOffset;
+    
     frame.size.height = frame.size.height - viewFormHeight;
+    frame.size.width  = frame.size.width - xOffset;
     
     [self setBackgroundColor:[UIColor clearColor]];
     [self setOpaque:NO];
@@ -79,10 +84,6 @@
     
     [self addSubview:[_ctvc tableView]];
     [self addSubview:self.viewForm];
-}
-
--(void)setParentScrollView:(UIScrollView *)scrollView{
-    [_ctvc setParentScrollView:scrollView];
 }
 
 /*
@@ -103,8 +104,16 @@
     FZZEnterMessagePrototypeViewController *mProtoTVC = [[FZZEnterMessagePrototypeViewController alloc] initWithNibName:@"FZZEnterMessagePrototypeViewController" bundle:nil];
     viewForm = mProtoTVC.view;
     chatBox  = mProtoTVC.textView;
+    
+    [mProtoTVC.textView setBackgroundColor:[UIColor clearColor]];
+    [mProtoTVC.textView setOpaque:NO];
+    
     _placeholderView = mProtoTVC.placeholderTV;
     [chatBox setBackgroundColor:[UIColor clearColor]];
+    [chatBox setOpaque:NO];
+    
+    [_placeholderView setBackgroundColor:[UIColor clearColor]];
+    [_placeholderView setOpaque:NO];
     
     [chatBox setDelegate:self];
     
@@ -298,6 +307,7 @@
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [[appDelegate navigationBar] setIsEditingText:YES];
+    [appDelegate setNavigationScrollEnabled:NO];
     
     // get keyboard size and loction
 	CGRect keyboardBounds = [FZZChatScreenCell getKeyboardBoundsFromNote:note];
@@ -350,6 +360,7 @@
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [[appDelegate navigationBar] setIsEditingText:NO];
+    [appDelegate setNavigationScrollEnabled:YES];
     
     // get keyboard size and location
 	CGRect keyboardBounds;

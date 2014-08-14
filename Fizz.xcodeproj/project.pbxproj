@@ -29,6 +29,7 @@
 		4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4925ED87198466BF0024247C /* FZZAjaxPostDelegate.m */; };
 		492E5D79192EE6BB00359F11 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 492E5D78192EE6BB00359F11 /* libc++.dylib */; };
 		492E5D8019327E5800359F11 /* FZZExpandedEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */; };
+		493A80B3199D0C6F004DE319 /* FZZInviteListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 493A80B2199D0C6F004DE319 /* FZZInviteListTableViewCell.m */; };
 		493B07401987FC4600EC61E4 /* FZZUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B073F1987FC4600EC61E4 /* FZZUtilities.m */; };
 		493B074719897ED400EC61E4 /* FZZKeyboardNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B074619897ED400EC61E4 /* FZZKeyboardNotificationCenter.m */; };
 		493B074B19898F0600EC61E4 /* FZZChatScreenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 493B074A19898F0600EC61E4 /* FZZChatScreenCell.m */; };
@@ -71,8 +72,10 @@
 		49B1C17818E4C6F2007C5D44 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */; };
 		49B1C17B18E4C6F8007C5D44 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */; };
 		49B562F91993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B562F81993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m */; };
-		49B562FB1993CFEB008302E5 /* FZZDescriptionScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B562FA1993CFEA008302E5 /* FZZDescriptionScreenTableViewCell.xib */; };
 		49BCC49C192D2FAA0085CE16 /* FZZCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BCC49B192D2FAA0085CE16 /* FZZCluster.m */; };
+		49C78988199D2C4F004EA886 /* FZZContactListScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C78987199D2C4F004EA886 /* FZZContactListScreenTableViewCell.m */; };
+		49C7898B199D2CD9004EA886 /* FZZContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C7898A199D2CD9004EA886 /* FZZContactTableViewCell.m */; };
+		49C7898E199D2CF3004EA886 /* FZZContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C7898D199D2CF3004EA886 /* FZZContactsTableViewController.m */; };
 		49C8B1551889F08600400832 /* FZZEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C8B1541889F08600400832 /* FZZEventCell.m */; };
 		49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C99F186042C2002BB1F0 /* Foundation.framework */; };
 		49D5C9A2186042C2002BB1F0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */; };
@@ -172,6 +175,8 @@
 		492E5D78192EE6BB00359F11 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		492E5D7E19327E5800359F11 /* FZZExpandedEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZExpandedEventCell.h; sourceTree = "<group>"; };
 		492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FZZExpandedEventCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		493A80B1199D0C6F004DE319 /* FZZInviteListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteListTableViewCell.h; sourceTree = "<group>"; };
+		493A80B2199D0C6F004DE319 /* FZZInviteListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteListTableViewCell.m; sourceTree = "<group>"; };
 		493B073E1987FC4600EC61E4 /* FZZUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUtilities.h; sourceTree = "<group>"; };
 		493B073F1987FC4600EC61E4 /* FZZUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUtilities.m; sourceTree = "<group>"; };
 		493B074519897ED400EC61E4 /* FZZKeyboardNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZKeyboardNotificationCenter.h; sourceTree = "<group>"; };
@@ -250,9 +255,14 @@
 		49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		49B562F71993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZDescriptionScreenTableViewCell.h; sourceTree = "<group>"; };
 		49B562F81993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZDescriptionScreenTableViewCell.m; sourceTree = "<group>"; };
-		49B562FA1993CFEA008302E5 /* FZZDescriptionScreenTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZDescriptionScreenTableViewCell.xib; sourceTree = "<group>"; };
 		49BCC49A192D2FAA0085CE16 /* FZZCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCluster.h; sourceTree = "<group>"; };
 		49BCC49B192D2FAA0085CE16 /* FZZCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCluster.m; sourceTree = "<group>"; };
+		49C78986199D2C4F004EA886 /* FZZContactListScreenTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZContactListScreenTableViewCell.h; sourceTree = "<group>"; };
+		49C78987199D2C4F004EA886 /* FZZContactListScreenTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZContactListScreenTableViewCell.m; sourceTree = "<group>"; };
+		49C78989199D2CD9004EA886 /* FZZContactTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZContactTableViewCell.h; sourceTree = "<group>"; };
+		49C7898A199D2CD9004EA886 /* FZZContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZContactTableViewCell.m; sourceTree = "<group>"; };
+		49C7898C199D2CF3004EA886 /* FZZContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZContactsTableViewController.h; sourceTree = "<group>"; };
+		49C7898D199D2CF3004EA886 /* FZZContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZContactsTableViewController.m; sourceTree = "<group>"; };
 		49C8B1531889F08600400832 /* FZZEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventCell.h; sourceTree = "<group>"; };
 		49C8B1541889F08600400832 /* FZZEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEventCell.m; sourceTree = "<group>"; };
 		49D5C99C186042C2002BB1F0 /* Fizz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fizz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -410,8 +420,8 @@
 			children = (
 				493B075319898FA600EC61E4 /* FZZInviteScreenCell.h */,
 				493B075419898FA600EC61E4 /* FZZInviteScreenCell.m */,
-				493B075619898FC500EC61E4 /* FZZInviteScreenTableViewController.h */,
-				493B075719898FC500EC61E4 /* FZZInviteScreenTableViewController.m */,
+				49C78984199D2BE2004EA886 /* Guest List */,
+				49C78985199D2C18004EA886 /* Contact List */,
 			);
 			name = "Invite View";
 			sourceTree = "<group>";
@@ -564,9 +574,32 @@
 			children = (
 				49B562F71993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.h */,
 				49B562F81993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m */,
-				49B562FA1993CFEA008302E5 /* FZZDescriptionScreenTableViewCell.xib */,
 			);
 			name = "Description Screen";
+			sourceTree = "<group>";
+		};
+		49C78984199D2BE2004EA886 /* Guest List */ = {
+			isa = PBXGroup;
+			children = (
+				493B075619898FC500EC61E4 /* FZZInviteScreenTableViewController.h */,
+				493B075719898FC500EC61E4 /* FZZInviteScreenTableViewController.m */,
+				493A80B1199D0C6F004DE319 /* FZZInviteListTableViewCell.h */,
+				493A80B2199D0C6F004DE319 /* FZZInviteListTableViewCell.m */,
+			);
+			name = "Guest List";
+			sourceTree = "<group>";
+		};
+		49C78985199D2C18004EA886 /* Contact List */ = {
+			isa = PBXGroup;
+			children = (
+				49C78986199D2C4F004EA886 /* FZZContactListScreenTableViewCell.h */,
+				49C78987199D2C4F004EA886 /* FZZContactListScreenTableViewCell.m */,
+				49C7898C199D2CF3004EA886 /* FZZContactsTableViewController.h */,
+				49C7898D199D2CF3004EA886 /* FZZContactsTableViewController.m */,
+				49C78989199D2CD9004EA886 /* FZZContactTableViewCell.h */,
+				49C7898A199D2CD9004EA886 /* FZZContactTableViewCell.m */,
+			);
+			name = "Contact List";
 			sourceTree = "<group>";
 		};
 		49C8B0E91888B3C500400832 /* Event Cells */ = {
@@ -878,7 +911,6 @@
 				4960803F18EFE03700CF72DB /* release_notes.md in Resources */,
 				499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */,
 				49D5E6D418616A56002BB1F0 /* package.json in Resources */,
-				49B562FB1993CFEB008302E5 /* FZZDescriptionScreenTableViewCell.xib in Resources */,
 				4925ED851984533F0024247C /* FZZInputVerificationCodeViewController.xib in Resources */,
 				49D5C9AA186042C2002BB1F0 /* InfoPlist.strings in Resources */,
 				4954FB0218D3AAA40083D07F /* FZZInputPhoneViewController.xib in Resources */,
@@ -984,18 +1016,22 @@
 				4950411C1984826F002DE44C /* FZZInputVerificationCodeViewController.m in Sources */,
 				497F349518E07F1200B70FD4 /* FZZInviteGuestButton.m in Sources */,
 				4950413C198593B1002DE44C /* SocketIOTransportWebsocket.m in Sources */,
+				49C7898E199D2CF3004EA886 /* FZZContactsTableViewController.m in Sources */,
 				492E5D8019327E5800359F11 /* FZZExpandedEventCell.m in Sources */,
 				4922702118CA1CA600816AD4 /* FZZEventsViewController.m in Sources */,
 				4925ED80197DAF1D0024247C /* FZZLocalCache.m in Sources */,
 				4954FB1918D4EFFF0083D07F /* FZZInviteViewController.m in Sources */,
 				49069B7E18661555003D003A /* SBJson4StreamParser.m in Sources */,
 				49069B0418651731003D003A /* base64.c in Sources */,
+				493A80B3199D0C6F004DE319 /* FZZInviteListTableViewCell.m in Sources */,
 				493B075119898F6900EC61E4 /* FZZEventMainCell.m in Sources */,
 				493B07401987FC4600EC61E4 /* FZZUtilities.m in Sources */,
+				49C78988199D2C4F004EA886 /* FZZContactListScreenTableViewCell.m in Sources */,
 				4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */,
 				49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */,
 				497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */,
 				4950413D198593B1002DE44C /* SocketIOTransportXHR.m in Sources */,
+				49C7898B199D2CD9004EA886 /* FZZContactTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

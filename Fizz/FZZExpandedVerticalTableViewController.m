@@ -11,32 +11,48 @@
 #import "FZZEvent.h"
 #import "FZZChatScreenCell.h"
 #import "FZZDescriptionScreenTableViewCell.h"
+#import "FZZInviteScreenCell.h"
+
+static NSMutableArray *instances;
 
 @interface FZZExpandedVerticalTableViewController ()
 
-@property UIView *bottomView;
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
 @end
 
 @implementation FZZExpandedVerticalTableViewController
 
++(void)initialize{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instances = [[NSMutableArray alloc] init];
+    });
+}
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
         [self.tableView setSeparatorColor:[UIColor clearColor]];
         [self.tableView setBackgroundColor:[UIColor clearColor]];
         
         [self.tableView registerClass:[FZZChatScreenCell class] forCellReuseIdentifier:@"chatCell"];
         
-        [self.tableView registerNib:[UINib nibWithNibName:@"FZZDescriptionScreenTableViewCell" bundle:nil] forCellReuseIdentifier:@"descriptionCell"];
+        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
+        
+        [self.tableView registerClass:[FZZInviteScreenCell class] forCellReuseIdentifier:@"inviteCell"];
+        
+        [instances addObject:self];
         
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
     return self;
+}
+
+-(void)dealloc{
+    [instances removeObject:self];
 }
 
 - (FZZChatScreenCell *)getChatScreenCell{
@@ -99,6 +115,14 @@
 //    }
 //}
 
++ (void)setScrollEnabled:(BOOL)canScroll{
+    [instances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        FZZExpandedVerticalTableViewController *evtvc = obj;
+        
+        [[evtvc tableView] setScrollEnabled:canScroll];
+    }];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -147,7 +171,6 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"chatCell" forIndexPath:indexPath];
             [(FZZChatScreenCell *)cell setEventIndexPath:_eventIndexPath];
-            [(FZZChatScreenCell *)cell setParentScrollView:[self tableView]];
         }
             break;
             
@@ -164,15 +187,18 @@
         }
             break;
             
-        default: // Invite List Cell
+        case 2: // Invite List Cell
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-//            [cell setEvent:event];
-//            [(FZZCellType *)cell setEventIndexPath:_eventIndexPath];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"inviteCell" forIndexPath:indexPath];
+            [(FZZInviteScreenCell *)cell setEventIndexPath:_eventIndexPath];
             
             [cell setBackgroundColor:[UIColor clearColor]];
             [cell setOpaque:NO];
-//            [(FZZCellType *)cell setParentScrollView:[self tableView]];
+        }
+            
+        default:
+        {
+            
         }
             break;
     }
@@ -199,27 +225,9 @@
     return (FZZDescriptionScreenTableViewCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
 }
 
-- (UIView *)bottomCell{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
-    
-    return [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-}
-
 - (void)updateMessages{
     FZZChatScreenCell *cell = [self getChatScreenCell];
     [cell updateMessages];
-}
-
-- (void)updateMiddleViewText:(NSString *)text{
-    [[(FZZDescriptionScreenTableViewCell *)[self middleCell] textView] setText:text];
-}
-
-- (void)updateBottomView:(UIView *)view{
-    if (_bottomView != view){
-        [_bottomView removeFromSuperview];
-        _bottomView = view;
-        [[self bottomCell] addSubview:view];
-    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

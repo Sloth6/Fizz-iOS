@@ -10,7 +10,7 @@
 
 @interface FZZDescriptionScreenTableViewCell : UITableViewCell
 
-@property IBOutlet UITextView *textView;
+@property UITextView *textView;
 
 //-(void)setText:(NSString *)text;
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;

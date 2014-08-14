@@ -15,6 +15,7 @@
 #import "FZZLocalCache.h"
 #import "FZZLocationManager.h"
 #import "FZZUtilities.h"
+#import "FZZExpandedVerticalTableViewController.h"
 
 #import "FZZLoginDelegate.h"
 
@@ -341,6 +342,11 @@
     return [token copy];
 }
 
+- (void)setNavigationScrollEnabled:(BOOL)isEnabled{
+    [[_evc collectionView] setScrollEnabled:isEnabled];
+    [FZZExpandedVerticalTableViewController setScrollEnabled:isEnabled];
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -374,7 +380,7 @@
     
     _gotAddressBook = NO;
     
-    if ((![FZZSocketIODelegate isConnectionOpen]) && _hasLoggedIn && !_isConnecting){
+    if ((![FZZSocketIODelegate isConnectionOpen]) && _hasLoggedIn){// && !_isConnecting){
         NSLog(@"Connection is not open");
         [FZZSocketIODelegate openConnectionCheckingForInternet];
     } else {

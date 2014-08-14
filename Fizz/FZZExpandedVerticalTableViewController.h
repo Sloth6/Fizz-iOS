@@ -12,15 +12,11 @@
 
 @interface FZZExpandedVerticalTableViewController : UITableViewController
 
++ (void)setScrollEnabled:(BOOL)canScroll;
+
 - (void)updateMessages;
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
 @property (strong, nonatomic) FZZEvent *event;
-
-- (UIView *)middleCell;
-- (UIView *)bottomCell;
-
-- (void)updateMiddleViewText:(NSString *)text;
-- (void)updateBottomView:(UIView *)view;
 
 - (void)reloadChat;
 

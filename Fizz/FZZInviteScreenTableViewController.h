@@ -10,6 +10,6 @@
 
 @interface FZZInviteScreenTableViewController : UITableViewController
 
--(void)addEvent;
+-(void)setEventIndexPath:(NSIndexPath *)indexPath;
 
 @end

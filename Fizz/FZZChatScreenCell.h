@@ -19,6 +19,4 @@
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;
 -(void)updateMessages;
 
--(void)setParentScrollView:(UIScrollView *)scrollView;
-
 @end

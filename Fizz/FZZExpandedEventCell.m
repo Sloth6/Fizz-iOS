@@ -47,14 +47,11 @@
         topBounds.origin.y    += offset;
         topBounds.size.height -= offset;
         
-        UITableView *tableView = [[UITableView alloc] initWithFrame:topBounds];
-        
 //        [[FZZBounceTableView alloc] initWithFrame:topFrame
 //                                                         shouldBounceAtTop:NO
 //                                                      shouldBounceAtBottom:YES];
         
-        [_vtvc updateBottomView:tableView];
-        tableView.bounces = NO;
+//        [_vtvc updateBottomView:tableView];
         [self setBackgroundColor:[UIColor clearColor]];
         [self setOpaque:NO];
         

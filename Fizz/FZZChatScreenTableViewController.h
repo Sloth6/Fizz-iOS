@@ -24,7 +24,6 @@
 - (void)updateMessages;
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
-- (void)setParentScrollView:(UIScrollView *)parentScrollView;
 
 + (CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;
 

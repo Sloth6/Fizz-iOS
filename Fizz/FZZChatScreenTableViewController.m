@@ -27,10 +27,6 @@ static int kFZZMinChatCellHeight = 58;
 @property BOOL shouldScrollParent;
 
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
-@property (strong, nonatomic) UIScrollView *parentScrollView;
-@property (strong, nonatomic) UIGestureRecognizer *parentScrollViewGesture;
-@property (strong, nonatomic) UIGestureRecognizer *scrollViewGesture;
-@property CGPoint lastOffset;
 
 @end
 
@@ -56,126 +52,9 @@ static int kFZZMinChatCellHeight = 58;
         //Magic Number 68
         _textLabelWidth = [UIScreen mainScreen].bounds.size.width - 68;
 
-        for (UIGestureRecognizer *gesture in [self tableView].gestureRecognizers)
-            if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]){
-                _scrollViewGesture = gesture;
-            }
-
     }
     return self;
 }
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-//    [_parentScrollView setPagingEnabled:YES];
-     [scrollView setExclusiveTouch:NO];
-    _shouldScrollParent = NO;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-//    [_parentScrollView setPagingEnabled:NO];
-    
-    CGFloat height = _tableView.contentSize.height;
-    CGFloat frameHeight = _tableView.bounds.size.height;
-    
-    CGFloat contentOffset = _tableView.contentOffset.y;
-    
-    if (![scrollView isDecelerating]){
-        if (contentOffset > height - frameHeight){
-            
-            [_scrollViewGesture setState:UIGestureRecognizerStateEnded];
-            [_parentScrollViewGesture setState:UIGestureRecognizerStateBegan];
-            
-            
-            CGPoint offsetPoint = CGPointMake(0, height - frameHeight);
-            [_tableView setContentOffset:offsetPoint];
-            
-            CGFloat offset = contentOffset - offsetPoint.y;
-            
-            CGFloat currentParentOffset = _parentScrollView.contentOffset.y;
-            CGPoint parentOffsetPoint = CGPointMake(_parentScrollView.contentOffset.x, currentParentOffset + offset);
-            
-            //                _parentScrollView.bounces = NO;
-    //        [[self tableView] resignFirstResponder];
-    //        [[self tableView] setScrollEnabled:NO];
-    //        [_parentScrollView setScrollEnabled:YES];
-            
-        }
-    }
-    
-//    else {
-//        [[self tableView] setScrollEnabled:YES];
-//        [_parentScrollView setScrollEnabled:NO];
-//    }
-    
-    return;
-    
-    if (scrollView == _tableView) {
-        
-        if ([_parentScrollView contentOffset].y > 0){
-            
-            [_parentScrollView becomeFirstResponder];
-            
-//            self.lastOffset.y;
-            
-            
-            
-            CGFloat height = _tableView.contentSize.height;
-            CGFloat frameHeight = _tableView.bounds.size.height;
-            
-            CGFloat contentOffset = _tableView.contentOffset.y;
-            
-        } else {
-        
-            CGFloat height = _tableView.contentSize.height;
-            CGFloat frameHeight = _tableView.bounds.size.height;
-            
-            CGFloat contentOffset = _tableView.contentOffset.y;
-            
-            if (contentOffset > height - frameHeight){
-                CGPoint offsetPoint = CGPointMake(0, height - frameHeight);
-                [_tableView setContentOffset:offsetPoint];
-                
-                CGFloat offset = contentOffset - offsetPoint.y;
-                
-                CGFloat currentParentOffset = _parentScrollView.contentOffset.y;
-                CGPoint parentOffsetPoint = CGPointMake(_parentScrollView.contentOffset.x, currentParentOffset + offset);
-                
-//                _parentScrollView.bounces = NO;
-                [_parentScrollView becomeFirstResponder];
-//                [_parentScrollView setContentOffset:parentOffsetPoint];
-        }
-//            [_tableView setPagingEnabled:NO];
-        }
-        
-//        CGFloat offsetChange = _lastOffset - scrollView.contentOffset.y;
-//        CGRect f = _floatingBarView.frame;
-//        f.origin.y += offsetChange;
-//        if (f.origin.y < -kFloatingBarHeight) f.origin.y = -kFloatingBarHeight;
-//        if (f.origin.y > 0) f.origin.y = 0;
-//        if (scrollView.contentOffset.y <= 0) f.origin.y = 0; //Deal with "bouncing" at the top
-//        if (scrollView.contentOffset.y + scrollView.bounds.size.height >= scrollView.contentSize.height) f.origin.y = -kFloatingBarHeight; //Deal with "bouncing" at the bottom
-//        _floatingBarView.frame = f;
-//        
-//        _lastOffset = scrollView.contentOffset.y;
-    }
-}
-
-//- (void)viewDidLoad
-//{
-//    [super viewDidLoad];
-//    
-//    // Uncomment the following line to preserve selection between presentations.
-//    // self.clearsSelectionOnViewWillAppear = NO;
-//    
-//    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-//    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-//}
-//
-//- (void)didReceiveMemoryWarning
-//{
-//    [super didReceiveMemoryWarning];
-//    // Dispose of any resources that can be recreated.
-//}
 
 #pragma mark - Table view data source
 
@@ -196,61 +75,10 @@ static int kFZZMinChatCellHeight = 58;
     return [[event messages] count];
 }
 
-//-(void)setEvent:(FZZEvent *)event{
-//    _event = event;
-//    
-//    NSLog(@"Reload chat for <%@>", [event description]);
-//    [[self tableView] reloadData];
-//}
-
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
     
     [[self tableView] reloadData];
-}
-
-- (void)setParentScrollView:(UIScrollView *)parentScrollView{
-    [_parentScrollView removeGestureRecognizer:_parentScrollViewGesture];
-    _parentScrollView = parentScrollView;
-    
-    _parentScrollViewGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:nil];
-    
-//    panGestureRecognizer.minimumNumberOfTouches = 2;
-    _parentScrollViewGesture.delegate = self;
-    [_parentScrollView addGestureRecognizer:_parentScrollViewGesture];
-//    
-//    for (UIGestureRecognizer *gesture in _parentScrollView.gestureRecognizers)
-//        if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]){
-//            gesture.delegate = self;
-//            _parentScrollViewGesture = gesture;
-//        }
-}
-
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return YES;
-}
-
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
-    
-    if (gestureRecognizer == _parentScrollViewGesture){
-        if (_shouldScrollParent){
-            return YES;
-        }
-        
-        CGFloat height = _tableView.contentSize.height;
-        CGFloat frameHeight = _tableView.bounds.size.height;
-        
-        CGFloat contentOffset = _tableView.contentOffset.y;
-        
-        if (contentOffset > height - frameHeight){
-            _shouldScrollParent = YES;
-            return YES;
-        }
-        
-        return NO;
-    }
-    
-    return YES;
 }
 
 -(void)updateMessages{
