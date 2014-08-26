@@ -8,10 +8,12 @@
 
 #import "FZZDescriptionScreenTableViewCell.h"
 #import "FZZEvent.h"
+#import "FZZAppDelegate.h"
+#import "FZZUtilities.h"
 
 @interface FZZDescriptionScreenTableViewCell ()
 
-
+@property NSIndexPath *eventIndexPath;
 
 @end
 
@@ -24,6 +26,7 @@
         // Initialization code
         [self setupBackground];
         [self setupTextview];
+        [self setupOptionsButton];
     }
     return self;
 }
@@ -53,10 +56,82 @@
     [_textView setOpaque:NO];
     [_textView setUserInteractionEnabled:NO];
     
-    UIFont *font = [UIFont fontWithName:@"Helvetica" size:50.0];
+    UIFont *font = kFZZHeadingsFont();
     
     [_textView setFont:font];
-    [_textView setTextColor:[UIColor whiteColor]];
+    NSLog(@"COLOUR: %@", kFZZWhiteTextColor());
+    [_textView setTextColor:kFZZWhiteTextColor()];
+}
+
+- (void)optionsButtonHit{
+    // Don't let optionsButtonHit
+    //if (the scroll view is not all the way at the bottom)
+    // or maybe if (more than one finger is on the screen)
+    // Don't pop this up
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:@"Delete Event"
+                                                    otherButtonTitles:nil];
+    
+    [actionSheet showInView:self];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Event"
+                                                            message:@"Are you sure you want to delete the event?"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"Delete Event", nil];
+        
+        [alertView show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1){
+        [self deleteEvent];
+    }
+}
+
+- (void)deleteEvent{    
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    [event socketIODeleteEventWithAcknowledge:nil];
+}
+
+- (void)setupOptionsButton{
+    UIButton *optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    UIImage *image = [UIImage imageNamed:@"optionsButtonImage"];
+    
+    [optionsButton setImage:image forState:UIControlStateNormal];
+    
+    [optionsButton addTarget:self action:@selector(optionsButtonHit) forControlEvents:UIControlEventTouchUpInside];
+    
+    CGRect frame = [UIScreen mainScreen].bounds;
+    
+    CGFloat imageHeight = image.size.height;
+    CGFloat imageWidth = image.size.width;
+    
+    CGFloat xOffsetFromRight = 15;
+    CGFloat yOffsetFromTop = 15;
+    
+    CGFloat bufferSpace = 8;
+    
+    frame.origin.x = frame.size.width - (imageWidth + xOffsetFromRight + bufferSpace);
+    frame.origin.y = yOffsetFromTop + bufferSpace;
+    
+    CGFloat frameDimension = MAX(imageWidth, imageHeight);
+    
+    frame.size.width = frameDimension + (bufferSpace * 2);
+    frame.size.height = frameDimension + (bufferSpace * 2);
+    
+    NSLog(@"xy:(%f, %f) wh:(%f, %f)", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+    
+    [optionsButton setFrame:frame];
+    [self addSubview:optionsButton];
 }
 
 - (void)awakeFromNib
@@ -72,7 +147,8 @@
 }
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath{
-    FZZEvent *event = [FZZEvent getEventAtIndexPath:indexPath];
+    _eventIndexPath = indexPath;
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
     NSString *title = [event eventDescription];
     
     [_textView setText:title];

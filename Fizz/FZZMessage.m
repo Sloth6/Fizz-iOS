@@ -51,6 +51,12 @@ static NSString *FZZ_NEW_MESSAGE = @"postNewMessage";
     return result;
 }
 
+-(NSString *)description{
+    NSString *messageID = [[self messageID] stringValue];
+    
+    return [NSString stringWithFormat:@"Message %@: {\"%@\"}", messageID, [self text]];
+}
+
 +(NSArray *)convertMessagesToJSONForCache:(NSArray *)messages{
     NSMutableArray *result = [messages mutableCopy];
     NSArray *messagesArray = [messages copy];

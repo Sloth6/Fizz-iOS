@@ -37,24 +37,24 @@
     CGRect navBarRect = CGRectMake(0, 0, screenWidth, 80);
     
     self.navigationBar = [[FZZOverlayView alloc] initWithFrame:navBarRect];
-    [self addSearchBar];
+//    [self addSearchBar];
 }
 
-- (void)addSearchBar{
-    float x = 60;
-    float y = 12;
-    float screenWidth = [UIScreen mainScreen].bounds.size.width;
-    
-    CGRect frame = CGRectMake(x, y, screenWidth - (2 * x) - 14, 60);
-    
-    _searchTextField = [[UITextField alloc] initWithFrame:frame];
-    
-    [_searchTextField setFont:[UIFont fontWithName:@"HelveticaNeue" size:18.0]];
-//    [_searchTextField setSearchBarStyle:UISearchBarStyleMinimal];
-    [_searchTextField setPlaceholder:@"Search"];
-    
-    [_searchTextField setHidden:YES];
-}
+//- (void)addSearchBar{
+//    float x = 60;
+//    float y = 12;
+//    float screenWidth = [UIScreen mainScreen].bounds.size.width;
+//    
+//    CGRect frame = CGRectMake(x, y, screenWidth - (2 * x) - 14, 60);
+//    
+//    _searchTextField = [[UITextField alloc] initWithFrame:frame];
+//    
+//    [_searchTextField setFont:[UIFont fontWithName:@"HelveticaNeue" size:18.0]];
+////    [_searchTextField setSearchBarStyle:UISearchBarStyleMinimal];
+//    [_searchTextField setPlaceholder:@"Search"];
+//    
+//    [_searchTextField setHidden:YES];
+//}
 
 - (void)setupNavigationController{
     
@@ -70,7 +70,7 @@
     [self.window setBackgroundColor:[UIColor clearColor]];
     
     [self.window addSubview:self.navigationBar];
-    [self.window addSubview:_searchTextField];
+//    [self.window addSubview:_searchTextField];
 }
 
 - (void)loadDataFromCache{
@@ -85,7 +85,6 @@
         NSLog(@"didCrash");
         
         [FZZLocalCache clearCache];
-        [FZZSocketIODelegate socketIOResetDataFromServerWithAcknowledge:NULL];
         
     } else { // Load data from cache
         
@@ -96,7 +95,6 @@
             
             if ([FZZLocalCache containsInvalidData]){
                 [FZZLocalCache clearCache];
-                [FZZSocketIODelegate socketIOResetDataFromServerWithAcknowledge:NULL];
             }
             
         } else {
@@ -127,12 +125,18 @@
     // Install TestFlight
     [TestFlight takeOff:@"c57d6a81-8946-4632-977e-9b92f7d0802a"];
     
+    // Initialize Class Variables
+    [FZZUtilities class];
+    
+    /* Initialize their dictionaries of all existing instances */
+    [FZZUser setupUserClass];
+    [FZZEvent setupEventClass];
+    
     @synchronized([FZZEvent class]){
         [self loadDataFromCache];
     }
     
-    // Initialize Class Variables
-    [FZZUtilities class];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     _hasLoadedDataFromCache = NO;
     _hasLoggedIn = NO;
@@ -161,10 +165,6 @@
     
     self.window.backgroundColor = [UIColor clearColor];
     [self.window makeKeyAndVisible];
-    
-    /* Initialize their dictionaries of all existing instances */
-    [FZZUser setupUserClass];
-    [FZZEvent setupEventClass];
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     NSNumber *registered = [pref objectForKey:@"didRegister"];

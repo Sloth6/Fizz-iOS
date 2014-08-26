@@ -1,5 +1,5 @@
 //
-//  FZZInviteListTableViewCell.h
+//  FZZGuestListTableViewCell.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 8/14/14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FZZInviteListTableViewCell : UITableViewCell
+@interface FZZGuestListTableViewCell : UITableViewCell
 
 - (void)setIsGoing:(BOOL)isGoing;
 

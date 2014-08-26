@@ -7,18 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FZZFadedEdgeTableViewController.h"
 
 @class FZZEvent;
 @class FZZEventsViewController;
 @class FZZInviteViewController;
 @class FZZExpandedVerticalTableViewController;
 
-@interface FZZChatScreenTableViewController : NSObject <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
+@interface FZZChatScreenTableViewController : FZZFadedEdgeTableViewController <UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UITableViewCell *view;
 
 @property (strong, nonatomic) FZZEventsViewController *esvc;
-@property (strong, nonatomic) UITableView *tableView;
+//@property (strong, nonatomic) UITableView *tableView;
 
 - (void)addIncomingMessage;
 - (void)updateMessages;

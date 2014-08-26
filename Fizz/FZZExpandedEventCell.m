@@ -41,11 +41,11 @@
         
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
-        UITextField *textField = appDelegate.searchTextField;
-        CGFloat offset = textField.frame.origin.y + textField.frame.size.height;
+//        UITextField *textField = appDelegate.searchTextField;
+//        CGFloat offset = textField.frame.origin.y + textField.frame.size.height;
         
-        topBounds.origin.y    += offset;
-        topBounds.size.height -= offset;
+//        topBounds.origin.y    += offset;
+//        topBounds.size.height -= offset;
         
 //        [[FZZBounceTableView alloc] initWithFrame:topFrame
 //                                                         shouldBounceAtTop:NO
@@ -72,9 +72,9 @@
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
     
-    [_vtvc setEventIndexPath:indexPath];
-    
     FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    [_vtvc setEventIndexPath:indexPath];
     
     NSIndexPath *scrollPosition = [event scrollPosition];
     
@@ -148,7 +148,7 @@
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         _textView = [[UITextView alloc] initWithFrame:CGRectMake(x, y, width, height)];
         
-        [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
+        [_textView setFont:kFZZHeadingsFont()];//[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
         [_textView setEditable:NO];
         [_textView setScrollEnabled:NO];
         [_textView setUserInteractionEnabled:NO];

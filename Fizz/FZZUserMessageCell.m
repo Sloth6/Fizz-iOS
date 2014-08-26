@@ -10,6 +10,8 @@
 #import "FZZUser.h"
 #import "FZZMessage.h"
 
+#import "FZZUtilities.h"
+
 static UIFont *userCellMessageFont;
 static UIFont *userCellNameFont;
 static float messageLabelWidth;
@@ -40,13 +42,13 @@ static float messageLabelWidth;
     if (userCellMessageFont){
         font = userCellMessageFont;
     } else {
-        font = [UIFont fontWithName:@"Futura-Medium" size:15.0];
+        font = kFZZLabelsFont();//[UIFont fontWithName:@"Futura-Medium" size:15.0];
     }
     
     FZZUser *me = [FZZUser me];
     
     if ([[message user] isEqual:me]){
-        font = [UIFont fontWithName:@"Futura-MediumItalic" size:15.0];
+        font = kFZZHostBodyFont();
     }
     
     NSString *text = [message text];

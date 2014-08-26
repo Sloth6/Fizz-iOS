@@ -17,6 +17,8 @@
 #import "FZZInviteViewController.h"
 #import "FZZLocationManager.h"
 
+#import "FZZContactSearchDelegate.h"
+
 #import "FZZLocalCache.h"
 
 #define SuppressPerformSelectorLeakWarning(Stuff) \
@@ -32,13 +34,9 @@ static NSString *FZZ_INCOMING_ON_LOGIN = @"onLogin";
 static NSString *FZZ_INCOMING_NEW_EVENT = @"newEvent";
 static NSString *FZZ_INCOMING_COMPLETE_EVENT = @"completeEvent";
 static NSString *FZZ_INCOMING_UPDATE_GUESTS = @"updateGuests";
-static NSString *FZZ_INCOMING_UPDATE_INVITEES = @"updateInvitees";
+static NSString *FZZ_INCOMING_NEW_INVITEES = @"newInvitees";
 static NSString *FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
 static NSString *FZZ_INCOMING_UPDATE_EVENT = @"updateEvent";
-
-
-// Outgoing Server Communication
-static NSString *FZZ_RESET = @"reset";
 
 static BOOL hasMadeDelegate = NO;
 static FZZSocketIODelegate *socketIODelegate;
@@ -86,8 +84,8 @@ static NSMutableData *data;
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateGuests:))
                                   forKey:FZZ_INCOMING_UPDATE_GUESTS];
         
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateInvitees:))
-                                  forKey:FZZ_INCOMING_UPDATE_INVITEES];
+        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewInvitees:))
+                                  forKey:FZZ_INCOMING_NEW_INVITEES];
         
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewMessage:))
                                   forKey:FZZ_INCOMING_NEW_MESSAGE];
@@ -331,7 +329,10 @@ static NSMutableData *data;
     [FZZUser setMeAs:me];
     
     NSArray *eventIDList = [json objectForKey:@"eventList"];
-    NSArray *completeEventIDList = [json objectForKey:@"completeEventList"];
+    NSMutableArray *completeEventIDList = [[FZZEvent getEventIDs] mutableCopy];
+    
+    [completeEventIDList removeObjectsInArray:eventIDList];
+    
     NSDictionary *messageDictJSON = [json objectForKey:@"newMessages"];
     
     // User array (additive)
@@ -381,6 +382,7 @@ static NSMutableData *data;
     [FZZInviteViewController updateFriends];
 
     [appDelegate updateEvents];
+    [FZZContactSearchDelegate updateFriendsAndContacts];
 }
 
 - (void)incomingNewEvent:(NSArray *)args{
@@ -419,13 +421,15 @@ static NSMutableData *data;
     [event updateGuests:guests];
 }
 
-- (void)incomingUpdateInvitees:(NSArray *)args{
+- (void)incomingNewInvitees:(NSArray *)args{
     NSDictionary *json = [args objectAtIndex:0];
     
     NSNumber *eventID = [json objectForKey:@"eid"];
     FZZEvent *event = [FZZEvent eventWithEID:eventID];
     
     NSArray *invitees = [json objectForKey:@"invitees"];
+    
+    invitees = [FZZUser parseUserJSONList:invitees];
     
     [event updateAddInvitees:invitees];
 }
@@ -494,12 +498,5 @@ static NSMutableData *data;
 + (BOOL) isConnectionOpen{
     return [socketIO isConnected];
 }
-
-+(void)socketIOResetDataFromServerWithAcknowledge:(SocketIOCallback)function{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    [[FZZSocketIODelegate socketIO] sendEvent:FZZ_RESET withData:json andAcknowledge:function];
-}
-
 
 @end

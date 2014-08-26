@@ -46,6 +46,8 @@ static NSMutableArray *instances;
         
         [instances addObject:self];
         
+        [self.tableView setBounces:NO];
+        
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
     return self;
@@ -71,9 +73,9 @@ static NSMutableArray *instances;
 - (void)reloadChat{
     NSIndexPath *topCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:topCellIndexPath];
+    FZZChatScreenCell *cell = (FZZChatScreenCell *)[[self tableView] cellForRowAtIndexPath:topCellIndexPath];
     
-    
+    [cell updateMessages];
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -87,6 +89,8 @@ static NSMutableArray *instances;
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
+    
+    NSLog(@"ExpandedVerticalTableViewController setEventIndexPath reloadData!!!");
     [[self tableView] reloadData];
 }
 
@@ -227,6 +231,7 @@ static NSMutableArray *instances;
 
 - (void)updateMessages{
     FZZChatScreenCell *cell = [self getChatScreenCell];
+    NSLog(@"Call Update Messages EVTVC");
     [cell updateMessages];
 }
 

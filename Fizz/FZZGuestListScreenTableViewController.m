@@ -1,32 +1,32 @@
 //
-//  FZZInviteScreenTableViewController.m
+//  FZZGuestListScreenTableViewController.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 7/30/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZInviteScreenTableViewController.h"
-#import "FZZInviteListTableViewCell.h"
+#import "FZZGuestListScreenTableViewController.h"
+#import "FZZGuestListTableViewCell.h"
 #import "FZZEvent.h"
 #import "FZZUser.h"
 
-@interface FZZInviteScreenTableViewController ()
+@interface FZZGuestListScreenTableViewController ()
 
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 @property (strong, nonatomic) FZZEvent *event;
 
 @end
 
-@implementation FZZInviteScreenTableViewController
+@implementation FZZGuestListScreenTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)init
 {
-    self = [super initWithStyle:style];
+    self = [super init];
     if (self) {
         // Custom initialization
         
-        [[self tableView] registerClass:[FZZInviteListTableViewCell class] forCellReuseIdentifier:@"inviteListCell"];
+        [[self tableView] registerClass:[FZZGuestListTableViewCell class] forCellReuseIdentifier:@"inviteListCell"];
         
         [[self tableView] setSeparatorColor:[UIColor clearColor]];
         [[self tableView] setBackgroundColor:[UIColor clearColor]];
@@ -35,10 +35,8 @@
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)viewWillAppear:(BOOL)animated{
+    // Override to avoid auto scrolling
 }
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath{
@@ -70,7 +68,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FZZInviteListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"inviteListCell" forIndexPath:indexPath];
+    FZZGuestListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"inviteListCell" forIndexPath:indexPath];
     
     NSString *userName;
     

@@ -24,6 +24,7 @@
 @property (nonatomic, strong) FZZUser *creator;
 @property (nonatomic, strong) NSString *eventDescription;
 
++(NSArray *)getEventIDs;
 +(BOOL)saveEventsToFile:(NSString *)eventsURL;
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
 +(NSArray *)getEvents;
@@ -36,13 +37,16 @@
 -(void)socketIOLoadMessagesBeforeMID:(NSNumber *)mid
                       AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIOUpdateEventWithAcknowledge:(SocketIOCallback)function;
+-(void)socketIODeleteEventWithAcknowledge:(SocketIOCallback)function;
 +(void)socketIONewEventWithMessage:(NSString *)message
                     AndAcknowledge:(SocketIOCallback)function;
+
 //+(void)socketIONewEventWithMessage:(NSString *)message
 //                          AndSeats:(int)numSeats
 //                    AndAcknowledge:(SocketIOCallback)function;
 
 -(NSNumber *)eventID;
+-(NSIndexPath *)getEventIndexPath;
 
 -(FZZUser *)creator;
 -(NSArray *)inviteesNotGuests;
@@ -55,8 +59,8 @@
 //-(NSArray *)engaged;
 -(FZZMessage *)firstMessage;
 
--(BOOL)isInvited:(FZZUser *)user;
--(BOOL)isGuest:(FZZUser *)user;
+-(BOOL)isUserInvited:(FZZUser *)user;
+-(BOOL)isUserGuest:(FZZUser *)user;
 
 -(BOOL)haveExpressedInterest;
 -(BOOL)joinEvent;

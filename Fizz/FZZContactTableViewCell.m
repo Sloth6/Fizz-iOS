@@ -8,6 +8,14 @@
 
 #import "FZZContactTableViewCell.h"
 
+#import "FZZUtilities.h"
+
+@interface FZZContactTableViewCell ()
+
+@property (nonatomic) BOOL selected;
+
+@end
+
 @implementation FZZContactTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -15,8 +23,15 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        [self setupTextLabel];
     }
     return self;
+}
+
+- (void)setupTextLabel{
+    UIFont *font = kFZZInputFont();
+    
+    [[self textLabel] setFont:font];
 }
 
 - (void)awakeFromNib
@@ -29,6 +44,20 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)setIsSelected:(BOOL)selection{
+    self.selected = selection;
+    
+    if (self.selected) {
+        [[self textLabel] setTextColor:kFZZWhiteTextColor()];
+    } else {
+        [[self textLabel] setTextColor:kFZZGrayTextColor()];
+    }
+}
+
+- (BOOL)isSelected{
+    return self.selected;
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  FZZInviteScreenTableViewController.h
+//  FZZGuestListScreenTableViewController.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 7/30/14.
@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FZZFadedEdgeTableViewController.h"
 
-@interface FZZInviteScreenTableViewController : UITableViewController
+@interface FZZGuestListScreenTableViewController : FZZFadedEdgeTableViewController
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;
 

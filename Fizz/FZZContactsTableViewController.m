@@ -8,6 +8,15 @@
 
 #import "FZZContactsTableViewController.h"
 
+#import "FZZContactTableViewCell.h"
+
+#import "FZZUser.h"
+
+
+#import "FZZContactSearchDelegate.h"
+
+NSString *kFZZContactCellIdentifer = @"contactCell";
+
 @interface FZZContactsTableViewController ()
 
 @end
@@ -19,6 +28,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        [[self tableView] registerClass:[FZZContactTableViewCell class] forCellReuseIdentifier:kFZZContactCellIdentifer];
     }
     return self;
 }
@@ -34,6 +44,11 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    // Override to avoid auto scrolling
+    [FZZContactSearchDelegate setCurrentTableView:self.tableView];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -44,28 +59,77 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [FZZContactSearchDelegate numberOfInvitableOptions];
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    FZZContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kFZZContactCellIdentifer];
+    
+    if (cell == nil) {
+        cell = [[FZZContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kFZZContactCellIdentifer];
+    }
     
     // Configure the cell...
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    BOOL selected;
+    
+    NSDictionary *dict = [FZZContactSearchDelegate userOrContactAtIndexPath:indexPath];
+    
+    FZZUser *user = [dict objectForKey:@"user"];
+    NSString *name = [dict objectForKey:@"name"];
+    
+    if (user){
+        [[cell textLabel] setText:name];
+        
+        selected = [FZZContactSearchDelegate isUserSelected:user];
+    } else {
+        NSDictionary *contact = [dict objectForKey:@"contact"];
+        
+        if ([name isEqualToString:@""]){
+            [cell.textLabel setText:[contact objectForKey:@"pn"]];
+        } else {
+            [cell.textLabel setText:name];
+        }
+        
+        selected = [FZZContactSearchDelegate isContactSelected:contact];
+    }
+    
+    [[cell textLabel] setNeedsDisplay];
+    
+    [cell setIsSelected:selected];
     
     return cell;
 }
-*/
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    FZZContactTableViewCell *cell = (FZZContactTableViewCell* )[tableView cellForRowAtIndexPath:indexPath];
+    
+    NSDictionary *userOrContact = [FZZContactSearchDelegate userOrContactAtIndexPath:indexPath];
+    
+    if ([FZZContactSearchDelegate userOrContactIsSelected:userOrContact]){
+        [FZZContactSearchDelegate deselectUserOrContact:userOrContact];
+    } else {
+        [FZZContactSearchDelegate selectUserOrContact:userOrContact];
+    }
+    
+    [cell setNeedsDisplay];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 48;
+}
+
 
 /*
 // Override to support conditional editing of the table view.

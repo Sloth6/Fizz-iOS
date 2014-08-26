@@ -278,9 +278,11 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         FZZExpandedEventCell *cell = [cv dequeueReusableCellWithReuseIdentifier:cellID
                                                                    forIndexPath:indexPath];
-//        FZZEvent *event = [FZZEvent getEventAtIndexPath:indexPath];
+        FZZEvent *event = [FZZEvent getEventAtIndexPath:indexPath];
         
-        [cell setEventIndexPath:indexPath];
+        if (![[cell event] isEqual:event]){
+            [cell setEventIndexPath:indexPath];
+        }
         
         [cell setNeedsDisplay];
         
@@ -604,7 +606,18 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     CGFloat width = [self collectionView].frame.size.width;
     NSInteger page = ([self collectionView].contentOffset.x + (0.5f * width)) / width;
     
-    return [NSIndexPath indexPathForItem:page inSection:0];
+    NSInteger section;
+    NSInteger item;
+    
+    if (page >= kFZZNumCellsBeforeEvents) {
+        section = 1;
+        item = page - 1;
+    } else {
+        section = 0;
+        item = 0;
+    }
+    
+    return [NSIndexPath indexPathForItem:item inSection:section];
 }
 
 -(void)addIncomingMessageForEvent:(FZZEvent *)event{
@@ -629,18 +642,24 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
  
  */
 -(void)updateEvent:(FZZEvent *)event{
-    NSInteger index = [_events indexOfObject:event];
+    NSIndexPath *indexPath = [event getEventIndexPath];
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:1];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:1];
     
     NSIndexPath *currentIndexPath = [self currentIndexPath];
     
+    NSLog(@"current: %@ (%d, %d) event: %@", currentIndexPath, currentIndexPath.section, currentIndexPath.row, indexPath);
+    
     //TODOAndrew, check if it's onscreen better, maybe the 3 events that could be on screen
-    if (false){//[indexPath isEqual:currentIndexPath]){
+    if ([indexPath isEqual:currentIndexPath]){
+        NSLog(@"UPDATE_EVENT on screen");
+        
         FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
         
         [cell updateMessages];
     } else {
+        NSLog(@"UPDATE_EVENT off screen");
+        
         FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
         
         [[cell vtvc] reloadChat];
@@ -876,7 +895,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 -(void)loadToEvent:(FZZEvent *)event{
     FZZUser *me = [FZZUser me];
     
-    BOOL showMessages = [event isInvited:me];
+    BOOL showMessages = [event isUserInvited:me];
     
     if (showMessages){
         [self jumpToMessagesForEvent:event];
@@ -1178,7 +1197,8 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
  */
 - (void)updateEvents{
     _events = [FZZEvent getEvents];
-    
+
+    NSLog(@"FZZEventsViewController updateEvents reloadData!!!");
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
     });

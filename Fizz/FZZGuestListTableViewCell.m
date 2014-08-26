@@ -1,14 +1,15 @@
 //
-//  FZZInviteListTableViewCell.m
+//  FZZGuestListTableViewCell.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 8/14/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZInviteListTableViewCell.h"
+#import "FZZGuestListTableViewCell.h"
+#import "FZZUtilities.h"
 
-@implementation FZZInviteListTableViewCell
+@implementation FZZGuestListTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -30,17 +31,17 @@
 }
 
 - (void)setupLabel{
-    UIFont *font = [UIFont fontWithName:@"Helvetica" size:20];
+    UIFont *font = kFZZBodyFont();
     
     [[self textLabel] setFont:font];
-    [[self textLabel] setTextColor:[UIColor whiteColor]];
+    [[self textLabel] setTextColor:kFZZWhiteTextColor()];
 }
 
 - (void)setIsGoing:(BOOL)isGoing{
     if (isGoing){
-        [[self textLabel] setTextColor:[UIColor whiteColor]];
+        [[self textLabel] setTextColor:kFZZWhiteTextColor()];
     } else {
-        [[self textLabel] setTextColor:[UIColor grayColor]];
+        [[self textLabel] setTextColor:kFZZGrayTextColor()];
     }
 }
 

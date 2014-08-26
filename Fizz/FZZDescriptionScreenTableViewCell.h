@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FZZDescriptionScreenTableViewCell : UITableViewCell
+@interface FZZDescriptionScreenTableViewCell : UITableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property UITextView *textView;
 

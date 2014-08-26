@@ -11,10 +11,13 @@
 #import "FZZEvent.h"
 #import "FZZAppDelegate.h"
 
+#import "FZZContactSearchDelegate.h"
+
 #import "FZZLocalCache.h"
 
-static NSMutableArray *friends;
 static NSMutableDictionary *users;
+
+static NSMutableDictionary *phoneNumberToUser;
 
 static FZZUser *me;
 
@@ -47,6 +50,10 @@ static FZZUser *currentUser = nil;
 @synthesize chid = _chid;
 @synthesize isFetchingPhoto = _isFetchingPhoto;
 @synthesize completionHandlers = _completionHandlers;
+
++(void)initialize{
+    phoneNumberToUser = [[NSMutableDictionary alloc] init];
+}
 
 +(BOOL)saveUsersToFile:(NSString *)userURL{
     NSDictionary *jsonDict = [FZZUser getUsersJSONForCache];
@@ -124,6 +131,9 @@ static FZZUser *currentUser = nil;
             [user setPhoneNumber:phoneNumber];
             [user setLastUsed:lastUsed];
             
+            // Store phoneNumber to user
+            [phoneNumberToUser setObject:user forKey:phoneNumber];
+            
             [users setObject:user forKey:userID];
         }
     }];
@@ -144,19 +154,11 @@ static FZZUser *currentUser = nil;
 }
 
 +(NSArray *)getFriends{
-    return friends;
+    return [FZZUser getUsers];
 }
 
 -(void)dealloc {
     [users removeObjectForKey:self.userID];
-}
-
-+(void)addFriends:(NSArray *)incomingFriends{
-    if (!friends){
-        friends = [[NSMutableArray alloc] init];
-    }
-    
-    [friends addObjectsFromArray:incomingFriends];
 }
 
 //-(id)initWithUserID:(NSNumber *)uID{
@@ -215,6 +217,12 @@ static FZZUser *currentUser = nil;
     [user updateLastUsed];
     
     return user;
+}
+
+-(NSString *)description{
+    NSString *userID = [[self userID] stringValue];
+    
+    return [NSString stringWithFormat:@"User %@: {\"%@\"}", userID, [self name]];
 }
 
 +(id)addUserWithUserID:(NSNumber *)uID andName:(NSString *)strName{
@@ -297,6 +305,9 @@ static FZZUser *currentUser = nil;
     user.phoneNumber = phoneNumber;
     user.name = name;
     
+    // Store phoneNumber to user
+    [phoneNumberToUser setObject:user forKey:phoneNumber];
+    
     return user;
 }
 
@@ -327,8 +338,8 @@ static FZZUser *currentUser = nil;
 }
 
 +(NSMutableArray *)parseUserJSONList:(NSArray *)userListJSON{
-    if (userListJSON == NULL){
-        return NULL;
+    if (userListJSON == nil || [userListJSON count] == 0){
+        return nil;
     }
     
     NSMutableArray *result = [[NSMutableArray alloc] initWithArray:userListJSON];
@@ -338,15 +349,7 @@ static FZZUser *currentUser = nil;
         [result setObject:user atIndexedSubscript:index];
     }];
     
-    return result;
-}
-
-+(NSArray *)parseUserJSONFriendList:(NSArray *)friendListJSON{
-    NSMutableArray *result = [FZZUser parseUserJSONList:friendListJSON];
-    
-    if (result){
-        friends = result;
-    }
+    [FZZContactSearchDelegate updateFriendsAndContacts];
     
     return result;
 }
@@ -370,6 +373,19 @@ static FZZUser *currentUser = nil;
     }];
     
     return result;
+}
+
++(NSString *)formatPhoneNumber:(NSString *)phoneNumber{
+    return phoneNumber;
+}
+
++(FZZUser *)userFromPhoneNumber:(NSString *)phoneNumber{
+    phoneNumber = [FZZUser formatPhoneNumber:phoneNumber];
+    
+    FZZUser *user = [phoneNumberToUser objectForKey:phoneNumber];
+    
+    // Return nil if no user is found
+    return user;
 }
 
 @end

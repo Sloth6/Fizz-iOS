@@ -13,6 +13,9 @@
 
 #import "FZZTextViewWithPlaceholder.h"
 
+static float kFZZBrightScreenAlpha;
+static float kFZZDarkScreenAlpha;
+
 @interface FZZExpandedNewEventCell ()
 
 @property (strong, nonatomic) UIButton *sendInviteButton;
@@ -23,6 +26,14 @@
 @end
 
 @implementation FZZExpandedNewEventCell
+
++ (void)initialize{
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        kFZZBrightScreenAlpha = 0.9;
+        kFZZDarkScreenAlpha = 0.5;
+    });
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -42,6 +53,7 @@
     
     _imageView = [[UIImageView alloc] initWithFrame:window];
     UIImage *image = [UIImage imageNamed:@"testImage"];
+    [_imageView setAlpha:kFZZBrightScreenAlpha];
     
     image = centeredCrop(image);
     
@@ -73,7 +85,7 @@
         
         _textView = [[FZZTextViewWithPlaceholder alloc] initWithFrame:CGRectMake(x, y, width, height)];
         
-        [_textView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
+        [_textView setFont:kFZZHeadingsFont()];//[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
         
         [self addSubview:_textView];
         

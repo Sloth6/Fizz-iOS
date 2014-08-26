@@ -7,6 +7,7 @@
 //
 
 #import "FZZEventMainCell.h"
+#import "FZZUtilities.h"
 
 @interface FZZEventMainCell ()
 
@@ -35,12 +36,12 @@
     [_textView setEditable:NO];
     [_textView setScrollEnabled:NO];
     
-    UIFont *font = [UIFont fontWithName:@"Futura-Medium" size:20.0];
+    UIFont *font = kFZZHeadingsFont();//[UIFont fontWithName:@"Futura-Medium" size:20.0];
     
     [_textView setText:@"Boo you whore"];
     
     [_textView setFont:font];
-    [_textView setTextColor:[UIColor whiteColor]];
+    [_textView setTextColor:kFZZWhiteTextColor()];
     
     [self addSubview:_textView];
 }

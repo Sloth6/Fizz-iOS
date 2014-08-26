@@ -49,14 +49,39 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         NSInteger numEvents = [sortedEvents count];
         NSInteger itemNum = (numEvents - 1) - indexPath.item;
         
+        NSLog(@"events[%d]: %@", itemNum, sortedEvents);
+        
         if (itemNum < 0){
             NSLog(@"SHOULDN'T TRY TO ACCESS NEGATIVE INDEX EVENTS!!");
             return nil;
         }
         
         FZZEvent *event = [sortedEvents objectAtIndex:itemNum];
+        
+        NSLog(@"event: %@", event);
+        
         return event;
     }
+}
+
+-(NSIndexPath *)getEventIndexPath{
+    @synchronized([FZZEvent class]){
+        NSArray *sortedEvents = [FZZEvent getSortedEvents];
+        
+        NSInteger numEvents = [sortedEvents count];
+        
+        NSInteger itemPlace = [sortedEvents indexOfObject:self];
+        
+        NSInteger itemNum = (numEvents - 1) - itemPlace;
+    
+        return [NSIndexPath indexPathForItem:itemNum inSection:1];
+    }
+}
+
+-(NSString *)description{
+    NSString *eventID = [[self eventID] stringValue];
+    
+    return [NSString stringWithFormat:@"Event %@: {\"%@\" \n\tmessages = %@}", eventID, [self eventDescription], [self messages]];
 }
 
 //+(FZZEvent *)getEventOnScreen{
@@ -194,9 +219,9 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         
         NSNumber *eventID = [numberFormatter numberFromString:eventIDString];
         
-        BOOL eventExists = [events objectForKey:eventID] != nil;
+        FZZEvent *event = [events objectForKey:eventID];
         
-        if (!eventExists){
+        if (event == nil || [event creator] == nil){
             
             FZZEvent *event = [FZZEvent eventWithEID:eventID];
             
@@ -290,8 +315,26 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         FZZEvent *e1 = obj1;
         FZZEvent *e2 = obj2;
         
-        return [[e1 creationTime] compare:[e2 creationTime]];
+        return [[e2 creationTime] compare:[e1 creationTime]];
     }];
+}
+
++(NSArray *)getEventIDs{
+    NSArray *allEvents = [events allValues];
+    NSMutableArray *result = [[allEvents sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        FZZEvent *e1 = obj1;
+        FZZEvent *e2 = obj2;
+        
+        return [[e1 creationTime] compare:[e2 creationTime]];
+    }] mutableCopy];
+    
+    for (int i = 0; i < [result count]; ++i){
+        FZZEvent *event = [result objectAtIndex:i];
+        
+        [result setObject:[event eventID] atIndexedSubscript:i];
+    }
+    
+    return result;
 }
 
 #pragma mark Accessors
@@ -344,11 +387,11 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     return event;
 }
 
--(BOOL)isInvited:(FZZUser *)user{
+-(BOOL)isUserInvited:(FZZUser *)user{
     return [self.invitees containsObject:user];
 }
 
--(BOOL)isGuest:(FZZUser *)user{
+-(BOOL)isUserGuest:(FZZUser *)user{
     return [self.guests containsObject:user];
 }
 
@@ -436,7 +479,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 -(BOOL)joinEvent{
     FZZUser *me = [FZZUser me];
     
-    if ([self isGuest:me] || ![self isInvited:me]){
+    if ([self isUserGuest:me] || ![self isUserInvited:me]){
         return NO;
     }
     
@@ -451,7 +494,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     FZZUser *me = [FZZUser me];
     
     @synchronized(self){
-        if (![self isGuest:me]){
+        if (![self isUserGuest:me]){
             return NO;
         }
         
@@ -615,7 +658,13 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     /* Creation Time */
     NSNumber *creationTimeInterval = [eventJSON objectForKey:@"creationTime"];
     
-    NSDate *creationTime = [NSDate dateWithTimeIntervalSince1970:[creationTimeInterval longValue]];
+//    NSNumber *seconds = [[NSNumber alloc] initWithDouble:];
+    
+    NSTimeInterval timeInterval = [creationTimeInterval doubleValue]/1000.0;
+    
+    NSLog(@"TIME:: %@ or f %g", creationTimeInterval, timeInterval);
+    
+    NSDate *creationTime = [NSDate dateWithTimeIntervalSince1970:timeInterval];
     
     NSArray *messages = [eventJSON objectForKey:@"messages"];
     
@@ -664,8 +713,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 }
 
 +(NSArray *)parseEventIDList:(NSArray *)eventIDList{
-    if (eventIDList == NULL){
-        return NULL;
+    if (eventIDList == nil){
+        return nil;
     }
     
     NSMutableArray *result = [[NSMutableArray alloc] initWithArray:eventIDList];
@@ -675,6 +724,9 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         NSNumber *eventID = obj;
         
         FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        NSLog(@"fetched event [%@] by creator: %@", eventID,
+              [event creator]);
         
         [result setObject:event atIndexedSubscript:index];
     }];

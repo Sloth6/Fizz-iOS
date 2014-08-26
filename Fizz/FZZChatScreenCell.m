@@ -13,6 +13,8 @@
 #import "FZZChatScreenTableViewController.h"
 #import "FZZAppDelegate.h"
 
+#import "FZZUtilities.h"
+
 @interface FZZChatScreenCell ()
 
 @property CGRect keyboardRect;
@@ -117,7 +119,7 @@
     
     [chatBox setDelegate:self];
     
-    [mProtoTVC setFont:[UIFont fontWithName:@"Helvetica" size:14]];
+    [mProtoTVC setFont:kFZZInputFont()];
     
     //turn off scrolling and set the font details.
     [chatBox setReturnKeyType:UIReturnKeySend];

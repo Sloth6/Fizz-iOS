@@ -8,6 +8,7 @@
 
 #import "FZZChatScreenTableViewController.h"
 
+#import "FZZUtilities.h"
 #import "FZZUser.h"
 #import "FZZEvent.h"
 #import "FZZMessage.h"
@@ -36,14 +37,13 @@ static int kFZZMinChatCellHeight = 58;
 {
     self = [super init];
     if (self) {
-        _tableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:style];
-        [_tableView setDelegate:self];
-        [_tableView setDataSource:self];
-        [_tableView setSeparatorColor:[UIColor clearColor]];
-        [_tableView setBackgroundColor:[UIColor clearColor]];
-        [_tableView setOpaque:NO];
+        [self.tableView setDelegate:self];
+        [self.tableView setDataSource:self];
+        [self.tableView setSeparatorColor:[UIColor clearColor]];
+        [self.tableView setBackgroundColor:[UIColor clearColor]];
+        [self.tableView setOpaque:NO];
         
-        _tableView.keyboardDismissMode  = UIScrollViewKeyboardDismissModeInteractive;
+        self.tableView.keyboardDismissMode  = UIScrollViewKeyboardDismissModeInteractive;
         
         // Custom initialization
         _nibTextCellLoaded = [[NSMutableSet alloc] init];
@@ -51,10 +51,13 @@ static int kFZZMinChatCellHeight = 58;
         
         //Magic Number 68
         _textLabelWidth = [UIScreen mainScreen].bounds.size.width - 68;
-
     }
     return self;
 }
+
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    [super scrollViewDidScroll:scrollView];
+//}
 
 #pragma mark - Table view data source
 
@@ -78,6 +81,7 @@ static int kFZZMinChatCellHeight = 58;
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
     
+    NSLog(@"ChatScreenTableViewController setEventIndexPath reloadData!!!");
     [[self tableView] reloadData];
 }
 
@@ -178,8 +182,10 @@ static int kFZZMinChatCellHeight = 58;
     NSString *text = [message text];
     FZZUser  *user = [message user];
     
+    NSString *name = [[user name] uppercaseString];
+    
     [cell.messageLabel setText:text];
-    [cell.userLabel setText:[user name]];
+    [cell.userLabel setText:name];
     
     FZZUser *me = [FZZUser me];
     UIFont *userFont;
@@ -189,15 +195,18 @@ static int kFZZMinChatCellHeight = 58;
     CGFloat messageFontSize = [[cell.messageLabel font] pointSize];
     
     if ([[message user] isEqual:me]){
-        messageFont = [UIFont fontWithName:@"Futura-MediumItalic" size:messageFontSize];
-        userFont = [UIFont fontWithName:@"Futura-MediumItalic" size:userFontSize];
+        messageFont = kFZZHostBodyFont();
+        userFont = kFZZHostNameFont();
     } else {
-        messageFont = [UIFont fontWithName:@"Futura-Medium" size:messageFontSize];
-        userFont = [UIFont fontWithName:@"Futura-Medium" size:userFontSize];
+        messageFont = kFZZBodyFont();
+        userFont = kFZZLabelsFont();
     }
     
     [cell.messageLabel setFont:messageFont];
     [cell.userLabel setFont:userFont];
+    
+    [cell.userLabel setTextColor:kFZZWhiteTextColor()];
+    [cell.messageLabel setTextColor:kFZZWhiteTextColor()];
     
     cell.backgroundColor = [UIColor clearColor];
     
@@ -225,9 +234,16 @@ static int kFZZMinChatCellHeight = 58;
 }
 
 - (void)addIncomingMessage{
-//    NSLog(@"Incoming Message Doing Nothing!");
+    FZZEvent *event2 = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    NSLog(@"Incoming Message for event [%@] Doing Nothing!", [event2 eventID]);
 //    return;
 //    exit(1);
+    
+    [[self tableView] reloadData];
+    return;
+    
+    
     CGPoint offset = [self tableView].contentOffset;
     CGRect bounds = [self tableView].bounds;
     CGSize size = [self tableView].contentSize;
@@ -282,6 +298,7 @@ static int kFZZMinChatCellHeight = 58;
     CGRect tableFrame = [self tableView].frame;
     tableFrame.size.height = height;
     [self tableView].frame = tableFrame;
+    [self updateMask];
 }
 
 /*

@@ -79,7 +79,7 @@ static int kFZZNumRecentInvites = 30;
         _invitedContacts = [[NSMutableSet alloc] init];
         
         [self setupKeyboard];
-        [self setupSearchField];
+//        [self setupSearchField];
         
         UINib *inviteNib = [UINib nibWithNibName:@"FZZInviteCell" bundle:nil];
         [[self tableView] registerNib:inviteNib forCellReuseIdentifier:@"InviteCell"];
@@ -96,30 +96,30 @@ static int kFZZNumRecentInvites = 30;
     return self;
 }
 
-- (void)setupSearchField{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-    _searchTextField = appDelegate.searchTextField;
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(searchStartEdit)
-     name:UITextFieldTextDidBeginEditingNotification
-     object:_searchTextField];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(searchStopEdit)
-     name:UITextFieldTextDidEndEditingNotification
-     object:_searchTextField];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(searchChange)
-     name:UITextFieldTextDidChangeNotification
-     object:_searchTextField];
-    
-    [_searchTextField setDelegate:self];
-}
+//- (void)setupSearchField{
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    _searchTextField = appDelegate.searchTextField;
+//    
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(searchStartEdit)
+//     name:UITextFieldTextDidBeginEditingNotification
+//     object:_searchTextField];
+//    
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(searchStopEdit)
+//     name:UITextFieldTextDidEndEditingNotification
+//     object:_searchTextField];
+//    
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(searchChange)
+//     name:UITextFieldTextDidChangeNotification
+//     object:_searchTextField];
+//    
+//    [_searchTextField setDelegate:self];
+//}
 
 - (void)setupInterface{
 //    [self setupSeats];
@@ -859,7 +859,7 @@ static int kFZZNumRecentInvites = 30;
         FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
         
         if (_canBeSelected && appDelegate.evc.viewMode == kTimeline){
-            if ([_event isInvited:[FZZUser me]]){ // Chat Mode
+            if ([_event isUserInvited:[FZZUser me]]){ // Chat Mode
                 [cell setSelected:NO];
                 [cell setHighlighted:NO];
 //                [_eventCell enterChatMode];
@@ -882,10 +882,10 @@ static int kFZZNumRecentInvites = 30;
         
         FZZUser *me = [FZZUser me];
         
-        if ([_event isGuest:me]){ // If I'm attending
+        if ([_event isUserGuest:me]){ // If I'm attending
             [_inviteButton setHidden:NO];
             
-        } else if ([_event isInvited:me]){ // If I'm invited
+        } else if ([_event isUserInvited:me]){ // If I'm invited
             [_inviteButton setHidden:YES];
             
         } else { // If I'm not invited
@@ -1025,7 +1025,7 @@ static int kFZZNumRecentInvites = 30;
 // Remove anybody who's already invited to the event
 -(void)filterInvitables{
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return ![_event isInvited:evaluatedObject];
+        return ![_event isUserInvited:evaluatedObject];
     }];
     
     _invitableFriends = [_invitableFriends filteredArrayUsingPredicate:predicate];

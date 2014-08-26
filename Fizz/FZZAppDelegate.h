@@ -27,7 +27,7 @@
 @property (strong, nonatomic) FZZEventsViewController *evc;
 
 @property (strong, nonatomic) FZZOverlayView *navigationBar;
-@property (strong, nonatomic) UITextField *searchTextField;
+//@property (strong, nonatomic) UITextField *searchTextField;
 
 @property BOOL hasLoggedIn;
 @property BOOL isConnecting;

@@ -8,6 +8,7 @@
 
 #import "FZZTextViewWithPlaceholder.h"
 #import "FZZEventsViewController.h"
+#import "FZZUtilities.h"
 
 @interface FZZTextViewWithPlaceholder ()
 
@@ -32,7 +33,7 @@
         [_placeholderTextView setUserInteractionEnabled:NO];
         [_placeholderTextView setEditable:NO];
         [_placeholderTextView setBackgroundColor:[UIColor clearColor]];
-        _placeholderTextView.textColor = [UIColor colorWithWhite:1.0 alpha:0.7];
+        _placeholderTextView.textColor = kFZZGrayTextColor();
         [self setBackgroundColor:[UIColor clearColor]];
         
         [self addSubview:_placeholderTextView];
@@ -42,7 +43,7 @@
         _textView = [[UITextView alloc] initWithFrame:bounds];
         [_textView setUserInteractionEnabled:YES];
         [_textView setBackgroundColor:[UIColor clearColor]];
-        [_textView setTextColor:[UIColor whiteColor]];
+        [_textView setTextColor:kFZZWhiteTextColor()];
         
         [self addSubview:_textView];
         

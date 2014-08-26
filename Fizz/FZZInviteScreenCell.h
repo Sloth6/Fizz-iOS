@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FZZInviteScreenCell : UITableViewCell
+@interface FZZInviteScreenCell : UITableViewCell <UITableViewDataSource, UITableViewDelegate>
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
 

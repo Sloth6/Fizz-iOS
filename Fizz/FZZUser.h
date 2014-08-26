@@ -48,8 +48,6 @@
 +(void)setMeAs:(FZZUser *)me;
 +(FZZUser *)me;
 
-+(void)addFriends:(NSArray *)friends;
-
 +(FZZUser *)parseJSON:(NSDictionary *)userJSON;
 -(NSDictionary *)toJson;
 +(NSArray *)usersToJSONUsers:(NSArray *)users;
@@ -59,5 +57,7 @@
 
 +(NSArray *)getUserIDsFromUsers:(NSArray *)users;
 +(NSArray *)getUsersFromUIDs:(NSArray *)UIDs;
+
++(FZZUser *)userFromPhoneNumber:(NSString *)phoneNumber;
 
 @end

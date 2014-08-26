@@ -10,4 +10,8 @@
 
 @interface FZZContactTableViewCell : UITableViewCell
 
+- (void)setIsSelected:(BOOL)isSelected;
+
+- (BOOL)isSelected;
+
 @end

@@ -138,8 +138,22 @@ static NSURLConnection *connection;
         [pref removeObjectForKey:@"didRegister"];
         [pref synchronize];
         
+        [FZZAjaxPostDelegate failRegistrationWithStatusCode:[response statusCode]];
+        
         return NO;
     }
+}
+
++ (void)failRegistrationWithStatusCode:(NSInteger)statusCode{
+    NSString *failureMessage = [NSString stringWithFormat:@"Failed to register with status code %d. Try again later.", statusCode];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:failureMessage
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Okay"
+                                              otherButtonTitles:nil];
+    
+    [alertView show];
 }
 
 /*
