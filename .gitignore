@@ -1,2 +1,10 @@
 mapbox-ios-sdk/
 aws-ios-sdk-1.7.1/
+
+*.xcscheme
+
+Fizz.xcodeproj/xcuserdata/Antonio.xcuserdatad/xcschemes/xcschememanagement.plist
+
+Fizz.xcworkspace/xcuserdata/Antonio.xcuserdatad/UserInterfaceState.xcuserstate
+
+Pods/Pods.xcodeproj/xcuserdata/Antonio.xcuserdatad/xcschemes/xcschememanagement.plist
