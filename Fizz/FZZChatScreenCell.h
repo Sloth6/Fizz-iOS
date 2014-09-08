@@ -19,4 +19,6 @@
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;
 -(void)updateMessages;
 
+-(UIScrollView *)scrollView;
+
 @end

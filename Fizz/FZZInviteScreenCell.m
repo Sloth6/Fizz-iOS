@@ -14,7 +14,6 @@
 @interface FZZInviteScreenCell ()
 
 @property UIButton *searchForFriendButton;
-@property FZZInvitationViewsTableViewController *ivtvc;
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
 @end

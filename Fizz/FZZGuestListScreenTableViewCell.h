@@ -12,4 +12,6 @@
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;
 
+-(UIScrollView *)scrollView;
+
 @end

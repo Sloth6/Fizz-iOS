@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="191" id="c20-ZQ-xHG" customClass="FZZInputPhoneTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="191"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c20-ZQ-xHG" id="Sqz-nG-dY8">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="190"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="first name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="buu-yl-07C" userLabel="First Name Text Field" customClass="FZZUnderlinedTextField">
+                        <rect key="frame" x="4" y="38" width="312" height="48"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="48" id="ZEv-ob-34C"/>
+                        </constraints>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="last name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9YM-dp-d1e" userLabel="Last Name Text Field" customClass="FZZUnderlinedTextField">
+                        <rect key="frame" x="4" y="86" width="312" height="48"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="48" id="l0h-0D-YzY"/>
+                        </constraints>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="cell phone" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eWh-C5-XEi" userLabel="Cell Phone Text Field" customClass="FZZUnderlinedTextField">
+                        <rect key="frame" x="4" y="134" width="312" height="48"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="48" id="fa5-cY-cOl"/>
+                        </constraints>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="create an account to get started" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6UX-EE-f9g">
+                        <rect key="frame" x="4" y="8" width="312" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="28" id="Bk3-uG-0Re"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="eWh-C5-XEi" secondAttribute="trailing" constant="4" id="4g1-fJ-5Wj"/>
+                    <constraint firstItem="eWh-C5-XEi" firstAttribute="leading" secondItem="Sqz-nG-dY8" secondAttribute="leading" constant="4" id="FUP-4A-sgJ"/>
+                    <constraint firstItem="6UX-EE-f9g" firstAttribute="leading" secondItem="Sqz-nG-dY8" secondAttribute="leading" constant="4" id="KSp-7H-cNJ"/>
+                    <constraint firstItem="buu-yl-07C" firstAttribute="top" secondItem="6UX-EE-f9g" secondAttribute="bottom" constant="2" id="OLr-Cr-uSc"/>
+                    <constraint firstAttribute="trailing" secondItem="6UX-EE-f9g" secondAttribute="trailing" constant="4" id="Px9-1p-EBr"/>
+                    <constraint firstAttribute="bottom" secondItem="eWh-C5-XEi" secondAttribute="bottom" constant="8" id="Qi8-pg-g1T"/>
+                    <constraint firstItem="buu-yl-07C" firstAttribute="leading" secondItem="Sqz-nG-dY8" secondAttribute="leading" constant="4" id="ZQb-8r-gRN"/>
+                    <constraint firstItem="9YM-dp-d1e" firstAttribute="top" secondItem="buu-yl-07C" secondAttribute="bottom" id="lc8-ZN-6bZ"/>
+                    <constraint firstItem="9YM-dp-d1e" firstAttribute="leading" secondItem="Sqz-nG-dY8" secondAttribute="leading" constant="4" id="n6H-KR-9Rg"/>
+                    <constraint firstAttribute="trailing" secondItem="9YM-dp-d1e" secondAttribute="trailing" constant="4" id="tGa-tZ-CRe"/>
+                    <constraint firstItem="eWh-C5-XEi" firstAttribute="top" secondItem="9YM-dp-d1e" secondAttribute="bottom" id="vdj-Cu-gLw"/>
+                    <constraint firstAttribute="trailing" secondItem="buu-yl-07C" secondAttribute="trailing" constant="4" id="wzR-uI-BY8"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="cellPhoneTextField" destination="eWh-C5-XEi" id="4ho-z1-pPy"/>
+                <outlet property="firstNameTextField" destination="buu-yl-07C" id="CpU-9p-1JF"/>
+                <outlet property="infoLabel" destination="6UX-EE-f9g" id="Dct-dq-3Hp"/>
+                <outlet property="lastNameTextField" destination="9YM-dp-d1e" id="Jnc-sL-gd4"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

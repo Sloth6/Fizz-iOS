@@ -23,37 +23,54 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 
 @implementation FZZContactsTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)init
 {
-    self = [super initWithStyle:style];
+    self = [super init];
     if (self) {
         // Custom initialization
+        
         [[self tableView] registerClass:[FZZContactTableViewCell class] forCellReuseIdentifier:kFZZContactCellIdentifer];
+        
+        [[self tableView] setSeparatorColor:[UIColor clearColor]];
+        [[self tableView] setBackgroundColor:[UIColor clearColor]];
+        [[self tableView] setOpaque:NO];
+        
+        [FZZContactSearchDelegate setCurrentTableView:self.tableView];
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+//- (id)initWithStyle:(UITableViewStyle)style
+//{
+//    self = [super initWithStyle:style];
+//    if (self) {
+//        // Custom initialization
+//        [[self tableView] registerClass:[FZZContactTableViewCell class] forCellReuseIdentifier:kFZZContactCellIdentifer];
+//    }
+//    return self;
+//}
 
--(void)viewWillAppear:(BOOL)animated{
-    // Override to avoid auto scrolling
-    [FZZContactSearchDelegate setCurrentTableView:self.tableView];
-}
+//- (void)viewDidLoad
+//{
+//    [super viewDidLoad];
+//    
+//    // Uncomment the following line to preserve selection between presentations.
+//    // self.clearsSelectionOnViewWillAppear = NO;
+//    
+//    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+//    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+//}
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+//-(void)viewWillAppear:(BOOL)animated{
+//    // Override to avoid auto scrolling
+//    
+//}
+
+//- (void)didReceiveMemoryWarning
+//{
+//    [super didReceiveMemoryWarning];
+//    // Dispose of any resources that can be recreated.
+//}
 
 #pragma mark - Table view data source
 

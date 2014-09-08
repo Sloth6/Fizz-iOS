@@ -10,9 +10,11 @@
 #import "FZZGuestListScreenTableViewController.h"
 #import "FZZUtilities.h"
 
+#import "FZZInvitationViewsTableViewController.h"
+
 @interface FZZGuestListScreenTableViewCell ()
 
-@property UIButton *searchForFriendButton;
+//@property UIButton *searchForFriendButton;
 @property FZZGuestListScreenTableViewController *gltvc;
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
@@ -83,6 +85,8 @@
 - (void)setupTableView{
     _gltvc = [[FZZGuestListScreenTableViewController alloc] init];
     
+    [[_gltvc tableView] setBackgroundColor:[UIColor purpleColor]];
+    
     CGRect frame = [UIScreen mainScreen].bounds;
     
     CGFloat leftBorder = 40;
@@ -91,17 +95,19 @@
     CGFloat bottomBorder = 6;
     
     // Account for _searchForFriendsButton
-    if (_searchForFriendButton){
-        bottomBorder += _searchForFriendButton.frame.size.height;
-    }
-        
+//    if (_searchForFriendButton){
+//        bottomBorder += _searchForFriendButton.frame.size.height;
+//    }
+    
+    bottomBorder += [FZZInvitationViewsTableViewController searchBarHeight];
+    
     frame.origin.x += leftBorder;
     frame.origin.y += topBorder;
     
     NSLog(@"top: %f bottom: %f", topBorder, bottomBorder);
     
     // TODOAndrew WTF IS THIS, HOW IS A FRAME HEIGHT 5 WORKING
-    frame.size.height = 5;//-= (topBorder + bottomBorder);
+    frame.size.height -= (topBorder + bottomBorder);
     frame.size.width  -= (leftBorder + rightBorder);
     
     NSLog(@"height: %f", frame.size.height);
@@ -112,6 +118,10 @@
     //    [[_tvc view] setBackgroundColor:[UIColor blueColor]];
     
     [self addSubview:[_gltvc tableView]];
+}
+
+-(UIScrollView *)scrollView{
+    return [_gltvc tableView];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

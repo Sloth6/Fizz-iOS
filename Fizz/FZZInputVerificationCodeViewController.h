@@ -8,11 +8,14 @@
 
 @interface FZZInputVerificationCodeViewController : UIViewController <UITextFieldDelegate>
 
-@property IBOutlet UITextField *verificationCodeField;
-
 //@property IBOutlet UIButton *test;
-@property IBOutlet UIButton *confirmCodeButton;
+@property IBOutlet UILabel *label;
 
-- (IBAction)verifyButtonHit:(id)sender;
+- (void)setKeyboardHeight:(CGFloat)keyboardHeight;
+
+- (void)textFieldBecomeFirstResponder;
+
+- (void)sendCode:(NSString *)code;
+- (void)failVerificationStep;
 
 @end

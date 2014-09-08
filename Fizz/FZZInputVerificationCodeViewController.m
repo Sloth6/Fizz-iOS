@@ -10,7 +10,16 @@
 #import "FZZAppDelegate.h"
 #import "FZZAjaxPostDelegate.h"
 
+#import "FZZPinTextField.h"
+
+#import "FZZUtilities.h"
+
 @interface FZZInputVerificationCodeViewController ()
+
+// This was an outlet, scrap it.
+@property UITextField *verificationCodeField;
+
+@property (strong, nonatomic) FZZPinTextField *pinTextField;
 
 @end
 
@@ -25,63 +34,95 @@
     return self;
 }
 
-- (void)finishVerificationStep{
-    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+}
+
+- (void)textFieldBecomeFirstResponder;{
+    [_pinTextField becomeFirstResponder];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
     
-    [appDelegate setupNavigationController];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self setupLabel];
+    
+    [[self view] setBackgroundColor:[UIColor blackColor]];
+    
     // Do any additional setup after loading the view from its nib.
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(verificationCodeFieldChange)
-     name:UITextFieldTextDidChangeNotification
-     object:_verificationCodeField];
+    [self setupPinInput];
     
     /**** PUSH NOTIFY ****/
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
 }
 
-- (IBAction)verifyButtonHit:(id)sender{
-    NSString *password = _verificationCodeField.text;
+- (void)setupPinInput{
+    CGFloat horizontalPadding = kFZZPinPadding();
     
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    [pref setObject:password forKey:@"password"];
-    [pref synchronize];
+    CGFloat width = [UIScreen mainScreen].bounds.size.width - (horizontalPadding * 2);
+    CGFloat height = 60;
+    CGFloat x = horizontalPadding;
+    CGFloat y = [UIScreen mainScreen].bounds.size.height/3;
     
-    NSLog(@"postLogin 2");
+    CGRect frame = CGRectMake(x, y, width, height);
     
-    [FZZSocketIODelegate openConnectionCheckingForInternet];
+    _pinTextField = [[FZZPinTextField alloc] initWithFrame:frame
+                                     andNumberOfCharacters:6];
     
-    if ([FZZAjaxPostDelegate postLogin]){
-        [self finishVerificationStep];
-    } else {
-        NSLog(@"AJAX POST LOGIN FAILED!");
-        exit(1);
-    }
+    [_pinTextField setIVCVC:self];
+    
+    [[self view] addSubview:_pinTextField];
 }
 
-- (void)verificationCodeFieldChange {
-    NSString *verificationCode = [_verificationCodeField text];
+- (void)setupLabel{
+    [_label setTextColor:kFZZWhiteTextColor()];
+    [_label setFont:kFZZSmallFont()];
+    [_label setText:@"we texted you a confirmation code.\nit may take a moment to arrive."];
+}
+
+- (void)sendCode:(NSString *)code{
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    [pref setObject:code forKey:@"password"];
+    [pref synchronize];
     
-    BOOL validVerificationCode = [verificationCode length] > 0;
+    [FZZSocketIODelegate openConnectionCheckingForInternet];
+}
+
+- (void)failVerificationStep{
+    [_pinTextField clearText];
     
-    if (validVerificationCode){
-        [_confirmCodeButton setEnabled:YES];
-        return;
-    }
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Wrong Code"
+                                                        message:@"The code you input was not correct. Please try again."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Okay"
+                                              otherButtonTitles:nil];
     
-    [_confirmCodeButton setEnabled:NO];
+    [alertView show];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setKeyboardHeight:(CGFloat)keyboardHeight{
+    CGRect frame = [_pinTextField frame];
+    
+    CGFloat viewHeight = [self view].bounds.size.height;
+    CGFloat textInputHeight = [_pinTextField bounds].size.height;
+    
+    CGFloat oddOffset = 7;
+    
+    frame.origin.y = viewHeight + oddOffset - (textInputHeight + keyboardHeight + kFZZPinPadding());
+    
+    [_pinTextField setFrame:frame];
 }
 
 @end

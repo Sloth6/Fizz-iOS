@@ -221,7 +221,7 @@ static int kFZZMinChatCellHeight = 58;
         return 24;
     }
     
-    float labelWidth = [UIScreen mainScreen].bounds.size.width - 74;//60(too small)//80(too large)//34//26//120;
+    float labelWidth = [self tableView].bounds.size.width - 74;//60(too small)//80(too large)//34//26//120;
     
     //NSLog(@"\ntext: <%@>\nlabelWidth: %f", text, labelWidth);
     

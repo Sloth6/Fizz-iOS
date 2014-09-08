@@ -7,7 +7,6 @@
 //
 
 #import "FZZExpandedNewEventCell.h"
-#import "FZZInviteViewController.h"
 #import "FZZAppDelegate.h"
 #import "FZZUtilities.h"
 

@@ -23,8 +23,6 @@
 
 #import "FZZTextViewWithPlaceholder.h"
 
-#import "FZZInviteViewController.h"
-
 #import "FZZEnterMessagePrototypeViewController.h"
 
 static int kFZZNumCellsBeforeEvents = 1; // Add New Event

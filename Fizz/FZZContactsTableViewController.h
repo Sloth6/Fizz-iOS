@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FZZContactsTableViewController : UITableViewController
+#import "FZZFadedEdgeTableViewController.h"
+
+@interface FZZContactsTableViewController : FZZFadedEdgeTableViewController;
 
 @end

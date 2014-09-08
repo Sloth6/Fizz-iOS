@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class FZZInvitationViewsTableViewController;
+
 @interface FZZInviteScreenCell : UITableViewCell <UITableViewDataSource, UITableViewDelegate>
+
+
+@property FZZInvitationViewsTableViewController *ivtvc;
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
 

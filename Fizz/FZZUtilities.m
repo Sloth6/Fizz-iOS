@@ -22,6 +22,10 @@ UIFont *kFZZHeadingsFont(){
     return [UIFont fontWithName:@"Futura-MediumItalic" size:68];
 }
 
+UIFont *kFZZPinInputFont(){
+    return [UIFont fontWithName:@"FuturaStd-Light" size:68];
+}
+
 UIFont *kFZZBodyFont(){
     return [UIFont fontWithName:@"Futura-Medium" size:18];
 }
@@ -32,11 +36,11 @@ UIFont *kFZZSmallFont(){
 }
 
 UIFont *kFZZLabelsFont(){
-    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];//-Bold
+    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
 }
 
 UIFont *kFZZHostNameFont(){
-    return [UIFont fontWithName:@"FuturaStd-BoldOblique" size:10];//boldItalicFontWithFont([UIFont fontWithName:@"Futura Std" size:10]);
+    return [UIFont fontWithName:@"FuturaStd-BoldOblique" size:10];
 }
 
 UIFont *kFZZHostBodyFont(){
@@ -44,7 +48,7 @@ UIFont *kFZZHostBodyFont(){
 }
 
 UIFont *kFZZCapsulesFont(){
-    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];//-Book
+    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
 }
 
 UIFont *kFZZInputFont(){
@@ -56,7 +60,7 @@ UIColor *kFZZWhiteTextColor(){
 }
 
 UIColor *kFZZGrayTextColor(){
-    return [UIColor colorWithWhite:0.9 alpha:0.76];
+    return [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
 UIFont *kFZZRegularFontWithSize(CGFloat size){
@@ -71,28 +75,30 @@ UIFont *kFZZHeavyFontWithSize(CGFloat size){
     return [UIFont fontWithName:@"Futura-MediumItalic" size:size];
 }
 
-UIFont *boldFontWithFont(UIFont *font)
-{
-    UIFontDescriptor * fontD = [font.fontDescriptor
-                                fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold];
-    return [UIFont fontWithDescriptor:fontD size:0];
-}
+CGFloat kFZZHorizontalMargin() {return 4;}
+CGFloat kFZZVerticalMargin() {return 8;}
 
-UIFont *boldItalicFontWithFont(UIFont *font)
-{
-    UIFontDescriptor * fontD = [font.fontDescriptor
-                                fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold||UIFontDescriptorTraitItalic];
-    
-    return [UIFont fontWithDescriptor:fontD size:0];
-}
+CGFloat kFZZHeadingBaselineToTop() {return 120;}
+//Line height is container around the text
+CGFloat kFZZHeadingLineHeight() {return 72;}
+CGFloat kFZZGuestListLineHeight() {return 40;}
 
-UIFont *italicFontWithFont(UIFont *font)
-{
-    UIFontDescriptor * fontD = [font.fontDescriptor
-                                fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
-    
-    return [UIFont fontWithDescriptor:fontD size:0];
-}
+CGFloat kFZZColumnWidth() {return 48;}
+
+CGFloat kFZZBodyLineHeight() {return 24;}
+
+//"add a comment" etc.
+CGFloat kFZZTopTextTopPadding() {return 24;}
+CGFloat kFZZMessageTopPadding() {return 16;}
+CGFloat kFZZCapsuleTopPadding() {return 12;}
+
+CGFloat kFZZInviteConfirmButtonDiameter() {return 32;}
+
+CGFloat kFZZTextInputBottomPadding() {return 8;}
+
+CGFloat kFZZCancelInviteFacebookFriendsButton() {return 9;}
+
+CGFloat kFZZPinPadding() {return 16;}
 
 void runOnMainQueueWithoutDeadlocking(void (^block)(void))
 {
@@ -119,13 +125,21 @@ UIImage *centeredCrop(UIImage *image){
     CGFloat imageWidth  = image.size.width;
     
     CGRect screenRect = [UIScreen mainScreen].bounds;
-    CGFloat screenHeight = screenRect.size.height * 2;
-    CGFloat screenWidth  = screenRect.size.width * 2;
+    CGFloat screenHeight = screenRect.size.height;
+    CGFloat screenWidth  = screenRect.size.width;
     
     screenRect.origin.y = (imageHeight/2) - (screenHeight/2);
     screenRect.origin.x = (imageWidth/2) - (screenWidth/2);
     
     return crop(image, screenRect);
+}
+
++(CGRect)getKeyboardBoundsFromNote:(NSNotification *)note{
+    CGRect _keyboardEndFrame;
+    [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue:&_keyboardEndFrame];
+    
+    // (x,y) is irrelevant for the use
+    return CGRectMake(0, 0, _keyboardEndFrame.size.width, _keyboardEndFrame.size.height);
 }
 
 @end

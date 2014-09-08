@@ -7,7 +7,6 @@
 //
 
 #import "FZZExpandedEventCell.h"
-#import "FZZInviteViewController.h"
 #import "FZZExpandedVerticalTableViewController.h"
 #import "FZZAppDelegate.h"
 #import "FZZMessage.h"
@@ -20,6 +19,7 @@
 
 @property (strong, nonatomic) UIButton *sendInviteButton;
 @property (strong, nonatomic) UIImageView *imageView;
+@property (strong, nonatomic) UIImage *image;
 
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
@@ -34,7 +34,6 @@
         // Initialization code
         [self setupExpandedEventCell];
         
-        //_ivc = [[FZZInviteViewController alloc] init];
         //[_vtvc updateTopView:[_ivc tableView]];
         
         CGRect topBounds = [UIScreen mainScreen].bounds;
@@ -95,14 +94,13 @@
     CGRect window = [UIScreen mainScreen].bounds;
     
     _imageView = [[UIImageView alloc] initWithFrame:window];
-    UIImage *image = [UIImage imageNamed:@"testImage"];
+    _image = [UIImage imageNamed:@"testImage"];
     
-    image = centeredCrop(image);
+    UIImage *image = centeredCrop(_image);
     
     [_imageView setImage:image];
     [self.contentView addSubview:_imageView];
 }
-
 
 - (void)hideCommitInvites{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;

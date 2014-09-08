@@ -90,11 +90,20 @@
     
     [_textField setEnabled:YES];
     [_textField setText:@""];
-    [_textField becomeFirstResponder];
     
     NSIndexPath *scrollTo = [NSIndexPath indexPathForRow:2 inSection:0];
     
-    [[self tableView] scrollToRowAtIndexPath:scrollTo atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         [[self tableView] scrollToRowAtIndexPath:scrollTo atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                     }
+                     completion:nil];
+    
+    [_textField becomeFirstResponder];
+    
+    [FZZContactSearchDelegate promptForAddressBook];
     
     FZZInviteSearchBarTableViewCell *cell = [self getSearchBarCell];
     
@@ -110,7 +119,13 @@
     
     NSIndexPath *scrollTo = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    [[self tableView] scrollToRowAtIndexPath:scrollTo atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         [[self tableView] scrollToRowAtIndexPath:scrollTo atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                     }
+                     completion:nil];
     
     FZZInviteSearchBarTableViewCell *cell = [self getSearchBarCell];
     
@@ -185,7 +200,7 @@
             
             CGFloat yInset = 20;
             
-            CGFloat cellHeight = screenFrame.size.height - [FZZInvitationViewsTableViewController searchBarHeight] - yInset;
+            CGFloat cellHeight = screenFrame.size.height - ([FZZInvitationViewsTableViewController searchBarHeight] + yInset);
             
             return cellHeight;
         }
@@ -257,6 +272,22 @@
 -(void)textFieldChange{
     NSLog(@"Searching for: <%@>", [_textField text]);
     [FZZContactSearchDelegate searchFieldTextChanged];
+}
+
+- (UIScrollView *)getActiveScrollView{
+    if (!_searchMode){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        FZZGuestListScreenTableViewCell *cell = (FZZGuestListScreenTableViewCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+        
+        return [cell scrollView];
+    } else {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+        
+        FZZContactListScreenTableViewCell *cell = (FZZContactListScreenTableViewCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+        
+        return [cell scrollView];
+    }
 }
 
 /*

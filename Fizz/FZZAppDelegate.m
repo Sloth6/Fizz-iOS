@@ -19,7 +19,7 @@
 
 #import "FZZLoginDelegate.h"
 
-#import "FZZInputPhoneViewController.h"
+#import "FZZInputPhoneTableViewController.h"
 
 #import "FZZMessage.h"
 
@@ -57,20 +57,19 @@
 //}
 
 - (void)setupNavigationController{
-    
-//    _esvc.automaticallyAdjustsScrollViewInsets = NO;
-    
     UINavigationController *navigationController = [[UINavigationController alloc]
                                 initWithRootViewController:_evc];
    
     [navigationController setNavigationBarHidden:YES];
     
-//    navigationController.automaticallyAdjustsScrollViewInsets = NO;
     [self.window setRootViewController:navigationController];
     [self.window setBackgroundColor:[UIColor clearColor]];
     
     [self.window addSubview:self.navigationBar];
-//    [self.window addSubview:_searchTextField];
+}
+
+- (void)failVerificationStep{
+    [_iptvc failVerificationStep];
 }
 
 - (void)loadDataFromCache{
@@ -139,7 +138,6 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     _hasLoadedDataFromCache = NO;
-    _hasLoggedIn = NO;
     
 //    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 //    [prefs removeObjectForKey:@"phoneNumber"];
@@ -169,25 +167,34 @@
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     NSNumber *registered = [pref objectForKey:@"didRegister"];
     
-    BOOL hasRegistered;
+    BOOL hasRegistered = NO;
+    _hasLoggedIn = NO;
     
     if (registered != nil){
         hasRegistered = [registered boolValue];
-    } else {
-        hasRegistered = NO;
+        
+        NSNumber *loggedIn = [pref objectForKey:@"didLogin"];
+        
+        if (registered != nil){
+            _hasLoggedIn = [loggedIn boolValue];
+        }
     }
     
     // Whenever a person opens the app, check for a cached session
-    if (hasRegistered) {
+    if (hasRegistered && _hasLoggedIn) {
         NSLog(@"\n\nActive Session Loaded\n\n");
         
-        [FZZSocketIODelegate openConnectionCheckingForInternet];
+//        [FZZSocketIODelegate openConnectionCheckingForInternet];
         [self setupNavigationController];
 
     } else { // Send to Login View Controller
          NSLog(@"\n\nSend To Login View Controller\n\n");
-         
-         [self promptForRegistration];
+       
+        if (hasRegistered){
+            [self promptForLogin];
+        } else {
+            [self promptForRegistration];
+        }
     }
     
     NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -299,7 +306,17 @@
 }
 
 - (void)promptForRegistration{
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FZZInputPhoneViewController alloc] initWithNibName:@"FZZInputPhoneViewController" bundle:nil]];
+    _iptvc = [[FZZInputPhoneTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_iptvc];
+    
+    navController.navigationBarHidden = YES;
+    
+    self.window.rootViewController = navController;
+}
+
+- (void)promptForLogin{
+    [self promptForRegistration];
 }
 
 -(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

@@ -48,12 +48,12 @@
 
 // placeholder position
 - (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 3 , 0 );
+    return CGRectInset( bounds , 0 , 0 );
 }
 
 // text position
 - (CGRect)editingRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 3 , 0 );
+    return CGRectInset( bounds , 0 , 0 );
 }
 
 - (void)drawPlaceholderInRect:(CGRect)rect {
@@ -95,7 +95,7 @@
                                   NSParagraphStyleAttributeName: textStyle,
                                   NSForegroundColorAttributeName: self.textColor};
     
-    [[self placeholder] drawInRect:rect withAttributes:attributes];
+    [[self text] drawInRect:rect withAttributes:attributes];
 }
 
 /*

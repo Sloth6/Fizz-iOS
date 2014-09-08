@@ -46,6 +46,10 @@
     return self;
 }
 
+-(UIScrollView *)scrollView{
+    return [_ctvc tableView];
+}
+
 - (void)updateMessages{
     [_ctvc updateMessages];
 }
@@ -96,8 +100,12 @@
 - (void)setupViewForm{
     _lastTextBoxTooBig = NO;
     
+    UIFont *inputFont = kFZZInputFont();
+    
+    float lineHeight = inputFont.lineHeight;
+    
     float width = [UIScreen mainScreen].bounds.size.width;
-    float height = 30 + 6;
+    float height = lineHeight + 6; // + 30
     float x = 0;
     float y = [UIScreen mainScreen].bounds.size.height - height;
     
@@ -107,8 +115,12 @@
     viewForm = mProtoTVC.view;
     chatBox  = mProtoTVC.textView;
     
-    [mProtoTVC.textView setBackgroundColor:[UIColor clearColor]];
-    [mProtoTVC.textView setOpaque:NO];
+    UITextView *textView = mProtoTVC.textView;
+    
+    [textView setBackgroundColor:[UIColor clearColor]];
+    [textView setOpaque:NO];
+    [textView setTextColor:kFZZWhiteTextColor()];
+    [textView setFont:kFZZInputFont()];
     
     _placeholderView = mProtoTVC.placeholderTV;
     [chatBox setBackgroundColor:[UIColor clearColor]];
@@ -116,10 +128,13 @@
     
     [_placeholderView setBackgroundColor:[UIColor clearColor]];
     [_placeholderView setOpaque:NO];
+    [_placeholderView setText:@"add a comment"];
+    [_placeholderView setTextColor:kFZZGrayTextColor()];
+    [_placeholderView setFont:kFZZInputFont()];
     
     [chatBox setDelegate:self];
     
-    [mProtoTVC setFont:kFZZInputFont()];
+    [mProtoTVC setFont:inputFont];
     
     //turn off scrolling and set the font details.
     [chatBox setReturnKeyType:UIReturnKeySend];
@@ -194,7 +209,9 @@
     // if the height of our new chatbox is
     // below 90 we can set the height
     
-    if (newSizeH >= 90){
+    newSizeH -= 11;
+    
+    if (newSizeH >= (font.lineHeight * 5)){
         
         text = @"i\n\n\n\ni";
         
@@ -229,12 +246,13 @@
         _lastTextBoxTooBig = NO;
     }
     
+    
     // chatbox
     CGRect chatBoxFrame = chatBox.frame;
     NSInteger chatBoxH = chatBoxFrame.size.height;
     NSInteger chatBoxW = chatBoxFrame.size.width;
     //NSLog(@"CHAT BOX SIZE : %d X %d", chatBoxW, chatBoxH);
-    chatBoxFrame.size.height = newSizeH + 12;
+    chatBoxFrame.size.height = newSizeH;// + 12;
     [chatBox setFrame:chatBoxFrame];
     
     // form view
@@ -312,7 +330,7 @@
     [appDelegate setNavigationScrollEnabled:NO];
     
     // get keyboard size and loction
-	CGRect keyboardBounds = [FZZChatScreenCell getKeyboardBoundsFromNote:note];
+	CGRect keyboardBounds = [FZZUtilities getKeyboardBoundsFromNote:note];
     
     _keyboardRect = keyboardBounds;
     
@@ -367,7 +385,7 @@
     // get keyboard size and location
 	CGRect keyboardBounds;
     
-    keyboardBounds = [FZZChatScreenCell getKeyboardBoundsFromNote:note];
+    keyboardBounds = [FZZUtilities getKeyboardBoundsFromNote:note];
     
 	// get the height since this is the main value that we need.
 	NSInteger kbSizeH = keyboardBounds.size.height;
@@ -428,18 +446,6 @@
 
 - (void)addIncomingMessage{
     [_ctvc addIncomingMessage];
-}
-
-+(CGRect) getKeyboardBoundsFromNote:(NSNotification *)note{
-    NSLog(@"<<5<<");
-    CGRect _keyboardEndFrame;
-    [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue:&_keyboardEndFrame];
-    
-    // (x,y) is irrelevant for the use
-    
-    NSLog(@">>5>>");
-    
-    return CGRectMake(0, 0, _keyboardEndFrame.size.width, _keyboardEndFrame.size.height);
 }
 
 - (void)awakeFromNib

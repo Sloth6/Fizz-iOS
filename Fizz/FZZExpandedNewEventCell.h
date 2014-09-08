@@ -23,7 +23,6 @@
  
  */
 
-@class FZZInviteViewController;
 @class FZZEvent;
 @class FZZTextViewWithPlaceholder;
 

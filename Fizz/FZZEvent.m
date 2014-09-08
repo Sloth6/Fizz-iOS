@@ -403,27 +403,6 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     return nil;
 }
 
-// You can always add a seat
-//- (void)addSeat{
-//    @synchronized(self){
-//        if (self.pendingNumSeats){
-//            [self restartTimer];
-//            
-//            self.haveSeatsChanged = YES;
-//            
-//            self.pendingNumSeats = [NSNumber numberWithInt:[self.pendingNumSeats integerValue] + 1];
-//        }
-//    }
-//}
-
-//-(void)updateNumberOfSeats:(NSNumber *)numSeats{
-//    @synchronized(self){
-//        _haveSeatsChanged = YES;
-//        self.numSeats = [numSeats copy];
-//        _pendingNumSeats = self.numSeats;
-//    }
-//}
-
 // Guests are Absolute because you can choose to leave an event at any time
 -(void)updateGuests:(NSArray *)guests{
     @synchronized(self){

@@ -15,6 +15,12 @@ static NSURLConnection *connection;
 
 @implementation FZZAjaxPostDelegate
 
++ (BOOL)isLoginURL:(NSURL *)url{
+    NSString *absoluteString = [url absoluteString];
+    
+    return [[self getLoginURL] isEqualToString:absoluteString];
+}
+
 + (BOOL)connection:(NSURLConnection *)connection didRecieveResponse:(NSURLResponse *)response{
     
     NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
@@ -22,23 +28,49 @@ static NSURLConnection *connection;
     
     NSLog(@"\n\n<<%@>>\n\n", resp);
     
-    if ([resp statusCode] == 200){
-        if (!didAjax){
-            didAjax = YES;
-            
-            return YES;
+    if ([FZZAjaxPostDelegate isLoginURL:[resp URL]]){
+        if ([resp statusCode] == 200){
+            // AJAX Login success
+            if (!didAjax){
+                didAjax = YES;
+                
+                [FZZAjaxPostDelegate finishVerificationStep];
+                
+                return YES;
+            }
+        } else {
+            // AJAX Login failed
+            [FZZAjaxPostDelegate failVerificationStep];
         }
     } else {
-        // AJAX failed
-        
-        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-        
-        // TODOAndrew Prompt server for new login token
-        
-        NSLog(@"FAILED LOGIN, FORCE LOGOUT");
+        if ([resp statusCode] == 200){
+            // Successful AJAX
+        } else {
+            // AJAX failed
+            NSLog(@"FAILED LOGIN, FORCE LOGOUT");
+        }
     }
     
     return NO;
+}
+
++ (void)finishVerificationStep{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    NSNumber *didLogin = [NSNumber numberWithBool:YES];
+    
+    [pref setObject:didLogin forKey:@"didLogin"];
+    [pref synchronize];
+    
+    [appDelegate setupNavigationController];
+}
+
++ (void)failVerificationStep{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate failVerificationStep];
 }
 
 + (BOOL)postRegistration{
@@ -106,16 +138,6 @@ static NSURLConnection *connection;
     [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[jsonData length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:jsonData];
     
-//    [FZZSocketIODelegate openConnectionCheckingForInternet];
-//    
-//    NSURLConnection *connection = [[NSURLConnection alloc]
-//                                   initWithRequest:request
-//                                   delegate:[FZZSocketIODelegate socketIODelegate]
-//                                   startImmediately:NO];
-    
-    /*[connection scheduleInRunLoop:[NSRunLoop mainRunLoop]
-     forMode:NSDefaultRunLoopMode];*/
-    
     NSHTTPURLResponse *response;
     NSError *error;
     
@@ -154,6 +176,10 @@ static NSURLConnection *connection;
                                               otherButtonTitles:nil];
     
     [alertView show];
+}
+
++ (NSString *)getLoginURL{
+    return [NSString stringWithFormat:@"http://%@:%d/login", kFZZSocketHost, kFZZSocketPort];
 }
 
 /*
@@ -214,7 +240,9 @@ static NSURLConnection *connection;
         
         NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
         
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/login", kFZZSocketHost, kFZZSocketPort]]];
+        NSString *loginURL = [self getLoginURL];
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:loginURL]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

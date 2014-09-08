@@ -472,9 +472,9 @@ static UITableView *tableView;
 }
 
 -(void)getContacts{
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    
-    _contacts = [pref objectForKey:@"contacts"];
+//    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+//    
+//    _contacts = [pref objectForKey:@"contacts"];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
@@ -529,7 +529,7 @@ static UITableView *tableView;
                 
                 //                NSLog(@"%@: (%@)", name, phoneNumber);
                 
-                if (phoneNumber != NULL && ![phoneNumber isEqualToString:@""]){
+                if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]){
                     NSMutableDictionary *contact = [[NSMutableDictionary alloc] init];
                     [contact setObject:name forKey:@"name"];
                     [contact setObject:phoneNumber forKey:@"pn"];
@@ -575,8 +575,8 @@ static UITableView *tableView;
         //            return [name1 compare:name2];
         //        }];
         
-        [pref setObject:_contacts forKey:@"contacts"];
-        [pref synchronize];
+//        [pref setObject:_contacts forKey:@"contacts"];
+//        [pref synchronize];
         
         appDelegate.gotAddressBook = YES;
         

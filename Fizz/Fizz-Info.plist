@@ -8,6 +8,7 @@
 		<string>FuturaStd-Bold.ttf</string>
 		<string>FuturaStd-BoldOblique.ttf</string>
 		<string>FuturaStd-Book.ttf</string>
+		<string>FuturaStd-Light.ttf</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

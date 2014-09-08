@@ -21,10 +21,14 @@
 #import "FZZEventsViewController.h"
 #import "FZZOverlayView.h"
 
+@class FZZInputPhoneTableViewController;
+
 @interface FZZAppDelegate : UIResponder <UIApplicationDelegate, SocketIODelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) FZZEventsViewController *evc;
+
+@property (strong, nonatomic) FZZInputPhoneTableViewController *iptvc;
 
 @property (strong, nonatomic) FZZOverlayView *navigationBar;
 //@property (strong, nonatomic) UITextField *searchTextField;
@@ -38,6 +42,8 @@
 
 + (BOOL)isRetinaDisplay;
 - (void)setupNavigationController;
+- (void)failVerificationStep;
+
 - (void)promptForLogin;
 - (void)loadDataFromCache;
 

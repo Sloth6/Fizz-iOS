@@ -55,6 +55,8 @@
      selector:@selector(phoneChange)
      name:UITextFieldTextDidChangeNotification
      object:_phoneNumberField];
+    
+    [_phoneNumberField setKeyboardType:UIKeyboardTypeNamePhonePad];
 }
 
 - (IBAction)savePhoneNumber:(id)sender{
@@ -78,11 +80,7 @@
     [pref setObject:lastName forKey:@"lastName"];
     [pref synchronize];
     
-    NSLog(@"get here 1");
-    
     [self finishPhoneSetup];
-
-    NSLog(@"get here 2");
 }
 
 - (BOOL)isValidUSPhoneNumber:(NSString *)phoneNumber{

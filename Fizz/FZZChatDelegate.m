@@ -27,7 +27,6 @@
 #import "FZZUser.h"
 #import "FZZEvent.h"
 #import "FZZEventsViewController.h"
-#import "FZZInviteViewController.h"
 
 #import "FZZEnterMessagePrototypeViewController.h"
 

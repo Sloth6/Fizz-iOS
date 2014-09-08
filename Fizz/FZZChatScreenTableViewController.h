@@ -11,7 +11,6 @@
 
 @class FZZEvent;
 @class FZZEventsViewController;
-@class FZZInviteViewController;
 @class FZZExpandedVerticalTableViewController;
 
 @interface FZZChatScreenTableViewController : FZZFadedEdgeTableViewController <UIGestureRecognizerDelegate>

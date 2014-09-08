@@ -13,10 +13,13 @@
 #import "FZZDescriptionScreenTableViewCell.h"
 #import "FZZInviteScreenCell.h"
 
+#import "FZZInvitationViewsTableViewController.h"
+
+#import "FZZUtilities.h"
+
 static NSMutableArray *instances;
 
 @interface FZZExpandedVerticalTableViewController ()
-
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
 @end
@@ -57,6 +60,24 @@ static NSMutableArray *instances;
     [instances removeObject:self];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    CGFloat maxOffset = [UIScreen mainScreen].bounds.size.height;
+    
+    CGFloat offset = abs(scrollView.contentOffset.y - maxOffset);
+    
+    CGFloat progress = offset/maxOffset;
+    
+    CGFloat maxAlpha = 0.5;
+    
+    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:progress * maxAlpha];
+    
+    CGFloat positiveOffset = scrollView.contentOffset.y;
+    CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
+    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;
+    
+    [[self tableView] setBackgroundColor:blackColor];
+}
+
 - (FZZChatScreenCell *)getChatScreenCell{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
@@ -64,10 +85,89 @@ static NSMutableArray *instances;
 }
 
 -(NSIndexPath *)getCurrentCellIndex{
-    CGFloat height = [self tableView].frame.size.height;
-    NSInteger page = ([self tableView].contentOffset.y + (0.5f * height)) / height;
+    NSInteger page = 0;
+    
+    CGFloat offset = [[self tableView] contentOffset].y;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    CGFloat height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
+    
+    while (offset > (height/2.0)){
+        indexPath = [NSIndexPath indexPathForRow:page inSection:0];
+        
+        height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
+        
+        offset -= height;
+        page++;
+    }
     
     return [NSIndexPath indexPathForItem:page inSection:0];
+}
+
+- (UIScrollView *)getActiveScrollView{
+    NSIndexPath *indexPath = [self getCurrentCellIndex];
+    
+    switch ([indexPath item]) {
+        case 0: // Chat Cell
+            {
+                FZZChatScreenCell *cell = (FZZChatScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+                
+                return [cell scrollView];
+            }
+            break;
+            
+        case 1: // Description/Title Cell
+            {
+                return nil;
+            }
+            break;
+            
+        case 2: // Invite List Cell
+            {
+                FZZInviteScreenCell *cell = (FZZInviteScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+                
+                FZZInvitationViewsTableViewController *ivtvc = [cell ivtvc];
+                
+                return [ivtvc getActiveScrollView];
+            }
+            break;
+            
+        default:
+            return nil;
+            break;
+    }
+}
+
+- (UITableViewCell *)getCurrentCell{
+    NSIndexPath *indexPath = [self getCurrentCellIndex];
+    
+    return [[self tableView] cellForRowAtIndexPath:indexPath];
+}
+
+- (BOOL)shouldActiveScreenScrollUp{
+    UIScrollView *scrollView = [self getActiveScrollView];
+    
+    CGFloat contentOffset = scrollView.contentOffset.y;
+    
+    if (contentOffset <= 0){
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)shouldActiveScreenScrollDown{
+    UIScrollView *scrollView = [self getActiveScrollView];
+    
+    CGFloat contentHeight = scrollView.contentSize.height;
+    CGFloat contentOffset = scrollView.contentOffset.y + scrollView.bounds.size.height;
+    
+    if (contentOffset >= contentHeight){
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (void)reloadChat{
