@@ -13,14 +13,20 @@
 #import "FZZDescriptionScreenTableViewCell.h"
 #import "FZZInviteScreenCell.h"
 
+#import "FZZGuestListScreenTableViewCell.h"
+#import "FZZContactListScreenTableViewCell.h"
+
 #import "FZZInvitationViewsTableViewController.h"
 
+#import "FZZPage.h"
 #import "FZZUtilities.h"
 
 static NSMutableArray *instances;
 
 @interface FZZExpandedVerticalTableViewController ()
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
+
+@property CGPoint lastOffset;
 
 @end
 
@@ -45,9 +51,13 @@ static NSMutableArray *instances;
         
         [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
         
-        [self.tableView registerClass:[FZZInviteScreenCell class] forCellReuseIdentifier:@"inviteCell"];
+        [self.tableView registerClass:[FZZGuestListScreenTableViewCell class] forCellReuseIdentifier:@"guestListCell"];
+        
+        [self.tableView registerClass:[FZZContactListScreenTableViewCell class] forCellReuseIdentifier:@"inviteCell"];
         
         [instances addObject:self];
+        
+        [self.tableView setDecelerationRate:UIScrollViewDecelerationRateFast];
         
         [self.tableView setBounces:NO];
         
@@ -69,7 +79,7 @@ static NSMutableArray *instances;
     
     CGFloat maxAlpha = 0.5;
     
-    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:progress * maxAlpha];
+    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha, maxAlpha)];
     
     CGFloat positiveOffset = scrollView.contentOffset.y;
     CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
@@ -78,94 +88,298 @@ static NSMutableArray *instances;
     [[self tableView] setBackgroundColor:blackColor];
 }
 
-- (FZZChatScreenCell *)getChatScreenCell{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    return (FZZChatScreenCell *)[self tableView:[self tableView] cellForRowAtIndexPath:indexPath];
+//-(UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
+//    UIView* child = nil;
+//    
+//    child = [self.tableView hitTest:point withEvent:event];
+//    
+//    if (child == self.tableView)
+//        return (UIView *)_calloutCell;
+//    return child;
+//}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    //_lastOffset is declared in the header file
+    //@property (nonatomic) CGPoint lastOffset;
+    _lastOffset = scrollView.contentOffset;
 }
 
--(NSIndexPath *)getCurrentCellIndex{
-    NSInteger page = 0;
+- (FZZPage *)getCurrentPage{
+    NSInteger numberOfRows = [[self tableView] numberOfRowsInSection:0];
     
-    CGFloat offset = [[self tableView] contentOffset].y;
+    CGPoint offset = _lastOffset;
+    CGFloat y = 0;
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
     CGFloat height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
     
-    while (offset > (height/2.0)){
-        indexPath = [NSIndexPath indexPathForRow:page inSection:0];
+    int pageNum = 0;
+    
+    for (int i = 0; (offset.y >= y + (height/2)) && (i < numberOfRows); ++i){
+        NSLog(@"YYY[%d] %f >= %f + %f", pageNum, offset.y, y, (height/2));
+        indexPath = [NSIndexPath indexPathForRow:i inSection:0];
         
         height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
         
-        offset -= height;
-        page++;
+        y += height;
+        pageNum = i;
+    }
+    NSLog(@"XXX[%d] %f >= %f + %f", pageNum, offset.y, y, (height/2));
+    
+    FZZPage *page = [[FZZPage alloc] init];
+    [page setPageOffset:CGPointMake(0, y)];
+    [page setPageNumber:MIN(pageNum+1, numberOfRows-1)];
+    
+    return page;
+}
+
+- (FZZPage *)getNextPage:(FZZPage *)page{
+    NSInteger numberOfRows = [[self tableView] numberOfRowsInSection:0];
+    
+    if (page.pageNumber >= numberOfRows) return page;
+    
+    NSInteger nextPageNumber = page.pageNumber + 1;
+    
+    CGFloat y = page.pageOffset.y;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nextPageNumber inSection:0];
+    
+    CGFloat height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
+    
+    page = [[FZZPage alloc] init];
+    [page setPageOffset:CGPointMake(0, y + height)];
+    [page setPageNumber:nextPageNumber];
+    
+    return page;
+}
+
+- (FZZPage *)getPreviousPage:(FZZPage *)page{
+    
+    if (page.pageNumber <= 0) return page;
+    
+    NSInteger prevPageNumber = page.pageNumber - 1;
+    
+    CGFloat y = page.pageOffset.y;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:prevPageNumber inSection:0];
+    
+    CGFloat height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
+    
+    page = [[FZZPage alloc] init];
+    [page setPageOffset:CGPointMake(0, y - height)];
+    [page setPageNumber:prevPageNumber];
+    
+    return page;
+}
+
+- (BOOL)shouldScrollToNextPageWithVelocity:(CGPoint)velocity andOffset:(CGPoint)currentOffset{
+    // Velocity is sufficient
+    
+    NSLog(@"VELOCITY: ABS(%f) > %f", velocity.y, kFZZMinPageScrollVelocity);
+    
+    if (ABS(velocity.y) > kFZZMinPageScrollVelocity){
+        return YES;
     }
     
-    return [NSIndexPath indexPathForItem:page inSection:0];
-}
-
-- (UIScrollView *)getActiveScrollView{
-    NSIndexPath *indexPath = [self getCurrentCellIndex];
-    
-    switch ([indexPath item]) {
-        case 0: // Chat Cell
-            {
-                FZZChatScreenCell *cell = (FZZChatScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
-                
-                return [cell scrollView];
-            }
-            break;
-            
-        case 1: // Description/Title Cell
-            {
-                return nil;
-            }
-            break;
-            
-        case 2: // Invite List Cell
-            {
-                FZZInviteScreenCell *cell = (FZZInviteScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
-                
-                FZZInvitationViewsTableViewController *ivtvc = [cell ivtvc];
-                
-                return [ivtvc getActiveScrollView];
-            }
-            break;
-            
-        default:
-            return nil;
-            break;
-    }
-}
-
-- (UITableViewCell *)getCurrentCell{
-    NSIndexPath *indexPath = [self getCurrentCellIndex];
-    
-    return [[self tableView] cellForRowAtIndexPath:indexPath];
-}
-
-- (BOOL)shouldActiveScreenScrollUp{
-    UIScrollView *scrollView = [self getActiveScrollView];
-    
-    CGFloat contentOffset = scrollView.contentOffset.y;
-    
-    if (contentOffset <= 0){
+    // Offset is sufficient
+    if ([self isOffsetSufficient:currentOffset]){
         return YES;
     }
     
     return NO;
 }
 
-- (BOOL)shouldActiveScreenScrollDown{
-    UIScrollView *scrollView = [self getActiveScrollView];
+- (BOOL)isOffsetSufficient:(CGPoint)currentOffset{
+    FZZPage *page = [self getCurrentPage];
     
-    CGFloat contentHeight = scrollView.contentSize.height;
-    CGFloat contentOffset = scrollView.contentOffset.y + scrollView.bounds.size.height;
+    CGPoint pageOffset = [page pageOffset];
     
-    if (contentOffset >= contentHeight){
-        return YES;
+    if (currentOffset.y < _lastOffset.y){
+        FZZPage *prevPage = [self getPreviousPage:page];
+        
+        CGPoint nextPoint = [prevPage pageOffset];
+        
+        NSLog(@"UP OFFSET: ABS(%f - %f) >= ABS(%f - %f)", pageOffset.y, currentOffset.y, nextPoint.y, currentOffset.y);
+        
+        if (ABS(pageOffset.y - currentOffset.y) >= ABS(nextPoint.y - currentOffset.y)){
+            return YES;
+        }
+        
+        return NO;
+        
+    } else {
+        FZZPage *nextPage = [self getNextPage:page];
+        
+        CGPoint nextPoint = [nextPage pageOffset];
+        
+        NSLog(@"DOWN OFFSET: ABS(%f - %f) >= ABS(%f - %f)", pageOffset.y, currentOffset.y, nextPoint.y, currentOffset.y);
+        
+        if (ABS(pageOffset.y - currentOffset.y) >= ABS(nextPoint.y - currentOffset.y)){
+            return YES;
+        }
+        
+        return NO;
     }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    
+    CGPoint currentOffset = scrollView.contentOffset;
+    FZZPage *proposedPage;
+    FZZPage *currentPage = [self getCurrentPage];
+    
+    // Velocity is sufficient or offset is enough
+    if ([self shouldScrollToNextPageWithVelocity:velocity andOffset:currentOffset]){
+        
+        if (_lastOffset.y < currentOffset.y) {
+            // bottom to top
+            proposedPage = [self getNextPage:currentPage];
+        }
+        else if (_lastOffset.y > currentOffset.y){
+            // top to bottom
+            proposedPage = [self getPreviousPage:currentPage];
+        } else {
+            proposedPage = currentPage;
+        }
+    } else {
+        proposedPage = currentPage;
+    }
+    
+    NSInteger numberOfPages = [[self tableView] numberOfRowsInSection:0];
+    
+    // what follows is a fix for a weird case where the scroll 'jumps' into place with no animation
+    // from http://stackoverflow.com/questions/15233845/uicollectionview-does-not-always-animate-deceleration-when-overriding-scrollview
+    if ([currentPage pageNumber] == [proposedPage pageNumber]) {
+        if((currentPage.pageNumber == 0 && velocity.y > 0) ||
+           (currentPage.pageNumber == (numberOfPages - 1) && velocity.y < 0) ||
+           (currentPage.pageNumber > 0 && currentPage.pageNumber < (numberOfPages - 1) && fabs(velocity.y) > 0)
+           ) {
+            NSLog(@"SMOOTHED!");
+            // this forces the scrolling animation to stop in its current place
+            [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
+            [UIView animateWithDuration:0.3
+                                  delay:0.0
+                                options:UIViewAnimationOptionCurveEaseOut
+                             animations:^{
+                                 [self.tableView setContentOffset:currentPage.pageOffset];
+                             }
+                             completion:NULL];
+        }
+    }
+    
+    NSLog(@"current page: %d ||prop page: %d", [currentPage pageNumber], [proposedPage pageNumber]);
+    
+    targetContentOffset->y = proposedPage.pageOffset.y;
+    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationDelay:0.0f];
+    
+//    targetContentOffset->y = newOffset.y;
+//    [UIView commitAnimations];
+}
+
+//- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+//    
+//    if (scrollView == self.tableView) {
+//        CGFloat y = targetContentOffset->y;
+//        y = roundf(y / 30.0f) * 30.0f;
+//        targetContentOffset->y = y;
+//    } 
+//}
+
+- (FZZChatScreenCell *)getChatScreenCell{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    return (FZZChatScreenCell *)[self tableView:[self tableView] cellForRowAtIndexPath:indexPath];
+}
+
+//-(NSIndexPath *)getCurrentCellIndex{
+//    NSInteger page = 0;
+//    
+//    CGFloat offset = [[self tableView] contentOffset].y;
+//    
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//    
+//    CGFloat height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
+//    
+//    while (offset > (height/2.0)){
+//        indexPath = [NSIndexPath indexPathForRow:page inSection:0];
+//        
+//        height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
+//        
+//        offset -= height;
+//        page++;
+//    }
+//    
+//    return [NSIndexPath indexPathForItem:page inSection:0];
+//}
+
+//- (UIScrollView *)getActiveScrollView{
+//    NSIndexPath *indexPath = [self getCurrentCellIndex];
+//    
+//    switch ([indexPath item]) {
+//        case 0: // Chat Cell
+//            {
+//                FZZChatScreenCell *cell = (FZZChatScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+//                
+//                return [cell scrollView];
+//            }
+//            break;
+//            
+//        case 1: // Description/Title Cell
+//            {
+//                return nil;
+//            }
+//            break;
+//            
+//        case 2: // Invite List Cell
+//            {
+//                NSLog(@"FUCKED THAT SHIT UP");
+//                exit(1);
+//                return nil;
+////                FZZInviteScreenCell *cell = (FZZInviteScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+////                
+////                FZZInvitationViewsTableViewController *ivtvc = [cell ivtvc];
+////                
+////                return [ivtvc getActiveScrollView];
+//            }
+//            break;
+//            
+//        default:
+//            return nil;
+//            break;
+//    }
+//}
+
+//- (UITableViewCell *)getCurrentCell{
+//    NSIndexPath *indexPath = [self getCurrentCellIndex];
+//    
+//    return [[self tableView] cellForRowAtIndexPath:indexPath];
+//}
+
+- (BOOL)shouldActiveScreenScrollUp{
+//    UIScrollView *scrollView = [self getActiveScrollView];
+    
+//    CGFloat contentOffset = scrollView.contentOffset.y;
+//    
+//    if (contentOffset <= 0){
+//        return YES;
+//    }
+    
+    return NO;
+}
+
+- (BOOL)shouldActiveScreenScrollDown{
+//    UIScrollView *scrollView = [self getActiveScrollView];
+//    
+//    CGFloat contentHeight = scrollView.contentSize.height;
+//    CGFloat contentOffset = scrollView.contentOffset.y + scrollView.bounds.size.height;
+//    
+//    if (contentOffset >= contentHeight){
+//        return YES;
+//    }
     
     return NO;
 }
@@ -181,10 +395,12 @@ static NSMutableArray *instances;
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
     
-    NSIndexPath *scrollPosition = [self getCurrentCellIndex];
+//    NSIndexPath *scrollPosition = [self getCurrentCellIndex];
+    FZZPage *page = [self getCurrentPage];
     
-    NSLog(@"Page number: %@", scrollPosition);
-    [event setScrollPosition:scrollPosition];
+    NSLog(@"Page number: %d", page.pageNumber);
+    NSIndexPath *pageIndex = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
+    [event setScrollPosition:pageIndex];
 }
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
@@ -261,8 +477,10 @@ static NSMutableArray *instances;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 3;
+    return 4;
 }
+
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -293,12 +511,24 @@ static NSMutableArray *instances;
             
         case 2: // Invite List Cell
         {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"guestListCell" forIndexPath:indexPath];
+            [(FZZGuestListScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
+            
+            [cell setBackgroundColor:[UIColor clearColor]];
+            [cell setOpaque:NO];
+            [(FZZGuestListScreenTableViewCell *)cell updateVisuals];
+        }
+            break;
+            
+        case 3:
+        {
             cell = [tableView dequeueReusableCellWithIdentifier:@"inviteCell" forIndexPath:indexPath];
-            [(FZZInviteScreenCell *)cell setEventIndexPath:_eventIndexPath];
+            [(FZZContactListScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
             
             [cell setBackgroundColor:[UIColor clearColor]];
             [cell setOpaque:NO];
         }
+            break;
             
         default:
         {
@@ -336,6 +566,13 @@ static NSMutableArray *instances;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 3){
+        NSInteger searchBarHeight = [FZZGuestListScreenTableViewCell searchBarHeight];
+        NSInteger cellOffset = [FZZContactListScreenTableViewCell cellOffset];
+        
+        return [UIScreen mainScreen].bounds.size.height - (searchBarHeight + cellOffset);
+    }
+    
     return [UIScreen mainScreen].bounds.size.height;
 }
 

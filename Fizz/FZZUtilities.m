@@ -20,39 +20,48 @@
 
 UIFont *kFZZHeadingsFont(){
     return [UIFont fontWithName:@"Futura-MediumItalic" size:68];
+//    return [UIFont fontWithName:@"Futura-MediumItalic" size:68];
 }
 
 UIFont *kFZZPinInputFont(){
-    return [UIFont fontWithName:@"FuturaStd-Light" size:68];
+    return [UIFont fontWithName:@"Futura-Medium" size:68];
+//    return [UIFont fontWithName:@"FuturaStd-Light" size:68];
 }
 
 UIFont *kFZZBodyFont(){
     return [UIFont fontWithName:@"Futura-Medium" size:18];
+//    return [UIFont fontWithName:@"Futura-Medium" size:18];
 }
 
 // Guest List
 UIFont *kFZZSmallFont(){
     return [UIFont fontWithName:@"Futura-Medium" size:14];
+//    return [UIFont fontWithName:@"Futura-Medium" size:14];
 }
 
 UIFont *kFZZLabelsFont(){
-    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
+    return [UIFont fontWithName:@"Futura-Medium" size:10*2];
+//    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
 }
 
 UIFont *kFZZHostNameFont(){
-    return [UIFont fontWithName:@"FuturaStd-BoldOblique" size:10];
+    return [UIFont fontWithName:@"Futura-MediumItalic" size:10];
+//    return [UIFont fontWithName:@"FuturaStd-BoldOblique" size:10];
 }
 
 UIFont *kFZZHostBodyFont(){
     return [UIFont fontWithName:@"Futura-MediumItalic" size:18];
+//    return [UIFont fontWithName:@"Futura-MediumItalic" size:18];
 }
 
 UIFont *kFZZCapsulesFont(){
-    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
+    return [UIFont fontWithName:@"Futura-Medium" size:10*2];
+//    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
 }
 
 UIFont *kFZZInputFont(){
     return [UIFont fontWithName:@"Futura-MediumItalic" size:10*2];
+//    eturn [UIFont fontWithName:@"Futura-MediumItalic" size:10*2];
 }
 
 UIColor *kFZZWhiteTextColor(){

@@ -94,7 +94,7 @@ static CGFloat kBottomBorder = 6;
 - (void)setupTableView{
     _ctvc = [[FZZContactsTableViewController alloc] init];
     
-    [[_ctvc tableView] setBackgroundColor:[UIColor greenColor]];
+    [[_ctvc tableView] setBackgroundColor:[UIColor redColor]];
     
     CGRect frame = [UIScreen mainScreen].bounds;
     
@@ -123,6 +123,10 @@ static CGFloat kBottomBorder = 6;
     //    [[_tvc view] setBackgroundColor:[UIColor blueColor]];
     
     [self addSubview:[_ctvc tableView]];
+}
+
++(CGFloat)cellOffset{
+    return 12;
 }
 
 @end

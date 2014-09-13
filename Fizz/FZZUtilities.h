@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 static float kFZZTimerDelay = 1.0;
+static float kFZZMinPageScrollVelocity = 0.5;
 
 @interface FZZUtilities : NSObject
 

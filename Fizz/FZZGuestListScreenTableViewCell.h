@@ -14,4 +14,8 @@
 
 -(UIScrollView *)scrollView;
 
++ (CGFloat)searchBarHeight;
+
+- (void)updateVisuals;
+
 @end

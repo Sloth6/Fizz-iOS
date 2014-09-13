@@ -13,7 +13,7 @@
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
 - (void)searchBarTextDidChangeTo:(NSString *)text;
 
-+ (CGFloat)searchBarHeight;
+//+ (CGFloat)searchBarHeight;
 
 - (UIScrollView *)getActiveScrollView;
 

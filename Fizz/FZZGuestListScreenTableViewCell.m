@@ -12,7 +12,11 @@
 
 #import "FZZInvitationViewsTableViewController.h"
 
+#import "FZZInviteSearchBarView.h"
+
 @interface FZZGuestListScreenTableViewCell ()
+
+@property (strong, nonatomic) FZZInviteSearchBarView *searchBar;
 
 //@property UIButton *searchForFriendButton;
 @property FZZGuestListScreenTableViewController *gltvc;
@@ -29,6 +33,7 @@
         // Initialization code
 //        [self setupSearchForFriendButton];
         [self setupTableView];
+        [self setupSearchBar];
         
         [self setBackgroundColor:[UIColor clearColor]];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -82,45 +87,76 @@
 //    [self addSubview:_searchForFriendButton];
 //}
 
++ (CGFloat)searchBarHeight{
+    return 35;
+}
+
 - (void)setupTableView{
     _gltvc = [[FZZGuestListScreenTableViewController alloc] init];
     
     [[_gltvc tableView] setBackgroundColor:[UIColor purpleColor]];
     
-    CGRect frame = [UIScreen mainScreen].bounds;
+    [self addSubview:[_gltvc tableView]];
+}
+
+- (void)updateTableView{
+    CGRect frame = self.bounds;
     
     CGFloat leftBorder = 40;
     CGFloat rightBorder = 6;
     CGFloat topBorder = 6;
     CGFloat bottomBorder = 6;
     
-    // Account for _searchForFriendsButton
-//    if (_searchForFriendButton){
-//        bottomBorder += _searchForFriendButton.frame.size.height;
-//    }
-    
-    bottomBorder += [FZZInvitationViewsTableViewController searchBarHeight];
+    bottomBorder += [FZZGuestListScreenTableViewCell searchBarHeight];
     
     frame.origin.x += leftBorder;
     frame.origin.y += topBorder;
     
-    NSLog(@"top: %f bottom: %f", topBorder, bottomBorder);
-    
-    // TODOAndrew WTF IS THIS, HOW IS A FRAME HEIGHT 5 WORKING
     frame.size.height -= (topBorder + bottomBorder);
     frame.size.width  -= (leftBorder + rightBorder);
     
-    NSLog(@"height: %f", frame.size.height);
-    
     [[_gltvc tableView] setFrame:frame];
     [_gltvc updateMask];
-    
-    //    [[_tvc view] setBackgroundColor:[UIColor blueColor]];
-    
-    [self addSubview:[_gltvc tableView]];
 }
 
--(UIScrollView *)scrollView{
+- (void)setupSearchBar{
+    CGFloat bottomBuffer = 0;
+    
+    CGFloat width = [self frame].size.width;
+    CGFloat height = [FZZGuestListScreenTableViewCell searchBarHeight];
+    CGFloat x = 0;
+    CGFloat y = [self frame].size.height;// - (height + bottomBuffer);
+    
+    NSLog(@"<<<%f", y);
+    
+    CGRect frame = CGRectMake(x, y, width, height);
+    
+    _searchBar = [[FZZInviteSearchBarView alloc] initWithFrame:frame];
+    
+    // Add listeners etc
+    
+    [self addSubview:_searchBar];
+}
+
+- (void)updateVisuals{
+    [self updateSearchBar];
+    [self updateTableView];
+}
+
+- (void)updateSearchBar{
+    CGFloat bottomBuffer = 0;
+    
+    CGFloat width = [self bounds].size.width;
+    CGFloat height = [FZZGuestListScreenTableViewCell searchBarHeight];
+    CGFloat x = 0;
+    CGFloat y = [self bounds].size.height - (height + bottomBuffer);
+    
+    CGRect frame = CGRectMake(x, y, width, height);
+    
+    [_searchBar setFrame:frame];
+}
+
+- (UIScrollView *)scrollView{
     return [_gltvc tableView];
 }
 

@@ -1,39 +1,37 @@
 //
-//  FZZInviteSearchBarTableViewCell.m
+//  FZZInviteSearchBarView.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 8/18/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZInviteSearchBarTableViewCell.h"
+#import "FZZInviteSearchBarView.h"
 #import "FZZCustomPlaceholderTextField.h"
 #import "FZZUtilities.h"
-#import "FZZInvitationViewsTableViewController.h"
 
-@interface FZZInviteSearchBarTableViewCell ()
+@interface FZZInviteSearchBarView ()
 
 @property (nonatomic) BOOL shouldDrawLine;
 
 @property (strong, nonatomic) FZZCustomPlaceholderTextField *textField;
-@property (strong, nonatomic) FZZInvitationViewsTableViewController *ivtvc;
 
 @end
 
-@implementation FZZInviteSearchBarTableViewCell
+@implementation FZZInviteSearchBarView
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
+- (id)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    
+    if (self){
         // Initialization code
         [self setupSearchBar];
         
         [self setBackgroundColor:[UIColor clearColor]];
-        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         _shouldDrawLine = NO;
     }
+    
     return self;
 }
 
@@ -46,7 +44,8 @@
 
 - (void)setupSearchBar{
     [_textField removeFromSuperview];
-    _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:self.frame];
+    
+    _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:self.bounds];
     
     UIFont *font = kFZZInputFont();
     
@@ -81,24 +80,17 @@
     // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (void)drawLine{
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGFloat cellWidth = self.frame.size.width;
+    CGFloat cellWidth = self.bounds.size.width;
     
     CGFloat xInset = 4;
     
     CGFloat x1 = xInset;
     CGFloat x2 = cellWidth - xInset;
     
-    CGFloat y = self.frame.size.height;
+    CGFloat y = self.bounds.size.height;
     
     UIColor *grayColor = kFZZGrayTextColor();
     

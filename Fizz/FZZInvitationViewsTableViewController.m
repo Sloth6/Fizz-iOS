@@ -9,7 +9,6 @@
 #import "FZZInvitationViewsTableViewController.h"
 
 #import "FZZGuestListScreenTableViewCell.h"
-#import "FZZInviteSearchBarTableViewCell.h"
 #import "FZZContactListScreenTableViewCell.h"
 
 #import "FZZAppDelegate.h"
@@ -33,7 +32,7 @@
         // Custom initialization
         [[self tableView] registerClass:[FZZGuestListScreenTableViewCell class] forCellReuseIdentifier:@"guestListCell"];
         
-        [[self tableView] registerClass:[FZZInviteSearchBarTableViewCell class] forCellReuseIdentifier:@"searchBarCell"];
+//        [[self tableView] registerClass:[FZZInviteSearchBarTableViewCell class] forCellReuseIdentifier:@"searchBarCell"];
         
         [[self tableView] registerClass:[FZZContactListScreenTableViewCell class] forCellReuseIdentifier:@"contactListCell"];
         
@@ -48,7 +47,7 @@
     
     [[self tableView] setScrollEnabled:NO];
 }
-
+/*
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -288,7 +287,7 @@
         
         return [cell scrollView];
     }
-}
+}*/
 
 /*
 // Override to support conditional editing of the table view.

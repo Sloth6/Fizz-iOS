@@ -1,5 +1,5 @@
 //
-//  FZZInviteSearchBarTableViewCell.h
+//  FZZInviteSearchBarView.h
 //  Fizz
 //
 //  Created by Andrew Sweet on 8/18/14.
@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-@class FZZInvitationViewsTableViewController;
 
-@interface FZZInviteSearchBarTableViewCell : UITableViewCell
+@interface FZZInviteSearchBarView : UIView
 
 -(UITextField *)textField;
 -(void)setShouldDrawLine:(BOOL)shouldDrawLine;

@@ -116,7 +116,7 @@
 - (void)setupTableview{
     _vtvc = [[FZZExpandedVerticalTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    [[_vtvc tableView] setPagingEnabled:YES];
+//    [[_vtvc tableView] setPagingEnabled:YES];
     
     [_vtvc.tableView setFrame:self.bounds];
     [_vtvc.tableView setBackgroundColor:[UIColor clearColor]];

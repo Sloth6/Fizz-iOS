@@ -14,4 +14,6 @@
 
 -(UIScrollView *)scrollView;
 
++(CGFloat)cellOffset;
+
 @end

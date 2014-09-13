@@ -21,10 +21,6 @@
 		49069B8018661555003D003A /* SBJson4Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B7718661555003D003A /* SBJson4Writer.m */; };
 		49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B7918661555003D003A /* SBJson4StreamParserState.m */; };
 		49069B8218661555003D003A /* SBJson4StreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B7A18661555003D003A /* SBJson4StreamTokeniser.m */; };
-		4919577E19AAD0D100DA9D26 /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 4919577D19AACE6300DA9D26 /* Futura.ttc */; };
-		4919577F19AAD0D100DA9D26 /* FuturaStd-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4919577A19AACE4800DA9D26 /* FuturaStd-Book.ttf */; };
-		4919578019AAD0D100DA9D26 /* FuturaStd-BoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4919577B19AACE4800DA9D26 /* FuturaStd-BoldOblique.ttf */; };
-		4919578119AAD0D100DA9D26 /* FuturaStd-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4919577C19AACE4800DA9D26 /* FuturaStd-Bold.ttf */; };
 		4921FD3C1943C8400086266E /* FZZBounceTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4921FD3B1943C8400086266E /* FZZBounceTableView.m */; };
 		4922702118CA1CA600816AD4 /* FZZEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4922702018CA1CA600816AD4 /* FZZEventsViewController.m */; };
 		4925ED80197DAF1D0024247C /* FZZLocalCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4925ED7F197DAF1D0024247C /* FZZLocalCache.m */; };
@@ -67,7 +63,6 @@
 		496C791719B15DA10052C3C4 /* FZZPinTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 496C791619B15DA10052C3C4 /* FZZPinTextField.m */; };
 		496C791A19B15FE70052C3C4 /* FZZPinNumberLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 496C791919B15FE70052C3C4 /* FZZPinNumberLabel.m */; };
 		496C791E19B2297F0052C3C4 /* FZZPinDotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 496C791D19B2297F0052C3C4 /* FZZPinDotView.m */; };
-		496D6CCD19B2309400D78297 /* FuturaStd-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 496D6CCC19B22D1200D78297 /* FuturaStd-Light.ttf */; };
 		497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */; };
 		497F349518E07F1200B70FD4 /* FZZInviteGuestButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349418E07F1200B70FD4 /* FZZInviteGuestButton.m */; };
 		4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */; };
@@ -91,11 +86,12 @@
 		49C78994199D9D2B004EA886 /* FZZFadedEdgeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C78993199D9D2B004EA886 /* FZZFadedEdgeTableViewController.m */; };
 		49C7899719A2461B004EA886 /* FZZGuestListScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C7899619A2461B004EA886 /* FZZGuestListScreenTableViewCell.m */; };
 		49C7899A19A24690004EA886 /* FZZInvitationViewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C7899919A24690004EA886 /* FZZInvitationViewsTableViewController.m */; };
-		49C7899E19A24966004EA886 /* FZZInviteSearchBarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C7899D19A24966004EA886 /* FZZInviteSearchBarTableViewCell.m */; };
+		49C7899E19A24966004EA886 /* FZZInviteSearchBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C7899D19A24966004EA886 /* FZZInviteSearchBarView.m */; };
 		49C789A119A24AD5004EA886 /* FZZCustomPlaceholderTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C789A019A24AD5004EA886 /* FZZCustomPlaceholderTextField.m */; };
 		49C789A419A2849B004EA886 /* FZZContactSearchDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C789A319A2849B004EA886 /* FZZContactSearchDelegate.m */; };
 		49C8B1551889F08600400832 /* FZZEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C8B1541889F08600400832 /* FZZEventCell.m */; };
 		49CD064819BD2EFB004E0C71 /* FZZScrollOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CD064719BD2EFB004E0C71 /* FZZScrollOverride.m */; };
+		49CD064B19BF4D26004E0C71 /* FZZPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CD064A19BF4D26004E0C71 /* FZZPage.m */; };
 		49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C99F186042C2002BB1F0 /* Foundation.framework */; };
 		49D5C9A2186042C2002BB1F0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */; };
 		49D5C9A4186042C2002BB1F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A3186042C2002BB1F0 /* UIKit.framework */; };
@@ -179,10 +175,6 @@
 		49069B7918661555003D003A /* SBJson4StreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamParserState.m; sourceTree = "<group>"; };
 		49069B7A18661555003D003A /* SBJson4StreamTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamTokeniser.m; sourceTree = "<group>"; };
 		49069B7B18661555003D003A /* SBJson4StreamTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamTokeniser.h; sourceTree = "<group>"; };
-		4919577A19AACE4800DA9D26 /* FuturaStd-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaStd-Book.ttf"; sourceTree = "<group>"; };
-		4919577B19AACE4800DA9D26 /* FuturaStd-BoldOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaStd-BoldOblique.ttf"; sourceTree = "<group>"; };
-		4919577C19AACE4800DA9D26 /* FuturaStd-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaStd-Bold.ttf"; sourceTree = "<group>"; };
-		4919577D19AACE6300DA9D26 /* Futura.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Futura.ttc; sourceTree = "<group>"; };
 		4919DDD9195E86450043A669 /* IAThreadSafeCoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IAThreadSafeCoreData.framework; path = "IAThreadSafeCoreData/build/Debug-iphoneos/IAThreadSafeCoreData.framework"; sourceTree = "<group>"; };
 		4921FD3A1943C8400086266E /* FZZBounceTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZBounceTableView.h; sourceTree = "<group>"; };
 		4921FD3B1943C8400086266E /* FZZBounceTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZBounceTableView.m; sourceTree = "<group>"; };
@@ -262,7 +254,6 @@
 		496C791919B15FE70052C3C4 /* FZZPinNumberLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPinNumberLabel.m; sourceTree = "<group>"; };
 		496C791C19B2297F0052C3C4 /* FZZPinDotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZPinDotView.h; sourceTree = "<group>"; };
 		496C791D19B2297F0052C3C4 /* FZZPinDotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPinDotView.m; sourceTree = "<group>"; };
-		496D6CCC19B22D1200D78297 /* FuturaStd-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaStd-Light.ttf"; sourceTree = "<group>"; };
 		497F348F18DCB75D00B70FD4 /* FZZChatDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZChatDelegate.h; sourceTree = "<group>"; };
 		497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZChatDelegate.m; sourceTree = "<group>"; };
 		497F349318E07F1200B70FD4 /* FZZInviteGuestButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteGuestButton.h; sourceTree = "<group>"; };
@@ -306,8 +297,8 @@
 		49C7899619A2461B004EA886 /* FZZGuestListScreenTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZGuestListScreenTableViewCell.m; sourceTree = "<group>"; };
 		49C7899819A24690004EA886 /* FZZInvitationViewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInvitationViewsTableViewController.h; sourceTree = "<group>"; };
 		49C7899919A24690004EA886 /* FZZInvitationViewsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInvitationViewsTableViewController.m; sourceTree = "<group>"; };
-		49C7899C19A24966004EA886 /* FZZInviteSearchBarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteSearchBarTableViewCell.h; sourceTree = "<group>"; };
-		49C7899D19A24966004EA886 /* FZZInviteSearchBarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteSearchBarTableViewCell.m; sourceTree = "<group>"; };
+		49C7899C19A24966004EA886 /* FZZInviteSearchBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteSearchBarView.h; sourceTree = "<group>"; };
+		49C7899D19A24966004EA886 /* FZZInviteSearchBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteSearchBarView.m; sourceTree = "<group>"; };
 		49C7899F19A24AD5004EA886 /* FZZCustomPlaceholderTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCustomPlaceholderTextField.h; sourceTree = "<group>"; };
 		49C789A019A24AD5004EA886 /* FZZCustomPlaceholderTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCustomPlaceholderTextField.m; sourceTree = "<group>"; };
 		49C789A219A2849B004EA886 /* FZZContactSearchDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZContactSearchDelegate.h; sourceTree = "<group>"; };
@@ -316,6 +307,8 @@
 		49C8B1541889F08600400832 /* FZZEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEventCell.m; sourceTree = "<group>"; };
 		49CD064619BD2EFB004E0C71 /* FZZScrollOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZScrollOverride.h; sourceTree = "<group>"; };
 		49CD064719BD2EFB004E0C71 /* FZZScrollOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZScrollOverride.m; sourceTree = "<group>"; };
+		49CD064919BF4D26004E0C71 /* FZZPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZPage.h; sourceTree = "<group>"; };
+		49CD064A19BF4D26004E0C71 /* FZZPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPage.m; sourceTree = "<group>"; };
 		49D5C99C186042C2002BB1F0 /* Fizz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fizz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D5C99F186042C2002BB1F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -448,18 +441,6 @@
 				4925ED82198439B40024247C /* FZZLoginDelegate.m */,
 			);
 			name = Login;
-			sourceTree = "<group>";
-		};
-		4919577619AABBB900DA9D26 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				4919577D19AACE6300DA9D26 /* Futura.ttc */,
-				4919577A19AACE4800DA9D26 /* FuturaStd-Book.ttf */,
-				4919577B19AACE4800DA9D26 /* FuturaStd-BoldOblique.ttf */,
-				4919577C19AACE4800DA9D26 /* FuturaStd-Bold.ttf */,
-				496D6CCC19B22D1200D78297 /* FuturaStd-Light.ttf */,
-			);
-			name = Fonts;
 			sourceTree = "<group>";
 		};
 		493B074119897C0000EC61E4 /* ChatViewOLD */ = {
@@ -611,6 +592,8 @@
 				492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */,
 				49958A5E1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.h */,
 				49958A5F1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m */,
+				49CD064919BF4D26004E0C71 /* FZZPage.h */,
+				49CD064A19BF4D26004E0C71 /* FZZPage.m */,
 				493B074119897C0000EC61E4 /* ChatViewOLD */,
 				4954FB1B18D4F0900083D07F /* InviteViewOLD */,
 			);
@@ -680,8 +663,8 @@
 		49C7899B19A24945004EA886 /* Invite Search Bar */ = {
 			isa = PBXGroup;
 			children = (
-				49C7899C19A24966004EA886 /* FZZInviteSearchBarTableViewCell.h */,
-				49C7899D19A24966004EA886 /* FZZInviteSearchBarTableViewCell.m */,
+				49C7899C19A24966004EA886 /* FZZInviteSearchBarView.h */,
+				49C7899D19A24966004EA886 /* FZZInviteSearchBarView.m */,
 			);
 			name = "Invite Search Bar";
 			sourceTree = "<group>";
@@ -765,7 +748,6 @@
 		49D5C9A6186042C2002BB1F0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4919577619AABBB900DA9D26 /* Fonts */,
 				49D5C9A7186042C2002BB1F0 /* Fizz-Info.plist */,
 				49D5C9A8186042C2002BB1F0 /* InfoPlist.strings */,
 				49D5C9AB186042C2002BB1F0 /* main.m */,
@@ -1003,12 +985,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4919577E19AAD0D100DA9D26 /* Futura.ttc in Resources */,
-				4919577F19AAD0D100DA9D26 /* FuturaStd-Book.ttf in Resources */,
 				496C790519AE55870052C3C4 /* FZZInputPhoneTableViewCell.xib in Resources */,
-				4919578019AAD0D100DA9D26 /* FuturaStd-BoldOblique.ttf in Resources */,
-				4919578119AAD0D100DA9D26 /* FuturaStd-Bold.ttf in Resources */,
-				496D6CCD19B2309400D78297 /* FuturaStd-Light.ttf in Resources */,
 				4954FB1D18D4F0A30083D07F /* FZZInviteCell.xib in Resources */,
 				49D5E6D318616A56002BB1F0 /* datakit.js in Resources */,
 				49D5E6D518616A56002BB1F0 /* run.js in Resources */,
@@ -1082,7 +1059,7 @@
 				4954FB0818D3AB800083D07F /* PhoneNumberFormatter.m in Sources */,
 				49EEEA9718D972FB00BDA605 /* FZZTextViewWithPlaceholder.m in Sources */,
 				49958A601932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m in Sources */,
-				49C7899E19A24966004EA886 /* FZZInviteSearchBarTableViewCell.m in Sources */,
+				49C7899E19A24966004EA886 /* FZZInviteSearchBarView.m in Sources */,
 				49B562F91993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m in Sources */,
 				49C8B1551889F08600400832 /* FZZEventCell.m in Sources */,
 				493B075819898FC500EC61E4 /* FZZGuestListScreenTableViewController.m in Sources */,
@@ -1122,6 +1099,7 @@
 				493B074B19898F0600EC61E4 /* FZZChatScreenCell.m in Sources */,
 				49069B8018661555003D003A /* SBJson4Writer.m in Sources */,
 				496C790E19B0E6400052C3C4 /* FZZUnderlinedTextField.m in Sources */,
+				49CD064B19BF4D26004E0C71 /* FZZPage.m in Sources */,
 				49069B7D18661555003D003A /* SBJson4StreamWriter.m in Sources */,
 				49EEEA9118D932F000BDA605 /* FZZBackspaceResignTextField.m in Sources */,
 				49EEEA8E18D8D37300BDA605 /* FZZPhoneInputCell.m in Sources */,
