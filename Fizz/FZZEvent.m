@@ -49,16 +49,12 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         NSInteger numEvents = [sortedEvents count];
         NSInteger itemNum = (numEvents - 1) - indexPath.item;
         
-        NSLog(@"events[%d]: %@", itemNum, sortedEvents);
-        
         if (itemNum < 0){
             NSLog(@"SHOULDN'T TRY TO ACCESS NEGATIVE INDEX EVENTS!!");
             return nil;
         }
         
         FZZEvent *event = [sortedEvents objectAtIndex:itemNum];
-        
-        NSLog(@"event: %@", event);
         
         return event;
     }

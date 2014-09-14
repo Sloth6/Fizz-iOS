@@ -74,6 +74,7 @@
 		499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 499A8E8018CD337B00842EA7 /* FZZUserMessageCell.xib */; };
 		49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F5A18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m */; };
 		49A31F5D18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49A31F5B18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.xib */; };
+		49A4C51519C5E2B300F5EC1C /* FZZScrollDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A4C51419C5E2B300F5EC1C /* FZZScrollDetector.m */; };
 		49AA439018E8FBEC006D6830 /* FZZServerMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA438F18E8FBEC006D6830 /* FZZServerMessageCell.m */; };
 		49AA439218E8FBFE006D6830 /* FZZServerMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA439118E8FBFE006D6830 /* FZZServerMessageCell.xib */; };
 		49B1C17818E4C6F2007C5D44 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */; };
@@ -275,6 +276,8 @@
 		49A31F5918CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEnterMessagePrototypeViewController.h; sourceTree = "<group>"; };
 		49A31F5A18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEnterMessagePrototypeViewController.m; sourceTree = "<group>"; };
 		49A31F5B18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZEnterMessagePrototypeViewController.xib; sourceTree = "<group>"; };
+		49A4C51319C5E2B200F5EC1C /* FZZScrollDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZScrollDetector.h; sourceTree = "<group>"; };
+		49A4C51419C5E2B300F5EC1C /* FZZScrollDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZScrollDetector.m; sourceTree = "<group>"; };
 		49AA438E18E8FBEC006D6830 /* FZZServerMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZServerMessageCell.h; sourceTree = "<group>"; };
 		49AA438F18E8FBEC006D6830 /* FZZServerMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZServerMessageCell.m; sourceTree = "<group>"; };
 		49AA439118E8FBFE006D6830 /* FZZServerMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZServerMessageCell.xib; sourceTree = "<group>"; };
@@ -592,6 +595,8 @@
 				492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */,
 				49958A5E1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.h */,
 				49958A5F1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m */,
+				49A4C51319C5E2B200F5EC1C /* FZZScrollDetector.h */,
+				49A4C51419C5E2B300F5EC1C /* FZZScrollDetector.m */,
 				49CD064919BF4D26004E0C71 /* FZZPage.h */,
 				49CD064A19BF4D26004E0C71 /* FZZPage.m */,
 				493B074119897C0000EC61E4 /* ChatViewOLD */,
@@ -1124,6 +1129,7 @@
 				493B07401987FC4600EC61E4 /* FZZUtilities.m in Sources */,
 				49C78988199D2C4F004EA886 /* FZZContactListScreenTableViewCell.m in Sources */,
 				4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */,
+				49A4C51519C5E2B300F5EC1C /* FZZScrollDetector.m in Sources */,
 				49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */,
 				497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */,
 				4950413D198593B1002DE44C /* SocketIOTransportXHR.m in Sources */,

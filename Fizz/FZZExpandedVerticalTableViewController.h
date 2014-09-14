@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class FZZScrollDetector;
 @class FZZEvent;
 
 @interface FZZExpandedVerticalTableViewController : UITableViewController
 
 @property (strong, nonatomic) FZZEvent *event;
+@property (strong, nonatomic) FZZScrollDetector *scrollDetector;
 
 + (void)setScrollEnabled:(BOOL)canScroll;
 
@@ -21,6 +23,10 @@
 
 - (BOOL)shouldActiveScreenScrollUp;
 - (BOOL)shouldActiveScreenScrollDown;
+
+- (FZZEvent *)getFZZEvent;
+
+- (UIScrollView *)getCurrentScrollView;
 
 - (void)reloadChat;
 

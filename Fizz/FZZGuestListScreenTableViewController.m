@@ -31,6 +31,7 @@
         [[self tableView] setSeparatorColor:[UIColor clearColor]];
         [[self tableView] setBackgroundColor:[UIColor clearColor]];
         [[self tableView] setOpaque:NO];
+        [[self tableView] setScrollEnabled:NO];
     }
     return self;
 }

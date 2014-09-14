@@ -12,6 +12,7 @@
 #import "FZZMessage.h"
 #import "FZZUtilities.h"
 #import "FZZBounceTableView.h"
+#import "FZZScrollDetector.h"
 
 #import "FZZEvent.h"
 
@@ -121,7 +122,15 @@
     [_vtvc.tableView setFrame:self.bounds];
     [_vtvc.tableView setBackgroundColor:[UIColor clearColor]];
     [_vtvc.tableView setOpaque:NO];
+    
+    FZZScrollDetector *scrollDetector = [[FZZScrollDetector alloc] initWithFrame:self.bounds];
+    
+    [scrollDetector setVtvc:_vtvc];
+    [_vtvc setScrollDetector:scrollDetector];
+    
     [self.contentView addSubview:_vtvc.tableView];
+    
+    [self.contentView addSubview:scrollDetector];
 }
 
 - (void)sendInvitations{
