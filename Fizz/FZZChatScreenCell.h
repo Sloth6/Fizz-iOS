@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "FZZKeyboardNotificationCenter.h"
+#import "FZZTableViewCell.h"
 
 @class FZZEvent;
 
-@interface FZZChatScreenCell : UITableViewCell <UITextViewDelegate, FZZKeyboardManagedObject>
+@interface FZZChatScreenCell : FZZTableViewCell <UITextViewDelegate, FZZKeyboardManagedObject>
 
 @property (nonatomic, retain) UIView *viewForm;
 @property (nonatomic, retain) UITextView *chatBox;

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FZZTableViewCell.h"
 
-@interface FZZDescriptionScreenTableViewCell : UITableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>
+@interface FZZDescriptionScreenTableViewCell : FZZTableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property UITextView *textView;
 

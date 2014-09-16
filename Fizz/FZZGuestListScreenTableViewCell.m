@@ -97,6 +97,7 @@
     [[_gltvc tableView] setBackgroundColor:[UIColor purpleColor]];
     
     [self addSubview:[_gltvc tableView]];
+    [[_gltvc tableView] setUserInteractionEnabled:NO];
 }
 
 - (void)updateTableView{
@@ -135,7 +136,7 @@
     
     // Add listeners etc
     
-    [self addSubview:_searchBar];
+    [self.contentView addSubview:_searchBar];
 }
 
 - (void)updateVisuals{

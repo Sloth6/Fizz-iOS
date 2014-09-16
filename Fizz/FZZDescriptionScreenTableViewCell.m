@@ -131,7 +131,7 @@
     NSLog(@"xy:(%f, %f) wh:(%f, %f)", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     
     [optionsButton setFrame:frame];
-    [self addSubview:optionsButton];
+    [self.contentView addSubview:optionsButton];
 }
 
 - (void)awakeFromNib

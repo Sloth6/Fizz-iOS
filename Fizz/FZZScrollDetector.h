@@ -13,7 +13,7 @@
 
 @interface FZZScrollDetector : UIView <UIScrollViewDelegate>
 
-@property FZZExpandedVerticalTableViewController *vtvc;
+@property (strong, nonatomic) FZZExpandedVerticalTableViewController *vtvc;
 
 - (FZZPage *)getCurrentPage;
 

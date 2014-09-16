@@ -11,7 +11,6 @@
 #import "FZZEvent.h"
 #import "FZZChatScreenCell.h"
 #import "FZZDescriptionScreenTableViewCell.h"
-#import "FZZInviteScreenCell.h"
 
 #import "FZZGuestListScreenTableViewCell.h"
 #import "FZZContactListScreenTableViewCell.h"
@@ -59,6 +58,7 @@ static NSMutableArray *instances;
         [self.tableView setDecelerationRate:UIScrollViewDecelerationRateFast];
         
         [self.tableView setBounces:YES];
+        [self.tableView setScrollEnabled:NO];
         
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
@@ -67,6 +67,18 @@ static NSMutableArray *instances;
 
 -(void)dealloc{
     [instances removeObject:self];
+}
+
+- (UITableViewCell *)getCurrentCell{
+    FZZPage *page = [_scrollDetector getCurrentPage];
+    
+    if (page.pageNumber >= 0 && page.pageNumber < [[self tableView] numberOfRowsInSection:0]){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
+        
+        return [[self tableView] cellForRowAtIndexPath:indexPath];
+    } else {
+        return nil;
+    }
 }
 
 - (UIScrollView *)getCurrentScrollView{
@@ -119,203 +131,6 @@ static NSMutableArray *instances;
     return nil;
 }
 
-    //- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    //    _touchStart = YES;
-    //    _touch = YES;
-    //    
-    //    NSLog(@"TOUCHBEGIN");
-    //    
-    //    UITouch *touch = [[event allTouches] anyObject];
-    //    _prevTouchLocation = [touch locationInView:[self tableView]];
-    //    _hasPrevTouchLocation = YES;
-    //}
-    //
-    //-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    //    _touchStart = YES;
-    //    _touch = YES;
-    //    
-    //    _lastOffset = scrollView.contentOffset;
-    //}
-    //
-    //- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    //    NSLog(@"TOUCHMOVE");
-    //    
-    //    if (_touchStart){
-    //        UITouch *touch = [[event allTouches] anyObject];
-    //        
-    //        CGPoint touchLocation = [touch locationInView:[self tableView]];
-    //        
-    //        if (_hasPrevTouchLocation){
-    //            
-    //            _currentScrollView = [self getCurrentScrollView];
-    //            CGPoint delta = CGPointMake(touchLocation.x - _prevTouchLocation.x,
-    //                                        touchLocation.y - _prevTouchLocation.y);
-    //            
-    //            NSLog(@"SCROLL TOUCH START <%f, %f> <%f, %f>", touchLocation.x, touchLocation.y, delta.x, delta.y);
-    //            NSLog(@"SCROLLVIEW: %@", _currentScrollView);
-    //            
-    //            if (delta.y > 0){
-    //                _touchStart = NO;
-    //                NSLog(@"SCROLL UP %f <= 0", _currentScrollView.contentOffset.y);
-    //                if (_currentScrollView.contentOffset.y <= 0){
-    //                    
-    //                    // Scroll the main view
-    //                    NSLog(@"SHOULD SCROLL MAINVIEW UP");
-    //                    
-    //                } else {
-    //                    // Scroll the currentScrollView
-    //                    NSLog(@"SHOULD SCROLL SUBVIEW UP");
-    //                    
-    //                    _scrollSubView = YES;
-    //                    [[self tableView] setContentOffset:_lastOffset];
-    //                    
-    //                    CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x + delta.x,
-    //                                                        _currentScrollView.contentOffset.y + delta.y);
-    //                    
-    //                    [_currentScrollView setContentOffset:updatedOffset];
-    //                }
-    //            } else if (delta.y < 0){
-    //                _touchStart = NO;
-    //                
-    //                CGFloat maxContentOffset =_currentScrollView.contentSize.height - _currentScrollView.bounds.size.height;
-    //                
-    //                NSLog(@"SCROLL DOWN %f >= %f", _currentScrollView.contentOffset.y, maxContentOffset);
-    //                
-    //                if (_currentScrollView.contentOffset.y >= maxContentOffset){
-    //                    // Scroll the main view
-    //                    NSLog(@"SHOULD SCROLL MAINVIEW DOWN");
-    //                    
-    //                } else {
-    //                    NSLog(@"SHOULD SCROLL SUBVIEW DOWN");
-    //                    // Scroll the currentScrollView
-    //                    _scrollSubView = YES;
-    //                    [[self tableView] setContentOffset:_lastOffset];
-    //                    
-    //                    CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x + delta.x,
-    //                                                        _currentScrollView.contentOffset.y + delta.y);
-    //                    
-    //                    [_currentScrollView setContentOffset:updatedOffset];
-    //                }
-    //            }
-    //        }
-    //        
-    //        _hasPrevTouchLocation = YES;
-    //        _prevTouchLocation = touchLocation;
-    //        return;
-    //    }
-    //    
-    //    if (_scrollSubView){
-    //        UITouch *touch = [[event allTouches] anyObject];
-    //        
-    //        CGPoint touchLocation = [touch locationInView:[self tableView]];
-    //        
-    //        CGPoint delta = CGPointMake(touchLocation.x - _prevTouchLocation.x,
-    //                                    touchLocation.y - _prevTouchLocation.y);
-    //        
-    //        [[self tableView] setContentOffset:_lastOffset];
-    //        
-    //        CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x + delta.x,
-    //                                            _currentScrollView.contentOffset.y + delta.y);
-    //        
-    //        [_currentScrollView setContentOffset:updatedOffset];
-    //        
-    //        _prevTouchLocation = touchLocation;
-    //    }
-    //}
-    //
-    //- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    //    NSLog(@"TOUCHEND");
-    //    
-    //    _touchStart = NO;
-    //    _touch = NO;
-    //    _currentScrollView = nil;
-    //    _scrollSubView = NO;
-    //    _hasPrevTouchLocation = NO;
-    //}
-    //
-    //- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
-    //    NSLog(@"TOUCHCANCEL");
-    //    _touchStart = NO;
-    //    _touch = NO;
-    //    _currentScrollView = nil;
-    //    _scrollSubView = NO;
-    //    _hasPrevTouchLocation = NO;
-    //}
-
-//- (void)handleScrollSubview{
-//    NSLog(@"TOUCH MOVE");
-//    
-//    if (_touchStart){
-//        _touchStart = NO;
-//        
-//        _currentScrollView = [self getCurrentScrollView];
-//        
-//        CGPoint offset = [_currentScrollView contentOffset];
-//        
-//        CGPoint delta = CGPointMake(offset.x - _lastSubViewOffset.x,
-//                                    offset.y - _lastSubViewOffset.y);
-//        
-//        NSLog(@"SCROLL TOUCH START <%f, %f>", delta.x, delta.y);
-//        
-//        if (delta.y < 0){
-//            NSLog(@"SCROLL UP");
-//            CGFloat maxContentOffset =_currentScrollView.contentSize.height - _currentScrollView.bounds.size.height;
-//            
-//            NSLog(@"%f >= %f", _currentScrollView.contentOffset.y, maxContentOffset);
-//            
-//            if (_currentScrollView.contentOffset.y >= maxContentOffset){
-//                // Scroll the main view
-//                NSLog(@"SHOULD SCROLL MAINVIEW UP");
-//                
-//            } else {
-//                // Scroll the currentScrollView
-//                NSLog(@"SHOULD SCROLL SUBVIEW UP");
-//                _scrollSubView = YES;
-//                [[self tableView] setContentOffset:_lastOffset];
-//                
-//                CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x + delta.x,
-//                                                    _currentScrollView.contentOffset.y + delta.y);
-//                
-//                [_currentScrollView setContentOffset:updatedOffset];
-//            }
-//        } else if (delta.y > 0){
-//            NSLog(@"SCROLL DOWN");
-//            
-//            if (_currentScrollView.contentOffset.y <= 0){
-//                // Scroll the main view
-//                NSLog(@"SHOULD SCROLL MAINVIEW DOWN");
-//                
-//            } else {
-//                NSLog(@"SHOULD SCROLL SUBVIEW DOWN");
-//                // Scroll the currentScrollView
-//                _scrollSubView = YES;
-//                [[self tableView] setContentOffset:_lastOffset];
-//                
-//                CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x + delta.x,
-//                                                    _currentScrollView.contentOffset.y + delta.y);
-//                
-//                [_currentScrollView setContentOffset:updatedOffset];
-//            }
-//        }
-//    }
-//    
-//    if (_scrollSubView){
-//        _currentScrollView = [self getCurrentScrollView];
-//        
-//        CGPoint offset = [_currentScrollView contentOffset];
-//        
-//        CGPoint delta = CGPointMake(offset.x - _lastSubViewOffset.x,
-//                                    offset.y - _lastSubViewOffset.y);
-//        
-//        [[self tableView] setContentOffset:_lastOffset];
-//        
-//        CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x + delta.x,
-//                                            _currentScrollView.contentOffset.y + delta.y);
-//        
-//        [_currentScrollView setContentOffset:updatedOffset];
-//    }
-//}
-
 - (void)handleBackgroundOnScroll:(UIScrollView *)scrollView{
     CGFloat maxOffset = [UIScreen mainScreen].bounds.size.height;
     
@@ -341,126 +156,10 @@ static NSMutableArray *instances;
     [self handleBackgroundOnScroll:scrollView];
 }
 
-//-(UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
-//    UIView* child = nil;
-//    
-//    child = [self.tableView hitTest:point withEvent:event];
-//    
-//    if (child == self.tableView)
-//        return (UIView *)_calloutCell;
-//    return child;
-//}
-
-
-//- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-//    
-//    if (scrollView == self.tableView) {
-//        CGFloat y = targetContentOffset->y;
-//        y = roundf(y / 30.0f) * 30.0f;
-//        targetContentOffset->y = y;
-//    } 
-//}
-
-//- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-//    
-//    [_scrollDetector scrollViewWillEndDragging:scrollView
-//                                  withVelocity:velocity
-//                           targetContentOffset:targetContentOffset];
-//}
-
 - (FZZChatScreenCell *)getChatScreenCell{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
     return (FZZChatScreenCell *)[self tableView:[self tableView] cellForRowAtIndexPath:indexPath];
-}
-
-//-(NSIndexPath *)getCurrentCellIndex{
-//    NSInteger page = 0;
-//    
-//    CGFloat offset = [[self tableView] contentOffset].y;
-//    
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//    
-//    CGFloat height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
-//    
-//    while (offset > (height/2.0)){
-//        indexPath = [NSIndexPath indexPathForRow:page inSection:0];
-//        
-//        height = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
-//        
-//        offset -= height;
-//        page++;
-//    }
-//    
-//    return [NSIndexPath indexPathForItem:page inSection:0];
-//}
-
-//- (UIScrollView *)getActiveScrollView{
-//    NSIndexPath *indexPath = [self getCurrentCellIndex];
-//    
-//    switch ([indexPath item]) {
-//        case 0: // Chat Cell
-//            {
-//                FZZChatScreenCell *cell = (FZZChatScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
-//                
-//                return [cell scrollView];
-//            }
-//            break;
-//            
-//        case 1: // Description/Title Cell
-//            {
-//                return nil;
-//            }
-//            break;
-//            
-//        case 2: // Invite List Cell
-//            {
-//                NSLog(@"FUCKED THAT SHIT UP");
-//                exit(1);
-//                return nil;
-////                FZZInviteScreenCell *cell = (FZZInviteScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
-////                
-////                FZZInvitationViewsTableViewController *ivtvc = [cell ivtvc];
-////                
-////                return [ivtvc getActiveScrollView];
-//            }
-//            break;
-//            
-//        default:
-//            return nil;
-//            break;
-//    }
-//}
-
-//- (UITableViewCell *)getCurrentCell{
-//    NSIndexPath *indexPath = [self getCurrentCellIndex];
-//    
-//    return [[self tableView] cellForRowAtIndexPath:indexPath];
-//}
-
-- (BOOL)shouldActiveScreenScrollUp{
-//    UIScrollView *scrollView = [self getActiveScrollView];
-    
-//    CGFloat contentOffset = scrollView.contentOffset.y;
-//    
-//    if (contentOffset <= 0){
-//        return YES;
-//    }
-    
-    return NO;
-}
-
-- (BOOL)shouldActiveScreenScrollDown{
-//    UIScrollView *scrollView = [self getActiveScrollView];
-//    
-//    CGFloat contentHeight = scrollView.contentSize.height;
-//    CGFloat contentOffset = scrollView.contentOffset.y + scrollView.bounds.size.height;
-//    
-//    if (contentOffset >= contentHeight){
-//        return YES;
-//    }
-    
-    return NO;
 }
 
 - (void)reloadChat{
@@ -478,7 +177,8 @@ static NSMutableArray *instances;
     [[self tableView] reloadData];
 }
 
-/*- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+/*
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     
     [_scrollDetector scrollViewWillEndDragging:scrollView
                                   withVelocity:velocity
@@ -491,7 +191,8 @@ static NSMutableArray *instances;
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     [_scrollDetector scrollViewDidEndDecelerating:scrollView];
-}*/
+}
+ */
 
 //- (void)setEvent:(FZZEvent *)event{
 //    NSLog(@"Shouldn't set event!");

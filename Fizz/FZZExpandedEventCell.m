@@ -127,7 +127,6 @@
     
     [scrollDetector setVtvc:_vtvc];
     [_vtvc setScrollDetector:scrollDetector];
-    
     [self.contentView addSubview:_vtvc.tableView];
     
     [self.contentView addSubview:scrollDetector];

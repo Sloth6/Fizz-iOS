@@ -21,11 +21,9 @@
 - (void)updateMessages;
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
 
-- (BOOL)shouldActiveScreenScrollUp;
-- (BOOL)shouldActiveScreenScrollDown;
-
 - (FZZEvent *)getFZZEvent;
 
+- (UITableViewCell *)getCurrentCell;
 - (UIScrollView *)getCurrentScrollView;
 
 - (void)reloadChat;

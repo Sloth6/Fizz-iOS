@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FZZTableViewCell.h"
 
-@interface FZZContactListScreenTableViewCell : UITableViewCell
+@interface FZZContactListScreenTableViewCell : FZZTableViewCell
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;
 

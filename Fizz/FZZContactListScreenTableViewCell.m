@@ -123,6 +123,7 @@ static CGFloat kBottomBorder = 6;
     //    [[_tvc view] setBackgroundColor:[UIColor blueColor]];
     
     [self addSubview:[_ctvc tableView]];
+    [[_ctvc tableView] setUserInteractionEnabled:NO];
 }
 
 +(CGFloat)cellOffset{

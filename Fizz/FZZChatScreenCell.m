@@ -89,7 +89,9 @@
     [[_ctvc tableView] setFrame:frame];
     
     [self addSubview:[_ctvc tableView]];
-    [self addSubview:self.viewForm];
+    [[_ctvc tableView] setUserInteractionEnabled:NO];
+    
+    [self.contentView addSubview:self.viewForm];
 }
 
 /*
