@@ -26,7 +26,7 @@
 #import "FZZEnterMessagePrototypeViewController.h"
 
 static int kFZZNumCellsBeforeEvents = 1; // Add New Event
-static NSString *kFZZPlaceholderText = @"What do you want to do?";
+static NSString *kFZZPlaceholderText = @"let's...";
 
 
 @interface FZZEventsViewController ()
@@ -976,26 +976,11 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 
 -(void) setupTextView:(FZZTextViewWithPlaceholder *)textView
 {
-    float endY = textView.frame.origin.y + textView.frame.size.height;
+    CGFloat yOffset = kFZZHeadingBaselineToTop() - _lineHeight;
     
-    //    UIEdgeInsets inset = textView.contentInset;
+    CGFloat xOffset = kFZZHorizontalMargin();
     
-    float minHeight = 2 * _lineHeight;
-    float maxHeight = 3 * _lineHeight;
-    
-    float height = MIN(MAX(minHeight, [self measureHeightOfUITextView:textView.textView]),
-                       maxHeight) + 20;
-    
-    //float height = textView.frame.size.height-insetDelta;
-    
-    float y = endY - height;
-    
-    float x = textView.frame.origin.x;
-    float width = textView.frame.size.width;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [textView setFrame:CGRectMake(x, y, width, height)];
-    });
+    [textView setTextContainerInset:UIEdgeInsetsMake(yOffset, xOffset, 0, 0)];
 }
 
 // Call when TextView will resign First Responder status
@@ -1009,117 +994,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
 //    [_secretLabel setAlpha:0.0];
     
 //    [self textViewDidChange:textView];
-    [self textViewDidChange:textView.textView];
 }
-
--(void) textViewDidChange:(UITextView *)textView
-{
-    float endY = textView.frame.origin.y + textView.frame.size.height;
-    
-//    UIEdgeInsets inset = textView.contentInset;
-    
-    float minHeight = 2 * _lineHeight;
-    float maxHeight = 3 * _lineHeight;
-    
-    if ([textView.text hasSuffix:@"  "]){
-        NSString *string = [textView.text substringToIndex:[textView.text length] - 1];
-        [textView setText:string];
-    }
-    
-    float textViewHeight = [self measureHeightOfUITextView:textView];
-    
-    // Limit textview num lines
-    if (textViewHeight > maxHeight){
-        UITextRange *textRange;
-        
-        if (textView.selectedTextRange.empty) {
-            UITextPosition *pos = [textView positionFromPosition:textView.endOfDocument
-                                                     inDirection:UITextLayoutDirectionLeft
-                                                          offset:0];
-            
-            //make a 0 length range at position
-            textRange = [textView textRangeFromPosition:pos
-                                             toPosition:pos];
-            
-        }
-        
-        [textView setText:_lastInputString];
-        
-        if (textRange != NULL){
-            NSLog(@"{<<%@>>}", textRange);
-            [textView setSelectedTextRange:textRange];
-        }
-    }
-    
-    float height = MIN(MAX(minHeight, textViewHeight),
-                       maxHeight) + 20;
-    
-    //float height = textView.frame.size.height-insetDelta;
-    
-    float y = endY - height;
-    
-    float x = textView.frame.origin.x;
-    float width = textView.frame.size.width;
-    
-    [textView setFrame:CGRectMake(x, y, width, height)];
-    
-//    textView.frame.size.height = result;
-//    
-//    NSLog(@"insetDelta: %f, result: %f", insetDelta, result);
-//    
-//    inset.top = result;
-//    [textView setContentInset:inset];
-////    [textView invalidateIntrinsicContentSize];
-////    [textView setNeedsDisplay];
-//    [textView setNeedsLayout];
-}
-
-//-(void) textViewDidChange:(FZZTextViewWithPlaceholder *)textView
-//{
-//    float endY = textView.frame.origin.y + textView.frame.size.height;
-//    
-//    //    UIEdgeInsets inset = textView.contentInset;
-//    
-//    float minHeight = 2 * _lineHeight;
-//    float maxHeight = 3 * _lineHeight;
-//    
-//    float textViewHeight = [self measureHeightOfUITextView:textView.textView];
-//    
-//    // Limit textview num lines
-//    if (textViewHeight > maxHeight){
-//        UITextRange *textRange;
-//        
-//        if (textView.textView.selectedTextRange.empty) {
-//            UITextPosition *pos = [textView.textView positionFromPosition:textView.textView.endOfDocument
-//                                                     inDirection:UITextLayoutDirectionLeft
-//                                                          offset:1];
-//            
-//            //make a 0 length range at position
-//            textRange = [textView.textView textRangeFromPosition:pos
-//                                                            toPosition:pos];
-//            
-//        }
-//        
-//        [textView setText:_lastInputString];
-//        
-//        if (textRange != NULL){
-//            [textView.textView setSelectedTextRange:textRange];
-//        }
-//    }
-//    
-//    float height = MIN(MAX(minHeight, textViewHeight),
-//                       maxHeight) + 20;
-//    
-//    //float height = textView.frame.size.height-insetDelta;
-//    
-//    float y = endY - height;
-//    
-//    float x = textView.frame.origin.x;
-//    float width = textView.frame.size.width;
-//    
-//    [textView setFrame:CGRectMake(x, y, width, height)];
-//}
-
 
 - (UICollectionViewCell *)getExpandedEventCell{
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
@@ -1143,16 +1018,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
     [FZZEvent socketIONewEventWithMessage:textView.text
                            AndAcknowledge:nil];
     
-    [UIView animateWithDuration:0.25 animations:^{
-        [textView setTextColor:[UIColor blackColor]];
-        
-        //_currentIndex = [NSIndexPath indexPathForItem:0 inSection:0];
-        [self.collectionView setScrollEnabled:YES];
-        
-//        FZZExpandedEventCell *nec = (FZZExpandedEventCell *)[self getExpandedEventCell];
-//        
-//        [nec setScrollingEnabled:YES];
-    } completion:NULL];
+    [self.collectionView setScrollEnabled:YES];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -1165,8 +1031,7 @@ static NSString *kFZZPlaceholderText = @"What do you want to do?";
         
         // Hit send on empty
         if(textView.text.length == 0){
-            textView.textColor = [UIColor lightGrayColor];
-            textView.text = kFZZPlaceholderText;
+            textView.text = @"";
             
 //            UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:nec action:@selector(sendInvitations)];
             

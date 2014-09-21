@@ -11,7 +11,7 @@ PODS:
     - FMDB (= 2.0)
     - GRMustache (= 6.8.3)
     - SMCalloutView (= 1.1)
-  - pop (1.0.5)
+  - pop (1.0.6)
   - SMCalloutView (1.1)
 
 DEPENDENCIES:
@@ -22,8 +22,8 @@ SPEC CHECKSUMS:
   FMDB: 51325701b48cc929ff967fa3047ebc893e798a23
   GRMustache: ab96109b7ba4b9568425bea40d6cd2cdc7582b6c
   JRSwizzle: 30da7a2c539a4ebf954b16d15f6dd8221c9f6fa5
-  MapBox: 01bd6999838d8dfbe8b48d33cae01ffcec8a7ab7
-  pop: 75fa2b33934200a8a68abb449ac1726fcf7e43b9
+  MapBox: 6d8baa83e276aab5d98a49e867cfffbb77081187
+  pop: e518794da38942c05255eb64b36d894e70cb4f00
   SMCalloutView: b1c20930f57bc4470f5477979e2decf066397c82
 
 COCOAPODS: 0.33.1

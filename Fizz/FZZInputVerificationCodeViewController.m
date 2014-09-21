@@ -38,7 +38,7 @@
     [super viewDidAppear:animated];
 }
 
-- (void)textFieldBecomeFirstResponder;{
+- (void)textFieldBecomeFirstResponder{
     [_pinTextField becomeFirstResponder];
 }
 

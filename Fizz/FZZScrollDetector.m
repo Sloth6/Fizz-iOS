@@ -24,6 +24,8 @@ static CGFloat kFZZInputScrollBuffer;
 
 @property UIScrollView *inputScrollView;
 
+@property NSDictionary *pageOffsets;
+
 @property CGPoint lastInputOffset;
 @property CGPoint lastTVCOffset;
 
@@ -71,7 +73,7 @@ static CGFloat kFZZInputScrollBuffer;
         _movingScrollView = nil;
         
         [self updateCurrentScrollView];
-        _lastTVCOffset = [_vtvc tableView].contentOffset;
+        _lastTVCOffset = [[_vtvc tableView] contentOffset];
     }
     
 //    else if (scrollView == [_vtvc tableView]) {
@@ -97,7 +99,7 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 - (void)updateVTVCPage{
-    [self updateVTVCToPage:[self getCurrentPage]];
+    [self updateVTVCToPage:nil];
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -132,15 +134,14 @@ static CGFloat kFZZInputScrollBuffer;
     [[_vtvc tableView] setContentOffset:_lastTVCOffset];
 }
 
+- (void)setVtvc:(FZZExpandedVerticalTableViewController *)vtvc{
+    _vtvc = vtvc;
+    
+    [self setupPageOffsets];
+}
+
 - (void)updateCurrentScrollViewToMainView{
-    CGSize size = [[_vtvc tableView] contentSize];
-    
-    CGPoint offset = [[_vtvc tableView] contentOffset];
-    
-    [_inputScrollView setDelegate:nil];
-    [_inputScrollView setContentSize:size];
-    [_inputScrollView setContentOffset:offset];
-    [_inputScrollView setDelegate:self];
+    [self updateInputScrollView];
     
     [_inputScrollView setBounces:[_vtvc.tableView bounces]];
     [_inputScrollView setDecelerationRate:[_vtvc.tableView decelerationRate]];
@@ -160,6 +161,8 @@ static CGFloat kFZZInputScrollBuffer;
         size = [_currentScrollView contentSize];
     
         size.height = size.height += [_inputScrollView bounds].size.height - [_currentScrollView bounds].size.height + 2;
+        
+        size.height = MAX([self bounds].size.height + (2 * kFZZInputScrollBuffer), size.height);
         
         offset = [_currentScrollView contentOffset];
         
@@ -272,7 +275,37 @@ static CGFloat kFZZInputScrollBuffer;
     NSInteger numberOfRows = [[_vtvc tableView] numberOfRowsInSection:0];
     
     CGPoint offset = _lastTVCOffset;
+    
+    int pageNum = -1;
+    
+    CGFloat minDY = CGFLOAT_MAX;
+    
+    for (int i = 0; i < numberOfRows; ++i){
+        NSNumber *pageOffset = [self getPageOffsetForPageNum:i];
+        
+        float dy = ABS(offset.y - [pageOffset floatValue]);
+        
+        if (dy < minDY){
+            pageNum = i;
+            minDY = dy;
+        }
+    }
+    
+    NSNumber *pageOffset = [self getPageOffsetForPageNum:pageNum];
+    
+    FZZPage *page = [[FZZPage alloc] init];
+    [page setPageOffset:CGPointMake(0, [pageOffset floatValue])];
+    [page setPageNumber:MIN(pageNum, numberOfRows-1)];
+    
+    return page;
+}
+
+- (void)setupPageOffsets{
+    NSInteger numberOfRows = [[_vtvc tableView] numberOfRowsInSection:0];
+    
     CGFloat y = 0;
+    
+    NSMutableDictionary *pageOffsets = [[NSMutableDictionary alloc] initWithCapacity:numberOfRows];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
@@ -280,37 +313,69 @@ static CGFloat kFZZInputScrollBuffer;
     
     int pageNum = -1;
     
-    for (int i = 0; (offset.y >= y + (height/2)) && (i < numberOfRows); ++i){
+    for (int i = 0; i < numberOfRows; ++i){
         indexPath = [NSIndexPath indexPathForRow:i inSection:0];
         
         height = [_vtvc tableView:[_vtvc tableView] heightForRowAtIndexPath:indexPath];
         
-        y += height;
+        CGFloat pageVerticalOffset = [_vtvc tableView:[_vtvc tableView] offsetForRowAtIndexPath:indexPath];
+        
+        CGFloat pageOffset = y - pageVerticalOffset;
+        
         pageNum = i;
+        
+        if (pageNum != numberOfRows - 1){
+            [pageOffsets setObject:[NSNumber numberWithFloat:pageOffset]
+                            forKey:[NSNumber numberWithInteger:pageNum]];
+        }
+        
+        y += height;
     }
     
-    FZZPage *page = [[FZZPage alloc] init];
-    [page setPageOffset:CGPointMake(0, y)];
-    [page setPageNumber:MIN(pageNum+1, numberOfRows-1)];
+//    [pageOffsets setObject:nil
+//                    forKey:[NSNumber numberWithInteger:numberOfRows - 1]];
     
-    return page;
+    [pageOffsets setObject:[NSNumber numberWithFloat:y]
+                    forKey:[NSNumber numberWithInteger:numberOfRows]];
+    
+    NSLog(@"PAGE OFFSETS %@", pageOffsets);
+    
+    _pageOffsets = pageOffsets;
+}
+
+- (NSNumber *)lastY{
+    NSInteger numberOfRows = [[_vtvc tableView] numberOfRowsInSection:0];
+    
+    NSNumber *result = [NSNumber numberWithFloat:[_vtvc tableView].contentSize.height
+                        - ([[_vtvc tableView] bounds].size.height + 2)];
+    
+    [(NSMutableDictionary *)_pageOffsets setObject:result
+                                            forKey:[NSNumber numberWithInteger:numberOfRows - 1]];
+    
+    return result;
+}
+
+- (NSNumber *)getPageOffsetForPageNum:(NSInteger)pageNum{
+    NSNumber *pageOffset = [_pageOffsets objectForKey:[NSNumber numberWithInteger:pageNum]];
+    
+    if (pageOffset == nil){
+        pageOffset = [self lastY];
+    }
+    
+    return pageOffset;
 }
 
 - (FZZPage *)getNextPage:(FZZPage *)page{
     NSInteger numberOfRows = [[_vtvc tableView] numberOfRowsInSection:0];
     
-    if (page.pageNumber >= numberOfRows) return page;
+    if (page.pageNumber >= numberOfRows - 1) return page;
     
     NSInteger nextPageNumber = page.pageNumber + 1;
     
-    CGFloat y = page.pageOffset.y;
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nextPageNumber inSection:0];
-    
-    CGFloat height = [_vtvc tableView:[_vtvc tableView] heightForRowAtIndexPath:indexPath];
+    NSNumber *pageOffset = [self getPageOffsetForPageNum:nextPageNumber];
     
     page = [[FZZPage alloc] init];
-    [page setPageOffset:CGPointMake(0, y + height)];
+    [page setPageOffset:CGPointMake(0, [pageOffset floatValue])];
     [page setPageNumber:nextPageNumber];
     
     return page;
@@ -322,14 +387,10 @@ static CGFloat kFZZInputScrollBuffer;
     
     NSInteger prevPageNumber = page.pageNumber - 1;
     
-    CGFloat y = page.pageOffset.y;
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:prevPageNumber inSection:0];
-    
-    CGFloat height = [_vtvc tableView:[_vtvc tableView] heightForRowAtIndexPath:indexPath];
+    NSNumber *pageOffset = [self getPageOffsetForPageNum:prevPageNumber];
     
     page = [[FZZPage alloc] init];
-    [page setPageOffset:CGPointMake(0, y - height)];
+    [page setPageOffset:CGPointMake(0, [pageOffset floatValue])];
     [page setPageNumber:prevPageNumber];
     
     return page;
@@ -357,6 +418,8 @@ static CGFloat kFZZInputScrollBuffer;
     FZZPage *page = [self getCurrentPage];
     
     CGPoint pageOffset = [page pageOffset];
+    
+    NSLog(@"CURRENT PAGE: %d (%f)", page.pageNumber, page.pageOffset.y);
     
     if (currentOffset.y < _lastTVCOffset.y){
         FZZPage *prevPage = [self getPreviousPage:page];
@@ -386,6 +449,17 @@ static CGFloat kFZZInputScrollBuffer;
     }
 }
 
+- (void)updateInputScrollView{
+    CGSize size = [[_vtvc tableView] contentSize];
+
+    CGPoint offset = [[_vtvc tableView] contentOffset];
+
+    [_inputScrollView setDelegate:nil];
+    [_inputScrollView setContentSize:size];
+    [_inputScrollView setContentOffset:offset];
+    [_inputScrollView setDelegate:self];
+}
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     
     if (_scrollSubView){
@@ -399,6 +473,8 @@ static CGFloat kFZZInputScrollBuffer;
         _touch = NO;
         _currentScrollView = nil;
         
+//        [self updateInputScrollView];
+        
         CGPoint currentOffset = _inputScrollView.contentOffset;
         
         FZZPage *proposedPage;
@@ -406,11 +482,13 @@ static CGFloat kFZZInputScrollBuffer;
         
         // Velocity is sufficient or offset is enough
         if ([self shouldScrollToNextPageWithVelocity:velocity andOffset:currentOffset]){
-            if (velocity.y > 0) {
+            NSLog(@"%f - [%d]%f", currentOffset.y, currentPage.pageNumber, currentPage.pageOffset.y);
+            
+            if ((currentOffset.y - currentPage.pageOffset.y) > 0) {
                 // bottom to top
                 proposedPage = [self getNextPage:currentPage];
             }
-            else if (velocity.y < 0){
+            else if ((currentOffset.y - currentPage.pageOffset.y) < 0){
                 // top to bottom
                 proposedPage = [self getPreviousPage:currentPage];
             } else {
@@ -444,7 +522,7 @@ static CGFloat kFZZInputScrollBuffer;
             }
         }
         
-        NSLog(@"current page: %d ||prop page: %d", [currentPage pageNumber], [proposedPage pageNumber]);
+        NSLog(@"current page: %d ||prop page: %d {%f}", [currentPage pageNumber], [proposedPage pageNumber], [proposedPage pageOffset].y);
         
         targetContentOffset->y = proposedPage.pageOffset.y;
     }

@@ -16,12 +16,14 @@
 @property (strong, nonatomic) FZZExpandedVerticalTableViewController *vtvc;
 
 - (FZZPage *)getCurrentPage;
+- (void)updateInputScrollView;
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset;
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
+
 
 
 @end

@@ -68,9 +68,11 @@ static float kFZZDarkScreenAlpha;
         // Hard coded value, should be fine for these purposes
         float keyboardHeight = 216;
         
-        float hInset  = 50;
+        CGFloat textViewInsetNormal = 8;
+        
+        float hInset  = 0;
         float hOutset = hInset;
-        float vInset  = 60;
+        float vInset  = 0;
         float vOutset = 50 + keyboardHeight;
         
         float sWidth  = [UIScreen mainScreen].bounds.size.width;
@@ -82,7 +84,7 @@ static float kFZZDarkScreenAlpha;
         float y = vInset;
         float height = sHeight - y - vOutset;
         
-        _textView = [[FZZTextViewWithPlaceholder alloc] initWithFrame:CGRectMake(x, y, width, height)];
+        _textView = [[FZZTextViewWithPlaceholder alloc] initWithFrame:CGRectMake(x - textViewInsetNormal, y, width + textViewInsetNormal, height)];
         
         [_textView setFont:kFZZHeadingsFont()];//[UIFont fontWithName:@"HelveticaNeue-Light" size:38]];
         

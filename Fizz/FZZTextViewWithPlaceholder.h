@@ -31,6 +31,7 @@
 -(void)setFont:(UIFont *)font;
 -(void)setEditable:(BOOL)editable;
 -(void)setScrollEnabled:(BOOL)scrollEnabled;
+-(void)setTextContainerInset:(UIEdgeInsets)insets;
 
 -(void)setEnablesReturnKeyAutomatically:(BOOL)enablesReturnKeyAutomatically;
 -(void)setReturnKeyType:(UIReturnKeyType)returnKeyType;

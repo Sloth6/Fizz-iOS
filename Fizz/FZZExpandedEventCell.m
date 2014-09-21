@@ -13,6 +13,7 @@
 #import "FZZUtilities.h"
 #import "FZZBounceTableView.h"
 #import "FZZScrollDetector.h"
+#import "FZZPage.h"
 
 #import "FZZEvent.h"
 
@@ -21,6 +22,8 @@
 @property (strong, nonatomic) UIButton *sendInviteButton;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) UIImage *image;
+
+@property (strong, nonatomic) FZZScrollDetector *scrollDetector;
 
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 
@@ -78,7 +81,12 @@
     
     NSIndexPath *scrollPosition = [event scrollPosition];
     
-    [_vtvc.tableView scrollToRowAtIndexPath:scrollPosition atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [_vtvc.tableView scrollToRowAtIndexPath:scrollPosition atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    
+    FZZPage *page = [[_vtvc scrollDetector] getCurrentPage];
+    
+    [[_vtvc tableView] setContentOffset:[page pageOffset]];
+    [[_vtvc scrollDetector] updateInputScrollView];
 }
 
 - (void)setupExpandedEventCell{
@@ -123,13 +131,13 @@
     [_vtvc.tableView setBackgroundColor:[UIColor clearColor]];
     [_vtvc.tableView setOpaque:NO];
     
-    FZZScrollDetector *scrollDetector = [[FZZScrollDetector alloc] initWithFrame:self.bounds];
+    _scrollDetector = [[FZZScrollDetector alloc] initWithFrame:self.bounds];
     
-    [scrollDetector setVtvc:_vtvc];
-    [_vtvc setScrollDetector:scrollDetector];
+    [_scrollDetector setVtvc:_vtvc];
+    [_vtvc setScrollDetector:_scrollDetector];
     [self.contentView addSubview:_vtvc.tableView];
     
-    [self.contentView addSubview:scrollDetector];
+    [self.contentView addSubview:_scrollDetector];
 }
 
 - (void)sendInvitations{

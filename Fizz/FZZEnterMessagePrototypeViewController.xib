@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FZZEnterMessagePrototypeViewController">
@@ -17,16 +18,14 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Add a comment" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xnG-PF-Fcf">
-                    <rect key="frame" x="6" y="0.0" width="308" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="6" y="2" width="308" height="568"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zlB-dt-XLm">
-                    <rect key="frame" x="6" y="0.0" width="308" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="6" y="2" width="308" height="568"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -36,18 +35,23 @@
             <constraints>
                 <constraint firstItem="xnG-PF-Fcf" firstAttribute="leading" secondItem="Ys1-oT-xqY" secondAttribute="leading" constant="6" id="G0v-Co-FWx"/>
                 <constraint firstItem="zlB-dt-XLm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Ys1-oT-xqY" secondAttribute="top" id="GZ9-cn-Iou"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="zlB-dt-XLm" secondAttribute="bottom" id="HaP-IT-ejU"/>
-                <constraint firstItem="xnG-PF-Fcf" firstAttribute="top" secondItem="Ys1-oT-xqY" secondAttribute="top" id="JAD-Jd-E8u"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="zlB-dt-XLm" secondAttribute="bottom" constant="-2" id="HaP-IT-ejU"/>
+                <constraint firstItem="xnG-PF-Fcf" firstAttribute="top" secondItem="Ys1-oT-xqY" secondAttribute="top" constant="2" id="JAD-Jd-E8u"/>
                 <constraint firstAttribute="trailing" secondItem="xnG-PF-Fcf" secondAttribute="trailing" constant="6" id="JMz-wl-31Y"/>
                 <constraint firstAttribute="trailing" secondItem="zlB-dt-XLm" secondAttribute="trailing" constant="6" id="Miw-bA-fHp"/>
                 <constraint firstItem="zlB-dt-XLm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ys1-oT-xqY" secondAttribute="leading" constant="6" id="NrG-bT-hW2"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zlB-dt-XLm" secondAttribute="trailing" constant="6" id="h7M-uD-T0L"/>
-                <constraint firstItem="zlB-dt-XLm" firstAttribute="top" secondItem="Ys1-oT-xqY" secondAttribute="top" id="n4q-J8-p5z"/>
-                <constraint firstAttribute="bottom" secondItem="zlB-dt-XLm" secondAttribute="bottom" id="oZK-uc-ied"/>
-                <constraint firstAttribute="bottom" secondItem="xnG-PF-Fcf" secondAttribute="bottom" id="pyM-Tg-RdI"/>
+                <constraint firstItem="zlB-dt-XLm" firstAttribute="top" secondItem="Ys1-oT-xqY" secondAttribute="top" constant="2" id="n4q-J8-p5z"/>
+                <constraint firstAttribute="bottom" secondItem="zlB-dt-XLm" secondAttribute="bottom" constant="-2" id="oZK-uc-ied"/>
+                <constraint firstAttribute="bottom" secondItem="xnG-PF-Fcf" secondAttribute="bottom" constant="-2" id="pyM-Tg-RdI"/>
                 <constraint firstItem="zlB-dt-XLm" firstAttribute="leading" secondItem="Ys1-oT-xqY" secondAttribute="leading" constant="6" id="ulK-aZ-vUq"/>
             </constraints>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <nil key="simulatedStatusBarMetrics"/>
         </view>
     </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

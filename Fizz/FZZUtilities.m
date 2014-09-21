@@ -90,9 +90,13 @@ CGFloat kFZZVerticalMargin() {return 8;}
 CGFloat kFZZHeadingBaselineToTop() {return 120;}
 //Line height is container around the text
 CGFloat kFZZHeadingLineHeight() {return 72;}
+
+CGFloat kFZZHeadingMinFontSize() {return kFZZHeadingMaxFontSize()/2.0;}
+CGFloat kFZZHeadingMaxFontSize() {return kFZZHeadingLineHeight();}
+
 CGFloat kFZZGuestListLineHeight() {return 40;}
 
-CGFloat kFZZColumnWidth() {return 48;}
+CGFloat kFZZInputRowHeight() {return 48;}
 
 CGFloat kFZZBodyLineHeight() {return 24;}
 

@@ -91,7 +91,6 @@
 		49C789A119A24AD5004EA886 /* FZZCustomPlaceholderTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C789A019A24AD5004EA886 /* FZZCustomPlaceholderTextField.m */; };
 		49C789A419A2849B004EA886 /* FZZContactSearchDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C789A319A2849B004EA886 /* FZZContactSearchDelegate.m */; };
 		49C8B1551889F08600400832 /* FZZEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C8B1541889F08600400832 /* FZZEventCell.m */; };
-		49CD064819BD2EFB004E0C71 /* FZZScrollOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CD064719BD2EFB004E0C71 /* FZZScrollOverride.m */; };
 		49CD064B19BF4D26004E0C71 /* FZZPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CD064A19BF4D26004E0C71 /* FZZPage.m */; };
 		49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C99F186042C2002BB1F0 /* Foundation.framework */; };
 		49D5C9A2186042C2002BB1F0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */; };
@@ -308,24 +307,22 @@
 		49C789A319A2849B004EA886 /* FZZContactSearchDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZContactSearchDelegate.m; sourceTree = "<group>"; };
 		49C8B1531889F08600400832 /* FZZEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEventCell.h; sourceTree = "<group>"; };
 		49C8B1541889F08600400832 /* FZZEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEventCell.m; sourceTree = "<group>"; };
-		49CD064619BD2EFB004E0C71 /* FZZScrollOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZScrollOverride.h; sourceTree = "<group>"; };
-		49CD064719BD2EFB004E0C71 /* FZZScrollOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZScrollOverride.m; sourceTree = "<group>"; };
 		49CD064919BF4D26004E0C71 /* FZZPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZPage.h; sourceTree = "<group>"; };
 		49CD064A19BF4D26004E0C71 /* FZZPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPage.m; sourceTree = "<group>"; };
 		49D5C99C186042C2002BB1F0 /* Fizz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fizz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D5C99F186042C2002BB1F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49D5C9A3186042C2002BB1F0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		49D5C9A7186042C2002BB1F0 /* Fizz-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Fizz-Info.plist"; sourceTree = "<group>"; };
+		49D5C9A7186042C2002BB1F0 /* Let's-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Let's-Info.plist"; sourceTree = "<group>"; };
 		49D5C9A9186042C2002BB1F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49D5C9AB186042C2002BB1F0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		49D5C9AD186042C2002BB1F0 /* Fizz-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fizz-Prefix.pch"; sourceTree = "<group>"; };
+		49D5C9AD186042C2002BB1F0 /* Let's-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Let's-Prefix.pch"; sourceTree = "<group>"; };
 		49D5C9AE186042C2002BB1F0 /* FZZAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FZZAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49D5C9AF186042C2002BB1F0 /* FZZAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FZZAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		49D5C9B1186042C2002BB1F0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		49D5C9B7186042C2002BB1F0 /* FizzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FizzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		49D5C9B7186042C2002BB1F0 /* Let'sTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Let'sTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D5C9B8186042C2002BB1F0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		49D5C9C0186042C2002BB1F0 /* FizzTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FizzTests-Info.plist"; sourceTree = "<group>"; };
+		49D5C9C0186042C2002BB1F0 /* Let'sTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Let'sTests-Info.plist"; sourceTree = "<group>"; };
 		49D5C9C2186042C2002BB1F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49D5C9C4186042C2002BB1F0 /* FizzTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FizzTests.m; sourceTree = "<group>"; };
 		49D5C9E018604973002BB1F0 /* FZZ_Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZ_Reachability.h; sourceTree = "<group>"; };
@@ -690,8 +687,8 @@
 			isa = PBXGroup;
 			children = (
 				4960803618EFE03700CF72DB /* TestFlightSDK3.0.0 */,
-				49D5C9A5186042C2002BB1F0 /* Fizz */,
-				49D5C9BE186042C2002BB1F0 /* FizzTests */,
+				49D5C9A5186042C2002BB1F0 /* Let's */,
+				49D5C9BE186042C2002BB1F0 /* Let'sTests */,
 				49D5C99E186042C2002BB1F0 /* Frameworks */,
 				49D5C99D186042C2002BB1F0 /* Products */,
 				5D9F535A370840F8A55F2F95 /* Pods.xcconfig */,
@@ -702,7 +699,7 @@
 			isa = PBXGroup;
 			children = (
 				49D5C99C186042C2002BB1F0 /* Fizz.app */,
-				49D5C9B7186042C2002BB1F0 /* FizzTests.xctest */,
+				49D5C9B7186042C2002BB1F0 /* Let'sTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -734,7 +731,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		49D5C9A5186042C2002BB1F0 /* Fizz */ = {
+		49D5C9A5186042C2002BB1F0 /* Let's */ = {
 			isa = PBXGroup;
 			children = (
 				49D5C9F018605960002BB1F0 /* Utils */,
@@ -747,33 +744,35 @@
 				49D5C9B1186042C2002BB1F0 /* Images.xcassets */,
 				49D5C9A6186042C2002BB1F0 /* Supporting Files */,
 			);
+			name = "Let's";
 			path = Fizz;
 			sourceTree = "<group>";
 		};
 		49D5C9A6186042C2002BB1F0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				49D5C9A7186042C2002BB1F0 /* Fizz-Info.plist */,
+				49D5C9A7186042C2002BB1F0 /* Let's-Info.plist */,
 				49D5C9A8186042C2002BB1F0 /* InfoPlist.strings */,
 				49D5C9AB186042C2002BB1F0 /* main.m */,
-				49D5C9AD186042C2002BB1F0 /* Fizz-Prefix.pch */,
+				49D5C9AD186042C2002BB1F0 /* Let's-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		49D5C9BE186042C2002BB1F0 /* FizzTests */ = {
+		49D5C9BE186042C2002BB1F0 /* Let'sTests */ = {
 			isa = PBXGroup;
 			children = (
 				49D5C9C4186042C2002BB1F0 /* FizzTests.m */,
 				49D5C9BF186042C2002BB1F0 /* Supporting Files */,
 			);
+			name = "Let'sTests";
 			path = FizzTests;
 			sourceTree = "<group>";
 		};
 		49D5C9BF186042C2002BB1F0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				49D5C9C0186042C2002BB1F0 /* FizzTests-Info.plist */,
+				49D5C9C0186042C2002BB1F0 /* Let'sTests-Info.plist */,
 				49D5C9C1186042C2002BB1F0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -794,14 +793,7 @@
 				49C789A019A24AD5004EA886 /* FZZCustomPlaceholderTextField.m */,
 				496C790C19B0E6400052C3C4 /* FZZUnderlinedTextField.h */,
 				496C790D19B0E6400052C3C4 /* FZZUnderlinedTextField.m */,
-				496C791519B15DA10052C3C4 /* FZZPinTextField.h */,
-				496C791619B15DA10052C3C4 /* FZZPinTextField.m */,
-				496C791819B15FE70052C3C4 /* FZZPinNumberLabel.h */,
-				496C791919B15FE70052C3C4 /* FZZPinNumberLabel.m */,
-				496C791C19B2297F0052C3C4 /* FZZPinDotView.h */,
-				496C791D19B2297F0052C3C4 /* FZZPinDotView.m */,
-				49CD064619BD2EFB004E0C71 /* FZZScrollOverride.h */,
-				49CD064719BD2EFB004E0C71 /* FZZScrollOverride.m */,
+				49E121F219CF5B8E00C3190B /* Pin Field */,
 			);
 			name = Internal;
 			sourceTree = "<group>";
@@ -886,12 +878,25 @@
 			path = util;
 			sourceTree = "<group>";
 		};
+		49E121F219CF5B8E00C3190B /* Pin Field */ = {
+			isa = PBXGroup;
+			children = (
+				496C791519B15DA10052C3C4 /* FZZPinTextField.h */,
+				496C791619B15DA10052C3C4 /* FZZPinTextField.m */,
+				496C791819B15FE70052C3C4 /* FZZPinNumberLabel.h */,
+				496C791919B15FE70052C3C4 /* FZZPinNumberLabel.m */,
+				496C791C19B2297F0052C3C4 /* FZZPinDotView.h */,
+				496C791D19B2297F0052C3C4 /* FZZPinDotView.m */,
+			);
+			name = "Pin Field";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		49D5C99B186042C2002BB1F0 /* Fizz */ = {
+		49D5C99B186042C2002BB1F0 /* Let's */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 49D5C9C8186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "Fizz" */;
+			buildConfigurationList = 49D5C9C8186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "Let's" */;
 			buildPhases = (
 				4A62913C6E414BD4979181C2 /* Check Pods Manifest.lock */,
 				49D5C998186042C2002BB1F0 /* Sources */,
@@ -903,14 +908,14 @@
 			);
 			dependencies = (
 			);
-			name = Fizz;
+			name = "Let's";
 			productName = Beacon;
 			productReference = 49D5C99C186042C2002BB1F0 /* Fizz.app */;
 			productType = "com.apple.product-type.application";
 		};
-		49D5C9B6186042C2002BB1F0 /* FizzTests */ = {
+		49D5C9B6186042C2002BB1F0 /* Let'sTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 49D5C9CB186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "FizzTests" */;
+			buildConfigurationList = 49D5C9CB186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "Let'sTests" */;
 			buildPhases = (
 				49D5C9B3186042C2002BB1F0 /* Sources */,
 				49D5C9B4186042C2002BB1F0 /* Frameworks */,
@@ -921,9 +926,9 @@
 			dependencies = (
 				49D5C9BD186042C2002BB1F0 /* PBXTargetDependency */,
 			);
-			name = FizzTests;
+			name = "Let'sTests";
 			productName = BeaconTests;
-			productReference = 49D5C9B7186042C2002BB1F0 /* FizzTests.xctest */;
+			productReference = 49D5C9B7186042C2002BB1F0 /* Let'sTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -934,7 +939,7 @@
 			attributes = {
 				CLASSPREFIX = FZZ;
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = Fizz;
+				ORGANIZATIONNAME = "Off Brand";
 				TargetAttributes = {
 					49D5C99B186042C2002BB1F0 = {
 						DevelopmentTeam = U7L3URP3WX;
@@ -944,7 +949,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 49D5C997186042C2002BB1F0 /* Build configuration list for PBXProject "Fizz" */;
+			buildConfigurationList = 49D5C997186042C2002BB1F0 /* Build configuration list for PBXProject "Let's" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -962,8 +967,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				49D5C99B186042C2002BB1F0 /* Fizz */,
-				49D5C9B6186042C2002BB1F0 /* FizzTests */,
+				49D5C99B186042C2002BB1F0 /* Let's */,
+				49D5C9B6186042C2002BB1F0 /* Let'sTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1081,7 +1086,6 @@
 				49AA439018E8FBEC006D6830 /* FZZServerMessageCell.m in Sources */,
 				49069B8118661555003D003A /* SBJson4StreamParserState.m in Sources */,
 				49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */,
-				49CD064819BD2EFB004E0C71 /* FZZScrollOverride.m in Sources */,
 				4994FD031929D2EE00BD2FB8 /* FZZUser.m in Sources */,
 				49D5C9E218604973002BB1F0 /* FZZ_Reachability.m in Sources */,
 				49069B0618651731003D003A /* SRWebSocket.m in Sources */,
@@ -1150,7 +1154,7 @@
 /* Begin PBXTargetDependency section */
 		49D5C9BD186042C2002BB1F0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 49D5C99B186042C2002BB1F0 /* Fizz */;
+			target = 49D5C99B186042C2002BB1F0 /* Let's */;
 			targetProxy = 49D5C9BC186042C2002BB1F0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1191,7 +1195,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Sweet (LVXPU6ZL2V)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1229,7 +1233,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Sweet (LVXPU6ZL2V)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1256,14 +1260,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "Fizz/Let's-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "Fizz/Fizz-Info.plist";
+				INFOPLIST_FILE = "Fizz/Let's-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-lc++";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Let's";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
@@ -1281,14 +1285,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "Fizz/Let's-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "Fizz/Fizz-Info.plist";
+				INFOPLIST_FILE = "Fizz/Let's-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-lc++";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Let's";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
@@ -1310,8 +1314,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "FizzTests/FizzTests-Info.plist";
-				PRODUCT_NAME = FizzTests;
+				INFOPLIST_FILE = "FizzTests/Let'sTests-Info.plist";
+				PRODUCT_NAME = "Let'sTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1328,8 +1332,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
-				INFOPLIST_FILE = "FizzTests/FizzTests-Info.plist";
-				PRODUCT_NAME = FizzTests;
+				INFOPLIST_FILE = "FizzTests/Let'sTests-Info.plist";
+				PRODUCT_NAME = "Let'sTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1338,7 +1342,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		49D5C997186042C2002BB1F0 /* Build configuration list for PBXProject "Fizz" */ = {
+		49D5C997186042C2002BB1F0 /* Build configuration list for PBXProject "Let's" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				49D5C9C6186042C2002BB1F0 /* Debug */,
@@ -1347,7 +1351,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		49D5C9C8186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "Fizz" */ = {
+		49D5C9C8186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "Let's" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				49D5C9C9186042C2002BB1F0 /* Debug */,
@@ -1356,7 +1360,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		49D5C9CB186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "FizzTests" */ = {
+		49D5C9CB186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "Let'sTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				49D5C9CC186042C2002BB1F0 /* Debug */,

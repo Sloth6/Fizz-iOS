@@ -36,9 +36,13 @@ CGFloat kFZZVerticalMargin(); //8
 CGFloat kFZZHeadingBaselineToTop(); //120
 //Line height is container around the text
 CGFloat kFZZHeadingLineHeight(); //72
+
+CGFloat kFZZHeadingMinFontSize();
+CGFloat kFZZHeadingMaxFontSize();
+
 CGFloat kFZZGuestListLineHeight(); // 40
 
-CGFloat kFZZColumnWidth(); //48
+CGFloat kFZZInputRowHeight(); //48
 
 CGFloat kFZZBodyLineHeight(); //24
 

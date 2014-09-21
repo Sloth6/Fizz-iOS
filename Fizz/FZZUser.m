@@ -331,7 +331,9 @@ static FZZUser *currentUser = nil;
         
         FZZUser *user = [FZZUser userWithUID:uid];
         
-        [result setObject:user atIndexedSubscript:idx];
+        if (user != nil){
+            [result setObject:user atIndexedSubscript:idx];
+        }
     }];
     
     return result;

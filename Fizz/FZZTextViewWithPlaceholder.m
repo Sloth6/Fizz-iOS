@@ -78,8 +78,43 @@
 -(void)setText:(NSString *)text{
     [_textView setText:text];
     
+//    [self sizeFontToFit:text minSize:kFZZHeadingMinFontSize() maxSize:kFZZHeadingMinFontSize()];
+    
 //    [self myTextDidChange];
 }
+
+//#define kMaxFieldHeight 9999.0
+//
+//-(BOOL)sizeFontToFit:(NSString*)aString minSize:(float)aMinFontSize maxSize:(float)aMaxFontSize
+//{
+//    float fudgeFactor = 16.0;
+//    float fontSize = aMaxFontSize;
+//    
+//    _textView.font = [_textView.font fontWithSize:fontSize];
+//    
+//    CGSize tallerSize = CGSizeMake(self.frame.size.width-fudgeFactor, kMaxFieldHeight);
+//    
+//    CGSize stringSize = [aString boundingRectWithSize:tallerSize
+//                                              options:NSStringDrawingUsesLineFragmentOrigin
+//                                           attributes:@{NSFontAttributeName:_textView.font}
+//                                              context:nil].size;
+//    
+//    while (stringSize.height >= self.frame.size.height)
+//    {
+//        if (fontSize <= aMinFontSize) // it just won't fit
+//            return NO;
+//        
+//        fontSize -= 1.0;
+//        _textView.font = [_textView.font fontWithSize:fontSize];
+//        tallerSize = CGSizeMake(self.frame.size.width-fudgeFactor, kMaxFieldHeight);
+//        stringSize = [aString boundingRectWithSize:tallerSize
+//                                           options:NSStringDrawingUsesLineFragmentOrigin
+//                                        attributes:@{NSFontAttributeName:_textView.font}
+//                                           context:nil].size;
+//    }
+//    
+//    return YES; 
+//}
 
 -(void)setFont:(UIFont *)font{
     [_textView setFont:font];
@@ -92,6 +127,11 @@
 
 -(void)setReturnKeyType:(UIReturnKeyType)returnKeyType{
     [_textView setReturnKeyType:returnKeyType];
+}
+
+- (void)setTextContainerInset:(UIEdgeInsets)insets{
+    [_textView setTextContainerInset:insets];
+    [_placeholderTextView setTextContainerInset:insets];
 }
 
 -(void)setEditable:(BOOL)editable{

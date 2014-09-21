@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "49D5C99B186042C2002BB1F0"
-               BuildableName = "Fizz.app"
-               BlueprintName = "Fizz"
-               ReferencedContainer = "container:Fizz.xcodeproj">
+               BuildableName = "Let&apos;s.app"
+               BlueprintName = "Let&apos;s"
+               ReferencedContainer = "container:Let&apos;s.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "49D5C9B6186042C2002BB1F0"
                BuildableName = "FizzTests.xctest"
-               BlueprintName = "FizzTests"
-               ReferencedContainer = "container:Fizz.xcodeproj">
+               BlueprintName = "Let&apos;sTests"
+               ReferencedContainer = "container:Let&apos;s.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "49D5C99B186042C2002BB1F0"
-            BuildableName = "Fizz.app"
-            BlueprintName = "Fizz"
-            ReferencedContainer = "container:Fizz.xcodeproj">
+            BuildableName = "Let&apos;s.app"
+            BlueprintName = "Let&apos;s"
+            ReferencedContainer = "container:Let&apos;s.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "49D5C99B186042C2002BB1F0"
-            BuildableName = "Fizz.app"
-            BlueprintName = "Fizz"
-            ReferencedContainer = "container:Fizz.xcodeproj">
+            BuildableName = "Let&apos;s.app"
+            BlueprintName = "Let&apos;s"
+            ReferencedContainer = "container:Let&apos;s.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "49D5C99B186042C2002BB1F0"
-            BuildableName = "Fizz.app"
-            BlueprintName = "Fizz"
-            ReferencedContainer = "container:Fizz.xcodeproj">
+            BuildableName = "Let&apos;s.app"
+            BlueprintName = "Let&apos;s"
+            ReferencedContainer = "container:Let&apos;s.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

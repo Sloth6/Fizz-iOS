@@ -220,11 +220,11 @@ static NSMutableArray *instances;
 //}
 
 + (void)setScrollEnabled:(BOOL)canScroll{
-    [instances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        FZZExpandedVerticalTableViewController *evtvc = obj;
-        
-        [[evtvc tableView] setScrollEnabled:canScroll];
-    }];
+//    [instances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        FZZExpandedVerticalTableViewController *evtvc = obj;
+//        
+//        [[evtvc tableView] setScrollEnabled:canScroll];
+//    }];
 }
 
 - (void)viewDidLoad
@@ -361,6 +361,40 @@ static NSMutableArray *instances;
     }
     
     return [UIScreen mainScreen].bounds.size.height;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView offsetForRowAtIndexPath:(NSIndexPath *)indexPath{
+    switch (indexPath.row) {
+        case 0: // Chat
+        {
+            return 0;
+        }
+            break;
+            
+        case 1: // Description
+        {
+            return kFZZInputRowHeight();
+        }
+            break;
+            
+        case 2: // Guest List
+        {
+            return 0;
+        }
+            break;
+            
+        case 3: // Invite
+        {
+            return 0;
+        }
+            break;
+            
+        default:
+        {
+            return 0;
+        }
+            break;
+    }
 }
 
 

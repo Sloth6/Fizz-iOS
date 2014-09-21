@@ -26,6 +26,8 @@
 - (UITableViewCell *)getCurrentCell;
 - (UIScrollView *)getCurrentScrollView;
 
+- (CGFloat)tableView:(UITableView *)tableView offsetForRowAtIndexPath:(NSIndexPath *)indexPath;
+
 - (void)reloadChat;
 
 @end

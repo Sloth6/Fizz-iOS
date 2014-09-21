@@ -8,85 +8,71 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 		<key>Pods-GRMustache.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>Pods-JRSwizzle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
 		</dict>
 		<key>Pods-MapBox.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
 		</dict>
 		<key>Pods-SMCalloutView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
 		</dict>
 		<key>Pods-pop.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>21B072A5A3904FDDBB3776D4</key>
+		<key>28727D831490487DB3CF32BA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8C93AB93DE5E43D0B80DE53F</key>
+		<key>4BFFEC0C6F4948AEBDAEA30F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9862A595084445A48A9A68E4</key>
+		<key>793542A4D63A4C3C9BDDF1FD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B102B000B7324BD3B6085997</key>
+		<key>7B88E2FF910D4C38B183B1EE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B11D1020C4BE42518A8E1659</key>
+		<key>827B24EBAA5F473B912583E6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D5EAE092A30E460C8603F037</key>
+		<key>B8D029C9CEDA47B48C834E1C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EAB24D324CE94EFA851EE2D1</key>
+		<key>C9A7991DC083456B9B7DBC09</key>
 		<dict>
 			<key>primary</key>
 			<true/>
