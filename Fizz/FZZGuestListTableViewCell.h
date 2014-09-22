@@ -10,6 +10,8 @@
 
 @interface FZZGuestListTableViewCell : UITableViewCell
 
+@property (strong, nonatomic) UILabel *label;
+
 - (void)setIsGoing:(BOOL)isGoing;
 
 @end

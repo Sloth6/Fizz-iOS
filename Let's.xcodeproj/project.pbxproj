@@ -63,7 +63,6 @@
 		496C791719B15DA10052C3C4 /* FZZPinTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 496C791619B15DA10052C3C4 /* FZZPinTextField.m */; };
 		496C791A19B15FE70052C3C4 /* FZZPinNumberLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 496C791919B15FE70052C3C4 /* FZZPinNumberLabel.m */; };
 		496C791E19B2297F0052C3C4 /* FZZPinDotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 496C791D19B2297F0052C3C4 /* FZZPinDotView.m */; };
-		497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */; };
 		497F349518E07F1200B70FD4 /* FZZInviteGuestButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 497F349418E07F1200B70FD4 /* FZZInviteGuestButton.m */; };
 		4994FCF71929D23900BD2FB8 /* FZZCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */; };
 		4994FCFD1929D2C000BD2FB8 /* FZZEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFC1929D2C000BD2FB8 /* FZZEvent.m */; };
@@ -254,8 +253,6 @@
 		496C791919B15FE70052C3C4 /* FZZPinNumberLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPinNumberLabel.m; sourceTree = "<group>"; };
 		496C791C19B2297F0052C3C4 /* FZZPinDotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZPinDotView.h; sourceTree = "<group>"; };
 		496C791D19B2297F0052C3C4 /* FZZPinDotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPinDotView.m; sourceTree = "<group>"; };
-		497F348F18DCB75D00B70FD4 /* FZZChatDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZChatDelegate.h; sourceTree = "<group>"; };
-		497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZChatDelegate.m; sourceTree = "<group>"; };
 		497F349318E07F1200B70FD4 /* FZZInviteGuestButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteGuestButton.h; sourceTree = "<group>"; };
 		497F349418E07F1200B70FD4 /* FZZInviteGuestButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteGuestButton.m; sourceTree = "<group>"; };
 		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
@@ -443,15 +440,6 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
-		493B074119897C0000EC61E4 /* ChatViewOLD */ = {
-			isa = PBXGroup;
-			children = (
-				497F348F18DCB75D00B70FD4 /* FZZChatDelegate.h */,
-				497F349018DCB75D00B70FD4 /* FZZChatDelegate.m */,
-			);
-			name = ChatViewOLD;
-			sourceTree = "<group>";
-		};
 		493B074819898ED200EC61E4 /* Chat View */ = {
 			isa = PBXGroup;
 			children = (
@@ -596,7 +584,6 @@
 				49A4C51419C5E2B300F5EC1C /* FZZScrollDetector.m */,
 				49CD064919BF4D26004E0C71 /* FZZPage.h */,
 				49CD064A19BF4D26004E0C71 /* FZZPage.m */,
-				493B074119897C0000EC61E4 /* ChatViewOLD */,
 				4954FB1B18D4F0900083D07F /* InviteViewOLD */,
 			);
 			name = "Event Subviews";
@@ -1135,7 +1122,6 @@
 				4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */,
 				49A4C51519C5E2B300F5EC1C /* FZZScrollDetector.m in Sources */,
 				49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */,
-				497F349118DCB75D00B70FD4 /* FZZChatDelegate.m in Sources */,
 				4950413D198593B1002DE44C /* SocketIOTransportXHR.m in Sources */,
 				49C7898B199D2CD9004EA886 /* FZZContactTableViewCell.m in Sources */,
 			);

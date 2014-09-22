@@ -9,11 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "FZZTableViewCell.h"
 
+@class FZZExpandedVerticalTableViewController;
+
 @interface FZZDescriptionScreenTableViewCell : FZZTableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property UITextView *textView;
 
 //-(void)setText:(NSString *)text;
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;
+
+-(void)setTableViewController:(FZZExpandedVerticalTableViewController *)evtvc;
 
 @end

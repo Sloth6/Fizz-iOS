@@ -19,48 +19,48 @@
 }
 
 UIFont *kFZZHeadingsFont(){
-    return [UIFont fontWithName:@"Futura-MediumItalic" size:68];
+    return [UIFont fontWithName:@"HelveticaNeue-MediumItalic" size:68];
 //    return [UIFont fontWithName:@"Futura-MediumItalic" size:68];
 }
 
 UIFont *kFZZPinInputFont(){
-    return [UIFont fontWithName:@"Futura-Medium" size:68];
+    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:68];
 //    return [UIFont fontWithName:@"FuturaStd-Light" size:68];
 }
 
 UIFont *kFZZBodyFont(){
-    return [UIFont fontWithName:@"Futura-Medium" size:18];
+    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
 //    return [UIFont fontWithName:@"Futura-Medium" size:18];
 }
 
 // Guest List
 UIFont *kFZZSmallFont(){
-    return [UIFont fontWithName:@"Futura-Medium" size:14];
+    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:14];
 //    return [UIFont fontWithName:@"Futura-Medium" size:14];
 }
 
 UIFont *kFZZLabelsFont(){
-    return [UIFont fontWithName:@"Futura-Medium" size:10*2];
+    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:10*2];
 //    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
 }
 
 UIFont *kFZZHostNameFont(){
-    return [UIFont fontWithName:@"Futura-MediumItalic" size:10];
+    return [UIFont fontWithName:@"HelveticaNeue-MediumItalic" size:10];
 //    return [UIFont fontWithName:@"FuturaStd-BoldOblique" size:10];
 }
 
 UIFont *kFZZHostBodyFont(){
-    return [UIFont fontWithName:@"Futura-MediumItalic" size:18];
+    return [UIFont fontWithName:@"HelveticaNeue-MediumItalic" size:18];
 //    return [UIFont fontWithName:@"Futura-MediumItalic" size:18];
 }
 
 UIFont *kFZZCapsulesFont(){
-    return [UIFont fontWithName:@"Futura-Medium" size:10*2];
+    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:10*2];
 //    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
 }
 
 UIFont *kFZZInputFont(){
-    return [UIFont fontWithName:@"Futura-MediumItalic" size:10*2];
+    return [UIFont fontWithName:@"HelveticaNeue-MediumItalic" size:10*2];
 //    eturn [UIFont fontWithName:@"Futura-MediumItalic" size:10*2];
 }
 
@@ -86,6 +86,7 @@ UIFont *kFZZHeavyFontWithSize(CGFloat size){
 
 CGFloat kFZZHorizontalMargin() {return 4;}
 CGFloat kFZZVerticalMargin() {return 8;}
+CGFloat kFZZRightMargin() {return kFZZVerticalMargin();}
 
 CGFloat kFZZHeadingBaselineToTop() {return 120;}
 //Line height is container around the text
@@ -94,7 +95,17 @@ CGFloat kFZZHeadingLineHeight() {return 72;}
 CGFloat kFZZHeadingMinFontSize() {return kFZZHeadingMaxFontSize()/2.0;}
 CGFloat kFZZHeadingMaxFontSize() {return kFZZHeadingLineHeight();}
 
-CGFloat kFZZGuestListLineHeight() {return 40;}
+CGFloat kFZZChatInputBoxInsetBottom() {return kFZZVerticalMargin();}
+CGFloat kFZZChatInputBoxInsetLeft() {return -6 + kFZZHorizontalMargin();}
+
+CGFloat kFZZGuestListLineHeight() {return 24;}
+
+CGFloat kFZZGuestListPeak() {return (3 * kFZZGuestListLineHeight())
+                                + (1.0/2.0 * kFZZGuestListLineHeight());}
+
+CGFloat kFZZGuestListOffset() {return 44;}
+
+CGFloat kFZZInviteListLineHeight() {return 40;}
 
 CGFloat kFZZInputRowHeight() {return 48;}
 

@@ -31,17 +31,30 @@
 }
 
 - (void)setupLabel{
-    UIFont *font = kFZZBodyFont();
+    UIFont *font = kFZZSmallFont();
     
-    [[self textLabel] setFont:font];
-    [[self textLabel] setTextColor:kFZZWhiteTextColor()];
+    _label = [[UILabel alloc] initWithFrame:self.bounds];
+    
+    [_label setFont:font];
+    [_label setTextColor:kFZZWhiteTextColor()];
+    
+    CGFloat dx = kFZZHorizontalMargin();
+    CGFloat dy = -15;
+    
+    CGRect frame = self.bounds;
+    frame.origin.x += dx;
+    frame.origin.y += dy;
+    frame.size.width -= dx;
+    
+    [_label setFrame:frame];
+    [[self contentView] addSubview:_label];
 }
 
 - (void)setIsGoing:(BOOL)isGoing{
     if (isGoing){
-        [[self textLabel] setTextColor:kFZZWhiteTextColor()];
+        [_label setTextColor:kFZZWhiteTextColor()];
     } else {
-        [[self textLabel] setTextColor:kFZZGrayTextColor()];
+        [_label setTextColor:kFZZGrayTextColor()];
     }
 }
 

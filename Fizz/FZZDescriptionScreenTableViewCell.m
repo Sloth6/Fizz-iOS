@@ -8,12 +8,19 @@
 
 #import "FZZDescriptionScreenTableViewCell.h"
 #import "FZZEvent.h"
+#import "FZZUser.h"
 #import "FZZAppDelegate.h"
 #import "FZZUtilities.h"
+
+#import "FZZExpandedVerticalTableViewController.h"
 
 @interface FZZDescriptionScreenTableViewCell ()
 
 @property NSIndexPath *eventIndexPath;
+@property FZZExpandedVerticalTableViewController *evtvc;
+
+@property UIButton *optionsButton;
+@property (strong, nonatomic) UILabel *hostLabel;
 
 @end
 
@@ -26,9 +33,17 @@
         // Initialization code
         [self setupBackground];
         [self setupTextview];
-        [self setupOptionsButton];
+        [self setupHostName];
     }
     return self;
+}
+
+-(void)setTableViewController:(FZZExpandedVerticalTableViewController *)evtvc{
+    _evtvc = evtvc;
+    
+    [self setupOptionsButton];
+    [self updateTextview];
+    [self updateHostName];
 }
 
 - (void)setupBackground{
@@ -37,10 +52,10 @@
 }
 
 - (void)setupTextview{
-    CGFloat leftBorder   = 4;
-    CGFloat topBorder    = 50;
-    CGFloat rightBorder  = 4;
-    CGFloat bottomBorder = 4;
+    CGFloat leftBorder   = -8 + kFZZHorizontalMargin();
+    CGFloat topBorder    = 0;
+    CGFloat rightBorder  = 0;
+    CGFloat bottomBorder = 0;
     
     CGRect frame = [UIScreen mainScreen].bounds;
     
@@ -59,8 +74,65 @@
     UIFont *font = kFZZHeadingsFont();
     
     [_textView setFont:font];
-    NSLog(@"COLOUR: %@", kFZZWhiteTextColor());
     [_textView setTextColor:kFZZWhiteTextColor()];
+}
+
+- (void)setupHostName{
+    CGFloat leftBorder   = kFZZHorizontalMargin();
+    CGFloat topBorder    = 0;
+    CGFloat rightBorder  = 0;
+    CGFloat bottomBorder = 0;
+    
+    CGRect frame = [_textView bounds];
+    
+    frame.origin.y = frame.size.height;
+    frame.size.height = kFZZGuestListLineHeight();
+    
+    frame.origin.x += leftBorder;
+    frame.origin.y += topBorder;
+    frame.size.width  -= (leftBorder + rightBorder);
+    frame.size.height -= (topBorder + bottomBorder);
+    
+    _hostLabel = [[UILabel alloc] initWithFrame:frame];
+    [self addSubview:_hostLabel];
+    
+    [_hostLabel setBackgroundColor:[UIColor clearColor]];
+    [_hostLabel setOpaque:NO];
+    
+    UIFont *font = kFZZHostNameFont();
+    
+    [_hostLabel setFont:font];
+    [_hostLabel setTextColor:kFZZWhiteTextColor()];
+}
+
+- (void)updateTextview{
+    CGFloat cellOffset = [_evtvc descriptionCellOffset];
+    
+    CGRect frame = [_textView frame];
+    
+    CGRect screenFrame = [UIScreen mainScreen].bounds;
+    
+    frame.size.height = screenFrame.size.height - cellOffset - kFZZInputRowHeight();
+    
+    frame.size.height -= (frame.origin.y);
+    
+    [_textView setFrame:frame];
+}
+
+- (void)updateHostName{
+    CGRect oldFrame = [_hostLabel frame];
+    
+    CGRect frame = [_textView frame];
+    frame.origin.x = oldFrame.origin.x;
+    
+    frame.origin.y = frame.size.height;
+    
+    frame.origin.y -= kFZZGuestListPeak();
+    frame.origin.y += kFZZVerticalMargin();
+    
+    frame.size.height = oldFrame.size.height;
+    
+    [_hostLabel setFrame:frame];
 }
 
 - (void)optionsButtonHit{
@@ -102,21 +174,24 @@
 }
 
 - (void)setupOptionsButton{
-    UIButton *optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_optionsButton removeFromSuperview];
+    
+    _optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     
     UIImage *image = [UIImage imageNamed:@"optionsButtonImage"];
     
-    [optionsButton setImage:image forState:UIControlStateNormal];
+    [_optionsButton setImage:image forState:UIControlStateNormal];
     
-    [optionsButton addTarget:self action:@selector(optionsButtonHit) forControlEvents:UIControlEventTouchUpInside];
+    [_optionsButton addTarget:self action:@selector(optionsButtonHit) forControlEvents:UIControlEventTouchUpInside];
     
     CGRect frame = [UIScreen mainScreen].bounds;
     
     CGFloat imageHeight = image.size.height;
     CGFloat imageWidth = image.size.width;
     
-    CGFloat xOffsetFromRight = 15;
-    CGFloat yOffsetFromTop = 15;
+    // Magic Number 32
+    CGFloat xOffsetFromRight = kFZZRightMargin();
+    CGFloat yOffsetFromTop = -[_evtvc descriptionCellOffset] - 32 + kFZZInputRowHeight();
     
     CGFloat bufferSpace = 8;
     
@@ -130,8 +205,8 @@
     
     NSLog(@"xy:(%f, %f) wh:(%f, %f)", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     
-    [optionsButton setFrame:frame];
-    [self.contentView addSubview:optionsButton];
+    [_optionsButton setFrame:frame];
+    [self.contentView addSubview:_optionsButton];
 }
 
 - (void)awakeFromNib
@@ -151,7 +226,10 @@
     FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
     NSString *title = [event eventDescription];
     
+    NSString *hostName = [[[event creator] name] uppercaseString];
+    
     [_textView setText:title];
+    [_hostLabel setText:hostName];
     NSLog(@"event: <%@>", title);
     [_textView setNeedsDisplay];
 }

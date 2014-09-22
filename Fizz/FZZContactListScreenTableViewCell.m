@@ -14,9 +14,9 @@
 
 #import "FZZUtilities.h"
 
-static CGFloat kLeftBorder = 40;
-static CGFloat kRightBorder = 6;
-static CGFloat kTopBorder = 6;
+static CGFloat kLeftBorder = 0;
+static CGFloat kRightBorder = 0;
+static CGFloat kTopBorder = 0;
 static CGFloat kBottomBorder = 6;
 
 @interface FZZContactListScreenTableViewCell ()

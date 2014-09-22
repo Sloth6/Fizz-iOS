@@ -12,13 +12,17 @@
 #import "FZZUtilities.h"
 #import "FZZEvent.h"
 
+#import "FZZAppDelegate.h"
+
 static CGFloat kFZZInputScrollBuffer;
 
 @interface FZZScrollDetector ()
 
 @property BOOL touch;
 @property BOOL touchStart;
+
 @property BOOL scrollSubView;
+
 @property UIScrollView *currentScrollView;
 @property UIScrollView *movingScrollView;
 
@@ -65,15 +69,23 @@ static CGFloat kFZZInputScrollBuffer;
 //    _lastOffset = [_vtvc tableView].contentOffset;
 //}
 
+-(void)setHorizontalScrollEnabled:(BOOL)isEnabled{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [[appDelegate.evc collectionView] setScrollEnabled:isEnabled];
+}
+
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if (scrollView == _inputScrollView){
         _touchStart = YES;
         _touch = YES;
         _scrollSubView = NO;
         _movingScrollView = nil;
+        [self setHorizontalScrollEnabled:NO];
+        
+        _lastTVCOffset = [[_vtvc tableView] contentOffset];
         
         [self updateCurrentScrollView];
-        _lastTVCOffset = [[_vtvc tableView] contentOffset];
     }
     
 //    else if (scrollView == [_vtvc tableView]) {
@@ -172,19 +184,38 @@ static CGFloat kFZZInputScrollBuffer;
         [_inputScrollView setDelegate:self];
         [_inputScrollView setContentInset:[_currentScrollView contentInset]];
     } else {
-        size = CGSizeMake([self bounds].size.width,
-                          [self bounds].size.height + (2 * kFZZInputScrollBuffer));
-        
-        offset = CGPointMake(0, kFZZInputScrollBuffer);
-        
-        [_inputScrollView setDelegate:nil];
-        [_inputScrollView setContentSize:size];
-        [_inputScrollView setContentOffset:offset];
-        [_inputScrollView setDelegate:self];
-        [_inputScrollView setContentInset:UIEdgeInsetsZero];
+        [self updateCurrentScrollViewToMainView];
+//        size = CGSizeMake([self bounds].size.width,
+//                          [self bounds].size.height + (2 * kFZZInputScrollBuffer));
+//        
+//        offset = CGPointMake(0, kFZZInputScrollBuffer);
+//        
+//        [_inputScrollView setDelegate:nil];
+//        [_inputScrollView setContentSize:size];
+//        [_inputScrollView setContentOffset:offset];
+//        [_inputScrollView setDelegate:self];
+//        [_inputScrollView setContentInset:UIEdgeInsetsZero];
     }
     
     _lastInputOffset = _inputScrollView.contentOffset;
+}
+
+- (void)scrollSubViewByDelta:(CGPoint)delta{
+//    [self updateCurrentScrollView];
+    
+    _scrollSubView = YES;
+    
+    CGSize size = [_currentScrollView contentSize];
+    size.height += 20;
+    
+    [_inputScrollView setDelegate:nil];
+    [_inputScrollView setContentSize:size];
+    [_inputScrollView setContentOffset:[_currentScrollView contentOffset]];
+    [_inputScrollView setDelegate:self];
+    
+    CGPoint updatedOffset = CGPointMake(0, _currentScrollView.contentOffset.y - delta.y);
+    
+    [_currentScrollView setContentOffset:updatedOffset];
 }
 
 - (void)handleSubScrollView{
@@ -207,16 +238,9 @@ static CGFloat kFZZInputScrollBuffer;
                 
             } else {
                 // Scroll the currentScrollView
-//                [self updateCurrentScrollView];
-                
                 NSLog(@"SHOULD SCROLL SUBVIEW UP");
                 
-                _scrollSubView = YES;
-                
-                CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x - delta.x,
-                                                    _currentScrollView.contentOffset.y - delta.y);
-                
-                [_currentScrollView setContentOffset:updatedOffset];
+                [self scrollSubViewByDelta:delta];
             }
         } else if (delta.y < 0){
             _touchStart = NO;
@@ -237,21 +261,14 @@ static CGFloat kFZZInputScrollBuffer;
             } else {
                 NSLog(@"SHOULD SCROLL SUBVIEW DOWN");
                 // Scroll the currentScrollView
-//                [self updateCurrentScrollView];
                 
-                _scrollSubView = YES;
-                
-                CGPoint updatedOffset = CGPointMake(_currentScrollView.contentOffset.x - delta.x,
-                                                    _currentScrollView.contentOffset.y - delta.y);
-                
-                [_currentScrollView setContentOffset:updatedOffset];
+                [self scrollSubViewByDelta:delta];
             }
         }
         return;
     }
     
-    CGPoint delta = CGPointMake(_lastInputOffset.x - _inputScrollView.contentOffset.x,
-                                _lastInputOffset.y - _inputScrollView.contentOffset.y);
+    CGPoint delta = CGPointMake(0, _lastInputOffset.y - _inputScrollView.contentOffset.y);
     
     if (_movingScrollView){
         CGPoint updatedOffset = CGPointMake(0, _movingScrollView.contentOffset.y - delta.y);
@@ -461,6 +478,8 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    
+    [self setHorizontalScrollEnabled:YES];
     
     if (_scrollSubView){
         _touchStart = NO;

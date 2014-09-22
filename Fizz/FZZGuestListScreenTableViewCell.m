@@ -94,8 +94,6 @@
 - (void)setupTableView{
     _gltvc = [[FZZGuestListScreenTableViewController alloc] init];
     
-    [[_gltvc tableView] setBackgroundColor:[UIColor purpleColor]];
-    
     [self addSubview:[_gltvc tableView]];
     [[_gltvc tableView] setUserInteractionEnabled:NO];
 }
@@ -103,10 +101,10 @@
 - (void)updateTableView{
     CGRect frame = self.bounds;
     
-    CGFloat leftBorder = 40;
-    CGFloat rightBorder = 6;
-    CGFloat topBorder = 6;
-    CGFloat bottomBorder = 6;
+    CGFloat leftBorder = 0;
+    CGFloat rightBorder = 0;
+    CGFloat topBorder = 0;
+    CGFloat bottomBorder = 0;
     
     bottomBorder += [FZZGuestListScreenTableViewCell searchBarHeight];
     
@@ -128,8 +126,6 @@
     CGFloat x = 0;
     CGFloat y = [self frame].size.height;// - (height + bottomBuffer);
     
-    NSLog(@"<<<%f", y);
-    
     CGRect frame = CGRectMake(x, y, width, height);
     
     _searchBar = [[FZZInviteSearchBarView alloc] initWithFrame:frame];
@@ -145,12 +141,12 @@
 }
 
 - (void)updateSearchBar{
-    CGFloat bottomBuffer = 0;
+    CGFloat bottomBuffer = kFZZVerticalMargin();
     
     CGFloat width = [self bounds].size.width;
     CGFloat height = [FZZGuestListScreenTableViewCell searchBarHeight];
     CGFloat x = 0;
-    CGFloat y = [self bounds].size.height - (height + bottomBuffer);
+    CGFloat y = [self bounds].size.height - (height + bottomBuffer) + 16;
     
     CGRect frame = CGRectMake(x, y, width, height);
     

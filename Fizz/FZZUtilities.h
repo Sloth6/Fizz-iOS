@@ -32,6 +32,7 @@ UIFont *kFZZPinInputFont();
 
 CGFloat kFZZHorizontalMargin(); //4
 CGFloat kFZZVerticalMargin(); //8
+CGFloat kFZZRightMargin();
 
 CGFloat kFZZHeadingBaselineToTop(); //120
 //Line height is container around the text
@@ -40,7 +41,12 @@ CGFloat kFZZHeadingLineHeight(); //72
 CGFloat kFZZHeadingMinFontSize();
 CGFloat kFZZHeadingMaxFontSize();
 
+CGFloat kFZZChatInputBoxInsetBottom();
+CGFloat kFZZChatInputBoxInsetLeft();
+
 CGFloat kFZZGuestListLineHeight(); // 40
+CGFloat kFZZGuestListPeak();
+CGFloat kFZZGuestListOffset();
 
 CGFloat kFZZInputRowHeight(); //48
 

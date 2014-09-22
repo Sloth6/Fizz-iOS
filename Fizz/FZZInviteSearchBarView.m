@@ -45,7 +45,11 @@
 - (void)setupSearchBar{
     [_textField removeFromSuperview];
     
-    _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:self.bounds];
+    CGRect frame = self.bounds;
+    frame.origin.x += kFZZHorizontalMargin();
+    frame.size.width -= kFZZHorizontalMargin();
+    
+    _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:frame];
     
     UIFont *font = kFZZInputFont();
     

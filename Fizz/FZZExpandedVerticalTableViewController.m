@@ -268,6 +268,12 @@ static NSMutableArray *instances;
     return [FZZEvent getEventAtIndexPath:_eventIndexPath];
 }
 
+- (CGFloat)descriptionCellOffset{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    
+    return [self tableView:[self tableView] offsetForRowAtIndexPath:indexPath];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
@@ -289,6 +295,8 @@ static NSMutableArray *instances;
             
             NSString *title = [event eventDescription];
             [(FZZDescriptionScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
+            
+            [(FZZDescriptionScreenTableViewCell *)cell setTableViewController:self];
             
 //            [(FZZDescriptionScreenTableViewCell *)cell setText:title];
             [cell setBackgroundColor:[UIColor clearColor]];
@@ -353,6 +361,10 @@ static NSMutableArray *instances;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 1){
+        return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath] - kFZZGuestListPeak();
+    }
+    
     if (indexPath.row == 3){
         NSInteger searchBarHeight = [FZZGuestListScreenTableViewCell searchBarHeight];
         NSInteger cellOffset = [FZZContactListScreenTableViewCell cellOffset];
@@ -360,7 +372,7 @@ static NSMutableArray *instances;
         return [UIScreen mainScreen].bounds.size.height - (searchBarHeight + cellOffset);
     }
     
-    return [UIScreen mainScreen].bounds.size.height;
+    return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView offsetForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -373,13 +385,13 @@ static NSMutableArray *instances;
             
         case 1: // Description
         {
-            return kFZZInputRowHeight();
+            return kFZZInputRowHeight() + kFZZVerticalMargin() + 1;
         }
             break;
             
-        case 2: // Guest List
+        case 2: // Guest List OR Invite List if no guests
         {
-            return 0;
+            return -20 + kFZZGuestListOffset();
         }
             break;
             

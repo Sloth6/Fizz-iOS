@@ -74,7 +74,7 @@
     float viewFormHeight = self.viewForm.bounds.size.height;
     
     // Full screen minus viewForm
-    CGFloat xOffset = 40;
+    CGFloat xOffset = -13 + kFZZHorizontalMargin();
     
     frame.origin.x = xOffset;
     
@@ -133,6 +133,12 @@
     [_placeholderView setText:@"add a comment"];
     [_placeholderView setTextColor:kFZZGrayTextColor()];
     [_placeholderView setFont:kFZZInputFont()];
+    
+    UIEdgeInsets insets = UIEdgeInsetsMake(-kFZZChatInputBoxInsetBottom(), kFZZChatInputBoxInsetLeft(),
+                                           0, 0);
+    
+    [textView setContentInset:insets];
+    [_placeholderView setContentInset:insets];
     
     [chatBox setDelegate:self];
     
@@ -263,7 +269,7 @@
     //NSLog(@"FORM VIEW HEIGHT : %d", viewFormH);
     formFrame.size.height = 20 + newSizeH;
     //formFrame.origin.y = 199 - (newSizeH - 18);
-    formFrame.origin.y = screenY - formFrame.size.height - _keyboardRect.size.height;
+    formFrame.origin.y = screenY - formFrame.size.height - _keyboardRect.size.height - kFZZChatInputBoxInsetBottom();
     viewForm.frame = formFrame;
     
     // table view

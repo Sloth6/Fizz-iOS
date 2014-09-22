@@ -23,6 +23,8 @@
 
 - (FZZEvent *)getFZZEvent;
 
+- (CGFloat)descriptionCellOffset;
+
 - (UITableViewCell *)getCurrentCell;
 - (UIScrollView *)getCurrentScrollView;
 
