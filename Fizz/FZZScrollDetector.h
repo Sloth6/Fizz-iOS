@@ -20,6 +20,8 @@
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset;
 
+-(void)scrollToPageAtIndexPath:(NSIndexPath *)scrollPosition isAnimated:(BOOL)isAnimated;
+
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;

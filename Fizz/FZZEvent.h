@@ -16,8 +16,8 @@
 
 @property (strong, nonatomic) NSIndexPath *scrollPosition;
 
-@property (nonatomic, strong) NSDate * creationTime;
-@property (nonatomic, strong) NSNumber * eventID;
+@property (nonatomic, strong) NSDate *creationTime;
+@property (nonatomic, strong) NSNumber *eventID;
 @property (nonatomic, strong) NSArray *guests;
 @property (nonatomic, strong) NSArray *invitees;
 @property (nonatomic, strong) NSArray *messages;

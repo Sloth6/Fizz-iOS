@@ -69,6 +69,15 @@ static CGFloat kFZZInputScrollBuffer;
 //    _lastOffset = [_vtvc tableView].contentOffset;
 //}
 
+-(void)scrollToPageAtIndexPath:(NSIndexPath *)scrollPosition isAnimated:(BOOL)isAnimated{
+    NSNumber *pageOffset = [self getPageOffsetForPageNum:scrollPosition.row];
+    
+    CGPoint offset = CGPointMake(0, [pageOffset floatValue]);
+    
+    [[_vtvc tableView] setContentOffset:offset];
+    [[_vtvc scrollDetector] updateInputScrollView];
+}
+
 -(void)setHorizontalScrollEnabled:(BOOL)isEnabled{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     

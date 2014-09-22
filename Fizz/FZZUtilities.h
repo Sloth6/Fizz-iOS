@@ -20,6 +20,8 @@ UIImage *crop(UIImage *image, CGRect rect);
 UIColor *kFZZWhiteTextColor();
 UIColor *kFZZGrayTextColor();
 
+NSString *kFZZConfirmationCodeJustSentPrompt();
+
 UIFont *kFZZBodyFont();
 UIFont *kFZZSmallFont();
 UIFont *kFZZLabelsFont();
@@ -49,6 +51,8 @@ CGFloat kFZZGuestListPeak();
 CGFloat kFZZGuestListOffset();
 
 CGFloat kFZZInputRowHeight(); //48
+
+CGFloat kFZZMinChatCellHeight(); // 48
 
 CGFloat kFZZBodyLineHeight(); //24
 

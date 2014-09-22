@@ -452,7 +452,8 @@
     CGFloat width = cell.bounds.size.width;
     CGFloat height = cell.bounds.size.height;
     
-    NSArray *lines = [NSArray arrayWithObjects:@"get your", @"friends", @"together", nil];
+    NSArray *lines = [NSArray arrayWithObject:@"let's..."];
+    //[NSArray arrayWithObjects:@"get your", @"friends", @"together", nil];
     
     _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     

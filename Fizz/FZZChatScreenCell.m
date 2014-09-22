@@ -75,8 +75,10 @@
     
     // Full screen minus viewForm
     CGFloat xOffset = -13 + kFZZHorizontalMargin();
+    CGFloat yOffset = kFZZVerticalMargin();
     
     frame.origin.x = xOffset;
+    frame.origin.y = yOffset;
     
     frame.size.height = frame.size.height - viewFormHeight;
     frame.size.width  = frame.size.width - xOffset;
@@ -123,6 +125,7 @@
     [textView setOpaque:NO];
     [textView setTextColor:kFZZWhiteTextColor()];
     [textView setFont:kFZZInputFont()];
+    [textView setKeyboardAppearance:UIKeyboardAppearanceDark];
     
     _placeholderView = mProtoTVC.placeholderTV;
     [chatBox setBackgroundColor:[UIColor clearColor]];
@@ -133,6 +136,7 @@
     [_placeholderView setText:@"add a comment"];
     [_placeholderView setTextColor:kFZZGrayTextColor()];
     [_placeholderView setFont:kFZZInputFont()];
+    [_placeholderView setKeyboardAppearance:UIKeyboardAppearanceDark];
     
     UIEdgeInsets insets = UIEdgeInsetsMake(-kFZZChatInputBoxInsetBottom(), kFZZChatInputBoxInsetLeft(),
                                            0, 0);

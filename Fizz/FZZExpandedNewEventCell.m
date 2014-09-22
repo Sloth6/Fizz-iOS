@@ -93,6 +93,8 @@ static float kFZZDarkScreenAlpha;
         [_textView textContainer].maximumNumberOfLines = 3;
         
         [_textView setBackgroundColor:[UIColor clearColor]];
+        
+        [[_textView textView] setKeyboardAppearance:UIKeyboardAppearanceDark];
     }
     
     [_textView setEditable:NO];

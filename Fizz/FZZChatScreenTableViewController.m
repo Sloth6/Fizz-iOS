@@ -16,8 +16,6 @@
 #import "FZZUserMessageCell.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-static int kFZZMinChatCellHeight = 58;
-
 @interface FZZChatScreenTableViewController ()
 
 @property NSMutableSet *nibTextCellLoaded;
@@ -229,7 +227,7 @@ static int kFZZMinChatCellHeight = 58;
     float height = [FZZUserMessageCell getTextBoxForMessage:message withLabelWidth:labelWidth].height;
     
     // Fit the profile picture at least
-    height = MAX(height, kFZZMinChatCellHeight);
+    height = MAX(height, kFZZMinChatCellHeight());
     
     return height + 14;
 }

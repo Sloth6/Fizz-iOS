@@ -71,6 +71,7 @@
     [_textField setKeyboardType:UIKeyboardTypeAlphabet];
     
     [_textField setClearButtonMode:UITextFieldViewModeWhileEditing];
+    [_textField setKeyboardAppearance:UIKeyboardAppearanceDark];
     
     [self addSubview:_textField];
 }

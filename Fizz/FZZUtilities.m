@@ -18,6 +18,10 @@
 //    kFZZWhiteTextColor = [UIColor redColor];//[UIColor colorWithWhite:1.0 alpha:0.98];
 }
 
+NSString *kFZZConfirmationCodeJustSentPrompt(){
+    return @"enter the code we just sent you";
+}
+
 UIFont *kFZZHeadingsFont(){
     return [UIFont fontWithName:@"HelveticaNeue-MediumItalic" size:68];
 //    return [UIFont fontWithName:@"Futura-MediumItalic" size:68];
@@ -108,6 +112,8 @@ CGFloat kFZZGuestListOffset() {return 44;}
 CGFloat kFZZInviteListLineHeight() {return 40;}
 
 CGFloat kFZZInputRowHeight() {return 48;}
+
+CGFloat kFZZMinChatCellHeight() {return 48;}
 
 CGFloat kFZZBodyLineHeight() {return 24;}
 

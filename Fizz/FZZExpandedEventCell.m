@@ -81,12 +81,13 @@
     
     NSIndexPath *scrollPosition = [event scrollPosition];
     
-    [_vtvc.tableView scrollToRowAtIndexPath:scrollPosition atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    if (!scrollPosition){
+        scrollPosition = [NSIndexPath indexPathForRow:1 inSection:0];
+    }
     
-    FZZPage *page = [[_vtvc scrollDetector] getCurrentPage];
+//    [_vtvc.tableView scrollToRowAtIndexPath:scrollPosition atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     
-    [[_vtvc tableView] setContentOffset:[page pageOffset]];
-    [[_vtvc scrollDetector] updateInputScrollView];
+    [[_vtvc scrollDetector] scrollToPageAtIndexPath:scrollPosition isAnimated:NO];
 }
 
 - (void)setupExpandedEventCell{

@@ -83,7 +83,7 @@
 - (void)setupLabel{
     [_label setTextColor:kFZZWhiteTextColor()];
     [_label setFont:kFZZSmallFont()];
-    [_label setText:@"we texted you a confirmation code.\nit may take a moment to arrive."];
+    [_label setText:kFZZConfirmationCodeJustSentPrompt()];
 }
 
 - (void)sendCode:(NSString *)code{
