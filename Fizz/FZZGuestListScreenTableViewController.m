@@ -59,9 +59,9 @@
     _event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
     
     if (section == 0){ // Attending Individuals
-        return [[_event guests] count] + 2;
+        return [[_event guestsWithoutCreator]  count];
     } else { // Not Yet Responded
-        return [[_event inviteesNotGuests] count] + 4;
+        return [[_event inviteesNotGuestsWithoutCreator] count];
     }
 }
 
@@ -78,17 +78,13 @@
     if (indexPath.section == 0){ // Guest
         [cell setIsGoing:YES];
         
-        userName = @"tony \"attending\" oni";
-        
-//        FZZUser *guest = [[_event guests] objectAtIndex:indexPath.row];
-//        userName = [guest name];
+        FZZUser *guest = [[_event guests] objectAtIndex:indexPath.row];
+        userName = [guest name];
     } else { // InviteeNotGuest
         [cell setIsGoing:NO];
-
-        userName = @"jeff \"not attending\" bridges";
         
-//        FZZUser *invitee = [[_event inviteesNotGuests] objectAtIndex:indexPath.row];
-//        userName = [invitee name];
+        FZZUser *invitee = [[_event inviteesNotGuests] objectAtIndex:indexPath.row];
+        userName = [invitee name];
     }
     
     [[cell label] setText:userName];

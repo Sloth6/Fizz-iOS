@@ -42,6 +42,7 @@ static NSMutableArray *instances;
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        
         [self.tableView setSeparatorColor:[UIColor clearColor]];
         [self.tableView setBackgroundColor:[UIColor clearColor]];
         
@@ -268,10 +269,20 @@ static NSMutableArray *instances;
     return [FZZEvent getEventAtIndexPath:_eventIndexPath];
 }
 
+- (NSIndexPath *)descriptionCellIndexPath{
+    return [NSIndexPath indexPathForRow:1 inSection:0];
+}
+
 - (CGFloat)descriptionCellOffset{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    NSIndexPath *indexPath = [self descriptionCellIndexPath];
     
     return [self tableView:[self tableView] offsetForRowAtIndexPath:indexPath];
+}
+
+- (CGFloat)descriptionCellHeight{
+    NSIndexPath *indexPath = [self descriptionCellIndexPath];
+    
+    return [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

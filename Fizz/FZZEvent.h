@@ -51,6 +51,9 @@
 -(FZZUser *)creator;
 -(NSArray *)inviteesNotGuests;
 
+-(NSArray *)guestsWithoutCreator;
+-(NSArray *)inviteesNotGuestsWithoutCreator;
+
 // Guests is a subset of invitees ALWAYS. People who join a non-secret event are "invited"
 //-(NSMutableArray *)guests;
 //-(NSMutableArray *)invitees;

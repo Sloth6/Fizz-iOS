@@ -15,10 +15,10 @@ static NSURLConnection *connection;
 
 @implementation FZZAjaxPostDelegate
 
-+ (BOOL)isLoginURL:(NSURL *)url{
++ (BOOL)isLoginSuccessURL:(NSURL *)url{
     NSString *absoluteString = [url absoluteString];
     
-    return [[self getLoginURL] isEqualToString:absoluteString];
+    return [[self getSuccessURL] isEqualToString:absoluteString];
 }
 
 + (BOOL)connection:(NSURLConnection *)connection didRecieveResponse:(NSURLResponse *)response{
@@ -28,7 +28,7 @@ static NSURLConnection *connection;
     
     NSLog(@"\n\n<<%@>>\n\n", resp);
     
-    if ([FZZAjaxPostDelegate isLoginURL:[resp URL]]){
+    if ([FZZAjaxPostDelegate isLoginSuccessURL:[resp URL]]){
         if ([resp statusCode] == 200){
             // AJAX Login success
             if (!didAjax){
@@ -180,6 +180,10 @@ static NSURLConnection *connection;
 
 + (NSString *)getLoginURL{
     return [NSString stringWithFormat:@"http://%@:%d/login", kFZZSocketHost, kFZZSocketPort];
+}
+
++ (NSString *)getSuccessURL{
+    return [NSString stringWithFormat:@"http://%@:%d/success", kFZZSocketHost, kFZZSocketPort];
 }
 
 /*

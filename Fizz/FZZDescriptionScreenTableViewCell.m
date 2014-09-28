@@ -12,6 +12,8 @@
 #import "FZZAppDelegate.h"
 #import "FZZUtilities.h"
 
+#import "FZZAttendingButton.h"
+
 #import "FZZExpandedVerticalTableViewController.h"
 
 @interface FZZDescriptionScreenTableViewCell ()
@@ -21,6 +23,7 @@
 
 @property UIButton *optionsButton;
 @property (strong, nonatomic) UILabel *hostLabel;
+@property (strong, nonatomic) FZZAttendingButton *attendingButton;
 
 @end
 
@@ -34,6 +37,7 @@
         [self setupBackground];
         [self setupTextview];
         [self setupHostName];
+        [self setupAttendingButton];
     }
     return self;
 }
@@ -44,6 +48,7 @@
     [self setupOptionsButton];
     [self updateTextview];
     [self updateHostName];
+    [self updateAttendingButton];
 }
 
 - (void)setupBackground{
@@ -103,6 +108,60 @@
     
     [_hostLabel setFont:font];
     [_hostLabel setTextColor:kFZZWhiteTextColor()];
+}
+
+- (void)setupAttendingButton{
+    CGRect screenFrame = [UIScreen mainScreen].bounds;
+    
+    screenFrame.size.height = [_evtvc descriptionCellHeight];
+    
+    float x = screenFrame.size.width - kFZZHorizontalMargin();
+    float y = screenFrame.size.height - kFZZHorizontalMargin();
+    
+    CGPoint bottomRightCorner = CGPointMake(x, y);
+    
+    _attendingButton = [[FZZAttendingButton alloc] initWithBottomRightCorner:bottomRightCorner];
+    
+    [[self contentView] addSubview:_attendingButton];
+    
+    [_attendingButton addTarget:self
+                         action:@selector(attendingButtonHit)
+               forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)attendingButtonHit{
+    NSLog(@"BUTTON HIT!");
+    
+    FZZEvent *event = [self event];
+    
+    FZZUser *me = [FZZUser me];
+    
+    BOOL isAttending = [event isUserGuest:me];
+    
+    if (!isAttending){
+        [event socketIOJoinEventWithAcknowledge:nil];
+    } else {
+        [event socketIOLeaveEventWithAcknowledge:nil];
+    }
+    
+    [_attendingButton setIsAttending:!isAttending isAnimated:YES];
+}
+
+- (FZZEvent *)event{
+    return [FZZEvent getEventAtIndexPath:_eventIndexPath];
+}
+
+- (void)updateAttendingButton{
+    CGRect screenFrame = [_evtvc tableView].bounds;
+    
+    screenFrame.size.height = [_evtvc descriptionCellHeight];
+    
+    float x = screenFrame.size.width - kFZZHorizontalMargin();
+    float y = screenFrame.size.height - kFZZHorizontalMargin() + kFZZGuestListPeak();
+    
+    CGPoint bottomRightCorner = CGPointMake(x, y);
+    
+    [_attendingButton setBottomRightCorner:bottomRightCorner];
 }
 
 - (void)updateTextview{
@@ -169,7 +228,7 @@
 }
 
 - (void)deleteEvent{    
-    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    FZZEvent *event = [self event];
     [event socketIODeleteEventWithAcknowledge:nil];
 }
 
@@ -223,15 +282,35 @@
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
-    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    FZZEvent *event = [self event];
     NSString *title = [event eventDescription];
     
     NSString *hostName = [[[event creator] name] uppercaseString];
     
     [_textView setText:title];
     [_hostLabel setText:hostName];
+    [_attendingButton setEventIndexPath:indexPath];
+    
     NSLog(@"event: <%@>", title);
     [_textView setNeedsDisplay];
 }
+
+//- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+//    for (UIView* view in self.contentView.subviews) {
+//        if (view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event]) {
+//            return YES;
+//        }
+//    }
+//    return NO;
+//}
+
+//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+//{
+//    if (CGRectContainsPoint(_attendingButton.frame, point)) {
+//        return self;
+//    }
+//    
+//    return [super hitTest:point withEvent:event];
+//}
 
 @end

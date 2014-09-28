@@ -69,6 +69,8 @@ CGFloat kFZZTextInputBottomPadding(); // 8
 
 CGFloat kFZZCancelInviteFacebookFriendsButton(); // 9
 
+float kFZZButtonBuffer();
+
 
 +(CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;
 

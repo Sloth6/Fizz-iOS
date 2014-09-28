@@ -140,15 +140,35 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    UITableViewCell *cell = [_vtvc getCurrentCell];
+    NSArray *visibleCells = [[_vtvc tableView] visibleCells];
     
-    for (UIView *view in cell.contentView.subviews) {
-        if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event]){
-            return NO;
+    for (UITableViewCell *cell in visibleCells){
+    
+//        UITableViewCell *cell = [_vtvc getCurrentCell];
+        
+        for (UIView *view in cell.contentView.subviews) {
+            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event]){
+                return NO;
+            }
         }
     }
     
     return [super pointInside:point withEvent:event];
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    NSArray *visibleCells = [[_vtvc tableView] visibleCells];
+    
+    for (UITableViewCell *cell in visibleCells){
+        for (UIView *view in cell.contentView.subviews) {
+            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event]){
+                
+                return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+            }
+        }
+    }
+    
+    return [super hitTest:point withEvent:event];
 }
 
 - (void)unmoveVtvc{

@@ -199,6 +199,21 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     }
 }
 
+-(NSArray *)guestsWithoutCreator{
+    NSMutableArray *guests = [[self guests] mutableCopy];
+    [guests removeObject:_creator];
+    
+    return guests;
+}
+
+-(NSArray *)inviteesNotGuestsWithoutCreator{
+    NSMutableArray *inviteesNotGuests = [[self inviteesNotGuests] mutableCopy];
+    [inviteesNotGuests removeObject:_creator];
+    
+    return inviteesNotGuests;
+}
+
+
 /*
  For each cached event, loads the cached event data, provided the event doesn't exist in the app already.
  

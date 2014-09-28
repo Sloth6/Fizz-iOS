@@ -59,7 +59,7 @@ UIFont *kFZZHostBodyFont(){
 }
 
 UIFont *kFZZCapsulesFont(){
-    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:10*2];
+    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:10];
 //    return [UIFont fontWithName:@"FuturaStd-Book" size:10*2];
 }
 
@@ -170,6 +170,10 @@ UIImage *centeredCrop(UIImage *image){
     
     // (x,y) is irrelevant for the use
     return CGRectMake(0, 0, _keyboardEndFrame.size.width, _keyboardEndFrame.size.height);
+}
+
+float kFZZButtonBuffer(){
+    return 10;
 }
 
 @end

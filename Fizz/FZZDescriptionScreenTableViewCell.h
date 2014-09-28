@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FZZTableViewCell.h"
 
 @class FZZExpandedVerticalTableViewController;
 
-@interface FZZDescriptionScreenTableViewCell : FZZTableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>
+@interface FZZDescriptionScreenTableViewCell : UITableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property UITextView *textView;
 
