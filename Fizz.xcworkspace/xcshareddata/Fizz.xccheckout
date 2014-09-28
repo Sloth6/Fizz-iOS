@@ -5,48 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>C58FF809-1DCC-4311-A262-9EB1A811DCA6</string>
+	<string>1848D2B3-1A34-482E-81EE-6FFE4AB86254</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Fizz</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>77105BE1-00D3-4A9A-85CD-CDC7202B8639</key>
-		<string>https://github.com/chrismiles/CMTraerPhysics.git</string>
-		<key>9A70D620-FF92-4F86-A17F-B9CCC2707CE6</key>
-		<string>https://github.com/Sloth6/FizzApp.git</string>
+		<key>A4BFD3846337578077A8F4C607F2B6136B5FBBC5</key>
+		<string>https://github.com/Sloth6/FizzApp</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Fizz.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>77105BE1-00D3-4A9A-85CD-CDC7202B8639</key>
-		<string>../CMTraerPhysics</string>
-		<key>9A70D620-FF92-4F86-A17F-B9CCC2707CE6</key>
+		<key>A4BFD3846337578077A8F4C607F2B6136B5FBBC5</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/Sloth6/FizzApp.git</string>
+	<string>https://github.com/Sloth6/FizzApp</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>9A70D620-FF92-4F86-A17F-B9CCC2707CE6</string>
+	<string>A4BFD3846337578077A8F4C607F2B6136B5FBBC5</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>77105BE1-00D3-4A9A-85CD-CDC7202B8639</string>
+			<string>A4BFD3846337578077A8F4C607F2B6136B5FBBC5</string>
 			<key>IDESourceControlWCCName</key>
-			<string>CMTraerPhysics</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>9A70D620-FF92-4F86-A17F-B9CCC2707CE6</string>
-			<key>IDESourceControlWCCName</key>
-			<string>Fizz</string>
+			<string>FizzApp</string>
 		</dict>
 	</array>
 </dict>
