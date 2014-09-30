@@ -1294,14 +1294,14 @@
 		49D5C9CC186042C2002BB1F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Fizz.app/Fizz";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Let's.app";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1316,14 +1316,14 @@
 		49D5C9CD186042C2002BB1F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Fizz.app/Fizz";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Let's.app";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Fizz/Fizz-Prefix.pch";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "FizzTests/Let'sTests-Info.plist";
 				PRODUCT_NAME = "Let'sTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
