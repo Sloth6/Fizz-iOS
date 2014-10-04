@@ -11,7 +11,7 @@
 @class FZZScrollDetector;
 @class FZZEvent;
 
-@interface FZZExpandedVerticalTableViewController : UITableViewController
+@interface FZZExpandedVerticalTableViewController : UITableViewController <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) FZZEvent *event;
 @property (strong, nonatomic) FZZScrollDetector *scrollDetector;

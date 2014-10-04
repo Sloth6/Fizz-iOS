@@ -27,7 +27,12 @@ static NSMutableArray *instances;
 
 @interface FZZExpandedVerticalTableViewController ()
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
+
+// Join/Leave Event
 @property (strong, nonatomic) FZZAttendingButton *attendingButton;
+
+// Delete Event
+@property (strong, nonatomic) UIButton *optionsButton;
 
 @end
 
@@ -65,6 +70,7 @@ static NSMutableArray *instances;
         [self.tableView setScrollEnabled:NO];
         
         [self setupAttendingButton];
+        [self setupOptionsButton];
         
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
@@ -126,8 +132,6 @@ static NSMutableArray *instances;
 
 - (UIScrollView *)getCurrentScrollView{
     FZZPage *page = [_scrollDetector getCurrentPage];
-    
-    NSLog(@"PAGENUM: %d", page.pageNumber);
     
     switch (page.pageNumber) {
         case 0: // Chat Cell
@@ -193,8 +197,6 @@ static NSMutableArray *instances;
 }
 
 - (void)handleAttendingButtonOnScroll:(UIScrollView *)scrollView{
-    FZZDescriptionScreenTableViewCell *cell = [self getDescriptionScreenCell];
-    
     NSIndexPath *indexPath = [self descriptionCellIndexPath];
     
     FZZPage *page = [_scrollDetector getPageForIndexPath:indexPath];
@@ -210,12 +212,35 @@ static NSMutableArray *instances;
     [_attendingButton handleAnimationsOnScroll:progress];
 }
 
+- (void)handleOptionsButtonOnScroll:(UIScrollView *)scrollView{
+    NSIndexPath *indexPath = [self descriptionCellIndexPath];
+    
+    FZZPage *page = [_scrollDetector getPageForIndexPath:indexPath];
+    
+    CGFloat buffer = 4;
+    
+    CGFloat maxOffset = -180;
+    
+    CGFloat offset = scrollView.contentOffset.y - (page.pageOffset.y + maxOffset + buffer);
+    
+    CGFloat progress = 1-MIN(1, MAX(offset/maxOffset, 0));
+    
+    if (progress > 0.9){
+        [_optionsButton setUserInteractionEnabled:YES];
+    } else {
+        [_optionsButton setUserInteractionEnabled:NO];
+    }
+    
+    [_optionsButton setAlpha:progress];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 //    [self handleScrollSubview];
 //    [_scrollDetector scrollViewDidScroll:scrollView];
     
     [self handleBackgroundOnScroll:scrollView];
     [self handleAttendingButtonOnScroll:scrollView];
+    [self handleOptionsButtonOnScroll:scrollView];
 }
 
 - (FZZChatScreenCell *)getChatScreenCell{
@@ -347,6 +372,99 @@ static NSMutableArray *instances;
     return [self tableView:[self tableView] heightForRowAtIndexPath:indexPath];
 }
 
+- (void)optionsButtonHit{
+    // Don't let optionsButtonHit
+    //if (the scroll view is not all the way at the bottom)
+    // or maybe if (more than one finger is on the screen)
+    // Don't pop this up
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:@"Delete Event"
+                                                    otherButtonTitles:nil];
+    
+    [actionSheet showInView:[self tableView]];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Event"
+                                                            message:@"Are you sure you want to delete the event?"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"Delete Event", nil];
+        
+        [alertView show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1){
+        [self deleteEvent];
+    }
+}
+
+- (void)deleteEvent{
+    FZZEvent *event = [self event];
+    [event socketIODeleteEventWithAcknowledge:nil];
+}
+
+- (void)setupOptionsButton{
+    _optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    UIImage *image = [UIImage imageNamed:@"optionsButtonImage"];
+    
+    [_optionsButton setImage:image forState:UIControlStateNormal];
+    
+    [_optionsButton addTarget:self action:@selector(optionsButtonHit) forControlEvents:UIControlEventTouchUpInside];
+    
+    CGRect frame = [UIScreen mainScreen].bounds;
+    
+    CGFloat imageHeight = image.size.height;
+    CGFloat imageWidth = image.size.width;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    // Magic Number 32
+    CGFloat xOffsetFromRight = kFZZRightMargin();
+    CGFloat yOffsetFromTop = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath] -[self descriptionCellOffset] - 32 + kFZZInputRowHeight();
+    
+    CGFloat bufferSpace = 8;
+    
+    frame.origin.x = frame.size.width - (imageWidth + xOffsetFromRight + bufferSpace);
+    frame.origin.y = yOffsetFromTop + bufferSpace;
+    
+    CGFloat frameDimension = MAX(imageWidth, imageHeight);
+    
+    frame.size.width = frameDimension + (bufferSpace * 2);
+    frame.size.height = frameDimension + (bufferSpace * 2);
+    
+    NSLog(@"xy:(%f, %f) wh:(%f, %f)", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+    
+    [_optionsButton setFrame:frame];
+}
+
+- (void)updateOptionsButton{
+    
+    CGRect frame = _optionsButton.frame;
+    
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    // Magic Number 32
+    CGFloat xOffsetFromRight = kFZZRightMargin();
+    CGFloat yOffsetFromTop = [self tableView:[self tableView] heightForRowAtIndexPath:indexPath] -[self descriptionCellOffset] - 32 + kFZZInputRowHeight();
+    
+    CGFloat bufferSpace = 8;
+    
+    frame.origin.x = screenWidth - (frame.size.width + xOffsetFromRight + bufferSpace);
+    frame.origin.y = yOffsetFromTop + bufferSpace;
+    
+    [_optionsButton setFrame:frame];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
@@ -359,6 +477,8 @@ static NSMutableArray *instances;
             cell = [tableView dequeueReusableCellWithIdentifier:@"chatCell" forIndexPath:indexPath];
             [(FZZChatScreenCell *)cell setEventIndexPath:_eventIndexPath];
             [(FZZChatScreenCell *)cell setEventIndexPath:_eventIndexPath];
+            
+            [cell.contentView addSubview:_optionsButton];
         }
             break;
             

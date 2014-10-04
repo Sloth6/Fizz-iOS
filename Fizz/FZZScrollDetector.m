@@ -544,11 +544,20 @@ static CGFloat kFZZInputScrollBuffer;
             
             if ((currentOffset.y - currentPage.pageOffset.y) > 0) {
                 // bottom to top
-                proposedPage = [self getNextPage:currentPage];
+                if (velocity.y < -kFZZMinPageScrollVelocity){
+                    proposedPage = currentPage;
+                } else {
+                    proposedPage = [self getNextPage:currentPage];
+                }
             }
             else if ((currentOffset.y - currentPage.pageOffset.y) < 0){
                 // top to bottom
-                proposedPage = [self getPreviousPage:currentPage];
+                if (velocity.y > kFZZMinPageScrollVelocity){
+                    proposedPage = currentPage;
+                } else {
+                    proposedPage = [self getPreviousPage:currentPage];
+                }
+                
             } else {
                 proposedPage = currentPage;
             }

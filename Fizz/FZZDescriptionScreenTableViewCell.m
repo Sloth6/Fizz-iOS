@@ -19,7 +19,6 @@
 @property NSIndexPath *eventIndexPath;
 @property FZZExpandedVerticalTableViewController *evtvc;
 
-@property UIButton *optionsButton;
 @property (strong, nonatomic) UILabel *hostLabel;
 
 @end
@@ -41,7 +40,6 @@
 -(void)setTableViewController:(FZZExpandedVerticalTableViewController *)evtvc{
     _evtvc = evtvc;
     
-    [self setupOptionsButton];
     [self updateTextview];
     [self updateHostName];
 }
@@ -139,79 +137,6 @@
     [_hostLabel setFrame:frame];
 }
 
-- (void)optionsButtonHit{
-    // Don't let optionsButtonHit
-    //if (the scroll view is not all the way at the bottom)
-    // or maybe if (more than one finger is on the screen)
-    // Don't pop this up
-    
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                               destructiveButtonTitle:@"Delete Event"
-                                                    otherButtonTitles:nil];
-    
-    [actionSheet showInView:self];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 0){
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Event"
-                                                            message:@"Are you sure you want to delete the event?"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Cancel"
-                                                  otherButtonTitles:@"Delete Event", nil];
-        
-        [alertView show];
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1){
-        [self deleteEvent];
-    }
-}
-
-- (void)deleteEvent{    
-    FZZEvent *event = [self event];
-    [event socketIODeleteEventWithAcknowledge:nil];
-}
-
-- (void)setupOptionsButton{
-    [_optionsButton removeFromSuperview];
-    
-    _optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    UIImage *image = [UIImage imageNamed:@"optionsButtonImage"];
-    
-    [_optionsButton setImage:image forState:UIControlStateNormal];
-    
-    [_optionsButton addTarget:self action:@selector(optionsButtonHit) forControlEvents:UIControlEventTouchUpInside];
-    
-    CGRect frame = [UIScreen mainScreen].bounds;
-    
-    CGFloat imageHeight = image.size.height;
-    CGFloat imageWidth = image.size.width;
-    
-    // Magic Number 32
-    CGFloat xOffsetFromRight = kFZZRightMargin();
-    CGFloat yOffsetFromTop = -[_evtvc descriptionCellOffset] - 32 + kFZZInputRowHeight();
-    
-    CGFloat bufferSpace = 8;
-    
-    frame.origin.x = frame.size.width - (imageWidth + xOffsetFromRight + bufferSpace);
-    frame.origin.y = yOffsetFromTop + bufferSpace;
-    
-    CGFloat frameDimension = MAX(imageWidth, imageHeight);
-    
-    frame.size.width = frameDimension + (bufferSpace * 2);
-    frame.size.height = frameDimension + (bufferSpace * 2);
-    
-    NSLog(@"xy:(%f, %f) wh:(%f, %f)", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-    
-    [_optionsButton setFrame:frame];
-    [self.contentView addSubview:_optionsButton];
-}
 
 - (void)awakeFromNib
 {
