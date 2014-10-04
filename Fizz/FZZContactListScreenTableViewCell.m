@@ -10,8 +10,6 @@
 
 #import "FZZContactsTableViewController.h"
 
-#import "FZZInvitationViewsTableViewController.h"
-
 #import "FZZUtilities.h"
 
 static CGFloat kLeftBorder = 0;
@@ -94,7 +92,7 @@ static CGFloat kBottomBorder = 6;
 - (void)setupTableView{
     _ctvc = [[FZZContactsTableViewController alloc] init];
     
-    [[_ctvc tableView] setBackgroundColor:[UIColor redColor]];
+//    [[_ctvc tableView] setBackgroundColor:[UIColor redColor]];
     
     CGRect frame = [UIScreen mainScreen].bounds;
     

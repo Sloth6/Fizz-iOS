@@ -36,6 +36,8 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
         [[self tableView] setOpaque:NO];
         [[self tableView] setScrollEnabled:NO];
         
+        [FZZContactSearchDelegate promptForAddressBook];
+        
         [FZZContactSearchDelegate setCurrentTableView:self.tableView];
     }
     return self;
@@ -146,6 +148,33 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 48;
+}
+
+- (void)enterSearchMode{
+//    [_textField setEnabled:YES];
+//    [_textField setText:@""];
+//    
+//    NSIndexPath *scrollTo = [NSIndexPath indexPathForRow:2 inSection:0];
+//    
+//    [UIView animateWithDuration:0.3
+//                          delay:0.0
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                         [[self tableView] scrollToRowAtIndexPath:scrollTo atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//                     }
+//                     completion:nil];
+//    
+//    [_textField becomeFirstResponder];
+    
+    [FZZContactSearchDelegate promptForAddressBook];
+    
+//    FZZInviteSearchBarTableViewCell *cell = [self getSearchBarCell];
+//    
+//    [cell setShouldDrawLine:YES];
+//    
+//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    [appDelegate setNavigationScrollEnabled:NO];
 }
 
 

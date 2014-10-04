@@ -15,8 +15,6 @@
 #import "FZZGuestListScreenTableViewCell.h"
 #import "FZZContactListScreenTableViewCell.h"
 
-#import "FZZInvitationViewsTableViewController.h"
-
 #import "FZZPage.h"
 #import "FZZUtilities.h"
 #import "FZZScrollDetector.h"

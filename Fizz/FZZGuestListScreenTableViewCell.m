@@ -10,8 +10,6 @@
 #import "FZZGuestListScreenTableViewController.h"
 #import "FZZUtilities.h"
 
-#import "FZZInvitationViewsTableViewController.h"
-
 #import "FZZInviteSearchBarView.h"
 
 @interface FZZGuestListScreenTableViewCell ()
