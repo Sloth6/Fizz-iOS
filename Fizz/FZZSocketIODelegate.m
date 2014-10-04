@@ -416,7 +416,12 @@ static NSMutableData *data;
     NSNumber *eID = [json objectForKey:@"eid"];
     FZZEvent *event = [FZZEvent eventWithEID:eID];
     
-    NSArray *guests = [json objectForKey:@"guests"];
+    NSArray *guestIDs = [json objectForKey:@"guests"];
+    
+    NSArray *guests = [FZZUser getUsersFromUIDs:guestIDs];
+    
+    NSLog(@"INCOMING GUEST IDS: %@", guestIDs);
+    NSLog(@"INCOMING GUESTS: %@", guests);
     
     [event updateGuests:guests];
 }

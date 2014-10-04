@@ -12,20 +12,15 @@
 
 @interface FZZContactTableViewCell ()
 
-@property (nonatomic) BOOL selected;
-
 @end
 
 @implementation FZZContactTableViewCell
-
-@synthesize selected;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        self.selected = NO;
         self.backgroundColor = [UIColor clearColor];
         [self setupTextLabel];
     }
@@ -48,20 +43,11 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-- (void)setIsSelected:(BOOL)selection{
-    self.selected = selection;
-    
-    if (self.selected) {
+    if (self.isSelected) {
         [[self textLabel] setTextColor:kFZZWhiteTextColor()];
     } else {
         [[self textLabel] setTextColor:kFZZGrayTextColor()];
     }
-}
-
-- (BOOL)isSelected{
-    return self.selected;
 }
 
 @end

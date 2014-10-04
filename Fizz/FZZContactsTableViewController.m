@@ -126,7 +126,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
     
     [[cell textLabel] setNeedsDisplay];
     
-    [cell setIsSelected:selected];
+    [cell setSelected:selected animated:NO];
     
     return cell;
 }

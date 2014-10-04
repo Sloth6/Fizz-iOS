@@ -11,7 +11,6 @@
 #import "SBJson4.h"
 #import "FZZEvent.h"
 #import "FZZEventsViewController.h"
-#import "FZZInviteViewController.h"
 #import "FZZLocalCache.h"
 #import "FZZLocationManager.h"
 #import "FZZUtilities.h"
@@ -155,8 +154,6 @@
     [self setupNavigationBar];
     
     _evc = [[FZZEventsViewController alloc] initWithCollectionViewLayout:flowLayout];
-    
-    [FZZInviteViewController setupClass];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.

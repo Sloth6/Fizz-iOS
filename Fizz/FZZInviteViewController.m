@@ -907,9 +907,9 @@ static int kFZZNumRecentInvites = 30;
 }
 
 -(void)getContacts{
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+//    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
     
-    _contacts = [pref objectForKey:@"contacts"];
+//    _contacts = [pref objectForKey:@"contacts"];
     [self.tableView reloadData];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -1010,8 +1010,8 @@ static int kFZZNumRecentInvites = 30;
 //            return [name1 compare:name2];
 //        }];
         
-        [pref setObject:_contacts forKey:@"contacts"];
-        [pref synchronize];
+//        [pref setObject:_contacts forKey:@"contacts"];
+//        [pref synchronize];
         
         appDelegate.gotAddressBook = YES;
         

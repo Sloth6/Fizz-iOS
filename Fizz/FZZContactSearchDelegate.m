@@ -67,6 +67,16 @@ static UITableView *tableView;
     });
 }
 
+- (instancetype)init{
+    self = [super init];
+    
+    if (self){
+        _phoneNumberFormat = [[PhoneNumberFormatter alloc] init];
+    }
+    
+    return self;
+}
+
 + (void)promptForAddressBook{
     [searchDelegate getContacts];
 }
@@ -467,18 +477,26 @@ static UITableView *tableView;
 - (void)searchChange{
     NSLog(@">>%@<<", _textField);
     
-    [self filterContentForSearchText:[_textField text]];
+    NSString *text = [_textField text];
+    
+    if (!text){
+        text = @"";
+    }
+    
+    [self filterContentForSearchText:text];
     [tableView reloadData];
 }
 
 -(void)getContacts{
-//    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-//    
-//    _contacts = [pref objectForKey:@"contacts"];
+    
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     if (appDelegate.gotAddressBook) {
+        NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+        
+        _contacts = [[pref objectForKey:@"contacts"] mutableCopy];
+        
         [self filterInvitables];
         [tableView reloadData];
         return;
@@ -527,7 +545,7 @@ static UITableView *tableView;
                 
                 NSString *phoneNumber = [self handlePhones:person];
                 
-                //                NSLog(@"%@: (%@)", name, phoneNumber);
+                NSLog(@">>%@: (%@)", name, phoneNumber);
                 
                 if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]){
                     NSMutableDictionary *contact = [[NSMutableDictionary alloc] init];
@@ -546,6 +564,8 @@ static UITableView *tableView;
         //                                                                     ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
         _contacts = [[contacts sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
+        
+        [self updateFriendsAndContacts];
         
         [self filterInvitables];
         
@@ -575,15 +595,17 @@ static UITableView *tableView;
         //            return [name1 compare:name2];
         //        }];
         
+        
 //        [pref setObject:_contacts forKey:@"contacts"];
 //        [pref synchronize];
         
-        appDelegate.gotAddressBook = YES;
+        NSLog(@"Saved Contacts: %@", _contacts);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
             [pref setObject:[NSNumber numberWithBool:YES] forKey:kFZZAddressBookPermission];
             [pref synchronize];
+            appDelegate.gotAddressBook = YES;
             
             [self searchChange];
             [tableView reloadData];
@@ -624,12 +646,12 @@ static UITableView *tableView;
     NSString* phoneNumber = NULL;
     NSString* mobileLabel;
     
-    int savedPriority = -1;
+    int savedPriority = 0;
     
     for (int i=0; i < ABMultiValueGetCount(phones); i++) {
         //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
         //NSLog(@"%@", phone);
-        int priority = -1;
+        int priority = 0;
         
         mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
         if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel]) {
@@ -641,17 +663,19 @@ static UITableView *tableView;
         } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
             priority = 2;
         } else if ([mobileLabel isEqualToString:(NSString *)kABPersonPhoneOtherFAXLabel]){
-            priority = -2;
+            priority = -1;
         } else if ([mobileLabel isEqualToString:(NSString *)kABPersonPhoneWorkFAXLabel]){
-            priority = -2;
+            priority = -1;
         } else if ([mobileLabel isEqualToString:(NSString *)kABPersonPhoneHomeFAXLabel]){
-            priority = -2;
+            priority = -1;
         } else if ([mobileLabel isEqualToString:(NSString *)kABPersonPhonePagerLabel]){
-            priority = -2;
+            priority = -1;
         } else {
             NSLog(@"other:");
             priority = 1;
         }
+        
+        NSLog(@"TEMP: %@", (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i));
         
         if (priority > savedPriority){
             savedPriority = priority;
@@ -659,7 +683,7 @@ static UITableView *tableView;
         }
     }
     
-    if (phoneNumber == NULL) return NULL;
+    if (phoneNumber == nil) return nil;
     
     phoneNumber = [_phoneNumberFormat strip:phoneNumber];
     

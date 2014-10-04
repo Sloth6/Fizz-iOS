@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Fizz/FZZSocketIODelegate.m"
-            timestampString = "430174795.586378"
+            timestampString = "434155693.668158"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "684"
-            endingLineNumber = "684">
+            startingLineNumber = "689"
+            endingLineNumber = "689">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

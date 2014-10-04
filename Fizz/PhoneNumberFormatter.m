@@ -265,19 +265,18 @@
 
 - (NSString *)strip:(NSString *)phoneNumber {
     
-    NSMutableString *res = [[NSMutableString alloc] init];
+    NSMutableString *result = [[NSMutableString alloc] init];
     
     for(int i = 0; i < [phoneNumber length]; i++) {
         
         char next = [phoneNumber characterAtIndex:i];
         
-        if([self canBeInputByPhonePad:next])
-            
-            [res appendFormat:@"%c", next];
-        
+        if([self canBeInputByPhonePad:next]){
+            [result appendFormat:@"%c", next];
+        }
     }
     
-    return res;
+    return result;
     
 }
 

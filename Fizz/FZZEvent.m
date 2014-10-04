@@ -417,6 +417,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 // Guests are Absolute because you can choose to leave an event at any time
 -(void)updateGuests:(NSArray *)guests{
     @synchronized(self){
+        NSLog(@"update to guests: %@", guests);
+        
         [self setGuests:guests];
     }
 }

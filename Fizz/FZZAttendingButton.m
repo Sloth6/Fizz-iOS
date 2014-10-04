@@ -273,11 +273,15 @@
     
     FZZUser *me = [FZZUser me];
     
+    NSLog(@"guests: %@", [event guests]);
+    
     BOOL isAttending = [event isUserGuest:me];
     
     if (!isAttending){
+        NSLog(@"JOIN EVENT");
         [event socketIOJoinEventWithAcknowledge:nil];
     } else {
+        NSLog(@"LEAVE EVENT");
         [event socketIOLeaveEventWithAcknowledge:nil];
     }
     

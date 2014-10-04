@@ -324,17 +324,18 @@ static FZZUser *currentUser = nil;
 }
 
 +(NSArray *)getUsersFromUIDs:(NSArray *)UIDs{
-    NSMutableArray *result = [users mutableCopy];
     
-    [UIDs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSNumber *uid = (NSNumber *)obj;
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [UIDs count]; ++i){
+        NSNumber *uid = [UIDs objectAtIndex:i];
         
         FZZUser *user = [FZZUser userWithUID:uid];
         
         if (user != nil){
-            [result setObject:user atIndexedSubscript:idx];
+            [result addObject:user];
         }
-    }];
+    }
     
     return result;
 }

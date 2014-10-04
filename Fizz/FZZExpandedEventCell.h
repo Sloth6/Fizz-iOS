@@ -23,7 +23,6 @@
  
  */
 
-@class FZZInviteViewController;
 @class FZZEvent;
 @class FZZExpandedVerticalTableViewController;
 
@@ -37,7 +36,6 @@
 @property UILabel *attendeesLabel;
 
 @property FZZExpandedVerticalTableViewController *vtvc;
-@property FZZInviteViewController *ivc;
 @property (strong, nonatomic) FZZEvent *event;
 
 - (void)scrollToTopAnimated:(BOOL)isAnimated;
