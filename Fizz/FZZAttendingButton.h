@@ -19,4 +19,8 @@
 
 -(void)setBottomRightCorner:(CGPoint)point;
 
+-(void)buttonHit;
+
+-(void)handleAnimationsOnScroll:(CGFloat)progress;
+
 @end

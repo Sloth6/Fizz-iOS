@@ -14,9 +14,11 @@
 
 @property UITextView *textView;
 
+
 //-(void)setText:(NSString *)text;
 -(void)setEventIndexPath:(NSIndexPath *)indexPath;
 
 -(void)setTableViewController:(FZZExpandedVerticalTableViewController *)evtvc;
+-(void)handleAnimationsOnScroll:(CGFloat)alpha;
 
 @end

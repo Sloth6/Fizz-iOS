@@ -317,6 +317,20 @@ static CGFloat kFZZInputScrollBuffer;
     }
 }
 
+
+- (FZZPage *)getPageForIndexPath:(NSIndexPath *)indexPath{
+    NSInteger pageNum = indexPath.row;
+    NSInteger numberOfRows = [[_vtvc tableView] numberOfRowsInSection:0];
+    
+    NSNumber *pageOffset = [self getPageOffsetForPageNum:pageNum];
+    
+    FZZPage *page = [[FZZPage alloc] init];
+    [page setPageOffset:CGPointMake(0, [pageOffset floatValue])];
+    [page setPageNumber:MIN(pageNum, numberOfRows-1)];
+    
+    return page;
+}
+
 - (FZZPage *)getCurrentPage{
     NSInteger numberOfRows = [[_vtvc tableView] numberOfRowsInSection:0];
     
@@ -337,13 +351,9 @@ static CGFloat kFZZInputScrollBuffer;
         }
     }
     
-    NSNumber *pageOffset = [self getPageOffsetForPageNum:pageNum];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:pageNum inSection:0];
     
-    FZZPage *page = [[FZZPage alloc] init];
-    [page setPageOffset:CGPointMake(0, [pageOffset floatValue])];
-    [page setPageNumber:MIN(pageNum, numberOfRows-1)];
-    
-    return page;
+    return [self getPageForIndexPath:indexPath];
 }
 
 - (void)setupPageOffsets{

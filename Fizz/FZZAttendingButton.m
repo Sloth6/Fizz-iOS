@@ -268,4 +268,33 @@
     }
 }
 
+- (void)buttonHit{
+    FZZEvent *event = [self event];
+    
+    FZZUser *me = [FZZUser me];
+    
+    BOOL isAttending = [event isUserGuest:me];
+    
+    if (!isAttending){
+        [event socketIOJoinEventWithAcknowledge:nil];
+    } else {
+        [event socketIOLeaveEventWithAcknowledge:nil];
+    }
+    
+    [self setIsAttending:!isAttending isAnimated:YES];
+}
+
+-(void)handleAnimationsOnScroll:(CGFloat)progress{
+    
+    CGFloat alpha = progress;
+    
+    if (alpha < 0.9){
+        [self setUserInteractionEnabled:NO];
+    } else {
+        [self setUserInteractionEnabled:YES];
+    }
+    
+    [self setAlpha:alpha];
+}
+
 @end

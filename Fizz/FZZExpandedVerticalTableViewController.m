@@ -21,10 +21,13 @@
 #import "FZZUtilities.h"
 #import "FZZScrollDetector.h"
 
+#import "FZZAttendingButton.h"
+
 static NSMutableArray *instances;
 
 @interface FZZExpandedVerticalTableViewController ()
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
+@property (strong, nonatomic) FZZAttendingButton *attendingButton;
 
 @end
 
@@ -61,6 +64,8 @@ static NSMutableArray *instances;
         [self.tableView setBounces:YES];
         [self.tableView setScrollEnabled:NO];
         
+        [self setupAttendingButton];
+        
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
     return self;
@@ -69,6 +74,43 @@ static NSMutableArray *instances;
 -(void)dealloc{
     [instances removeObject:self];
 }
+
+- (void)setupAttendingButton{
+    CGRect screenFrame = [UIScreen mainScreen].bounds;
+    
+    NSIndexPath *indexPath = [self descriptionCellIndexPath];
+    CGFloat descriptionCellOffset = [self tableView:[self tableView] offsetForRowAtIndexPath:indexPath];
+    
+    screenFrame.size.height = screenFrame.size.height - (descriptionCellOffset + [self descriptionCellHeight]);
+    
+    float x = screenFrame.size.width - kFZZHorizontalMargin();
+    float y = screenFrame.size.height - kFZZHorizontalMargin();
+    
+    CGPoint bottomRightCorner = CGPointMake(x, y);
+    
+    _attendingButton = [[FZZAttendingButton alloc] initWithBottomRightCorner:bottomRightCorner];
+    
+    [_attendingButton addTarget:_attendingButton
+                         action:@selector(buttonHit)
+               forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)updateAttendingButton{
+    CGRect screenFrame = [UIScreen mainScreen].bounds;
+    
+    NSIndexPath *indexPath = [self descriptionCellIndexPath];
+    CGFloat descriptionCellOffset = [self tableView:[self tableView] offsetForRowAtIndexPath:indexPath];
+    
+    screenFrame.size.height = screenFrame.size.height - (descriptionCellOffset + [self descriptionCellHeight]);
+    
+    float x = screenFrame.size.width - kFZZHorizontalMargin();
+    float y = screenFrame.size.height - kFZZHorizontalMargin();
+    
+    CGPoint bottomRightCorner = CGPointMake(x, y);
+    
+    [_attendingButton setBottomRightCorner:bottomRightCorner];
+}
+
 
 - (UITableViewCell *)getCurrentCell{
     FZZPage *page = [_scrollDetector getCurrentPage];
@@ -150,11 +192,30 @@ static NSMutableArray *instances;
     [[self tableView] setBackgroundColor:blackColor];
 }
 
+- (void)handleAttendingButtonOnScroll:(UIScrollView *)scrollView{
+    FZZDescriptionScreenTableViewCell *cell = [self getDescriptionScreenCell];
+    
+    NSIndexPath *indexPath = [self descriptionCellIndexPath];
+    
+    FZZPage *page = [_scrollDetector getPageForIndexPath:indexPath];
+    
+    CGFloat buffer = 4;
+    
+    CGFloat maxOffset = 180;
+    
+    CGFloat offset = (page.pageOffset.y + maxOffset + buffer) - scrollView.contentOffset.y;
+    
+    CGFloat progress = MIN(1, MAX(offset/maxOffset, 0));
+    
+    [_attendingButton handleAnimationsOnScroll:progress];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 //    [self handleScrollSubview];
 //    [_scrollDetector scrollViewDidScroll:scrollView];
     
     [self handleBackgroundOnScroll:scrollView];
+    [self handleAttendingButtonOnScroll:scrollView];
 }
 
 - (FZZChatScreenCell *)getChatScreenCell{
@@ -173,6 +234,7 @@ static NSMutableArray *instances;
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
+    [_attendingButton setEventIndexPath:indexPath];
     
     NSLog(@"ExpandedVerticalTableViewController setEventIndexPath reloadData!!!");
     [[self tableView] reloadData];
@@ -308,6 +370,7 @@ static NSMutableArray *instances;
             [(FZZDescriptionScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
             
             [(FZZDescriptionScreenTableViewCell *)cell setTableViewController:self];
+            [self updateAttendingButton];
             
 //            [(FZZDescriptionScreenTableViewCell *)cell setText:title];
             [cell setBackgroundColor:[UIColor clearColor]];
@@ -322,6 +385,10 @@ static NSMutableArray *instances;
             
             [cell setBackgroundColor:[UIColor clearColor]];
             [cell setOpaque:NO];
+            
+            // Place in the cell below the description cell always
+            [[cell contentView] addSubview:_attendingButton];
+            
             [(FZZGuestListScreenTableViewCell *)cell updateVisuals];
         }
             break;
