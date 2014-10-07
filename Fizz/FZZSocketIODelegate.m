@@ -17,7 +17,8 @@
 #import "FZZInviteViewController.h"
 #import "FZZLocationManager.h"
 
-#import "FZZContactSearchDelegate.h"
+#import "FZZContactDelegate.h"
+#import "FZZContactSelectionDelegate.h"
 
 #import "FZZLocalCache.h"
 
@@ -382,7 +383,7 @@ static NSMutableData *data;
     [FZZInviteViewController updateFriends];
 
     [appDelegate updateEvents];
-    [FZZContactSearchDelegate updateFriendsAndContacts];
+    [FZZContactDelegate updateFriendsAndContacts];
 }
 
 - (void)incomingNewEvent:(NSArray *)args{
@@ -424,6 +425,9 @@ static NSMutableData *data;
     NSLog(@"INCOMING GUESTS: %@", guests);
     
     [event updateGuests:guests];
+    
+    // TODOAndrew don't invalidate all guest invitation lists, just the updated events
+    [FZZContactSelectionDelegate invalidateInvitables];
 }
 
 - (void)incomingNewInvitees:(NSArray *)args{

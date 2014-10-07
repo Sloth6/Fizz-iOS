@@ -12,12 +12,15 @@
 
 #import "FZZUser.h"
 
-
-#import "FZZContactSearchDelegate.h"
+#import "FZZContactDelegate.h"
+#import "FZZContactSelectionDelegate.h"
 
 NSString *kFZZContactCellIdentifer = @"contactCell";
 
 @interface FZZContactsTableViewController ()
+
+@property FZZContactSelectionDelegate *invitationDelegate;
+@property (nonatomic) NSIndexPath *eventIndexPath;
 
 @end
 
@@ -28,19 +31,30 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
     self = [super init];
     if (self) {
         // Custom initialization
-        
         [[self tableView] registerClass:[FZZContactTableViewCell class] forCellReuseIdentifier:kFZZContactCellIdentifer];
         
         [[self tableView] setSeparatorColor:[UIColor clearColor]];
         [[self tableView] setBackgroundColor:[UIColor clearColor]];
         [[self tableView] setOpaque:NO];
         [[self tableView] setScrollEnabled:NO];
+        [[self tableView] setExclusiveTouch:NO];
         
-        [FZZContactSearchDelegate promptForAddressBook];
+        [FZZContactDelegate promptForAddressBook];
         
-        [FZZContactSearchDelegate setCurrentTableView:self.tableView];
+        _invitationDelegate = [[FZZContactSelectionDelegate alloc] init];
+        
+        [_invitationDelegate setCurrentTableView:self.tableView];
     }
     return self;
+}
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath{
+    _eventIndexPath = indexPath;
+    [_invitationDelegate setEventIndexPath:indexPath];
+}
+
+- (void)setTextField:(UITextField *)textField{
+    [_invitationDelegate setTextField:textField];
 }
 
 //- (id)initWithStyle:(UITableViewStyle)style
@@ -86,7 +100,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [FZZContactSearchDelegate numberOfInvitableOptions];
+    return [_invitationDelegate numberOfInvitableOptions];
 }
 
 
@@ -103,7 +117,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
     
     BOOL selected;
     
-    NSDictionary *dict = [FZZContactSearchDelegate userOrContactAtIndexPath:indexPath];
+    NSDictionary *dict = [_invitationDelegate userOrContactAtIndexPath:indexPath];
     
     FZZUser *user = [dict objectForKey:@"user"];
     NSString *name = [dict objectForKey:@"name"];
@@ -111,7 +125,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
     if (user){
         [[cell textLabel] setText:name];
         
-        selected = [FZZContactSearchDelegate isUserSelected:user];
+        selected = [_invitationDelegate isUserSelected:user];
     } else {
         NSDictionary *contact = [dict objectForKey:@"contact"];
         
@@ -121,26 +135,37 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
             [cell.textLabel setText:name];
         }
         
-        selected = [FZZContactSearchDelegate isContactSelected:contact];
+        selected = [_invitationDelegate isContactSelected:contact];
     }
+    
+    [cell setTvc:(UITableViewController *)self];
+    [cell setIndexPath:indexPath];
     
     [[cell textLabel] setNeedsDisplay];
     
-    [cell setSelected:selected animated:NO];
+    [cell setSelectionState:selected];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FZZContactTableViewCell *cell = (FZZContactTableViewCell* )[tableView cellForRowAtIndexPath:indexPath];
+    FZZContactTableViewCell *cell = (FZZContactTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    NSDictionary *userOrContact = [FZZContactSearchDelegate userOrContactAtIndexPath:indexPath];
+    NSDictionary *userOrContact = [_invitationDelegate userOrContactAtIndexPath:indexPath];
     
-    if ([FZZContactSearchDelegate userOrContactIsSelected:userOrContact]){
-        [FZZContactSearchDelegate deselectUserOrContact:userOrContact];
+    NSLog(@"GOT: %@", userOrContact);
+    
+    if ([_invitationDelegate userOrContactIsSelected:userOrContact]){
+        [_invitationDelegate deselectUserOrContact:userOrContact];
+        [cell setSelectionState:NO];
+        
+        NSLog(@"DESELECT %@", userOrContact);
     } else {
-        [FZZContactSearchDelegate selectUserOrContact:userOrContact];
+        [_invitationDelegate selectUserOrContact:userOrContact];
+        [cell setSelectionState:YES];
+        
+        NSLog(@"SELECT %@", userOrContact);
     }
     
     [cell setNeedsDisplay];
@@ -166,7 +191,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 //    
 //    [_textField becomeFirstResponder];
     
-    [FZZContactSearchDelegate promptForAddressBook];
+    [FZZContactDelegate promptForAddressBook];
     
 //    FZZInviteSearchBarTableViewCell *cell = [self getSearchBarCell];
 //    

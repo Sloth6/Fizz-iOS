@@ -13,6 +13,7 @@
 #import "FZZEvent.h"
 
 #import "FZZAppDelegate.h"
+#import "FZZContactTableViewCell.h"
 
 static CGFloat kFZZInputScrollBuffer;
 
@@ -51,10 +52,30 @@ static CGFloat kFZZInputScrollBuffer;
         
         kFZZInputScrollBuffer = frame.size.height;
         
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapGestureCaptured:)];
+        [self addGestureRecognizer:singleTap];
+        [singleTap setCancelsTouchesInView:NO];
+        
         [self addSubview:_inputScrollView];
         [self updateCurrentScrollView];
+        
     }
     return self;
+}
+
+- (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
+{
+    CGPoint touchPoint = [gesture locationInView:self];
+    
+    UIView *tappedView = [self tapTest:touchPoint withEvent:UIEventSubtypeNone];
+    
+    NSLog(@"Tapped: %@", tappedView);
+    
+    if ([NSStringFromClass([tappedView class]) isEqualToString:@"UITableViewCellContentView"]){
+        FZZContactTableViewCell *cell = (FZZContactTableViewCell *)[tappedView superview];
+        
+        [cell hitCell];
+    }
 }
 
 //- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -143,11 +164,8 @@ static CGFloat kFZZInputScrollBuffer;
     NSArray *visibleCells = [[_vtvc tableView] visibleCells];
     
     for (UITableViewCell *cell in visibleCells){
-    
-//        UITableViewCell *cell = [_vtvc getCurrentCell];
-        
         for (UIView *view in cell.contentView.subviews) {
-            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event]){
+            if ((!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]])){
                 return NO;
             }
         }
@@ -161,7 +179,7 @@ static CGFloat kFZZInputScrollBuffer;
     
     for (UITableViewCell *cell in visibleCells){
         for (UIView *view in cell.contentView.subviews) {
-            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event]){
+            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
                 
                 return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
             }
@@ -170,6 +188,21 @@ static CGFloat kFZZInputScrollBuffer;
     
     return [super hitTest:point withEvent:event];
 }
+
+- (UIView *)tapTest:(CGPoint)point withEvent:(UIEvent *)event{
+    NSArray *visibleCells = [[_vtvc tableView] visibleCells];
+    
+    for (UITableViewCell *cell in visibleCells){
+        for (UIView *view in cell.contentView.subviews) {
+            if ((!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event]) && [view isKindOfClass:[UITableView class]]){
+                return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+            }
+        }
+    }
+    
+    return [super hitTest:point withEvent:event];
+}
+
 
 - (void)unmoveVtvc{
     [[_vtvc tableView] setContentOffset:_lastTVCOffset];

@@ -11,6 +11,7 @@
 #import "FZZContactsTableViewController.h"
 
 #import "FZZUtilities.h"
+#import "FZZInviteSearchBarView.h"
 
 static CGFloat kLeftBorder = 0;
 static CGFloat kRightBorder = 0;
@@ -18,6 +19,8 @@ static CGFloat kTopBorder = 0;
 static CGFloat kBottomBorder = 6;
 
 @interface FZZContactListScreenTableViewCell ()
+
+@property (strong, nonatomic) FZZInviteSearchBarView *searchBar;
 
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
 @property (strong, nonatomic) FZZContactsTableViewController *ctvc;
@@ -32,6 +35,7 @@ static CGFloat kBottomBorder = 6;
     if (self) {
         // Initialization code
         [self setupTableView];
+        [self setupSearchBar];
         
         [self setBackgroundColor:[UIColor clearColor]];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -44,6 +48,10 @@ static CGFloat kBottomBorder = 6;
         
     }
     return self;
+}
+
++ (CGFloat)searchBarHeight{
+    return 35;
 }
 
 - (void)keyboardWasShown:(NSNotification *)notification {
@@ -68,6 +76,7 @@ static CGFloat kBottomBorder = 6;
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
+    [_ctvc setEventIndexPath:indexPath];
 }
 
 -(UIScrollView *)scrollView{
@@ -98,7 +107,7 @@ static CGFloat kBottomBorder = 6;
     
     CGFloat leftBorder = kLeftBorder;
     CGFloat rightBorder = kRightBorder;
-    CGFloat topBorder = kTopBorder;
+    CGFloat topBorder = kTopBorder + [FZZContactListScreenTableViewCell searchBarHeight];
     CGFloat bottomBorder = kBottomBorder;
     
     // Account for _searchForFriendsButton
@@ -120,12 +129,41 @@ static CGFloat kBottomBorder = 6;
     
     //    [[_tvc view] setBackgroundColor:[UIColor blueColor]];
     
-    [self addSubview:[_ctvc tableView]];
-    [[_ctvc tableView] setUserInteractionEnabled:NO];
+    [[self contentView] addSubview:[_ctvc tableView]];
+    [[_ctvc tableView] setUserInteractionEnabled:YES];
 }
 
 +(CGFloat)cellOffset{
     return 12;
+}
+
+- (void)setupSearchBar{
+    CGFloat width = [self frame].size.width;
+    CGFloat height = [FZZContactListScreenTableViewCell searchBarHeight];
+    CGFloat x = 0;
+    CGFloat y = 0;
+    
+    CGRect frame = CGRectMake(x, y, width, height);
+    
+    _searchBar = [[FZZInviteSearchBarView alloc] initWithFrame:frame];
+    
+    // Add listeners etc
+    
+    [self.contentView addSubview:_searchBar];
+    [_ctvc setTextField:[_searchBar textField]];
+}
+
+- (void)updateSearchBar{
+    CGFloat bottomBuffer = kFZZVerticalMargin();
+    
+    CGFloat width = [self bounds].size.width;
+    CGFloat height = [FZZContactListScreenTableViewCell searchBarHeight];
+    CGFloat x = 0;
+    CGFloat y = 0;//[self bounds].size.height - (height + bottomBuffer) + 16;
+    
+    CGRect frame = CGRectMake(x, y, width, height);
+    
+    [_searchBar setFrame:frame];
 }
 
 @end

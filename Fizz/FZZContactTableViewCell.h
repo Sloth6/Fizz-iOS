@@ -10,4 +10,12 @@
 
 @interface FZZContactTableViewCell : UITableViewCell
 
+- (void)hitCell;
+
+- (void)toggleSelected;
+- (void)setSelectionState:(BOOL)isSelected;
+
+- (void)setIndexPath:(NSIndexPath *)indexPath;
+- (void)setTvc:(UITableViewController *)tvc;
+
 @end

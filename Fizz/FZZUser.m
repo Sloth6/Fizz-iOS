@@ -11,7 +11,7 @@
 #import "FZZEvent.h"
 #import "FZZAppDelegate.h"
 
-#import "FZZContactSearchDelegate.h"
+#import "FZZContactDelegate.h"
 
 #import "FZZLocalCache.h"
 
@@ -352,7 +352,7 @@ static FZZUser *currentUser = nil;
         [result setObject:user atIndexedSubscript:index];
     }];
     
-    [FZZContactSearchDelegate updateFriendsAndContacts];
+    [FZZContactDelegate updateFriendsAndContacts];
     
     return result;
 }

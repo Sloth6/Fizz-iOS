@@ -12,6 +12,10 @@
 
 @interface FZZContactTableViewCell ()
 
+@property BOOL wasSelected;
+@property (nonatomic) UITableViewController *tvc;
+@property (nonatomic) NSIndexPath *indexPath;
+
 @end
 
 @implementation FZZContactTableViewCell
@@ -23,6 +27,8 @@
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
         [self setupTextLabel];
+        
+        _wasSelected = NO;
     }
     return self;
 }
@@ -38,16 +44,28 @@
     // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-    if (self.isSelected) {
+- (void)handleTextColor{
+    if (_wasSelected) {
         [[self textLabel] setTextColor:kFZZWhiteTextColor()];
     } else {
         [[self textLabel] setTextColor:kFZZGrayTextColor()];
     }
+}
+
+- (void)hitCell{
+    [_tvc tableView:[_tvc tableView] didSelectRowAtIndexPath:_indexPath];
+}
+
+- (void)toggleSelected{
+    _wasSelected = !_wasSelected;
+    
+    [self handleTextColor];
+}
+
+- (void)setSelectionState:(BOOL)isSelected{
+    _wasSelected = isSelected;
+    
+    [self handleTextColor];
 }
 
 @end

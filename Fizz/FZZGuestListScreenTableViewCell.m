@@ -10,11 +10,9 @@
 #import "FZZGuestListScreenTableViewController.h"
 #import "FZZUtilities.h"
 
-#import "FZZInviteSearchBarView.h"
+#import "FZZContactListScreenTableViewCell.h"
 
 @interface FZZGuestListScreenTableViewCell ()
-
-@property (strong, nonatomic) FZZInviteSearchBarView *searchBar;
 
 //@property UIButton *searchForFriendButton;
 @property FZZGuestListScreenTableViewController *gltvc;
@@ -31,7 +29,6 @@
         // Initialization code
 //        [self setupSearchForFriendButton];
         [self setupTableView];
-        [self setupSearchBar];
         
         [self setBackgroundColor:[UIColor clearColor]];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -104,7 +101,7 @@
     CGFloat topBorder = 0;
     CGFloat bottomBorder = 0;
     
-    bottomBorder += [FZZGuestListScreenTableViewCell searchBarHeight];
+    bottomBorder += [FZZContactListScreenTableViewCell searchBarHeight];
     
     frame.origin.x += leftBorder;
     frame.origin.y += topBorder;
@@ -116,39 +113,8 @@
     [_gltvc updateMask];
 }
 
-- (void)setupSearchBar{
-    CGFloat bottomBuffer = 0;
-    
-    CGFloat width = [self frame].size.width;
-    CGFloat height = [FZZGuestListScreenTableViewCell searchBarHeight];
-    CGFloat x = 0;
-    CGFloat y = [self frame].size.height;// - (height + bottomBuffer);
-    
-    CGRect frame = CGRectMake(x, y, width, height);
-    
-    _searchBar = [[FZZInviteSearchBarView alloc] initWithFrame:frame];
-    
-    // Add listeners etc
-    
-    [self.contentView addSubview:_searchBar];
-}
-
 - (void)updateVisuals{
-    [self updateSearchBar];
     [self updateTableView];
-}
-
-- (void)updateSearchBar{
-    CGFloat bottomBuffer = kFZZVerticalMargin();
-    
-    CGFloat width = [self bounds].size.width;
-    CGFloat height = [FZZGuestListScreenTableViewCell searchBarHeight];
-    CGFloat x = 0;
-    CGFloat y = [self bounds].size.height - (height + bottomBuffer) + 16;
-    
-    CGRect frame = CGRectMake(x, y, width, height);
-    
-    [_searchBar setFrame:frame];
 }
 
 - (UIScrollView *)scrollView{

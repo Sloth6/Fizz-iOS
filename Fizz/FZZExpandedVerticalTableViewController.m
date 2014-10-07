@@ -556,19 +556,50 @@ static NSMutableArray *instances;
     [cell updateMessages];
 }
 
+- (BOOL)doesGuestListCellExist{
+    return [self tableView:[self tableView] numberOfRowsInSection:0] == 4;
+}
+
+- (CGFloat)heightForContactListScreenCell{
+//    NSInteger searchBarHeight = [FZZContactListScreenTableViewCell searchBarHeight];
+    NSInteger cellOffset = [FZZContactListScreenTableViewCell cellOffset];
+    
+    return [UIScreen mainScreen].bounds.size.height - cellOffset;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 1){
         return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath] - kFZZGuestListPeak();
+    } else if (indexPath.row == 2){
+        if (![self doesGuestListCellExist]){
+            return [self heightForContactListScreenCell];
+        }
+    } else if (indexPath.row == 3){
+        return [self heightForContactListScreenCell];
     }
     
-    if (indexPath.row == 3){
-        NSInteger searchBarHeight = [FZZGuestListScreenTableViewCell searchBarHeight];
-        NSInteger cellOffset = [FZZContactListScreenTableViewCell cellOffset];
-        
-        return [UIScreen mainScreen].bounds.size.height - (searchBarHeight + cellOffset);
+    return [UIScreen mainScreen].bounds.size.height - ([self tableView:tableView offsetForRowAtIndexPath:indexPath] + [self tableView:tableView outsetForRowAtIndexPath:indexPath]);
+}
+
+- (CGFloat)tableView:(UITableView *)tableView outsetForRowAtIndexPath:(NSIndexPath *)indexPath{
+    switch (indexPath.row) {
+        case 2: // Guest List OR Invite List if no guests
+        {
+            if ([self doesGuestListCellExist]){
+                return [FZZContactListScreenTableViewCell searchBarHeight] - 15 + kFZZVerticalMargin(); //TODOAndrew magic number
+            } else {
+                return 0;
+            }
+        }
+            break;
+            
+        default:{
+            return 0;
+        }
+            break;
     }
     
-    return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath];
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView offsetForRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -63,7 +63,7 @@
     [_textField setPlaceholder:placeholder];
     [_textField setText:placeholder];
     
-    [_textField setEnabled:NO];
+    [_textField setEnabled:YES];
     [_textField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [_textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     

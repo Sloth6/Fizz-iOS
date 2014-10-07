@@ -1,12 +1,12 @@
 //
-//  FZZContactSearchDelegate.m
+//  FZZContactDelegate.m
 //  Fizz
 //
 //  Created by Andrew Sweet on 8/18/14.
 //  Copyright (c) 2014 Fizz. All rights reserved.
 //
 
-#import "FZZContactSearchDelegate.h"
+#import "FZZContactDelegate.h"
 
 #import "FZZAppDelegate.h"
 
@@ -14,33 +14,29 @@
 #import <AddressBookUI/AddressBookUI.h>
 
 #import "FZZUser.h"
-#import "FZZEvent.h"
 
 #import "PhoneNumberFormatter.h"
 
-static FZZContactSearchDelegate *searchDelegate;
+static FZZContactDelegate *searchDelegate;
 
 static int kFZZNumRecentInvites = 10;
 static int kFZZNumRecentInvitesSaved = 20;
 static NSString *kFZZAddressBookPermission = @"addressBookPermission";
 
-static UITableView *tableView;
+//static UITableView *tableView;
 
-@interface FZZContactSearchDelegate ()
+@interface FZZContactDelegate ()
 
-@property (nonatomic) UITextField *textField;
+//@property NSArray *invitableUsersAndContacts;
 
-@property NSArray *invitableUsersAndContacts;
+//@property NSArray *filteredRecents;
+//@property NSArray *filteredUsersAndContacts; // Fizz Users and Contacts
+//@property NSMutableSet *invitedContacts;
+//
+//@property NSMutableSet *selectedUsers; // FZZUsers
+//@property NSMutableSet *selectedContacts; // pn + name
 
-@property (strong, nonatomic) NSIndexPath *eventIndexPath;
-
-@property NSArray *filteredRecents;
-@property NSArray *filteredUsersAndContacts; // Fizz Users and Contacts
-@property NSMutableSet *invitedContacts;
-
-@property NSMutableSet *selectedUsers; // FZZUsers
-@property NSMutableSet *selectedContacts; // pn + name
-
+@property NSArray *usersAndContacts;
 @property NSMutableArray *contacts;
 @property NSArray *recentInvites;
 
@@ -50,12 +46,12 @@ static UITableView *tableView;
 
 @end
 
-@implementation FZZContactSearchDelegate
+@implementation FZZContactDelegate
 
 +(void)initialize{
     static dispatch_once_t once;
     dispatch_once(&once, ^{
-        searchDelegate = [[FZZContactSearchDelegate alloc] init];
+        searchDelegate = [[FZZContactDelegate alloc] init];
         
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
         
@@ -79,43 +75,6 @@ static UITableView *tableView;
 
 + (void)promptForAddressBook{
     [searchDelegate getContacts];
-}
-
-+ (void)setCurrentTableView:(UITableView *)currentTableView{
-    tableView = currentTableView;
-}
-
-+ (void)setTextField:(UITextField *)textField;{
-    NSLog(@"TEXTFIELD::: %@", textField);
-    
-    [searchDelegate setTextField:textField];
-    [searchDelegate searchChange];
-}
-
-- (void)setTextField:(UITextField *)textField{
-    _textField = textField;
-}
-
--(void)filterContentForSearchText:(NSString*)searchText {
-    
-    NSLog(@"FILTERING! %@", _invitableUsersAndContacts);
-    if (searchText == NULL || [searchText isEqualToString:@""]){
-        NSLog(@"meh <%@>", searchText);
-        
-        _filteredUsersAndContacts = _invitableUsersAndContacts;
-        return;
-    }
-    
-    // Filter the array using NSPredicate
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(name CONTAINS[cd] %@)", [NSString stringWithFormat:@" %@", searchText]];
-    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"(name BEGINSWITH[cd] %@)", searchText];
-    
-    NSArray *predicates = [[NSArray alloc] initWithObjects:predicate, predicate2, nil];
-    NSPredicate *fullPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
-    
-    _filteredUsersAndContacts = [_invitableUsersAndContacts filteredArrayUsingPredicate:fullPredicate];
-    
-    NSLog(@"filtered: <<%@>>", _filteredUsersAndContacts);
 }
 
 -(void)loadRecentInvites{
@@ -162,9 +121,33 @@ static UITableView *tableView;
     NSArray *subArray = [sortedValues subarrayWithRange:NSMakeRange(0, numberOfItems)];
     
     _recentInvites = subArray;
+    
+    [self doRecentsUpdate:update];
 }
 
--(void)updateRecentInvitedUsers:(NSArray *)invitedFriends
+- (void)doRecentsUpdate:(NSDictionary *)update{
+    // Sort by count
+    NSArray *sortedValues =
+    [[update allValues] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSDictionary *val1 = obj1;
+        NSDictionary *val2 = obj2;
+        
+        NSNumber *count1 = [val1 objectForKey:@"count"];
+        NSNumber *count2 = [val2 objectForKey:@"count"];
+        
+        return [count2 compare:count1];
+    }];
+    
+    NSInteger numberOfItems = 10;
+    
+    numberOfItems = MIN(numberOfItems, [sortedValues count]);
+    
+    NSArray *subArray = [sortedValues subarrayWithRange:NSMakeRange(0, numberOfItems)];
+    
+    _recentInvites = subArray;
+}
+
++(void)updateRecentInvitedUsers:(NSArray *)invitedFriends
                     andContacts:(NSArray *)invitedContacts{
     
     int numInvitedFriends = [invitedFriends count];
@@ -270,140 +253,16 @@ static UITableView *tableView;
     NSDictionary *toSave = [updateInvites dictionaryWithValuesForKeys:sortedKeys];
     updateInvites = NULL;
     
+    [searchDelegate doRecentsUpdate:toSave];
+    
+    NSLog(@"RECENT INVITES: %@", toSave);
+    
     [pref setObject:toSave forKey:@"recentInvites"];
     [pref synchronize];
 }
 
-+ (NSDictionary *)userOrContactAtIndexPath:(NSIndexPath *)indexPath{
-    return [searchDelegate userOrContactAtIndexPath:indexPath];
-}
-
-// TODOAndrew Sort friends alphabetically with a recent count in front
-// Filter out all users who are currently invited
-- (NSDictionary *)userOrContactAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row > [self lengthOfOptions] || indexPath.row < 0){
-        return nil;
-    }
-    
-    NSDictionary *dict = [_filteredUsersAndContacts objectAtIndex:indexPath.row];
-    
-    return dict;
-}
-
--(void)sendInvitations{
-    [_textField setText:[_textField placeholder]];
-    [self filterContentForSearchText:@""];
-    [_textField resignFirstResponder];
-    [_textField setEnabled:NO];
-    
-    NSMutableArray *userInvites = [[NSMutableArray alloc] init];
-    NSMutableArray *phoneInvites = [[NSMutableArray alloc] init];
-    
-    NSArray *invitedUsers  = [_selectedUsers allObjects];
-    NSArray *invitedContacts = [_selectedContacts allObjects];
-    
-    [_selectedContacts removeAllObjects];
-    [_selectedUsers removeAllObjects];
-    
-    [_invitedContacts addObjectsFromArray:invitedContacts];
-    
-    int numInvitedUsers = [invitedUsers count];
-    
-    for (int i = 0; i < numInvitedUsers; ++i){
-        FZZUser *user = [invitedUsers objectAtIndex:i];
-        
-        [userInvites addObject:user];
-    }
-    
-    int numInvitedContacts = [invitedContacts count];
-    
-    for (int i = 0; i < numInvitedContacts; ++i){
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        
-        NSDictionary *contact = [invitedContacts objectAtIndex:i];
-        [dict setObject:[contact objectForKey:@"pn"] forKey:@"pn"];
-        [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
-        
-        [phoneInvites addObject:dict];
-    }
-    
-    [self updateRecentInvitedUsers:invitedUsers
-                       andContacts:invitedContacts];
-    
-    NSLog(@"\n\nUser Invites: %@\nPhone Invites: %@\n\n", userInvites, phoneInvites);
-    
-    if ([userInvites count] > 0 || [phoneInvites count] > 0){
-        
-        FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
-        
-        [event socketIOInviteWithInviteList:userInvites
-                          InviteContactList:phoneInvites
-                             AndAcknowledge:nil];
-    }
-}
-
-+ (BOOL)isContactSelected:(NSDictionary *)contact{
-    return [[searchDelegate selectedContacts] containsObject:contact];
-}
-
-+ (BOOL)isUserSelected:(FZZUser *)user{
-    return [[searchDelegate selectedUsers] containsObject:user];
-}
-
-+ (BOOL)isUserOrContactUser:(NSDictionary *)userOrContact{
++ (BOOL)isUserElseContactUser:(NSDictionary *)userOrContact{
     return [userOrContact objectForKey:@"user"] != nil;
-}
-
-+ (BOOL)userOrContactIsSelected:(NSDictionary *)userOrContact{
-    if ([FZZContactSearchDelegate isUserOrContactUser:userOrContact]){
-        FZZUser *user = [userOrContact objectForKey:@"user"];
-        
-        return [FZZContactSearchDelegate isUserSelected:user];
-    } else {
-        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
-        
-        return [FZZContactSearchDelegate isContactSelected:contact];
-    }
-}
-
-+ (void)deselectUserOrContact:(NSDictionary *)userOrContact{
-    if ([FZZContactSearchDelegate isUserOrContactUser:userOrContact]){
-        FZZUser *user = [userOrContact objectForKey:@"user"];
-        
-        [[searchDelegate selectedUsers] removeObject:user];
-    } else {
-        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
-        
-        [[searchDelegate selectedContacts] removeObject:contact];
-    }
-}
-
-+ (void)selectUserOrContact:(NSDictionary *)userOrContact{
-    if ([FZZContactSearchDelegate isUserOrContactUser:userOrContact]){
-        FZZUser *user = [userOrContact objectForKey:@"user"];
-        
-        [[searchDelegate selectedUsers] addObject:user];
-    } else {
-        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
-        
-        [[searchDelegate selectedContacts] addObject:contact];
-    }
-}
-
-+ (int)numberOfInvitableOptions{
-    return [searchDelegate lengthOfOptions];
-}
-
-- (int)lengthOfOptions{
-    return [_filteredUsersAndContacts count];
-}
-
-+ (void)setEventIndexPath:(NSIndexPath *)eventIndexPath{
-    [searchDelegate setEventIndexPath:eventIndexPath];
-}
-
-- (void)setEventIndexPath:(NSIndexPath *)eventIndexPath{
-    _eventIndexPath = eventIndexPath;
 }
 
 +(void)updateFriendsAndContacts{
@@ -415,10 +274,16 @@ static UITableView *tableView;
  TODOAndrew this is probably called too often, every time I setEvent for FZZExpandedEventCell. Reduce to "updating friends" when you get new FZZUsers from the server. Also load all users from the cache on launch.
  
  */
+
 -(void)updateFriendsAndContacts{
     NSMutableArray *usersAndContacts;
     
     NSMutableArray *users = [[FZZUser getFriends] mutableCopy];
+    
+    // Will not do anything if already have loaded contacts
+    // Else attempts to get most recent address book
+    [self getContacts];
+    
     NSMutableArray *contacts = [_contacts mutableCopy];
     
     NSArray *usersEnum = [users copy];
@@ -449,9 +314,9 @@ static UITableView *tableView;
     
     NSLog(@"All you people: %@", usersAndContacts);
     
-    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
-    
-    [usersAndContacts removeObjectsInArray:[event invitees]];
+//    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+//    
+//    [usersAndContacts removeObjectsInArray:[event invitees]];
     
     [usersAndContacts sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         NSDictionary *user1 = obj1;
@@ -460,45 +325,21 @@ static UITableView *tableView;
         return [[user1 objectForKey:@"name"] caseInsensitiveCompare:[user2 objectForKey:@"name"]];
     }];
     
-    _invitableUsersAndContacts = usersAndContacts;
-    [self filterInvitables];
+    _usersAndContacts = [NSArray arrayWithArray:usersAndContacts];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [tableView reloadData];
-    });
-    
-    //    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-+ (void)searchFieldTextChanged{
-    [searchDelegate searchChange];
-}
-
-- (void)searchChange{
-    NSLog(@">>%@<<", _textField);
-    
-    NSString *text = [_textField text];
-    
-    if (!text){
-        text = @"";
-    }
-    
-    [self filterContentForSearchText:text];
-    [tableView reloadData];
+//    _invitableUsersAndContacts = usersAndContacts;
+//    
+//    [self filterInvitables];
+//    [tableView reloadData];
 }
 
 -(void)getContacts{
-    
-    
+    @synchronized(self){
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     if (appDelegate.gotAddressBook) {
-        NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-        
-        _contacts = [[pref objectForKey:@"contacts"] mutableCopy];
-        
-        [self filterInvitables];
-        [tableView reloadData];
+//        [self filterInvitables];
+//        [tableView reloadData];
         return;
     }
     
@@ -545,6 +386,8 @@ static UITableView *tableView;
                 
                 NSString *phoneNumber = [self handlePhones:person];
                 
+                name = name.lowercaseString;
+                
                 NSLog(@">>%@: (%@)", name, phoneNumber);
                 
                 if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]){
@@ -565,80 +408,23 @@ static UITableView *tableView;
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
         _contacts = [[contacts sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
         
-        [self updateFriendsAndContacts];
-        
-        [self filterInvitables];
-        
-        //        [_contacts sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        //            NSDictionary *d1 = obj1;
-        //            NSDictionary *d2 = obj2;
-        //
-        //            NSString *name1 = [d1 objectForKey:@"name"];
-        //            NSString *name2 = [d1 objectForKey:@"name"];
-        //
-        //            if ([name1 isEqualToString:@""]){
-        //                name1 = [d1 objectForKey:@"pn"];
-        //            }
-        ////            } else {
-        ////                NSArray *terms = [name1 componentsSeparatedByString: @" "];
-        ////                name1 = [terms lastObject];
-        ////            }
-        //
-        //            if ([name2 isEqualToString:@""]){
-        //                name2 = [d2 objectForKey:@"pn"];
-        //            }
-        ////            } else {
-        ////                NSArray *terms = [name2 componentsSeparatedByString: @" "];
-        ////                name2 = [terms lastObject];
-        ////            }
-        //
-        //            return [name1 compare:name2];
-        //        }];
-        
-        
-//        [pref setObject:_contacts forKey:@"contacts"];
-//        [pref synchronize];
+//        [self filterInvitables];
         
         NSLog(@"Saved Contacts: %@", _contacts);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-            [pref setObject:[NSNumber numberWithBool:YES] forKey:kFZZAddressBookPermission];
-            [pref synchronize];
-            appDelegate.gotAddressBook = YES;
-            
-            [self searchChange];
-            [tableView reloadData];
-        });
+        NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+        
+        // Stored so users can be loaded earlier in app launch if we already were given access
+        [pref setObject:[NSNumber numberWithBool:YES] forKey:kFZZAddressBookPermission];
+        [pref synchronize];
+        appDelegate.gotAddressBook = YES;
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self searchChange];
+//            [tableView reloadData];
+//        });
     });
-}
-
-// Remove anybody who's already invited to the event
--(void)filterInvitables{
-    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        NSDictionary *dict = evaluatedObject;
-        
-        FZZUser *user = [dict objectForKey:@"user"];
-        
-        if (user){
-            return ![event isUserInvited:user];
-        } else {
-            NSDictionary *contact = [dict objectForKey:@"contact"];
-            NSString *phoneNumber = [contact objectForKey:@"pn"];
-            
-            FZZUser *user = [FZZUser userFromPhoneNumber:phoneNumber];
-            
-            if (user){
-                return ![event isUserInvited:user];
-            } else {
-                return YES;
-            }
-        }
-    }];
-    
-    _invitableUsersAndContacts = [_invitableUsersAndContacts filteredArrayUsingPredicate:predicate];
+    }
 }
 
 -(NSString *)handlePhones:(ABRecordRef)person{
@@ -688,6 +474,12 @@ static UITableView *tableView;
     phoneNumber = [_phoneNumberFormat strip:phoneNumber];
     
     return [NSString stringWithFormat:@"+%@", phoneNumber];
+}
+
++ (NSArray *)usersAndContacts{
+    // technically mutable
+    return [searchDelegate usersAndContacts];
+//    return [NSArray arrayWithArray:[searchDelegate contacts]];
 }
 
 

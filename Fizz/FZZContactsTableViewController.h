@@ -10,6 +10,9 @@
 
 #import "FZZFadedEdgeTableViewController.h"
 
-@interface FZZContactsTableViewController : FZZFadedEdgeTableViewController;
+@interface FZZContactsTableViewController : FZZFadedEdgeTableViewController
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath;
+- (void)setTextField:(UITextField *)textField;
 
 @end

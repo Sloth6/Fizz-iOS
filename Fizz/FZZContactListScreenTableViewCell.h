@@ -16,4 +16,6 @@
 
 +(CGFloat)cellOffset;
 
++ (CGFloat)searchBarHeight;
+
 @end
