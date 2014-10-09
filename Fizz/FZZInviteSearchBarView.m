@@ -58,10 +58,13 @@
     CGFloat buttonWidth = textWidth + (2 * kFZZButtonBuffer());
     CGFloat buttonHeight = textHeight + (2 * kFZZButtonBuffer());
     
-    frame.origin.x = frame.size.width - buttonWidth - kFZZHorizontalMargin();
+    frame.origin.x = frame.size.width + kFZZButtonBuffer() + 1
+                    - (buttonWidth + kFZZHorizontalMargin());
+    
     frame.size.width = buttonWidth;
     
-    frame.origin.y = frame.size.height - buttonHeight;
+    frame.origin.y = frame.size.height
+                    - (textHeight + kFZZButtonBuffer() + 1 + kFZZVerticalMargin());
     frame.size.height = buttonHeight;
     
     _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -79,20 +82,32 @@
     
     CGFloat buttonWidth = [_sendButton frame].size.width;
     
+    NSString *placeholder = @"search for a friend to invite";
+    
+    UIFont *font = kFZZInputFont();
+    
+    CGSize textSize = [placeholder sizeWithAttributes:@{NSFontAttributeName:font}];
+    
+    CGFloat textHeight = textSize.height;
+    
     CGRect frame = self.bounds;
     frame.origin.x += kFZZHorizontalMargin();
     frame.size.width -= (2*kFZZHorizontalMargin()) + buttonWidth + kFZZHorizontalMargin();
     
-    _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:frame];
+    CGFloat fieldHeight = textHeight + (2 * kFZZButtonBuffer());
     
-    UIFont *font = kFZZInputFont();
+    frame.origin.y = frame.size.height
+                    - (textHeight + kFZZButtonBuffer() + kFZZVerticalMargin());
+    
+    frame.size.height = fieldHeight;
+    
+    
+    _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:frame];
     
     [_textField setFont:font];
     
     [_textField setTextColor:kFZZWhiteTextColor()];
     [_textField setPlaceholderTextColor:kFZZGrayTextColor()];
-    
-    NSString *placeholder = @"search for a friend to invite";
     
     [_textField setPlaceholder:placeholder];
     [_textField setText:placeholder];
@@ -129,7 +144,7 @@
     CGFloat x1 = xInset;
     CGFloat x2 = cellWidth - xInset;
     
-    CGFloat y = self.bounds.size.height;
+    CGFloat y = self.bounds.size.height - kFZZHorizontalMargin();
     
     UIColor *grayColor = kFZZGrayTextColor();
     
@@ -141,7 +156,7 @@
     [UIColor colorWithWhite:whiteness alpha:alpha];
     
     CGContextSetStrokeColorWithColor(context, [kFZZGrayTextColor() CGColor]);
-    CGContextSetLineWidth(context, 2.0);
+    CGContextSetLineWidth(context, 0.5);
     CGContextMoveToPoint(context, x1, y);
     CGContextAddLineToPoint(context, x2, y);
     CGContextDrawPath(context, kCGPathStroke);
@@ -150,9 +165,9 @@
 - (void)drawRect:(CGRect)rect{
     [super drawRect:rect];
     
-    if (_shouldDrawLine){
-        [self drawLine];
-    }
+//    if (_shouldDrawLine){
+    [self drawLine];
+//    }
 }
 
 @end
