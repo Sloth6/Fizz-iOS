@@ -329,7 +329,20 @@ static NSMutableData *data;
     
     [FZZUser setMeAs:me];
     
-    NSArray *eventIDList = [json objectForKey:@"eventList"];
+    //
+    NSArray *eventIDAndMessageNumList = [json objectForKey:@"eventList"];
+    
+    [FZZEvent confirmEventsAndNumberOfMessages:eventIDAndMessageNumList];
+    
+    NSMutableArray *eventIDList = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [eventIDAndMessageNumList count]; ++i){
+        NSDictionary *dict = [eventIDAndMessageNumList objectAtIndex:i];
+        NSNumber *eventID = [dict objectForKey:@"eid"];
+        
+        [eventIDList addObject:eventID];
+    }
+    
     NSMutableArray *completeEventIDList = [[FZZEvent getEventIDs] mutableCopy];
     
     [completeEventIDList removeObjectsInArray:eventIDList];

@@ -29,6 +29,9 @@
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
 +(NSArray *)getEvents;
 
++(NSArray *)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList;
+
+
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOInviteWithInviteList:(NSArray *)inviteList
@@ -40,6 +43,8 @@
 -(void)socketIODeleteEventWithAcknowledge:(SocketIOCallback)function;
 +(void)socketIONewEventWithMessage:(NSString *)message
                     AndAcknowledge:(SocketIOCallback)function;
++(void)socketIORequestEventsWithIDs:(NSArray *)eventIDs
+                     AndAcknowledge:(SocketIOCallback)function;
 
 //+(void)socketIONewEventWithMessage:(NSString *)message
 //                          AndSeats:(int)numSeats

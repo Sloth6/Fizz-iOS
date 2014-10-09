@@ -330,6 +330,38 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     }];
 }
 
++(NSArray *)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList{
+    NSMutableArray *pullEventIDs = [[NSMutableArray alloc] init];
+    NSMutableArray *pullMessagesForEventIDs = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [eventIDAndMessageNumList count]; ++i){
+        NSDictionary *dict = [eventIDAndMessageNumList objectAtIndex:i];
+        NSNumber *eventID = [dict objectForKey:@"eid"];
+        NSNumber *numberOfMessages = [dict objectForKey:@"numM"];
+        
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        
+        if (!event){
+            int cachedNumberOfMessages = [[event messages] count];
+            
+            if (![numberOfMessages isEqualToNumber:[NSNumber numberWithInt:cachedNumberOfMessages]]){
+                //TODOAndrew
+                // Add eventID to list of events that you need to pull all messages
+                [pullMessagesForEventIDs addObject:eventID];
+            }
+        } else {
+            //TODOAndrew
+            // Add eventID to list of events that I will need to ask for
+            [pullEventIDs addObject:eventID];
+        }
+    }
+    
+    NSArray *pullEIDs = [pullEventIDs arrayByAddingObjectsFromArray:pullMessagesForEventIDs];
+    
+    [FZZEvent socketIORequestEventsWithIDs:pullEIDs
+                            AndAcknowledge:nil];
+}
+
 +(NSArray *)getEventIDs{
     NSArray *allEvents = [events allValues];
     NSMutableArray *result = [[allEvents sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
@@ -557,18 +589,9 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     [[FZZSocketIODelegate socketIO] sendEvent:FZZ_UPDATE_EVENT withData:json andAcknowledge:function];
 }
 
--(void)socketIOUpdateEventWithEventsList:(NSArray *)events
-                          AndAcknowledge:(SocketIOCallback)function{
++(void)socketIORequestEventsWithIDs:(NSArray *)eventIDs
+                      AndAcknowledge:(SocketIOCallback)function{
     NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
-    
-    NSMutableArray *eventIDs = [events mutableCopy];
-    
-    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        FZZEvent *event = obj;
-        NSNumber *eventID = [event eventID];
-        
-        [eventIDs setObject:eventID atIndexedSubscript:idx];
-    }];
     
     /* eidList : int array */
     [json setObject:eventIDs forKey:@"eidList"];
