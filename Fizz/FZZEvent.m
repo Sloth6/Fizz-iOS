@@ -330,7 +330,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     }];
 }
 
-+(NSArray *)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList{
++(void)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList{
     NSMutableArray *pullEventIDs = [[NSMutableArray alloc] init];
     NSMutableArray *pullMessagesForEventIDs = [[NSMutableArray alloc] init];
     
@@ -655,8 +655,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 }
 
 +(FZZEvent *)parseJSON:(NSDictionary *)eventJSON{
-    if (eventJSON == NULL){
-        return NULL;
+    if (eventJSON == nil){
+        return nil;
     }
     
     /* Event ID */
@@ -676,8 +676,6 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 //    NSNumber *seconds = [[NSNumber alloc] initWithDouble:];
     
     NSTimeInterval timeInterval = [creationTimeInterval doubleValue]/1000.0;
-    
-    NSLog(@"TIME:: %@ or f %g", creationTimeInterval, timeInterval);
     
     NSDate *creationTime = [NSDate dateWithTimeIntervalSince1970:timeInterval];
     

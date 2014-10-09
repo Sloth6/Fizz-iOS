@@ -29,7 +29,7 @@
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
 +(NSArray *)getEvents;
 
-+(NSArray *)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList;
++(void)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList;
 
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
