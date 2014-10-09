@@ -10,7 +10,6 @@
 #import "FZZAppDelegate.h"
 #import "SBJson4.h"
 
-static BOOL didAjax = NO;
 static NSURLConnection *connection;
 
 @implementation FZZAjaxPostDelegate
@@ -29,15 +28,13 @@ static NSURLConnection *connection;
     NSLog(@"\n\n<<%@>>\n\n", resp);
     
     if ([FZZAjaxPostDelegate isLoginSuccessURL:[resp URL]]){
+        
         if ([resp statusCode] == 200){
             // AJAX Login success
-            if (!didAjax){
-                didAjax = YES;
                 
-                [FZZAjaxPostDelegate finishVerificationStep];
-                
-                return YES;
-            }
+            [FZZAjaxPostDelegate finishVerificationStep];
+            
+            return YES;
         } else {
             // AJAX Login failed
             [FZZAjaxPostDelegate failVerificationStep];

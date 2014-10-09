@@ -15,6 +15,7 @@
 @property (nonatomic) BOOL shouldDrawLine;
 
 @property (strong, nonatomic) FZZCustomPlaceholderTextField *textField;
+@property (nonatomic) UIButton *sendButton;
 
 @end
 
@@ -25,6 +26,7 @@
     
     if (self){
         // Initialization code
+        [self setupSendButton];
         [self setupSearchBar];
         
         [self setBackgroundColor:[UIColor clearColor]];
@@ -42,12 +44,34 @@
     }
 }
 
+- (void)setupSendButton{
+    CGRect frame = self.bounds;
+    
+    CGFloat buttonWidth = 50; //Magic Number
+    
+    frame.origin.x = frame.size.width - buttonWidth - kFZZHorizontalMargin();
+    frame.size.width = buttonWidth;
+    
+    _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [_sendButton setBackgroundColor:[UIColor redColor]];
+    
+    [_sendButton setFrame:frame];
+    [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    [[_sendButton titleLabel] setFont:kFZZCapsulesFont()];
+    [_sendButton setTitleColor:kFZZWhiteTextColor() forState:UIControlStateApplication];
+    
+    [self addSubview:_sendButton];
+}
+
 - (void)setupSearchBar{
     [_textField removeFromSuperview];
     
+    CGFloat buttonWidth = [_sendButton frame].size.width;
+    
     CGRect frame = self.bounds;
     frame.origin.x += kFZZHorizontalMargin();
-    frame.size.width -= kFZZHorizontalMargin();
+    frame.size.width -= kFZZHorizontalMargin() + buttonWidth;
     
     _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:frame];
     
@@ -62,6 +86,8 @@
     
     [_textField setPlaceholder:placeholder];
     [_textField setText:placeholder];
+    
+    [_textField setBackgroundColor:[UIColor blueColor]];
     
     [_textField setEnabled:YES];
     [_textField setAutocorrectionType:UITextAutocorrectionTypeNo];

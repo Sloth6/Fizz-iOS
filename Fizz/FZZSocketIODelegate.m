@@ -164,6 +164,8 @@ static NSMutableData *data;
     
     if ([FZZAjaxPostDelegate connection:connection didRecieveResponse:response]){
         [[FZZSocketIODelegate socketIODelegate] openConnection];
+    } else {
+        NSLog(@"CONNECTION: <<%@>> RESPONSE: <<%@>>", connection, response);
     }
 }
 
