@@ -358,8 +358,10 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     
     NSArray *pullEIDs = [pullEventIDs arrayByAddingObjectsFromArray:pullMessagesForEventIDs];
     
-    [FZZEvent socketIORequestEventsWithIDs:pullEIDs
-                            AndAcknowledge:nil];
+    if ([pullEIDs count] > 0){
+        [FZZEvent socketIORequestEventsWithIDs:pullEIDs
+                                AndAcknowledge:nil];
+    }
 }
 
 +(NSArray *)getEventIDs{
