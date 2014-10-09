@@ -342,6 +342,10 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         FZZEvent *event = [FZZEvent eventWithEID:eventID];
         
         if (!event){
+            //TODOAndrew
+            // Add eventID to list of events that I will need to ask for
+            [pullEventIDs addObject:eventID];
+        } else {
             int cachedNumberOfMessages = [[event messages] count];
             
             if (![numberOfMessages isEqualToNumber:[NSNumber numberWithInt:cachedNumberOfMessages]]){
@@ -349,10 +353,6 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
                 // Add eventID to list of events that you need to pull all messages
                 [pullMessagesForEventIDs addObject:eventID];
             }
-        } else {
-            //TODOAndrew
-            // Add eventID to list of events that I will need to ask for
-            [pullEventIDs addObject:eventID];
         }
     }
     

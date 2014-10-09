@@ -47,18 +47,28 @@
 - (void)setupSendButton{
     CGRect frame = self.bounds;
     
-    CGFloat buttonWidth = 50; //Magic Number
+    NSString *text = @"SEND";
+    UIFont *font = kFZZCapsulesFont();
+    
+    CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName:font}];
+    
+    CGFloat textWidth = textSize.width;
+    CGFloat textHeight = textSize.height;
+    
+    CGFloat buttonWidth = textWidth + (2 * kFZZButtonBuffer());
+    CGFloat buttonHeight = textHeight + (2 * kFZZButtonBuffer());
     
     frame.origin.x = frame.size.width - buttonWidth - kFZZHorizontalMargin();
     frame.size.width = buttonWidth;
     
+    frame.origin.y = frame.size.height - buttonHeight;
+    frame.size.height = buttonHeight;
+    
     _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    [_sendButton setBackgroundColor:[UIColor redColor]];
-    
     [_sendButton setFrame:frame];
-    [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
-    [[_sendButton titleLabel] setFont:kFZZCapsulesFont()];
+    [_sendButton setTitle:text forState:UIControlStateNormal];
+    [[_sendButton titleLabel] setFont:font];
     [_sendButton setTitleColor:kFZZWhiteTextColor() forState:UIControlStateApplication];
     
     [self addSubview:_sendButton];
@@ -71,7 +81,7 @@
     
     CGRect frame = self.bounds;
     frame.origin.x += kFZZHorizontalMargin();
-    frame.size.width -= kFZZHorizontalMargin() + buttonWidth;
+    frame.size.width -= (2*kFZZHorizontalMargin()) + buttonWidth + kFZZHorizontalMargin();
     
     _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:frame];
     
@@ -86,8 +96,6 @@
     
     [_textField setPlaceholder:placeholder];
     [_textField setText:placeholder];
-    
-    [_textField setBackgroundColor:[UIColor blueColor]];
     
     [_textField setEnabled:YES];
     [_textField setAutocorrectionType:UITextAutocorrectionTypeNo];

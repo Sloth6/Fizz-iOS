@@ -57,7 +57,7 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         
         NSNumber *addressBookAccess = [pref objectForKey:kFZZAddressBookPermission];
         
-        if ([addressBookAccess boolValue]){
+        if ((addressBookAccess != nil) && [addressBookAccess boolValue]){
             [searchDelegate getContacts];
         }
     });
@@ -282,7 +282,13 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
     
     // Will not do anything if already have loaded contacts
     // Else attempts to get most recent address book
-    [self getContacts];
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    NSNumber *addressBookAccess = [pref objectForKey:kFZZAddressBookPermission];
+    
+    if ((addressBookAccess != nil) && [addressBookAccess boolValue]){
+        [self getContacts];
+    }
     
     NSMutableArray *contacts = [_contacts mutableCopy];
     
