@@ -74,7 +74,23 @@
     [[_sendButton titleLabel] setFont:font];
     [_sendButton setTitleColor:kFZZWhiteTextColor() forState:UIControlStateApplication];
     
+//    [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:nec action:@selector(sendInvitations)];
+    
     [self addSubview:_sendButton];
+}
+
+- (void)setInvitationDelegate:(FZZContactSelectionDelegate *)invitationDelegate{
+    [_sendButton removeTarget:_invitationDelegate
+                       action:@selector(sendInvitations)
+             forControlEvents:UIControlEventTouchUpInside];
+    
+    _invitationDelegate = invitationDelegate;
+    
+    NSLog(@"DICK %@ %@", _sendButton, _invitationDelegate);
+    
+    [_sendButton addTarget:_invitationDelegate
+                    action:@selector(sendInvitations)
+          forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setupSearchBar{

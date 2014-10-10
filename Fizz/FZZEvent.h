@@ -34,8 +34,9 @@
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLeaveEventWithAcknowledge:(SocketIOCallback)function;
+
+// {"pn" : phoneNumber, "name" : name} list
 -(void)socketIOInviteWithInviteList:(NSArray *)inviteList
-                  InviteContactList:(NSArray *)contactList
                      AndAcknowledge:(SocketIOCallback)function;
 -(void)socketIOLoadMessagesBeforeMID:(NSNumber *)mid
                       AndAcknowledge:(SocketIOCallback)function;

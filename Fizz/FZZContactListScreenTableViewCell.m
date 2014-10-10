@@ -148,6 +148,9 @@ static CGFloat kBottomBorder = 6;
     _searchBar = [[FZZInviteSearchBarView alloc] initWithFrame:frame];
     
     // Add listeners etc
+    FZZContactSelectionDelegate *invitationDelegate = [_ctvc invitationDelegate];
+    
+    [_searchBar setInvitationDelegate:invitationDelegate];
     
     [self.contentView addSubview:_searchBar];
     [_ctvc setTextField:[_searchBar textField]];

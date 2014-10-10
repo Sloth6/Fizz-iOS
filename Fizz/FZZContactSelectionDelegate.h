@@ -27,6 +27,8 @@
 
 - (void)setCurrentTableView:(UITableView *)tableView;
 
+- (void)sendInvitations;
+
 + (void)invalidateInvitables;
 
 @end

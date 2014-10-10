@@ -150,6 +150,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
 +(void)updateRecentInvitedUsers:(NSArray *)invitedFriends
                     andContacts:(NSArray *)invitedContacts{
     
+    NSLog(@"invitedFriends: <<%@>>\n\ninvitedContacts: <<%@>>", invitedFriends, invitedContacts);
+    
     int numInvitedFriends = [invitedFriends count];
     int numInvitedContacts = [invitedContacts count];
     
@@ -163,6 +165,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
     
     int capacity = 0;
     
+    NSLog(@"<<1>>");
+    
     if (savedInvites){
         capacity = MIN(MIN([savedInvites count], kFZZNumRecentInvitesSaved), numInvitedFriends + numInvitedContacts);
         updateInvites = [[NSMutableDictionary alloc] initWithCapacity:capacity];
@@ -171,14 +175,21 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         updateInvites = [[NSMutableDictionary alloc] initWithCapacity:capacity];
     }
     
+    NSLog(@"<<2>>");
+    
     // Update recent users
     for (int i = 0; i < numInvitedFriends; ++i){
+        
+        NSLog(@"<<3>>");
+        
         FZZUser *user = (FZZUser *)[invitedFriends objectAtIndex:i];
         NSString *phoneNumber = [user phoneNumber];
         NSNumber *userID = [user userID];
         
         NSDictionary *dict = [savedInvites objectForKey:phoneNumber];
         NSNumber *count;
+        
+        NSLog(@"dict: <<%@>>\n\nuser: <<%@>>", dict, user);
         
         if (dict){
             count = [dict objectForKey:@"count"];
@@ -196,11 +207,17 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         [savedInvites removeObjectForKey:phoneNumber];
     }
     
+    NSLog(@"<<4>>");
+    
     // Update recent contacts
     for (int i = 0; i < numInvitedContacts; ++i){
+        NSLog(@"<<6>>");
+        
         NSDictionary *contact = [invitedContacts objectAtIndex:i];
         NSString *phoneNumber = [contact objectForKey:@"pn"];
         NSString *name = [contact objectForKey:@"name"];
+        
+        NSLog(@"<<5>>");
         
         NSDictionary *dict = [savedInvites objectForKey:phoneNumber];
         NSNumber *count;
@@ -221,6 +238,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         [savedInvites removeObjectForKey:phoneNumber];
     }
     
+    NSLog(@"<<7>>");
+    
     // Update unused recent values
     [savedInvites enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSMutableDictionary *dict = [(NSDictionary *)obj mutableCopy];
@@ -234,6 +253,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         [updateInvites setObject:dict forKey:phoneNumber];
     }];
     
+    NSLog(@"<<8>>");
+    
     // Sort by count
     NSArray *sortedKeys =
     [updateInvites keysSortedByValueUsingComparator:^NSComparisonResult(id obj1, id obj2) {
@@ -246,12 +267,16 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         return [count2 compare:count1];
     }];
     
+    NSLog(@"<<9>>");
+    
     // Keep only the allowed amount
     sortedKeys =
     [sortedKeys subarrayWithRange:NSMakeRange(0, MIN(kFZZNumRecentInvitesSaved, sortedKeys.count))];
     
     NSDictionary *toSave = [updateInvites dictionaryWithValuesForKeys:sortedKeys];
     updateInvites = NULL;
+    
+    NSLog(@"<<10>>");
     
     [searchDelegate doRecentsUpdate:toSave];
     
@@ -310,10 +335,16 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         
         NSDictionary *contact = obj;
         
-        [dict setObject:contact forKey:@"contact"];
-        [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
+        NSString *phoneNumber = [contact objectForKey:@"pn"];
         
-        [contacts setObject:dict atIndexedSubscript:idx];
+        FZZUser *user = [FZZUser userFromPhoneNumber:phoneNumber];
+        
+        if (user == nil){
+            [dict setObject:contact forKey:@"contact"];
+            [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
+            
+            [contacts setObject:dict atIndexedSubscript:idx];
+        }
     }];
     
     usersAndContacts = [[users arrayByAddingObjectsFromArray:contacts] mutableCopy];

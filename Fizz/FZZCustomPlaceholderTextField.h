@@ -12,4 +12,6 @@
 
 -(void)setPlaceholderTextColor:(UIColor *)placeholderColor;
 
+-(CGFloat)textInset;
+
 @end

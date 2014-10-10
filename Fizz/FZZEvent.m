@@ -311,6 +311,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         @synchronized([FZZUser class]){
             sorted = NO;
             
+            _invitees = [[NSArray alloc] init];
+            
             self.eventID = eID;
             self.scrollPosition = [NSIndexPath indexPathForItem:1 inSection:0];
             [events setObject:self forKey:eID];
@@ -433,7 +435,10 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 }
 
 -(BOOL)isUserInvited:(FZZUser *)user{
-    return [self.invitees containsObject:user];
+    NSLog(@"IS INVITED? <<%@>> %@", _invitees, user);
+    NSLog(@"\n\nWELP: %d", [_invitees containsObject:user]);
+    
+    return [_invitees containsObject:user];
 }
 
 -(BOOL)isUserGuest:(FZZUser *)user{
@@ -460,10 +465,25 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 // Invitees are Additive because you can't be uninvited from an event
 -(void)updateAddInvitees:(NSArray *)invitees{
     @synchronized(self){
-        NSMutableArray *resultInvitees = [[self invitees] mutableCopy];
-        [resultInvitees addObjectsFromArray:invitees];
-        
-        [self setInvitees:resultInvitees];
+        if (invitees != nil){
+            NSMutableArray *resultInvitees = [[self invitees] mutableCopy];
+            
+            if (resultInvitees != nil){
+            
+                NSLog(@"firstInvitees: %@", resultInvitees);
+                
+                [resultInvitees addObjectsFromArray:invitees];
+                
+                NSLog(@"inviteesToAdd: %@, resultInvitees: %@", invitees, resultInvitees);
+                
+                [self setInvitees:resultInvitees];
+            } else {
+                
+                 NSLog(@"addedInvitees: %@", invitees);
+                
+                [self setInvitees:invitees];
+            }
+        }
     }
 }
 

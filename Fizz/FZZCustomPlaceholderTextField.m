@@ -21,6 +21,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        [self setAdjustsFontSizeToFitWidth:YES];
     }
     return self;
 }
@@ -29,7 +30,8 @@
     _placeholderColor = placeholderColor;
 }
 
-+ (CGRect) getDrawRectForText:(NSString *)text withAttributes:(NSDictionary *)attributes inRect:(CGRect)rect
++ (CGRect)getDrawRectForText:(NSString *)text
+              withAttributes:(NSDictionary *)attributes inRect:(CGRect)rect
 {
     CGSize size = [text sizeWithAttributes:attributes];
     
@@ -48,12 +50,16 @@
 
 // placeholder position
 - (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 0 , 0 );
+    return CGRectInset( bounds , 5 , 5 );
 }
 
 // text position
 - (CGRect)editingRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 0 , 0 );
+    return CGRectInset( bounds , 5 , 5 );
+}
+
+-(CGFloat)textInset{
+    return 2;
 }
 
 - (void)drawPlaceholderInRect:(CGRect)rect {
@@ -95,7 +101,7 @@
                                   NSParagraphStyleAttributeName: textStyle,
                                   NSForegroundColorAttributeName: self.textColor};
     
-    [[self text] drawInRect:rect withAttributes:attributes];
+    [[self text] drawInRect:CGRectInset(rect, 5.0, 5.0) withAttributes:attributes];
 }
 
 /*

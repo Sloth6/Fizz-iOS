@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "FZZContactSelectionDelegate.h"
+
 @interface FZZInviteSearchBarView : UIView
+
+@property (nonatomic) FZZContactSelectionDelegate *invitationDelegate;
 
 -(UITextField *)textField;
 -(void)setShouldDrawLine:(BOOL)shouldDrawLine;

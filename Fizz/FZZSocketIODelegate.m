@@ -14,7 +14,6 @@
 #import "FZZUser.h"
 #import "FZZMessage.h"
 #import "FZZAppDelegate.h"
-#import "FZZInviteViewController.h"
 #import "FZZLocationManager.h"
 
 #import "FZZContactDelegate.h"
@@ -30,14 +29,13 @@ Stuff; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
-// Incoming Server Communication
-static NSString *FZZ_INCOMING_ON_LOGIN = @"onLogin";
-static NSString *FZZ_INCOMING_NEW_EVENT = @"newEvent";
-static NSString *FZZ_INCOMING_COMPLETE_EVENT = @"completeEvent";
-static NSString *FZZ_INCOMING_UPDATE_GUESTS = @"updateGuests";
-static NSString *FZZ_INCOMING_NEW_INVITEES = @"newInvitees";
-static NSString *FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
-static NSString *FZZ_INCOMING_UPDATE_EVENT = @"updateEvent";
+NSString * const FZZ_INCOMING_ON_LOGIN = @"onLogin";
+NSString * const FZZ_INCOMING_NEW_EVENT = @"newEvent";
+NSString * const FZZ_INCOMING_COMPLETE_EVENT = @"completeEvent";
+NSString * const FZZ_INCOMING_UPDATE_GUESTS = @"updateGuests";
+NSString * const FZZ_INCOMING_NEW_INVITEES = @"newInvitees";
+NSString * const FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
+NSString * const FZZ_INCOMING_UPDATE_EVENT = @"updateEvent";
 
 static BOOL hasMadeDelegate = NO;
 static FZZSocketIODelegate *socketIODelegate;
@@ -261,7 +259,7 @@ static NSMutableData *data;
 - (void) updateReconnectDelay{
     // Ramp up how often you try to reconnect from every 5 seconds to every 5 minutes
     if (reconnectDelay < kFZZMaximumReconnectDelay){
-        reconnectDelay += ((reconnectDelay / 20) + 1) * 5;
+        reconnectDelay += ((reconnectDelay / 20.0) + 1.0) * 5.0;
         
         reconnectDelay = MIN(reconnectDelay, kFZZMaximumReconnectDelay);
     }
@@ -395,7 +393,6 @@ static NSMutableData *data;
     
     // After all users are loaded in, update available friends to invite
     // TODOAndrew Check out what update friends is doing, cache the friendslist?
-    [FZZInviteViewController updateFriends];
 
     [appDelegate updateEvents];
     [FZZContactDelegate updateFriendsAndContacts];
@@ -451,11 +448,19 @@ static NSMutableData *data;
     NSNumber *eventID = [json objectForKey:@"eid"];
     FZZEvent *event = [FZZEvent eventWithEID:eventID];
     
-    NSArray *invitees = [json objectForKey:@"invitees"];
+    NSLog(@"JSON: %@", json);
+    
+    NSArray *invitees = [json objectForKey:@"newlyInvitedUsers"];
+    
+    NSLog(@"UNPARSED INVITEES: %@", invitees);
     
     invitees = [FZZUser parseUserJSONList:invitees];
     
+    NSLog(@"PARSED INVITEES: %@", invitees);
+    
     [event updateAddInvitees:invitees];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_NEW_INVITEES object:nil userInfo:nil];
 }
 
 - (void)incomingNewMessage:(NSArray *)args{

@@ -19,7 +19,6 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 
 @interface FZZContactsTableViewController ()
 
-@property FZZContactSelectionDelegate *invitationDelegate;
 @property (nonatomic) NSIndexPath *eventIndexPath;
 
 @end

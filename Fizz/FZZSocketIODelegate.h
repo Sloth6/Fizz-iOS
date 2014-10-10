@@ -17,12 +17,21 @@
 #import "SocketIO.h"
 #import "SocketIOPacket.h"
 
+// Incoming Server Communication
+extern NSString * const FZZ_INCOMING_ON_LOGIN;
+extern NSString * const FZZ_INCOMING_NEW_EVENT;
+extern NSString * const FZZ_INCOMING_COMPLETE_EVENT;
+extern NSString * const FZZ_INCOMING_UPDATE_GUESTS;
+extern NSString * const FZZ_INCOMING_NEW_INVITEES;
+extern NSString * const FZZ_INCOMING_NEW_MESSAGE;
+extern NSString * const FZZ_INCOMING_UPDATE_EVENT;
+
 /* Server Info */
 static NSString * const kFZZSocketHost = @"localhost";//@"68.225.244.171";//@"54.84.205.222";//@"128.237.139.204";//@"localhost"
 static int const kFZZSocketPort = 9001;
 
-static int const kFZZDefaultReconnectDelay = 5; // 5 seconds
-static int const kFZZMaximumReconnectDelay = 300; // 5 minutes
+static int const kFZZDefaultReconnectDelay = 2; // 5 seconds
+static int const kFZZMaximumReconnectDelay = 120; // 2 minutes
 
 
 @interface FZZSocketIODelegate : NSObject <SocketIODelegate, NSURLConnectionDelegate>

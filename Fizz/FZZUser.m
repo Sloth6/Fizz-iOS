@@ -131,6 +131,8 @@ static FZZUser *currentUser = nil;
             [user setPhoneNumber:phoneNumber];
             [user setLastUsed:lastUsed];
             
+            phoneNumber = [self formatPhoneNumber:phoneNumber];
+            
             // Store phoneNumber to user
             [phoneNumberToUser setObject:user forKey:phoneNumber];
             
@@ -308,6 +310,8 @@ static FZZUser *currentUser = nil;
     // Store phoneNumber to user
     [phoneNumberToUser setObject:user forKey:phoneNumber];
     
+    NSLog(@"%@ ::: %@", phoneNumber, user);
+    
     return user;
 }
 
@@ -379,6 +383,31 @@ static FZZUser *currentUser = nil;
 }
 
 +(NSString *)formatPhoneNumber:(NSString *)phoneNumber{
+    
+    if (phoneNumber == nil) return nil;
+    
+    NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
+    
+    NSLog(@"BEFORE <%@>", phoneNumber);
+    
+    phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[charSet invertedSet]] componentsJoinedByString:@""];
+    
+    NSLog(@"AFTER <%@>", phoneNumber);
+    
+    unichar c = [phoneNumber characterAtIndex:0];
+    
+    if (c == '+'){
+        phoneNumber = [phoneNumber substringFromIndex:1];
+    }
+    
+    c = [phoneNumber characterAtIndex:0];
+    
+    if (c != '1'){
+        NSString *prepend = @"+1";
+        
+        phoneNumber = [prepend stringByAppendingString:phoneNumber];
+    }
+    
     return phoneNumber;
 }
 
@@ -386,6 +415,8 @@ static FZZUser *currentUser = nil;
     phoneNumber = [FZZUser formatPhoneNumber:phoneNumber];
     
     FZZUser *user = [phoneNumberToUser objectForKey:phoneNumber];
+    
+    NSLog(@"pnToUSER<<%@>>[%@] --> %@", phoneNumberToUser, phoneNumber, user);
     
     // Return nil if no user is found
     return user;
