@@ -176,4 +176,34 @@ float kFZZButtonBuffer(){
     return 10;
 }
 
++(NSString *)formatPhoneNumber:(NSString *)phoneNumber{
+    
+    if (phoneNumber == nil) return nil;
+    
+    NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
+    
+    NSLog(@"BEFORE <%@>", phoneNumber);
+    
+    phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[charSet invertedSet]] componentsJoinedByString:@""];
+    
+    NSLog(@"AFTER <%@>", phoneNumber);
+    
+    unichar c = [phoneNumber characterAtIndex:0];
+    
+    if (c == '+'){
+        phoneNumber = [phoneNumber substringFromIndex:1];
+    }
+    
+    c = [phoneNumber characterAtIndex:0];
+    
+    if (c != '1'){
+        NSString *prepend = @"+1";
+        
+        phoneNumber = [prepend stringByAppendingString:phoneNumber];
+    }
+    
+    return phoneNumber;
+}
+
+
 @end

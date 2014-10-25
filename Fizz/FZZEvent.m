@@ -276,6 +276,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
                 
                 FZZUser *creator = [FZZUser userWithUID:creatorUserID];
                 
+                NSLog(@"Creater[2]: <%@> UID: %@", creator, creatorUserID);
+                
                 [event setCreator:creator];
                 
                 // Description
@@ -689,6 +691,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     
     NSNumber *creatorUID = [eventJSON objectForKey:@"creator"];
     creator = [FZZUser userWithUID:creatorUID];
+    
+    NSLog(@"Creater[1]: <%@> UID: %@", creator, creatorUID);
     
     creatorUID = nil;
     

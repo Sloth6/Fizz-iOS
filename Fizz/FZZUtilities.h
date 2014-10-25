@@ -71,9 +71,10 @@ CGFloat kFZZCancelInviteFacebookFriendsButton(); // 9
 
 float kFZZButtonBuffer();
 
-
 +(CGRect)getKeyboardBoundsFromNote:(NSNotification *)note;
 
 //UIFont *kFZZHeadingsFontWithScale(CGFloat scale);
+
++(NSString *)formatPhoneNumber:(NSString *)phoneNumber;
 
 @end

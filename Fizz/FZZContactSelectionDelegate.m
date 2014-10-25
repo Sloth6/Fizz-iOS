@@ -221,14 +221,16 @@ NSMutableArray *instances;
         FZZUser *user = [userOrContact objectForKey:@"user"];
         
         NSLog(@"ADDING USER: %@", user);
-        
-        [_selectedUsers addObject:user];
+        if (user){
+            [_selectedUsers addObject:user];
+        }
     } else {
         NSDictionary *contact = [userOrContact objectForKey:@"contact"];
         
         NSLog(@"ADDING CONTACT: %@", contact);
-        
-        [_selectedContacts addObject:contact];
+        if (contact){
+            [_selectedContacts addObject:contact];
+        }
     }
     
     NSLog(@"contacts: %@", _selectedContacts);

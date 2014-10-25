@@ -13,6 +13,8 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 
+#import "FZZUtilities.h"
+
 #import "FZZUser.h"
 
 #import "PhoneNumberFormatter.h"
@@ -303,7 +305,7 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
 -(void)updateFriendsAndContacts{
     NSMutableArray *usersAndContacts;
     
-    NSMutableArray *users = [[FZZUser getFriends] mutableCopy];
+    NSArray *usersEnum = [FZZUser getFriends];
     
     // Will not do anything if already have loaded contacts
     // Else attempts to get most recent address book
@@ -315,37 +317,48 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         [self getContacts];
     }
     
-    NSMutableArray *contacts = [_contacts mutableCopy];
+    NSMutableArray *users = [[NSMutableArray alloc] init];
     
-    NSArray *usersEnum = [users copy];
-    [usersEnum enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    for (int i = 0; i < [usersEnum count]; ++i){
+        FZZUser *user = [usersEnum objectAtIndex:i];
         
-        FZZUser *user = obj;
-        
-        [dict setObject:user forKey:@"user"];
-        [dict setObject:[user name] forKey:@"name"];
-        
-        [users setObject:dict atIndexedSubscript:idx];
-    }];
-    
-    NSArray *contactsEnum = [contacts copy];
-    [contactsEnum enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        
-        NSDictionary *contact = obj;
-        
-        NSString *phoneNumber = [contact objectForKey:@"pn"];
-        
-        FZZUser *user = [FZZUser userFromPhoneNumber:phoneNumber];
-        
-        if (user == nil){
-            [dict setObject:contact forKey:@"contact"];
-            [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
+        if (user != nil){
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
             
-            [contacts setObject:dict atIndexedSubscript:idx];
+            NSString *name = [user name];
+            
+            if (name != nil){
+                [dict setObject:user forKey:@"user"];
+                [dict setObject:name forKey:@"name"];
+            
+                [users addObject:dict];
+            }
         }
-    }];
+    }
+    
+    NSArray *contactsEnum = [_contacts copy];
+    NSMutableArray *contacts = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [contactsEnum count]; ++i){
+        NSDictionary *contact = [contactsEnum objectAtIndex:i];
+        
+        if (contact != nil){
+            NSString *phoneNumber = [contact objectForKey:@"pn"];
+            
+            if (phoneNumber != nil){
+                FZZUser *user = [FZZUser userFromPhoneNumber:phoneNumber];
+                
+                if (user == nil){
+                    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                    
+                    [dict setObject:contact forKey:@"contact"];
+                    [dict setObject:[contact objectForKey:@"name"] forKey:@"name"];
+                    
+                    [contacts addObject:dict];
+                }
+            }
+        }
+    }
     
     usersAndContacts = [[users arrayByAddingObjectsFromArray:contacts] mutableCopy];
     
@@ -430,6 +443,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
                 if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]){
                     NSMutableDictionary *contact = [[NSMutableDictionary alloc] init];
                     [contact setObject:name forKey:@"name"];
+                    phoneNumber = [FZZUtilities formatPhoneNumber:phoneNumber];
+                    
                     [contact setObject:phoneNumber forKey:@"pn"];
                     
                     if (![contacts containsObject:contact]){
