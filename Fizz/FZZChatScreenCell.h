@@ -21,4 +21,6 @@
 
 -(UIScrollView *)scrollView;
 
+-(void)setOnPage:(BOOL)isOnPage;
+
 @end

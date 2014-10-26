@@ -11,6 +11,9 @@
 static float kFZZTimerDelay = 1.0;
 static float kFZZMinPageScrollVelocity = 0.5;
 
+static NSString *kFZZScrollToMessagesNotification = @"kFZZScrollToMessagesNotification";
+static NSString *kFZZPageUpdateNotification = @"kFZZPageUpdateNotification";
+
 @interface FZZUtilities : NSObject
 
 void runOnMainQueueWithoutDeadlocking(void (^block)(void));

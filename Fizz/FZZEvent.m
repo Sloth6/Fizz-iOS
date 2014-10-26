@@ -14,6 +14,8 @@
 #import "FZZAppDelegate.h"
 #import "FZZEventsViewController.h"
 
+#import "FZZUtilities.h"
+
 #import "FZZLocalCache.h"
 
 static NSMutableDictionary *events;

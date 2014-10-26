@@ -629,7 +629,10 @@ static NSString *kFZZPlaceholderText = @"let's...";
         
 //        [cell.chatDelegate addIncomingMessageForEvent:event];
     } else {
-        NSLog(@"WOOPS SHOULD NEVER HAPPEN!");
+        NSLog(@"CRASH! SHOULD NEVER HAPPEN!");
+        
+        NSLog(@"Add incoming message for event not in _events: %@", event);
+        
         exit(1);
     }
 }

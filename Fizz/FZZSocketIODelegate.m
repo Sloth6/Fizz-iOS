@@ -476,13 +476,11 @@ static NSMutableData *data;
     FZZEvent *event = [message event];
 
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-
-    FZZEventsViewController *evc = [appDelegate evc];
     
     dispatch_sync(dispatch_get_main_queue(), ^{
         [event updateAddMessage:message];
         
-        [evc addIncomingMessageForEvent:event];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_NEW_MESSAGE object:nil userInfo:nil];
     });
 }
 

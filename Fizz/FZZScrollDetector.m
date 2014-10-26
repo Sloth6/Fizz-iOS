@@ -27,6 +27,8 @@ static CGFloat kFZZInputScrollBuffer;
 @property UIScrollView *currentScrollView;
 @property UIScrollView *movingScrollView;
 
+@property NSIndexPath *eventIndexPath;
+
 @property UIScrollView *inputScrollView;
 
 @property NSDictionary *pageOffsets;
@@ -126,6 +128,10 @@ static CGFloat kFZZInputScrollBuffer;
 //    }
 }
 
+- (NSIndexPath *)getEventIndexPath{
+    return _eventIndexPath;
+}
+
 - (void)updateVTVCToPage:(FZZPage *)page{
     FZZEvent *event = [_vtvc getFZZEvent];
     
@@ -137,7 +143,30 @@ static CGFloat kFZZInputScrollBuffer;
     
     NSLog(@"Page number: %d", page.pageNumber);
     NSIndexPath *pageIndex = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
+    
     [event setScrollPosition:pageIndex];
+    
+    [self postPageNumberNotification:page];
+}
+
+- (void)postPageNumberNotification:(FZZPage *)page{
+    NSIndexPath *pageIndex = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
+    
+    NSIndexPath *indexPath = [self getEventIndexPath];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    NSLog(@"indexPath: %@", indexPath);
+    NSLog(@"page: %@", page);
+    
+    [dict setObject:indexPath forKey:@"eventIndexPath"];
+    [dict setObject:page forKey:@"page"];
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kFZZPageUpdateNotification
+                                                        object:self
+                                                      userInfo:dict];
 }
 
 - (void)updateVTVCPage{
@@ -387,6 +416,10 @@ static CGFloat kFZZInputScrollBuffer;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:pageNum inSection:0];
     
     return [self getPageForIndexPath:indexPath];
+}
+
+- (void)setEventIndexPath:(NSIndexPath *)indexPath{
+    _eventIndexPath = indexPath;
 }
 
 - (void)setupPageOffsets{

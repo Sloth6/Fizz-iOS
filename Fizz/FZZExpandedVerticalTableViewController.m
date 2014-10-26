@@ -70,9 +70,70 @@ static NSMutableArray *instances;
         [self setupAttendingButton];
         [self setupOptionsButton];
         
+        [self setupNotificationObservers];
+        
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
     return self;
+}
+
+- (void)setupScrollToMessagesObserver{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(scrollToMessages:)
+                                                 name:kFZZScrollToMessagesNotification
+                                               object:nil];
+}
+
+- (void)setupPageUpdateObserver{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updatePage:)
+                                                 name:kFZZPageUpdateNotification
+                                               object:nil];
+}
+
+- (void)setupNotificationObservers{
+    [self setupScrollToMessagesObserver];
+    [self setupPageUpdateObserver];
+}
+
+- (void)scrollToMessages:(NSNotification *)note{
+    NSIndexPath *indexPath = [[note userInfo] objectForKey:@"eventIndexPath"];
+    
+    NSLog(@"recieved NOTE");
+    
+    if ([indexPath isEqual:_eventIndexPath]){
+        NSIndexPath *topIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        [[self tableView] scrollToRowAtIndexPath:topIndex atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
+}
+
+- (void)updatePage:(NSNotification *)note{
+    NSIndexPath *indexPath = [[note userInfo] objectForKey:@"eventIndexPath"];
+    FZZPage *page = [[note userInfo] objectForKey:@"page"];
+    
+    if ([indexPath isEqual:_eventIndexPath]){
+        switch (page.pageNumber) {
+            case 0:
+            {
+                FZZChatScreenCell *cell = (FZZChatScreenCell *)[self getCellAtPage:page];
+                
+                [cell setOnPage:YES];
+            }
+                break;
+                
+            default:
+            {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0
+                                                            inSection:0];
+                
+                FZZChatScreenCell *cell = (FZZChatScreenCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+                
+                [cell setOnPage:NO];
+            }
+                break;
+        }
+    }
 }
 
 -(void)dealloc{
@@ -115,10 +176,7 @@ static NSMutableArray *instances;
     [_attendingButton setBottomRightCorner:bottomRightCorner];
 }
 
-
-- (UITableViewCell *)getCurrentCell{
-    FZZPage *page = [_scrollDetector getCurrentPage];
-    
+- (UITableViewCell *)getCellAtPage:(FZZPage *)page{
     if (page.pageNumber >= 0 && page.pageNumber < [[self tableView] numberOfRowsInSection:0]){
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
         
@@ -126,6 +184,12 @@ static NSMutableArray *instances;
     } else {
         return nil;
     }
+}
+
+- (UITableViewCell *)getCurrentCell{
+    FZZPage *page = [_scrollDetector getCurrentPage];
+    
+    return [self getCellAtPage:page];
 }
 
 - (UIScrollView *)getCurrentScrollView{
@@ -473,7 +537,6 @@ static NSMutableArray *instances;
         case 0: // Chat Cell
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"chatCell" forIndexPath:indexPath];
-            [(FZZChatScreenCell *)cell setEventIndexPath:_eventIndexPath];
             [(FZZChatScreenCell *)cell setEventIndexPath:_eventIndexPath];
             
             [cell.contentView addSubview:_optionsButton];

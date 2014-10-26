@@ -78,6 +78,7 @@
     FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
     
     [_vtvc setEventIndexPath:indexPath];
+    [_scrollDetector setEventIndexPath:_eventIndexPath];
     
     NSIndexPath *scrollPosition = [event scrollPosition];
     
@@ -135,6 +136,7 @@
     _scrollDetector = [[FZZScrollDetector alloc] initWithFrame:self.bounds];
     
     [_scrollDetector setVtvc:_vtvc];
+    [_scrollDetector setEventIndexPath:_eventIndexPath];
     [_vtvc setScrollDetector:_scrollDetector];
     [self.contentView addSubview:_vtvc.tableView];
     

@@ -26,6 +26,7 @@
 @property BOOL placeholder;
 @property BOOL lastTextBoxTooBig;
 @property UITextView *placeholderView;
+@property UIButton *scrollToPageButton;
 
 @end
 
@@ -94,6 +95,21 @@
     [[_ctvc tableView] setUserInteractionEnabled:NO];
     
     [self.contentView addSubview:self.viewForm];
+    
+    [self setupEventListener];
+}
+
+- (void)setupEventListener{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(messagesUpdated)
+                                                 name:FZZ_INCOMING_NEW_MESSAGE
+                                               object:nil];
+}
+
+- (void)messagesUpdated{
+    [[_ctvc tableView] reloadData];
+    
+    NSLog(@"UPDATE MESSAGES!");
 }
 
 /*
@@ -153,9 +169,38 @@
     [chatBox setEnablesReturnKeyAutomatically:YES];
     [chatBox setUserInteractionEnabled:YES];
     
+    [self setOnPage:NO];
+    [viewForm setUserInteractionEnabled:NO];
+    
+    _scrollToPageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_scrollToPageButton addTarget:self
+                            action:@selector(scrollToPageButtonPress)
+                  forControlEvents:UIControlEventTouchUpInside];
+    
+    CGRect frame = viewFormRect;
+    
+    frame.size.width -= 150;
+//    frame.size.height = chatBox.bounds.size.height;
+////    frame.origin.x += viewForm.frame.origin.x;
+//    frame.origin.y += viewForm.frame.origin.y;
+    
+    [_scrollToPageButton setFrame:frame];
+    [self.contentView addSubview:_scrollToPageButton];
+    
     //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     [mProtoTVC.view setFrame:viewFormRect];
+}
+
+- (void)scrollToPageButtonPress{
+    [self setOnPage:YES];
+    [chatBox becomeFirstResponder];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObject:_eventIndexPath forKey:@"eventIndexPath"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kFZZScrollToMessagesNotification
+                                                        object:self
+                                                      userInfo:dict];
 }
 
 -(void)handlePlaceholder{
@@ -173,6 +218,11 @@
             [_placeholderView setHidden:YES];
         }
     }
+}
+
+- (void)setOnPage:(BOOL)isOnPage{
+    [viewForm setUserInteractionEnabled:isOnPage];
+    [_scrollToPageButton setUserInteractionEnabled:!isOnPage];
 }
 
 -(void) keyPressed{

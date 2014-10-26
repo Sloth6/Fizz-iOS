@@ -19,6 +19,8 @@
 - (FZZPage *)getPageForIndexPath:(NSIndexPath *)indexPath;
 - (FZZPage *)getCurrentPage;
 
+- (void)setEventIndexPath:(NSIndexPath *)indexPath;
+
 - (void)updateInputScrollView;
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset;
