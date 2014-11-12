@@ -421,7 +421,7 @@
 
 // Called when an event has been removed or added
 - (void)updateEvents{
-    [_evc updateEvents];
+//    [_evc updateEvents];
     
     NSLog(@"Updating local cache...");
     if ([FZZLocalCache updateCache]){

@@ -929,7 +929,7 @@
 				ORGANIZATIONNAME = "Off Brand";
 				TargetAttributes = {
 					49D5C99B186042C2002BB1F0 = {
-						DevelopmentTeam = U7L3URP3WX;
+						DevelopmentTeam = LVXPU6ZL2V;
 					};
 					49D5C9B6186042C2002BB1F0 = {
 						TestTargetID = 49D5C99B186042C2002BB1F0;
@@ -1301,6 +1301,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "FizzTests/Let'sTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "Let'sTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -1319,6 +1320,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "FizzTests/Let'sTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "Let'sTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

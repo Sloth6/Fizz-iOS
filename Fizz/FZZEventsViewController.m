@@ -44,6 +44,8 @@ static NSString *kFZZPlaceholderText = @"let's...";
 @property BOOL firstAppear;
 @property NSArray *events;
 
+@property NSIndexPath *shouldJumpToItem;
+
 @end
 
 @implementation FZZEventsViewController
@@ -168,8 +170,36 @@ static NSString *kFZZPlaceholderText = @"let's...";
         _overviewFlowLayout.itemSize = itemSize;
         
         _events = [[NSArray alloc] init];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(incomingNewEvent:)
+                                                     name:FZZ_INCOMING_NEW_EVENT
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)incomingNewEvent:(NSNotification *)note{
+    
+    
+    FZZEvent *event = [[note userInfo] objectForKey:@"event"];
+    
+    if (![FZZSocketIODelegate recentLogin] && [[event creator] isEqual:[FZZUser me]]){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:1];
+        
+//        int numberOfItems = [[self collectionView] numberOfItemsInSection:0];
+        
+//        if (indexPath.item < numberOfItems){
+//            [[self collectionView] scrollToItemAtIndexPath:indexPath
+//                                          atScrollPosition:UICollectionViewScrollPositionLeft
+//                                                  animated:NO];
+//        } else {
+        _shouldJumpToItem = indexPath;
+//        }
+        
+    }
+    
+    [self updateEvents];
 }
 
 - (void)enterCellDetail{
@@ -1067,6 +1097,15 @@ static NSString *kFZZPlaceholderText = @"let's...";
     NSLog(@"FZZEventsViewController updateEvents reloadData!!!");
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
+        
+        if (_shouldJumpToItem){
+            NSIndexPath *jumpTo = _shouldJumpToItem;
+            _shouldJumpToItem = nil;
+            
+            [self.collectionView scrollToItemAtIndexPath:jumpTo
+                                        atScrollPosition:UICollectionViewScrollPositionLeft
+                                                animated:NO];
+        }
     });
 }
 

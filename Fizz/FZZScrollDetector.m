@@ -21,6 +21,7 @@ static CGFloat kFZZInputScrollBuffer;
 
 @property BOOL touch;
 @property BOOL touchStart;
+@property BOOL didScroll;
 
 @property BOOL scrollSubView;
 
@@ -51,6 +52,8 @@ static CGFloat kFZZInputScrollBuffer;
         CGSize size = CGSizeMake(frame.size.width, frame.size.height * 10);
         
         [_inputScrollView setContentSize:size];
+        [_inputScrollView setShowsHorizontalScrollIndicator:NO];
+        [_inputScrollView setExclusiveTouch:NO];
         
         kFZZInputScrollBuffer = frame.size.height;
         
@@ -108,9 +111,13 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    NSLog(@"{}WILL_BEGIN_DRAGGING");
     if (scrollView == _inputScrollView){
         _touchStart = YES;
         _touch = YES;
+        
+        _didScroll = NO;
+        
         _scrollSubView = NO;
         _movingScrollView = nil;
         [self setHorizontalScrollEnabled:NO];
@@ -174,6 +181,7 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    NSLog(@"{}DID_END_DECELERATING");
     if (scrollView == _inputScrollView){
         [self updateVTVCPage];
         _scrollSubView = NO;
@@ -181,6 +189,10 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSLog(@"{}DID_SCROLL");
+    
+    _didScroll = YES;
+    
     if (scrollView == _inputScrollView) {
         
         [self handleSubScrollView];
@@ -299,6 +311,8 @@ static CGFloat kFZZInputScrollBuffer;
     CGSize size = [_currentScrollView contentSize];
     size.height += 20;
     
+    size.width = [[UIScreen mainScreen] bounds].size.width;
+    
     [_inputScrollView setDelegate:nil];
     [_inputScrollView setContentSize:size];
     [_inputScrollView setContentOffset:[_currentScrollView contentOffset]];
@@ -310,6 +324,8 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 - (void)handleSubScrollView{
+//    NSLog(@"HANDLING SUBVIEW");
+    
     if (_touchStart){
         CGPoint delta = CGPointMake(0, _lastInputOffset.y - _inputScrollView.contentOffset.y);
         
@@ -354,7 +370,10 @@ static CGFloat kFZZInputScrollBuffer;
                 // Scroll the currentScrollView
                 
                 [self scrollSubViewByDelta:delta];
+                
+                NSLog(@"TOUCH START: %hhd", _touchStart);
             }
+            
         }
         return;
     }
@@ -583,6 +602,11 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (!_didScroll){
+        [self scrollViewDidScroll:scrollView];
+    }
+    
+    NSLog(@"{}WILL_END_DRAGGING");
     
     [self setHorizontalScrollEnabled:YES];
     

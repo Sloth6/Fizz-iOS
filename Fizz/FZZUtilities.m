@@ -7,6 +7,7 @@
 //
 
 #import "FZZUtilities.h"
+#import "FZZSocketIODelegate.h"
 
 @implementation FZZUtilities
 
@@ -204,6 +205,5 @@ float kFZZButtonBuffer(){
     
     return phoneNumber;
 }
-
 
 @end

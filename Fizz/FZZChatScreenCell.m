@@ -28,6 +28,8 @@
 @property UITextView *placeholderView;
 @property UIButton *scrollToPageButton;
 
+@property BOOL isKeyboardShown;
+
 @end
 
 @implementation FZZChatScreenCell
@@ -94,10 +96,23 @@
     [self addSubview:[_ctvc tableView]];
     [[_ctvc tableView] setUserInteractionEnabled:NO];
     
+//    self.viewForm.inputAccessoryView
+    
     [self.contentView addSubview:self.viewForm];
     
     [self setupEventListener];
 }
+
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+////    if ([textField isEqual:chatBox]){
+////        exit(2);
+////    textField.inputAccessoryView = YOURCustomView;
+////    }
+//    [viewForm removeFromSuperview];
+//    chatBox.inputAccessoryView = viewForm;
+//    
+//    return YES;
+//}
 
 - (void)setupEventListener{
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -386,6 +401,12 @@
         return;
     }
     
+    if (_isKeyboardShown){
+        return;
+    }
+    
+    _isKeyboardShown = YES;
+    
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [[appDelegate navigationBar] setIsEditingText:YES];
@@ -438,6 +459,12 @@
     if (![chatBox isFirstResponder]) {
         return;
     }
+    
+    if (!_isKeyboardShown){
+        return;
+    }
+    
+    _isKeyboardShown = NO;
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     

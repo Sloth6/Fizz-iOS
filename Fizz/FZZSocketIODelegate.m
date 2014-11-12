@@ -48,6 +48,8 @@ static int reconnectDelay;
 static BOOL resignedActive;
 static NSMutableData *data;
 
+static NSDate *loginTimestamp;
+
 @interface FZZSocketIODelegate ()
 
 @end
@@ -330,22 +332,25 @@ static NSMutableData *data;
     [FZZUser setMeAs:me];
     
     //
-    NSArray *eventIDAndMessageNumList = [json objectForKey:@"eventList"];
+    NSArray *eventChangesList = [json objectForKey:@"eventList"];
     
-    [FZZEvent confirmEventsAndNumberOfMessages:eventIDAndMessageNumList];
+    NSSet *unusableEventIDs = [FZZEvent confirmEventsAndNumberOfMessages:eventChangesList];
     
     NSMutableArray *eventIDList = [[NSMutableArray alloc] init];
+    NSMutableArray *eventIDsToComplete = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < [eventIDAndMessageNumList count]; ++i){
-        NSDictionary *dict = [eventIDAndMessageNumList objectAtIndex:i];
+    for (int i = 0; i < [eventChangesList count]; ++i){
+        NSDictionary *dict = [eventChangesList objectAtIndex:i];
         NSNumber *eventID = [dict objectForKey:@"eid"];
         
         [eventIDList addObject:eventID];
+        
+        NSNumber *shouldComplete = [dict objectForKey:@"completed"];
+        
+        if ([shouldComplete boolValue]){
+            [eventIDsToComplete addObject:eventID];
+        }
     }
-    
-    NSMutableArray *completeEventIDList = [[FZZEvent getEventIDs] mutableCopy];
-    
-    [completeEventIDList removeObjectsInArray:eventIDList];
     
     NSDictionary *messageDictJSON = [json objectForKey:@"newMessages"];
     
@@ -356,10 +361,10 @@ static NSMutableData *data;
     NSDictionary *guests   = [json objectForKey:@"guests"];
     
     // complete Events
-    [FZZEvent killEvents:completeEventIDList];
+    [FZZEvent killEvents:eventIDsToComplete];
     
     // Events
-    NSArray *newEvents = [FZZEvent parseEventIDList:eventIDList];
+//    NSSet *unparsedEventIDs = [FZZEvent parseOnLoginEventList:eventIDList];
     
     // Messages
     // Parses the JSON, places messages in the appropriate events
@@ -396,19 +401,26 @@ static NSMutableData *data;
 
     [appDelegate updateEvents];
     [FZZContactDelegate updateFriendsAndContacts];
+    
+    loginTimestamp = [NSDate date];
 }
 
 - (void)incomingNewEvent:(NSArray *)args{
-    NSLog(@"\n\nINCOMING EVENT: %@\n", args);
+    NSLog(@"\n\nINCOMING NEW EVENT: %@\n", args);
     
     NSDictionary *json  = [args objectAtIndex:0];
     
-    //FZZEvent *event =
-    [FZZEvent parseJSON:json];
+    FZZEvent *event = [FZZEvent parseJSON:json];
     
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [appDelegate updateEvents];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObject:event forKey:@"event"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_NEW_EVENT
+                                                        object:self
+                                                      userInfo:dict];
 }
 
 - (void)incomingCompleteEvent:(NSArray *)args{
@@ -524,6 +536,17 @@ static NSMutableData *data;
 
 + (BOOL) isConnectionOpen{
     return [socketIO isConnected];
+}
+
+
++(BOOL)recentLogin{
+    NSLog(@"TIME PASSED: %f", [loginTimestamp timeIntervalSinceNow]);
+    
+    if (!loginTimestamp || (-[loginTimestamp timeIntervalSinceNow]) < 1){
+        return YES;
+    }
+    
+    return NO;
 }
 
 @end

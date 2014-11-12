@@ -278,7 +278,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
                 
                 FZZUser *creator = [FZZUser userWithUID:creatorUserID];
                 
-                NSLog(@"Creater[2]: <%@> UID: %@", creator, creatorUserID);
+                NSLog(@"Creator[2]: <%@> UID: %@", creator, creatorUserID);
                 
                 [event setCreator:creator];
                 
@@ -336,7 +336,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     }];
 }
 
-+(void)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList{
++(NSSet *)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList{
     NSMutableArray *pullEventIDs = [[NSMutableArray alloc] init];
     NSMutableArray *pullMessagesForEventIDs = [[NSMutableArray alloc] init];
     
@@ -368,6 +368,8 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         [FZZEvent socketIORequestEventsWithIDs:pullEIDs
                                 AndAcknowledge:nil];
     }
+    
+    return [NSSet setWithArray:pullEIDs];
 }
 
 +(NSArray *)getEventIDs{
@@ -694,7 +696,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     NSNumber *creatorUID = [eventJSON objectForKey:@"creator"];
     creator = [FZZUser userWithUID:creatorUID];
     
-    NSLog(@"Creater[1]: <%@> UID: %@", creator, creatorUID);
+    NSLog(@"Creator[1]: <%@> UID: %@", creator, creatorUID);
     
     creatorUID = nil;
     
@@ -753,26 +755,30 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     return event;
 }
 
-+(NSArray *)parseEventIDList:(NSArray *)eventIDList{
++(NSSet *)parseEventIDList:(NSArray *)eventIDList{
     if (eventIDList == nil){
         return nil;
     }
     
-    NSMutableArray *result = [[NSMutableArray alloc] initWithArray:eventIDList];
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    NSMutableSet *unparsedIDs = [[NSMutableSet alloc] init];
     
-    [eventIDList enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-        
-        NSNumber *eventID = obj;
+    for (int i = 0; i < [eventIDList count]; ++i){
+        NSNumber *eventID = [eventIDList objectAtIndex:i];
         
         FZZEvent *event = [FZZEvent eventWithEID:eventID];
         
-        NSLog(@"fetched event [%@] by creator: %@", eventID,
-              [event creator]);
+        NSLog(@"fetched event [%@] %@ by creator: %@", eventID,
+              event, [event creator]);
         
-        [result setObject:event atIndexedSubscript:index];
-    }];
+        if (event != nil){
+            [result addObject:event];
+        } else {
+            [unparsedIDs addObject:eventID];
+        }
+    }
     
-    return result;
+    return unparsedIDs;
 }
 
 +(void)killEvents:(NSArray *)deadEvents{

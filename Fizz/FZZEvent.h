@@ -29,7 +29,7 @@
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
 +(NSArray *)getEvents;
 
-+(void)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList;
++(NSSet *)confirmEventsAndNumberOfMessages:(NSArray *)eventIDAndMessageNumList;
 
 
 -(void)socketIOJoinEventWithAcknowledge:(SocketIOCallback)function;
@@ -96,7 +96,7 @@
 //-(void)updateEngaged;
 
 +(FZZEvent *)parseJSON:(NSDictionary *)eventJSON;
-+(NSArray *)parseEventIDList:(NSArray *)eventIDList;
++(NSSet *)parseEventIDList:(NSArray *)eventIDList;
 
 +(void)killEvents:(NSArray *)deadEvents;
 
