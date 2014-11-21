@@ -121,7 +121,7 @@
     sigaction(SIGBUS, &signalAction, NULL);
     
     // Install TestFlight
-    [TestFlight takeOff:@"c57d6a81-8946-4632-977e-9b92f7d0802a"];
+    [TestFlight takeOff:@"7bc086e7-b7c3-4f3e-816f-be5ad13da12e"];
     
     // Initialize Class Variables
     [FZZUtilities class];

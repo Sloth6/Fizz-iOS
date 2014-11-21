@@ -59,7 +59,7 @@
 }
 
 -(CGFloat)textInset{
-    return 2;
+    return 0;//2;
 }
 
 - (void)drawPlaceholderInRect:(CGRect)rect {
@@ -101,7 +101,11 @@
                                   NSParagraphStyleAttributeName: textStyle,
                                   NSForegroundColorAttributeName: self.textColor};
     
-    [[self text] drawInRect:CGRectInset(rect, 5.0, 5.0) withAttributes:attributes];
+    CGRect textRect = [FZZCustomPlaceholderTextField getDrawRectForText:[self placeholder]
+                                                         withAttributes:attributes
+                                                                 inRect:rect];
+    
+    [[self text] drawInRect:textRect withAttributes:attributes];
 }
 
 /*

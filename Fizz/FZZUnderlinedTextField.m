@@ -22,13 +22,18 @@
 
 // placeholder position
 - (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 0 , kFZZTextInputBottomPadding() - 4 );
+    return CGRectInset( bounds , 0, kFZZTextInputBottomPadding() - 4 );
 }
 
 // text position
 - (CGRect)editingRectForBounds:(CGRect)bounds {
     return CGRectInset( bounds , 0 , kFZZTextInputBottomPadding() - 4 );
 }
+
+- (CGRect)placeholderRectForBounds:(CGRect)bounds{
+    return CGRectInset( bounds , 0 , kFZZTextInputBottomPadding() - 4 );
+}
+
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

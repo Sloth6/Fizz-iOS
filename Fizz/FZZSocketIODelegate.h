@@ -27,7 +27,7 @@ extern NSString * const FZZ_INCOMING_NEW_MESSAGE;
 extern NSString * const FZZ_INCOMING_UPDATE_EVENT;
 
 /* Server Info */
-static NSString * const kFZZSocketHost = @"ec2-54-173-45-6.compute-1.amazonaws.com";//@"68.225.244.171";//@"54.84.205.222";//@"128.237.139.204";//@"localhost"
+static NSString * const kFZZSocketHost = @"54.69.196.168";//@"ec2-54-173-45-6.compute-1.amazonaws.com";//@"68.225.244.171";//@"54.84.205.222";//@"128.237.139.204";//@"localhost"
 static int const kFZZSocketPort = 9001;
 
 static int const kFZZDefaultReconnectDelay = 2; // 5 seconds
