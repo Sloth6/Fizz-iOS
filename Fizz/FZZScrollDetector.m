@@ -181,7 +181,6 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    NSLog(@"{}DID_END_DECELERATING");
     if (scrollView == _inputScrollView){
         [self updateVTVCPage];
         _scrollSubView = NO;
@@ -189,8 +188,6 @@ static CGFloat kFZZInputScrollBuffer;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    NSLog(@"{}DID_SCROLL");
-    
     _didScroll = YES;
     
     if (scrollView == _inputScrollView) {

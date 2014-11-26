@@ -9,6 +9,8 @@
 #import "FZZUtilities.h"
 #import "FZZSocketIODelegate.h"
 
+NSString * const FZZ_CONTACTS_SAVED = @"contactsSaved";
+
 @implementation FZZUtilities
 
 + (void)initialize{
@@ -183,11 +185,11 @@ float kFZZButtonBuffer(){
     
     NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
     
-    NSLog(@"BEFORE <%@>", phoneNumber);
+//    NSLog(@"BEFORE <%@>", phoneNumber);
     
     phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[charSet invertedSet]] componentsJoinedByString:@""];
     
-    NSLog(@"AFTER <%@>", phoneNumber);
+//    NSLog(@"AFTER <%@>", phoneNumber);
     
     unichar c = [phoneNumber characterAtIndex:0];
     

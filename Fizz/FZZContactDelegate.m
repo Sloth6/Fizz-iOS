@@ -13,6 +13,8 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 
+#import "FZZContactSelectionDelegate.h"
+
 #import "FZZUtilities.h"
 
 #import "FZZUser.h"
@@ -362,7 +364,7 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
     
     usersAndContacts = [[users arrayByAddingObjectsFromArray:contacts] mutableCopy];
     
-    NSLog(@"All you people: %@", usersAndContacts);
+//    NSLog(@"All you people: %@", usersAndContacts);
     
 //    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
 //    
@@ -376,6 +378,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
     }];
     
     _usersAndContacts = [NSArray arrayWithArray:usersAndContacts];
+    
+    NSLog(@"UPDATE CONTACTS:: %d", [_usersAndContacts count]);
     
 //    _invitableUsersAndContacts = usersAndContacts;
 //    
@@ -392,6 +396,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
 //        [tableView reloadData];
         return;
     }
+        
+    appDelegate.gotAddressBook = YES;
     
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);//&err);
     
@@ -403,7 +409,8 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
             
             ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, NULL, kABPersonSortByLastName);
             
-            NSLog(@"\n\nADDRESSBOOK\n\n%@\n\n", allContacts);
+//            NSLog(@"\n\nADDRESSBOOK\n\n%@\n\n", allContacts);
+            NSLog(@"Retrieving contacts...");
             
             for (int i = 0; i < [allContacts count]; ++i){
                 ABRecordRef person = (__bridge ABRecordRef)([allContacts objectAtIndex:i]);
@@ -438,7 +445,7 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
                 
                 name = name.lowercaseString;
                 
-                NSLog(@">>%@: (%@)", name, phoneNumber);
+//                NSLog(@">>%@: (%@)", name, phoneNumber);
                 
                 if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]){
                     NSMutableDictionary *contact = [[NSMutableDictionary alloc] init];
@@ -452,6 +459,10 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
                     }
                 }
             }
+            
+            NSLog(@"Retrieved contacts.");
+        } else {
+            NSLog(@"Contacts access declined.");
         }
         
         NSSortDescriptor *sortByName = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
@@ -462,14 +473,22 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         
 //        [self filterInvitables];
         
-        NSLog(@"Saved Contacts: %@", _contacts);
+//        NSLog(@"Saved Contacts: %@", _contacts);
         
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
         
         // Stored so users can be loaded earlier in app launch if we already were given access
         [pref setObject:[NSNumber numberWithBool:YES] forKey:kFZZAddressBookPermission];
         [pref synchronize];
-        appDelegate.gotAddressBook = YES;
+        
+        NSLog(@"%d contacts loaded.", [_contacts count]);
+        
+        [FZZContactDelegate updateFriendsAndContacts];
+        [FZZContactSelectionDelegate invalidateInvitables];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_CONTACTS_SAVED
+                                                            object:nil
+                                                          userInfo:nil];
         
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            [self searchChange];
@@ -493,10 +512,10 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         
         mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
         if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel]) {
-            NSLog(@"iphone:");
+//            NSLog(@"iphone:");
             priority = 4;
         } else if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel]) {
-            NSLog(@"mobile:");
+//            NSLog(@"mobile:");
             priority = 3;
         } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
             priority = 2;
@@ -509,11 +528,11 @@ static NSString *kFZZAddressBookPermission = @"addressBookPermission";
         } else if ([mobileLabel isEqualToString:(NSString *)kABPersonPhonePagerLabel]){
             priority = -1;
         } else {
-            NSLog(@"other:");
+//            NSLog(@"other:");
             priority = 1;
         }
         
-        NSLog(@"TEMP: %@", (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i));
+//        NSLog(@"TEMP: %@", (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i));
         
         if (priority > savedPriority){
             savedPriority = priority;

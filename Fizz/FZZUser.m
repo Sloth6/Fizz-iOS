@@ -389,7 +389,7 @@ static FZZUser *currentUser = nil;
     
     FZZUser *user = [phoneNumberToUser objectForKey:phoneNumber];
     
-    NSLog(@"pnToUSER<<%@>>[%@] --> %@", phoneNumberToUser, phoneNumber, user);
+//    NSLog(@"pnToUSER<<%@>>[%@] --> %@", phoneNumberToUser, phoneNumber, user);
     
     // Return nil if no user is found
     return user;

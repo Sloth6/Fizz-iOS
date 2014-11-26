@@ -23,7 +23,6 @@
 		49069B8218661555003D003A /* SBJson4StreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49069B7A18661555003D003A /* SBJson4StreamTokeniser.m */; };
 		49164A8A19E2033000913A66 /* FZZContactSelectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49164A8919E2033000913A66 /* FZZContactSelectionDelegate.m */; };
 		49191D7619D5D9330009D290 /* FZZAttendingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 49191D7519D5D9330009D290 /* FZZAttendingButton.m */; };
-		49191D7919D60D510009D290 /* FZZCustomTouchTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49191D7819D60D510009D290 /* FZZCustomTouchTableView.m */; };
 		4921FD3C1943C8400086266E /* FZZBounceTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4921FD3B1943C8400086266E /* FZZBounceTableView.m */; };
 		4922702118CA1CA600816AD4 /* FZZEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4922702018CA1CA600816AD4 /* FZZEventsViewController.m */; };
 		4925ED80197DAF1D0024247C /* FZZLocalCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4925ED7F197DAF1D0024247C /* FZZLocalCache.m */; };
@@ -178,8 +177,6 @@
 		49164A8919E2033000913A66 /* FZZContactSelectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZContactSelectionDelegate.m; sourceTree = "<group>"; };
 		49191D7419D5D9330009D290 /* FZZAttendingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZAttendingButton.h; sourceTree = "<group>"; };
 		49191D7519D5D9330009D290 /* FZZAttendingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZAttendingButton.m; sourceTree = "<group>"; };
-		49191D7719D60D510009D290 /* FZZCustomTouchTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCustomTouchTableView.h; sourceTree = "<group>"; };
-		49191D7819D60D510009D290 /* FZZCustomTouchTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCustomTouchTableView.m; sourceTree = "<group>"; };
 		4919DDD9195E86450043A669 /* IAThreadSafeCoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IAThreadSafeCoreData.framework; path = "IAThreadSafeCoreData/build/Debug-iphoneos/IAThreadSafeCoreData.framework"; sourceTree = "<group>"; };
 		4921FD3A1943C8400086266E /* FZZBounceTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZBounceTableView.h; sourceTree = "<group>"; };
 		4921FD3B1943C8400086266E /* FZZBounceTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZBounceTableView.m; sourceTree = "<group>"; };
@@ -565,8 +562,6 @@
 				492E5D7F19327E5800359F11 /* FZZExpandedEventCell.m */,
 				49958A5E1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.h */,
 				49958A5F1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m */,
-				49191D7719D60D510009D290 /* FZZCustomTouchTableView.h */,
-				49191D7819D60D510009D290 /* FZZCustomTouchTableView.m */,
 				49A4C51319C5E2B200F5EC1C /* FZZScrollDetector.h */,
 				49A4C51419C5E2B300F5EC1C /* FZZScrollDetector.m */,
 				49CD064919BF4D26004E0C71 /* FZZPage.h */,
@@ -1081,7 +1076,6 @@
 				49D5C9B0186042C2002BB1F0 /* FZZAppDelegate.m in Sources */,
 				49164A8A19E2033000913A66 /* FZZContactSelectionDelegate.m in Sources */,
 				49069B0518651731003D003A /* NSData+SRB64Additions.m in Sources */,
-				49191D7919D60D510009D290 /* FZZCustomTouchTableView.m in Sources */,
 				4950413B198593B1002DE44C /* SocketIOPacket.m in Sources */,
 				49BCC49C192D2FAA0085CE16 /* FZZCluster.m in Sources */,
 				4954FB0118D3AAA40083D07F /* FZZInputPhoneViewController.m in Sources */,

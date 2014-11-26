@@ -399,10 +399,13 @@ static NSDate *loginTimestamp;
     // After all users are loaded in, update available friends to invite
     // TODOAndrew Check out what update friends is doing, cache the friendslist?
 
-    [appDelegate updateEvents];
     [FZZContactDelegate updateFriendsAndContacts];
     
     loginTimestamp = [NSDate date];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_ON_LOGIN
+                                                        object:self
+                                                      userInfo:nil];
 }
 
 - (void)incomingNewEvent:(NSArray *)args{
@@ -433,6 +436,12 @@ static NSDate *loginTimestamp;
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     
     [appDelegate updateEvents];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObject:eID forKey:@"eID"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_COMPLETE_EVENT
+                                                        object:self
+                                                      userInfo:dict];
 }
 
 - (void)incomingUpdateGuests:(NSArray *)args{
@@ -452,6 +461,14 @@ static NSDate *loginTimestamp;
     
     // TODOAndrew don't invalidate all guest invitation lists, just the updated events
     [FZZContactSelectionDelegate invalidateInvitables];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:guests forKey:@"guests"];
+    [dict setObject:event forKey:@"event"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_UPDATE_GUESTS
+                                                        object:self
+                                                      userInfo:dict];
 }
 
 - (void)incomingNewInvitees:(NSArray *)args{
@@ -472,7 +489,13 @@ static NSDate *loginTimestamp;
     
     [event updateAddInvitees:invitees];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_NEW_INVITEES object:nil userInfo:nil];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:invitees forKey:@"invitees"];
+    [dict setObject:event forKey:@"event"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_NEW_INVITEES
+                                                        object:self
+                                                      userInfo:dict];
 }
 
 - (void)incomingNewMessage:(NSArray *)args{
@@ -507,6 +530,13 @@ static NSDate *loginTimestamp;
     
     // Update visually too
     [event updateEventDescription:eventDescription];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    [dict setObject:event forKey:@"event"];
+    [dict setObject:eventDescription forKey:@"description"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_UPDATE_EVENT object:dict userInfo:nil];
 }
 
 //- (void)incomingNewUserLocationList:(NSArray *)args{

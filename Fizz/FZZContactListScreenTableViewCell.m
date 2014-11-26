@@ -16,7 +16,7 @@
 static CGFloat kLeftBorder = 0;
 static CGFloat kRightBorder = 0;
 static CGFloat kTopBorder = 0;
-static CGFloat kBottomBorder = 6;
+static CGFloat kBottomBorder = 12;
 
 @interface FZZContactListScreenTableViewCell ()
 
@@ -46,6 +46,16 @@ static CGFloat kBottomBorder = 6;
                                                      name:UIKeyboardDidShowNotification
                                                    object:nil];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardDidChange:)
+                                                     name:UIKeyboardDidChangeFrameNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWasHidden:)
+                                                     name:UIKeyboardDidHideNotification
+                                                   object:nil];
+        
     }
     return self;
 }
@@ -55,7 +65,14 @@ static CGFloat kBottomBorder = 6;
 }
 
 - (void)keyboardWasShown:(NSNotification *)notification {
-    
+    [self keyboardDidChange:notification];
+}
+
+- (void)keyboardWasHidden:(NSNotification *)notification{
+    [self keyboardDidChange:notification];
+}
+
+- (void)keyboardDidChange:(NSNotification *)notification{
     // Get the size of the keyboard.
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
@@ -91,9 +108,7 @@ static CGFloat kBottomBorder = 6;
     CGFloat topBorder = kTopBorder;
     CGFloat bottomBorder = kBottomBorder;
     
-    height -= keyboardHeight + topBorder + bottomBorder;
-    
-    frame.size.height = height;
+    height -= keyboardHeight + topBorder + bottomBorder + frame.origin.y;
     
     [[_ctvc tableView] setFrame:frame];
 }

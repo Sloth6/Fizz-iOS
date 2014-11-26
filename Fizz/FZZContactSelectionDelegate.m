@@ -85,9 +85,9 @@ NSMutableArray *instances;
         [self filterInvitables];
     }
     
-    NSLog(@"FILTERING! %@", _invitableUsersAndContacts);
+//    NSLog(@"FILTERING! %@", _invitableUsersAndContacts);
     if (searchText == NULL || [searchText isEqualToString:@""]){
-        NSLog(@"meh <%@>", searchText);
+//        NSLog(@"meh <%@>", searchText);
         
         _filteredUsersAndContacts = _invitableUsersAndContacts;
         return;
@@ -106,16 +106,16 @@ NSMutableArray *instances;
 // TODOAndrew Sort friends alphabetically with a recent count in front
 // Filter out all users who are currently invited
 - (NSDictionary *)userOrContactAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"index: %d, total: %d", indexPath.row, [self numberOfInvitableOptions]);
+//    NSLog(@"index: %d, total: %d", indexPath.row, [self numberOfInvitableOptions]);
     
     if (indexPath.row > [self numberOfInvitableOptions] || indexPath.row < 0){
-        NSLog(@"failture to retrieve");
+        NSLog(@"failure to retrieve");
         return nil;
     }
     
     NSDictionary *dict = [_filteredUsersAndContacts objectAtIndex:indexPath.row];
     
-    NSLog(@"retrieved %@", dict);
+//    NSLog(@"retrieved %@", dict);
     
     return dict;
 }
@@ -277,7 +277,7 @@ NSMutableArray *instances;
 -(void)filterInvitables{
     FZZEvent *event = [self event];
     
-    NSLog(@"event: %@\n\ninvitees: %@", event, [event invitees]);
+//    NSLog(@"event: %@\n\ninvitees: %@", event, [event invitees]);
     
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         NSDictionary *dict = evaluatedObject;
@@ -285,21 +285,21 @@ NSMutableArray *instances;
         FZZUser *user = [dict objectForKey:@"user"];
         
         if (user){
-            NSLog(@"USER: %@ <%@>", user, [user phoneNumber]);
+//            NSLog(@"USER: %@ <%@>", user, [user phoneNumber]);
             
             return ![event isUserInvited:user];
         } else {
             NSDictionary *contact = [dict objectForKey:@"contact"];
             NSString *phoneNumber = [contact objectForKey:@"pn"];
             
-            NSLog(@"%@", contact);
+//            NSLog(@"%@", contact);
             
             FZZUser *user = [FZZUser userFromPhoneNumber:phoneNumber];
             
             if (user){
                 return ![event isUserInvited:user];
             } else {
-                NSLog(@"NO USER EXISTS");
+//                NSLog(@"NO USER EXISTS");
                 
                 return YES;
             }
@@ -308,15 +308,15 @@ NSMutableArray *instances;
     
     NSArray *usersAndContacts = [FZZContactDelegate usersAndContacts];
     
-    NSLog(@"USERS AND CONTACTS: %@", usersAndContacts);
+//    NSLog(@"USERS AND CONTACTS: %@", usersAndContacts);
     
-    NSLog(@"Filter away!");
+//    NSLog(@"Filter away!");
     
     _invitableUsersAndContacts = [usersAndContacts filteredArrayUsingPredicate:predicate];
     
     _validInvitables = YES;
     
-    NSLog(@"FILTERED DOWN TO: %@", _invitableUsersAndContacts);
+//    NSLog(@"FILTERED DOWN TO: %@", _invitableUsersAndContacts);
 }
 
 - (void)setCurrentTableView:(UITableView *)tableView{

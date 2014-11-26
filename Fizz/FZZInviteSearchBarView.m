@@ -9,6 +9,7 @@
 #import "FZZInviteSearchBarView.h"
 #import "FZZCustomPlaceholderTextField.h"
 #import "FZZUtilities.h"
+#import "FZZContactDelegate.h"
 
 @interface FZZInviteSearchBarView ()
 
@@ -138,7 +139,13 @@
     [_textField setClearButtonMode:UITextFieldViewModeWhileEditing];
     [_textField setKeyboardAppearance:UIKeyboardAppearanceDark];
     
+    [_textField setDelegate:self];
+    
     [self addSubview:_textField];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    [FZZContactDelegate promptForAddressBook];
 }
 
 - (UITextField *)textField{

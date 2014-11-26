@@ -26,7 +26,7 @@
 #import "FZZEnterMessagePrototypeViewController.h"
 
 static int kFZZNumCellsBeforeEvents = 1; // Add New Event
-static NSString *kFZZPlaceholderText = @"let's...";
+static NSString *kFZZPlaceholderText = @"let’s...";
 
 
 @interface FZZEventsViewController ()
@@ -175,12 +175,15 @@ static NSString *kFZZPlaceholderText = @"let's...";
                                                  selector:@selector(incomingNewEvent:)
                                                      name:FZZ_INCOMING_NEW_EVENT
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(incomingOnLogin:)
+                                                     name:FZZ_INCOMING_ON_LOGIN
+                                                   object:nil];
     }
     return self;
 }
 
 - (void)incomingNewEvent:(NSNotification *)note{
-    
     
     FZZEvent *event = [[note userInfo] objectForKey:@"event"];
     
@@ -200,6 +203,13 @@ static NSString *kFZZPlaceholderText = @"let's...";
     }
     
     [self updateEvents];
+}
+
+- (void)incomingOnLogin:(NSNotification *)note{
+    [self updateEvents];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:1];
+    
+    _shouldJumpToItem = indexPath;
 }
 
 - (void)enterCellDetail{

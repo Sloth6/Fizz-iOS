@@ -10,7 +10,7 @@
 
 #import "FZZContactSelectionDelegate.h"
 
-@interface FZZInviteSearchBarView : UIView
+@interface FZZInviteSearchBarView : UIView <UITextFieldDelegate>
 
 @property (nonatomic) FZZContactSelectionDelegate *invitationDelegate;
 

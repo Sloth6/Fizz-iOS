@@ -12,6 +12,8 @@
 
 #import "FZZUser.h"
 
+#import "FZZUtilities.h"
+
 #import "FZZContactDelegate.h"
 #import "FZZContactSelectionDelegate.h"
 
@@ -38,13 +40,23 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
         [[self tableView] setScrollEnabled:NO];
         [[self tableView] setExclusiveTouch:NO];
         
-        [FZZContactDelegate promptForAddressBook];
-        
         _invitationDelegate = [[FZZContactSelectionDelegate alloc] init];
         
         [_invitationDelegate setCurrentTableView:self.tableView];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateContacts)
+                                                     name:FZZ_CONTACTS_SAVED
+                                                   object:nil];
     }
     return self;
+}
+
+
+- (void)updateContacts{
+    [FZZContactSelectionDelegate invalidateInvitables];
+    NSLog(@"UPDATE CONTACTS MESSAGE RECIEVED");
+    [_invitationDelegate searchChange];
 }
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
@@ -172,33 +184,6 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 48;
-}
-
-- (void)enterSearchMode{
-//    [_textField setEnabled:YES];
-//    [_textField setText:@""];
-//    
-//    NSIndexPath *scrollTo = [NSIndexPath indexPathForRow:2 inSection:0];
-//    
-//    [UIView animateWithDuration:0.3
-//                          delay:0.0
-//                        options:UIViewAnimationOptionCurveEaseInOut
-//                     animations:^{
-//                         [[self tableView] scrollToRowAtIndexPath:scrollTo atScrollPosition:UITableViewScrollPositionTop animated:NO];
-//                     }
-//                     completion:nil];
-//    
-//    [_textField becomeFirstResponder];
-    
-    [FZZContactDelegate promptForAddressBook];
-    
-//    FZZInviteSearchBarTableViewCell *cell = [self getSearchBarCell];
-//    
-//    [cell setShouldDrawLine:YES];
-//    
-//    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-//    
-//    [appDelegate setNavigationScrollEnabled:NO];
 }
 
 

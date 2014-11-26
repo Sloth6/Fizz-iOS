@@ -31,4 +31,6 @@
 
 + (void)invalidateInvitables;
 
+- (void)searchChange;
+
 @end

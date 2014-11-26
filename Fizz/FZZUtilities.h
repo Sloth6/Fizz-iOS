@@ -11,6 +11,8 @@
 static float kFZZTimerDelay = 1.0;
 static float kFZZMinPageScrollVelocity = 0.5;
 
+extern NSString * const FZZ_CONTACTS_SAVED;
+
 static NSString *kFZZScrollToMessagesNotification = @"kFZZScrollToMessagesNotification";
 static NSString *kFZZPageUpdateNotification = @"kFZZPageUpdateNotification";
 
