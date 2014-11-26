@@ -23,6 +23,8 @@ static CGFloat kFZZInputScrollBuffer;
 @property BOOL touchStart;
 @property BOOL didScroll;
 
+@property float scrollSubViewHeightDisparity;
+
 @property BOOL scrollSubView;
 
 @property UIScrollView *currentScrollView;
@@ -51,6 +53,10 @@ static CGFloat kFZZInputScrollBuffer;
         
         CGSize size = CGSizeMake(frame.size.width, frame.size.height * 10);
         
+        _scrollSubViewHeightDisparity = 0;
+        
+        size.height += _scrollSubViewHeightDisparity;
+        
         [_inputScrollView setContentSize:size];
         [_inputScrollView setShowsHorizontalScrollIndicator:NO];
         [_inputScrollView setExclusiveTouch:NO];
@@ -66,6 +72,11 @@ static CGFloat kFZZInputScrollBuffer;
         
     }
     return self;
+}
+
+- (void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    kFZZInputScrollBuffer = frame.size.height;
 }
 
 - (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
@@ -271,12 +282,20 @@ static CGFloat kFZZInputScrollBuffer;
     
     if (_currentScrollView){
         size = [_currentScrollView contentSize];
-    
+        
         size.height = size.height += [_inputScrollView bounds].size.height - [_currentScrollView bounds].size.height + 2;
         
         size.height = MAX([self bounds].size.height + (2 * kFZZInputScrollBuffer), size.height);
         
         offset = [_currentScrollView contentOffset];
+        
+        _scrollSubViewHeightDisparity = self.frame.size.height - [_currentScrollView bounds].size.height;
+        
+//        offset.y -= _scrollSubViewHeightDisparity;
+        
+        size.height += _scrollSubViewHeightDisparity;
+        
+        NSLog(@"SELF: {%f, %f}, SUBVIEW: {%f, %f}", self.frame.size.width, self.frame.size.height, [_currentScrollView bounds].size.width, [_currentScrollView bounds].size.height);
         
         [_inputScrollView setDelegate:nil];
         [_inputScrollView setContentSize:size];
@@ -306,7 +325,7 @@ static CGFloat kFZZInputScrollBuffer;
     _scrollSubView = YES;
     
     CGSize size = [_currentScrollView contentSize];
-    size.height += 20;
+    size.height += _scrollSubViewHeightDisparity;
     
     size.width = [[UIScreen mainScreen] bounds].size.width;
     
@@ -591,6 +610,8 @@ static CGFloat kFZZInputScrollBuffer;
     CGSize size = [[_vtvc tableView] contentSize];
 
     CGPoint offset = [[_vtvc tableView] contentOffset];
+    
+    size.height += _scrollSubViewHeightDisparity;
 
     [_inputScrollView setDelegate:nil];
     [_inputScrollView setContentSize:size];
