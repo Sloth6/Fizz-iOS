@@ -249,12 +249,11 @@ static NSMutableArray *instances;
     
     CGFloat maxAlpha = 0.5;
     
-    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha, maxAlpha)];
+    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha + .2, 0.0)];
     
     CGFloat positiveOffset = scrollView.contentOffset.y;
     CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
-    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;
-    
+    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;    
     [[self tableView] setBackgroundColor:blackColor];
 }
 
