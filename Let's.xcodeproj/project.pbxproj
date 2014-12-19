@@ -1247,7 +1247,7 @@
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/TestFlightSDK3.0.2",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_NAME = "Let's";
@@ -1276,7 +1276,7 @@
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/TestFlightSDK3.0.2",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_NAME = "Let's";
