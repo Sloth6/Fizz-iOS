@@ -105,6 +105,8 @@ static float kFZZDarkScreenAlpha;
     // Enable the placeholder text
     [_textView setText:@""];
     [_textView deleteBackward];
+    
+//    [[_textView textView] setKeyboardDismissMode:UIScrollViewKeyboardDismissModeInteractive];
 }
 
 /*

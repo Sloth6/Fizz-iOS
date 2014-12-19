@@ -213,7 +213,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 }
 
 - (void)enterCellDetail{
-    [self.collectionView setScrollEnabled:NO];
+//    [self.collectionView setScrollEnabled:NO];
 }
 
 - (float)mapPositionToOpacity:(float) y{
@@ -1117,6 +1117,10 @@ static NSString *kFZZPlaceholderText = @"let’s...";
                                                 animated:NO];
         }
     });
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self.view endEditing:YES];
 }
 
 @end

@@ -38,7 +38,7 @@
     
     UIFont *font = kFZZHeadingsFont();//[UIFont fontWithName:@"Futura-Medium" size:20.0];
     
-    [_textView setText:@"Boo you whore"];
+    [_textView setText:@""];
     
     [_textView setFont:font];
     [_textView setTextColor:kFZZWhiteTextColor()];
