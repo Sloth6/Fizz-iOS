@@ -30,6 +30,7 @@ NSString *kFZZConfirmationCodeJustSentPrompt();
 UIFont *kFZZBodyFont();
 UIFont *kFZZSmallFont();
 UIFont *kFZZLabelsFont();
+UIFont *kFZZNameFont();
 UIFont *kFZZHostNameFont();
 UIFont *kFZZHostBodyFont();
 UIFont *kFZZCapsulesFont();

@@ -198,7 +198,7 @@
         userFont = kFZZHostNameFont();
     } else {
         messageFont = kFZZBodyFont();
-        userFont = kFZZLabelsFont();
+        userFont = kFZZNameFont();
     }
     
     [cell.messageLabel setFont:messageFont];

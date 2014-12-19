@@ -66,9 +66,6 @@
 		4994FD001929D2D800BD2FB8 /* FZZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FCFF1929D2D800BD2FB8 /* FZZMessage.m */; };
 		4994FD031929D2EE00BD2FB8 /* FZZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4994FD021929D2EE00BD2FB8 /* FZZUser.m */; };
 		49958A601932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49958A5F1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m */; };
-		49960E411A1DB61700BB557F /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49960E3B1A1DB61700BB557F /* libTestFlight.a */; };
-		49960E421A1DB61700BB557F /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 49960E3C1A1DB61700BB557F /* README.md */; };
-		49960E431A1DB61700BB557F /* release_notes.md in Sources */ = {isa = PBXBuildFile; fileRef = 49960E3D1A1DB61700BB557F /* release_notes.md */; };
 		499A8E7F18CD336800842EA7 /* FZZUserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 499A8E7E18CD336800842EA7 /* FZZUserMessageCell.m */; };
 		499A8E8118CD337B00842EA7 /* FZZUserMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 499A8E8018CD337B00842EA7 /* FZZUserMessageCell.xib */; };
 		49A31F5C18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A31F5A18CF5E3A001214B9 /* FZZEnterMessagePrototypeViewController.m */; };
@@ -259,12 +256,6 @@
 		4994FD021929D2EE00BD2FB8 /* FZZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUser.m; sourceTree = "<group>"; };
 		49958A5E1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZExpandedVerticalTableViewController.h; sourceTree = "<group>"; };
 		49958A5F1932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZExpandedVerticalTableViewController.m; sourceTree = "<group>"; };
-		49960E3B1A1DB61700BB557F /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		49960E3C1A1DB61700BB557F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		49960E3D1A1DB61700BB557F /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = release_notes.md; sourceTree = "<group>"; };
-		49960E3E1A1DB61700BB557F /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
-		49960E3F1A1DB61700BB557F /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
-		49960E401A1DB61700BB557F /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		499A8E7D18CD336800842EA7 /* FZZUserMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZUserMessageCell.h; sourceTree = "<group>"; };
 		499A8E7E18CD336800842EA7 /* FZZUserMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZUserMessageCell.m; sourceTree = "<group>"; };
 		499A8E8018CD337B00842EA7 /* FZZUserMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FZZUserMessageCell.xib; sourceTree = "<group>"; };
@@ -363,7 +354,6 @@
 				49E983E4186A5C4D00D37B2A /* CoreLocation.framework in Frameworks */,
 				49069B0C18651775003D003A /* libicucore.dylib in Frameworks */,
 				49069B0A1865176A003D003A /* CFNetwork.framework in Frameworks */,
-				49960E411A1DB61700BB557F /* libTestFlight.a in Frameworks */,
 				49069B0818651762003D003A /* Security.framework in Frameworks */,
 				49D5C9A4186042C2002BB1F0 /* UIKit.framework in Frameworks */,
 				49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */,
@@ -571,19 +561,6 @@
 			name = "Event Subviews";
 			sourceTree = "<group>";
 		};
-		49960E3A1A1DB61700BB557F /* TestFlightSDK3.0.2 */ = {
-			isa = PBXGroup;
-			children = (
-				49960E3B1A1DB61700BB557F /* libTestFlight.a */,
-				49960E3C1A1DB61700BB557F /* README.md */,
-				49960E3D1A1DB61700BB557F /* release_notes.md */,
-				49960E3E1A1DB61700BB557F /* TestFlight+AsyncLogging.h */,
-				49960E3F1A1DB61700BB557F /* TestFlight+ManualSessions.h */,
-				49960E401A1DB61700BB557F /* TestFlight.h */,
-			);
-			path = TestFlightSDK3.0.2;
-			sourceTree = "<group>";
-		};
 		499A8E7918CD32B000842EA7 /* Chat Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -668,7 +645,6 @@
 		49D5C993186042C2002BB1F0 = {
 			isa = PBXGroup;
 			children = (
-				49960E3A1A1DB61700BB557F /* TestFlightSDK3.0.2 */,
 				49D5C9A5186042C2002BB1F0 /* Let's */,
 				49D5C9BE186042C2002BB1F0 /* Let'sTests */,
 				49D5C99E186042C2002BB1F0 /* Frameworks */,
@@ -716,6 +692,7 @@
 		49D5C9A5186042C2002BB1F0 /* Let's */ = {
 			isa = PBXGroup;
 			children = (
+				A9F1C2871A3796C700CB048E /* Images */,
 				49D5C9F018605960002BB1F0 /* Utils */,
 				49D5C9AE186042C2002BB1F0 /* FZZAppDelegate.h */,
 				49D5C9AF186042C2002BB1F0 /* FZZAppDelegate.m */,
@@ -871,6 +848,13 @@
 				496C791D19B2297F0052C3C4 /* FZZPinDotView.m */,
 			);
 			name = "Pin Field";
+			sourceTree = "<group>";
+		};
+		A9F1C2871A3796C700CB048E /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1046,7 +1030,6 @@
 				49504139198593B1002DE44C /* SocketIO.m in Sources */,
 				49069B2018651FFA003D003A /* FZZSocketIODelegate.m in Sources */,
 				49F524D518E212840019C5DF /* FZZNavIcon.m in Sources */,
-				49960E431A1DB61700BB557F /* release_notes.md in Sources */,
 				4954FB0818D3AB800083D07F /* PhoneNumberFormatter.m in Sources */,
 				49EEEA9718D972FB00BDA605 /* FZZTextViewWithPlaceholder.m in Sources */,
 				49958A601932B64400C8F6E1 /* FZZExpandedVerticalTableViewController.m in Sources */,
@@ -1112,7 +1095,6 @@
 				493B07401987FC4600EC61E4 /* FZZUtilities.m in Sources */,
 				49C78988199D2C4F004EA886 /* FZZContactListScreenTableViewCell.m in Sources */,
 				4925ED88198466BF0024247C /* FZZAjaxPostDelegate.m in Sources */,
-				49960E421A1DB61700BB557F /* README.md in Sources */,
 				49A4C51519C5E2B300F5EC1C /* FZZScrollDetector.m in Sources */,
 				49069B7C18661555003D003A /* SBJson4StreamWriterState.m in Sources */,
 				4950413D198593B1002DE44C /* SocketIOTransportXHR.m in Sources */,
