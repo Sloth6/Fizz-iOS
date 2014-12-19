@@ -202,7 +202,7 @@
     [_scrollToPageButton setFrame:frame];
     [self.contentView addSubview:_scrollToPageButton];
     
-    //    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+//    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     [mProtoTVC.view setFrame:viewFormRect];
 }

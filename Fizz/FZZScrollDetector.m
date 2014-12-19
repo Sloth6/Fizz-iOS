@@ -23,6 +23,8 @@ static CGFloat kFZZInputScrollBuffer;
 @property BOOL touchStart;
 @property BOOL didScroll;
 
+@property FZZPage *proposedPage;
+
 @property float scrollSubViewHeightDisparity;
 
 @property BOOL scrollSubView;
@@ -54,6 +56,7 @@ static CGFloat kFZZInputScrollBuffer;
         CGSize size = CGSizeMake(frame.size.width, frame.size.height * 10);
         
         _scrollSubViewHeightDisparity = 0;
+        _proposedPage = nil;
         
         size.height += _scrollSubViewHeightDisparity;
         
@@ -133,7 +136,12 @@ static CGFloat kFZZInputScrollBuffer;
         _movingScrollView = nil;
         [self setHorizontalScrollEnabled:NO];
         
-        _lastTVCOffset = [[_vtvc tableView] contentOffset];
+        // TODOAndrew Proposed Page does nothing...
+        if (_proposedPage != nil){
+            _lastTVCOffset = _proposedPage.pageOffset;
+        } else {
+            _lastTVCOffset = [[_vtvc tableView] contentOffset];
+        }
         
         [self updateCurrentScrollView];
     }
@@ -195,6 +203,7 @@ static CGFloat kFZZInputScrollBuffer;
     if (scrollView == _inputScrollView){
         [self updateVTVCPage];
         _scrollSubView = NO;
+        _proposedPage = nil;
     }
 }
 
@@ -672,6 +681,8 @@ static CGFloat kFZZInputScrollBuffer;
         } else {
             proposedPage = currentPage;
         }
+        
+        _proposedPage = proposedPage;
         
         NSInteger numberOfPages = [[_vtvc tableView] numberOfRowsInSection:0];
         
