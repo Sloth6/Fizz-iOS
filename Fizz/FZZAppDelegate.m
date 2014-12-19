@@ -24,8 +24,6 @@
 
 #import "FZZOverlayView.h"
 
-#import "TestFlight.h"
-
 @implementation FZZAppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -119,10 +117,7 @@
     sigaction(SIGABRT, &signalAction, NULL);
     sigaction(SIGILL, &signalAction, NULL);
     sigaction(SIGBUS, &signalAction, NULL);
-    
-    // Install TestFlight
-    [TestFlight takeOff:@"7bc086e7-b7c3-4f3e-816f-be5ad13da12e"];
-    
+        
     // Initialize Class Variables
     [FZZUtilities class];
     

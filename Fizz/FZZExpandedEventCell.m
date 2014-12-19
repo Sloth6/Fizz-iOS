@@ -107,6 +107,11 @@
     _imageView = [[UIImageView alloc] initWithFrame:window];
     _image = [UIImage imageNamed:@"testImage"];
     
+    UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    [visualEffectView setFrame:self.contentView.bounds];
+    [self.contentView addSubview:visualEffectView];
+    
     UIImage *image = centeredCrop(_image);
     
     [_imageView setImage:image];
