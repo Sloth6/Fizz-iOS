@@ -24,6 +24,9 @@
 @property (nonatomic, strong) FZZUser *creator;
 @property (nonatomic, strong) NSString *eventDescription;
 
+@property (nonatomic, strong) UIColor *topColor;
+@property (nonatomic, strong) UIColor *bottomColor;
+
 +(NSArray *)getEventIDs;
 +(BOOL)saveEventsToFile:(NSString *)eventsURL;
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
@@ -85,7 +88,6 @@
 -(void)updateEventDescription:(NSString *)eventDescription;
 
 //-(BOOL)haveSeatsChangedSinceLastCheck;
-
 
 // Most recent new thing, used for sorting
 -(NSDate *)lastUpdate;

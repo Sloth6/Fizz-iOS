@@ -30,6 +30,8 @@ static CGFloat numPixelsFade = 20;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
+        [_tableView setKeyboardDismissMode:UIScrollViewKeyboardDismissModeInteractive];
+        
         [self setupMask];
     }
     return self;

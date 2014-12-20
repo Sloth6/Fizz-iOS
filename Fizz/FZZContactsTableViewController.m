@@ -48,6 +48,8 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
                                                  selector:@selector(updateContacts)
                                                      name:FZZ_CONTACTS_SAVED
                                                    object:nil];
+        
+        [[self tableView] setKeyboardDismissMode:UIScrollViewKeyboardDismissModeInteractive];
     }
     return self;
 }

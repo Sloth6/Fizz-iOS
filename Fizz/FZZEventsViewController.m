@@ -299,9 +299,12 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 -(FZZEvent *)getEventAtIndexPath:(NSIndexPath *)indexPath{
     int eventNum = (int)indexPath.item;
     
-    FZZEvent *event = [_events objectAtIndex:eventNum];
-    
-    return event;
+    if (indexPath.section == 1 && [_events count] > eventNum){
+        FZZEvent *event = [_events objectAtIndex:eventNum];
+        return event;
+    } else {
+        return NULL;
+    }
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -609,7 +612,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 
 
 -(NSIndexPath *)currentIndexPath{
-    CGFloat width = [self collectionView].frame.size.width;
+    CGFloat width = [self cellWidth];
     NSInteger page = ([self collectionView].contentOffset.x + (0.5f * width)) / width;
     
     NSInteger section;
@@ -624,6 +627,178 @@ static NSString *kFZZPlaceholderText = @"let’s...";
     }
     
     return [NSIndexPath indexPathForItem:item inSection:section];
+}
+
+- (float)cellWidth{
+    return [self collectionView].frame.size.width;
+}
+
+- (long)cellNum:(NSIndexPath *)indexPath{
+    long numItemsInSection = [self collectionView:[self collectionView] numberOfItemsInSection:0];
+    
+    return (indexPath.section * numItemsInSection) + indexPath.row;
+}
+
+-(NSIndexPath *)secondClosestIndexPath{
+    NSIndexPath *indexPath = [self currentIndexPath];
+    
+    CGFloat width = [self cellWidth];
+    
+    long cellNum = [self cellNum:indexPath];
+    
+    CGFloat closestOffset = width * cellNum;
+    
+    NSInteger section;
+    NSInteger item;
+    
+    float offset = [self collectionView].contentOffset.x - (0.5f * width);
+    
+    if (offset < closestOffset){
+        if (cellNum <= 1){
+            section = 0;
+            item = 0;
+        } else {
+            section = 1;
+            item = cellNum - 1;
+        }
+    } else {
+        long maxItem = [[self collectionView] numberOfItemsInSection:1];
+        
+        section = 1;
+        
+        if (indexPath.section == 0){
+            item = 0;
+        } else if (cellNum >= maxItem - 1){
+            item = maxItem - 1;
+        } else {
+            item = cellNum + 1;
+        }
+    }
+    
+    return [NSIndexPath indexPathForItem:item inSection:section];
+}
+
+-(NSIndexPath *)leftIndex{
+    CGFloat width = [self cellWidth];
+    NSInteger page = [self collectionView].contentOffset.x / width;
+    
+    NSInteger section;
+    NSInteger item;
+    
+    if (page >= kFZZNumCellsBeforeEvents) {
+        section = 1;
+        item = page - 1;
+    } else {
+        section = 0;
+        item = 0;
+    }
+    
+    return [NSIndexPath indexPathForItem:item inSection:section];
+}
+
+- (NSIndexPath *)rightIndex{
+    NSIndexPath *leftIndex = [self leftIndex];
+    
+    NSIndexPath *result;
+    
+    if (leftIndex.section == 0){
+        result = [NSIndexPath indexPathForItem:0 inSection:1];
+    } else if (leftIndex.item < [[self collectionView] numberOfItemsInSection:1] - 1){
+        result = [NSIndexPath indexPathForItem:leftIndex.item+1 inSection:1];
+    } else {
+        result = leftIndex;
+    }
+    
+    NSLog(@"RIGHT INDEX: (%ld,%ld)", (long)result.section, (long)result.item);
+    
+    return result;
+}
+
+- (float)getPercentageOffset{
+    float offset = [self collectionView].contentOffset.x;
+    float cellWidth = [self cellWidth];
+    
+    NSIndexPath *i1 = [self leftIndex];
+    
+    long left = [self cellNum:i1];
+    
+    float delta = offset - (left * cellWidth);
+    
+    float progress = delta / cellWidth;
+    
+    if (progress < 0){
+        progress += 1;
+    }
+    
+    NSLog(@"PROGRESS: %f", progress);
+    
+    return progress;
+}
+
+- (UIColor *)getTopColor{
+    NSIndexPath *leftIndex = [self leftIndex];
+    NSIndexPath *rightIndex = [self rightIndex];
+    
+    FZZEvent *leftEvent = [self getEventAtIndexPath:leftIndex];
+    FZZEvent *rightEvent = [self getEventAtIndexPath:rightIndex];
+    
+    if (leftEvent == NULL && rightEvent != NULL){
+        return [rightEvent topColor];
+    } else if (rightEvent == NULL){
+        return [leftEvent topColor];
+    }
+    
+    UIColor *leftTopColor = [leftEvent topColor];
+    UIColor *rightTopColor = [rightEvent topColor];
+    
+    float progress = [self getPercentageOffset];
+    
+    const CGFloat* c1 = CGColorGetComponents(leftTopColor.CGColor);
+    float a1 = CGColorGetAlpha(leftTopColor.CGColor);
+    
+    const CGFloat* c2 = CGColorGetComponents(rightTopColor.CGColor);
+    float a2 = CGColorGetAlpha(rightTopColor.CGColor);
+    
+    
+    UIColor *topColor = [UIColor colorWithRed:((c1[0] * (1.0 - progress)) + (c2[0] * progress))
+                                        green:((c1[1] * (1.0 - progress)) + (c2[1] * progress))
+                                         blue:((c1[2] * (1.0 - progress)) + (c2[2] * progress))
+                                        alpha:((a1 * (1.0 - progress)) + (a2 * progress))];
+    
+    return topColor;
+}
+
+- (UIColor *)getBottomColor{
+    NSIndexPath *leftIndex = [self leftIndex];
+    NSIndexPath *rightIndex = [self rightIndex];
+    
+    FZZEvent *leftEvent = [self getEventAtIndexPath:leftIndex];
+    FZZEvent *rightEvent = [self getEventAtIndexPath:rightIndex];
+    
+    if (leftEvent == NULL && rightEvent != NULL){
+        return [rightEvent bottomColor];
+    } else if (rightEvent == NULL){
+        return [leftEvent bottomColor];
+    }
+    
+    UIColor *leftBottomColor = [leftEvent bottomColor];
+    UIColor *rightBottomColor = [rightEvent bottomColor];
+    
+    float progress = [self getPercentageOffset];
+    
+    const CGFloat* c1 = CGColorGetComponents(leftBottomColor.CGColor);
+    float a1 = CGColorGetAlpha(leftBottomColor.CGColor);
+    
+    const CGFloat* c2 = CGColorGetComponents(rightBottomColor.CGColor);
+    float a2 = CGColorGetAlpha(rightBottomColor.CGColor);
+    
+    
+    UIColor *btmColor = [UIColor colorWithRed:((c1[0] * (1.0 - progress)) + (c2[0] * progress))
+                                        green:((c1[1] * (1.0 - progress)) + (c2[1] * progress))
+                                         blue:((c1[2] * (1.0 - progress)) + (c2[2] * progress))
+                                        alpha:((a1 * (1.0 - progress)) + (a2 * progress))];
+    
+    return btmColor;
 }
 
 -(void)addIncomingMessageForEvent:(FZZEvent *)event{
@@ -1088,7 +1263,10 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 }
 
 - (void)handleBackgroundOnScroll{
+    UIColor *topColor = [self getTopColor];
+    UIColor *bottomColor = [self getBottomColor];
     
+    [_gradient setGradientWithColor:topColor bottom:bottomColor];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
