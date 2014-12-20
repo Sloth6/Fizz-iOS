@@ -25,6 +25,8 @@
 
 #import "FZZEnterMessagePrototypeViewController.h"
 
+#import "FZZGradientView.h"
+
 static int kFZZNumCellsBeforeEvents = 1; // Add New Event
 static NSString *kFZZPlaceholderText = @"let’s...";
 
@@ -32,6 +34,8 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 @interface FZZEventsViewController ()
 
 @property UICollectionViewFlowLayout *overviewFlowLayout;
+
+@property FZZGradientView *gradient;
 
 @property (nonatomic) FZZTextViewWithPlaceholder *eventTextView;
 
@@ -61,53 +65,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
         _firstAppear = YES;
         _currentCell = NULL;
         
-//        // Burger Button
-//        
-//        float burgerX = 14.5;
-//        float burgerY = 24.5;
-//        
-//        CGRect buttonFrame = CGRectMake(0, 0, 45 + burgerX, 45 + burgerY);
-//        CGRect iconFrame = CGRectMake(burgerX, burgerY, 21, 21);
-//        
-//        _burgerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [_burgerButton setFrame:buttonFrame];
-//        
-//        _navIcon = [[FZZNavIcon alloc] initWithFrame:iconFrame];
-//        
-//        [_navIcon setState:kCollapsed];
-//        
-//        [_burgerButton addSubview:_navIcon];
-//        
-//        [_burgerButton addTarget:self action:@selector(navButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-//        
-//        FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
-//        
-//        [appDelegate.navigationBar addSubview:_burgerButton];
-        
-        
-//        // Friends Button
-//        
-//        float xOffset = buttonFrame.origin.x;
-//        float width = buttonFrame.size.width;
-//        float y = buttonFrame.origin.y;
-//        float x = [UIScreen mainScreen].bounds.size.width - (width + xOffset);
-//        
-//        CGRect button2Frame = CGRectMake(x, y, width, width);
-//        
-//        _friendsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [_friendsButton setFrame:button2Frame];
-//        
-//        [_friendsButton setBackgroundColor:[UIColor blueColor]];
-//        [_friendsButton setHidden:YES];
-//        
-//        [_friendsButton addTarget:self action:@selector(friendsButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-//        
-//        [appDelegate.navigationBar addSubview:_friendsButton];
-        
-        
-//        [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(navButtonPress:)];
-        
-        //self.collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:];
+        [self setupBackground];
         
         [self setUseLayoutToLayoutNavigationTransitions:NO];
         
@@ -181,6 +139,16 @@ static NSString *kFZZPlaceholderText = @"let’s...";
                                                    object:nil];
     }
     return self;
+}
+
+- (void)setupBackground{
+    _gradient = [[FZZGradientView alloc] initWithColor:[UIColor redColor] bottom:[UIColor yellowColor]];
+    
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    
+    [_gradient setFrame:frame];
+    
+    [self.view addSubview:_gradient];
 }
 
 - (void)incomingNewEvent:(NSNotification *)note{
@@ -1119,8 +1087,14 @@ static NSString *kFZZPlaceholderText = @"let’s...";
     });
 }
 
+- (void)handleBackgroundOnScroll{
+    
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self.view endEditing:YES];
+    
+    [self handleBackgroundOnScroll];
 }
 
 @end

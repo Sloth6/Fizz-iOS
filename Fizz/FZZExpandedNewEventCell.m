@@ -40,7 +40,7 @@ static float kFZZDarkScreenAlpha;
     if (self) {
         // Initialization code
         _isSetup = NO;
-        [self setupImageView];
+//        [self setupImageView];
         
         [self setupNewEventTextView];
     }

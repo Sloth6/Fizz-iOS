@@ -20,8 +20,6 @@
 @interface FZZExpandedEventCell ()
 
 @property (strong, nonatomic) UIButton *sendInviteButton;
-@property (strong, nonatomic) UIImageView *imageView;
-@property (strong, nonatomic) UIImage *image;
 
 @property (strong, nonatomic) FZZScrollDetector *scrollDetector;
 
@@ -93,29 +91,10 @@
 
 - (void)setupExpandedEventCell{
     
-    [self setupImageView];
-    
     [self setupTextView];
     
     [self setupTableview];
     
-}
-
-- (void)setupImageView{
-    CGRect window = [UIScreen mainScreen].bounds;
-    
-    _imageView = [[UIImageView alloc] initWithFrame:window];
-    _image = [UIImage imageNamed:@"testImage"];
-    
-    UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    [visualEffectView setFrame:self.contentView.bounds];
-    [self.contentView addSubview:visualEffectView];
-    
-    UIImage *image = centeredCrop(_image);
-    
-    [_imageView setImage:image];
-    [self.contentView addSubview:_imageView];
 }
 
 - (void)hideCommitInvites{
