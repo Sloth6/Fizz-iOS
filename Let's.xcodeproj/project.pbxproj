@@ -87,6 +87,7 @@
 		49C789A419A2849B004EA886 /* FZZContactDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C789A319A2849B004EA886 /* FZZContactDelegate.m */; };
 		49C8B1551889F08600400832 /* FZZEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C8B1541889F08600400832 /* FZZEventCell.m */; };
 		49CD064B19BF4D26004E0C71 /* FZZPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CD064A19BF4D26004E0C71 /* FZZPage.m */; };
+		49D28EDE1A44F1A600E8CAA9 /* FZZGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D28EDD1A44F1A600E8CAA9 /* FZZGradientView.m */; };
 		49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C99F186042C2002BB1F0 /* Foundation.framework */; };
 		49D5C9A2186042C2002BB1F0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */; };
 		49D5C9A4186042C2002BB1F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D5C9A3186042C2002BB1F0 /* UIKit.framework */; };
@@ -294,6 +295,8 @@
 		49C8B1541889F08600400832 /* FZZEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZEventCell.m; sourceTree = "<group>"; };
 		49CD064919BF4D26004E0C71 /* FZZPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZPage.h; sourceTree = "<group>"; };
 		49CD064A19BF4D26004E0C71 /* FZZPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPage.m; sourceTree = "<group>"; };
+		49D28EDC1A44F1A600E8CAA9 /* FZZGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZGradientView.h; sourceTree = "<group>"; };
+		49D28EDD1A44F1A600E8CAA9 /* FZZGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZGradientView.m; sourceTree = "<group>"; };
 		49D5C99C186042C2002BB1F0 /* Let's.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Let's.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D5C99F186042C2002BB1F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -480,6 +483,8 @@
 				4922701F18CA1CA600816AD4 /* FZZEventsViewController.h */,
 				4922702018CA1CA600816AD4 /* FZZEventsViewController.m */,
 				496B87B7190D8B2600E100FB /* Unused */,
+				49D28EDC1A44F1A600E8CAA9 /* FZZGradientView.h */,
+				49D28EDD1A44F1A600E8CAA9 /* FZZGradientView.m */,
 			);
 			name = "Main View";
 			sourceTree = "<group>";
@@ -1036,6 +1041,7 @@
 				49C7899E19A24966004EA886 /* FZZInviteSearchBarView.m in Sources */,
 				49B562F91993CF5F008302E5 /* FZZDescriptionScreenTableViewCell.m in Sources */,
 				49C8B1551889F08600400832 /* FZZEventCell.m in Sources */,
+				49D28EDE1A44F1A600E8CAA9 /* FZZGradientView.m in Sources */,
 				493B075819898FC500EC61E4 /* FZZGuestListScreenTableViewController.m in Sources */,
 				49F524D218E1C3040019C5DF /* FZZOverlayView.m in Sources */,
 				4954FB2018D4F1010083D07F /* FZZInviteCell.m in Sources */,

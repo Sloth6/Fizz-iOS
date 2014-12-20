@@ -57,6 +57,8 @@
      object:_phoneNumberField];
     
     [_phoneNumberField setKeyboardType:UIKeyboardTypeNamePhonePad];
+    [_firstNameField setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [_lastNameField setAutocorrectionType:UITextAutocorrectionTypeNo];
 }
 
 - (IBAction)savePhoneNumber:(id)sender{
