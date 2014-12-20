@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Fizz/FZZEventsViewController.m"
-            timestampString = "440726837.857957"
+            timestampString = "440734262.198374"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "705"
-            endingLineNumber = "705"
+            startingLineNumber = "880"
+            endingLineNumber = "880"
             landmarkName = "-jumpToMessagesForEvent:"
             landmarkType = "5">
          </BreakpointContent>

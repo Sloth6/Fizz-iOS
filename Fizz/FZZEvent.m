@@ -303,6 +303,59 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     [events removeObjectForKey:self.eventID];
 }
 
+- (void)setRandomColors{
+    int rand = arc4random() % 3;
+    int rand2 = (arc4random() % 2) + 1;
+    
+    NSArray *values = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.0],
+                       [NSNumber numberWithFloat:1.0],
+                       [NSNumber numberWithFloat:(arc4random() % 255)/255.0], nil];
+    
+    NSArray *values2 = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.0],
+                        [NSNumber numberWithFloat:(arc4random() % 255)/255.0],
+                        [NSNumber numberWithFloat:1.0], nil];
+    
+    // Modulo was being weird
+    int i0 = rand;
+    int i1 = rand + rand2;
+    int i2;
+    
+    if (rand + rand2 >= 3){
+        i1 = 0;
+    } else {
+        i1 = rand + rand2;
+    }
+    
+    if (rand < rand2){
+        i2 = 2;
+    } else {
+        i2 = rand - rand2;
+    }
+    
+    NSLog(@"rand: %d", rand);
+    NSLog(@"rand2: %d", rand2);
+    NSLog(@"i0: %d", i0);
+    NSLog(@"i1: %d", i1);
+    NSLog(@"i2: %d", i2);
+    
+    NSNumber *red = [values objectAtIndex:i0];
+    NSNumber *green = [values objectAtIndex:i1];
+    NSNumber *blue = [values objectAtIndex:i2];
+    
+    self.topColor = [UIColor colorWithRed:[red floatValue]
+                                    green:[green floatValue]
+                                     blue:[blue floatValue]
+                                    alpha:1.0];
+    
+    red = [values2 objectAtIndex:i0];
+    green = [values2 objectAtIndex:i1];
+    blue = [values2 objectAtIndex:i2];
+    
+    self.bottomColor = [UIColor colorWithRed:[red floatValue]
+                                       green:[green floatValue]
+                                        blue:[blue floatValue]
+                                       alpha:1.0];
+}
 
 -(id)initWithEID:(NSNumber *)eID{
     if (!eID){
@@ -316,6 +369,11 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
             sorted = NO;
             
             _invitees = [[NSArray alloc] init];
+            
+            [self setRandomColors];
+            
+//            self.topColor = [UIColor blueColor];
+//            self.bottomColor = [UIColor greenColor];
             
             self.eventID = eID;
             self.scrollPosition = [NSIndexPath indexPathForItem:1 inSection:0];
