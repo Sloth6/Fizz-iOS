@@ -198,11 +198,7 @@ float kFZZButtonBuffer(){
     
     NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
     
-//    NSLog(@"BEFORE <%@>", phoneNumber);
-    
     phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[charSet invertedSet]] componentsJoinedByString:@""];
-    
-//    NSLog(@"AFTER <%@>", phoneNumber);
     
     unichar c = [phoneNumber characterAtIndex:0];
     
