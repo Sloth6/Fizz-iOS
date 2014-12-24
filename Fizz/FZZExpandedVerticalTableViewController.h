@@ -24,6 +24,8 @@
 - (void)updateMessages;
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
 
+- (float)getBackgroundAlpha;
+
 - (FZZEvent *)getFZZEvent;
 
 - (CGFloat)descriptionCellOffset;

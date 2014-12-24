@@ -19,6 +19,8 @@
 #import "FZZUtilities.h"
 #import "FZZScrollDetector.h"
 
+#import "FZZAppDelegate.h"
+
 #import "FZZAttendingButton.h"
 
 static NSMutableArray *instances;
@@ -267,22 +269,28 @@ static NSMutableArray *instances;
     return nil;
 }
 
-- (void)handleBackgroundOnScroll:(UIScrollView *)scrollView{
+- (float)getBackgroundAlpha{
     CGFloat maxOffset = [UIScreen mainScreen].bounds.size.height;
     
-    CGFloat offset = abs(scrollView.contentOffset.y - maxOffset);
+    CGFloat offset = abs([self tableView].contentOffset.y - maxOffset);
     
     CGFloat progress = offset/maxOffset;
     
     CGFloat maxAlpha = 0.5;
     
-    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha + .15, maxAlpha)];
+    float alpha = 1 - MIN(1, MAX((progress * maxAlpha) + 0.15, 0));
     
-    CGFloat positiveOffset = scrollView.contentOffset.y;
-    CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
-    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;
+    NSLog(@"alpha: %f", alpha);
     
-    [[self tableView] setBackgroundColor:blackColor];
+    return alpha;
+    
+//    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha + .15, maxAlpha)];
+//    
+//    CGFloat positiveOffset = scrollView.contentOffset.y;
+//    CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
+//    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;
+//    
+//    [[self tableView] setBackgroundColor:blackColor];
 }
 
 - (void)handleAttendingButtonOnScroll:(UIScrollView *)scrollView{
@@ -333,10 +341,13 @@ static NSMutableArray *instances;
 //    [_scrollDetector scrollViewDidScroll:scrollView];
     
     // TODO Parallelize these tasks
-    [self handleBackgroundOnScroll:scrollView];
     [self handleAttendingButtonOnScroll:scrollView];
     [self handleOptionsButtonOnScroll:scrollView];
     [self handleMessagesViewOnScroll:scrollView];
+    
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [[appDelegate evc] didScroll];
 }
 
 - (FZZChatScreenCell *)getChatScreenCell{

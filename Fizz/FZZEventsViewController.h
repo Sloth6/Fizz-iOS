@@ -55,4 +55,6 @@ typedef enum {
 
 -(void)loadToEvent:(FZZEvent *)event;
 
+-(void)didScroll;
+
 @end
