@@ -18,13 +18,20 @@
 
 + (void)setScrollEnabled:(BOOL)canScroll;
 
+- (void)tableViewWillAppear;
+- (void)updateVisuals;
+
 - (void)updateMessages;
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
+
+- (float)getBackgroundAlpha;
 
 - (FZZEvent *)getFZZEvent;
 
 - (CGFloat)descriptionCellOffset;
 - (CGFloat)descriptionCellHeight;
+
++ (NSIndexPath *)descriptionCellIndexPath;
 
 - (UITableViewCell *)getCurrentCell;
 - (UIScrollView *)getCurrentScrollView;
@@ -32,5 +39,9 @@
 - (CGFloat)tableView:(UITableView *)tableView offsetForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 - (void)reloadChat;
+
++ (CGFloat)descriptionScreenScrollPosition;
+
++ (CGFloat)offsetForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

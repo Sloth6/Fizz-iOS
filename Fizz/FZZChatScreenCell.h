@@ -10,6 +10,7 @@
 #import "FZZKeyboardNotificationCenter.h"
 
 @class FZZEvent;
+@class FZZScrollDetector;
 
 @interface FZZChatScreenCell : UITableViewCell <UITextViewDelegate, FZZKeyboardManagedObject>
 
@@ -20,6 +21,8 @@
 -(void)updateMessages;
 
 -(UIScrollView *)scrollView;
+-(void)onVerticalEventScroll:(UIScrollView *)scrollView
+           andScrollDetector:(FZZScrollDetector *)scrollDetector;
 
 -(void)setOnPage:(BOOL)isOnPage;
 

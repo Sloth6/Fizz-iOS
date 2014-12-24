@@ -910,7 +910,7 @@
 			attributes = {
 				CLASSPREFIX = FZZ;
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = "Off Brand";
+				ORGANIZATIONNAME = "Let's";
 				TargetAttributes = {
 					49D5C99B186042C2002BB1F0 = {
 						DevelopmentTeam = LVXPU6ZL2V;
@@ -1182,6 +1182,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = armv7;
 			};
 			name = Debug;
 		};
@@ -1211,9 +1212,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = armv7;
 			};
 			name = Release;
 		};
@@ -1231,7 +1234,7 @@
 				GCC_PREFIX_HEADER = "Fizz/Let's-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Fizz/Let's-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/TestFlightSDK3.0.2",
@@ -1261,7 +1264,7 @@
 				GCC_PREFIX_HEADER = "Fizz/Let's-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Fizz/Let's-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/TestFlightSDK3.0.2",

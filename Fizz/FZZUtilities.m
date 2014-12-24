@@ -10,6 +10,7 @@
 #import "FZZSocketIODelegate.h"
 
 NSString * const FZZ_CONTACTS_SAVED = @"contactsSaved";
+NSString * const FZZ_RELOADED_CHAT = @"reloadedChat";
 
 @implementation FZZUtilities
 
@@ -48,7 +49,8 @@ UIFont *kFZZSmallFont(){
 
 UIFont *kFZZLabelsFont(){
 //    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:10*2];
-    return [UIFont fontWithName:@"FuturaStd-Book" size:18];
+    return [UIFont fontWithName:@"Futura-Medium" size:15];
+//    return [UIFont fontWithName:@"FuturaStd-Book" size:18];
 }
 
 UIFont *kFZZNameFont(){
@@ -115,6 +117,10 @@ CGFloat kFZZGuestListLineHeight() {return 24;}
 CGFloat kFZZGuestListPeak() {return (3 * kFZZGuestListLineHeight())
                                 + (1.0/2.0 * kFZZGuestListLineHeight());}
 
+CGFloat kFZZInviteViewPeak() { // 2.0 to hide the line on the bottom
+    return kFZZTopTextTopPadding() + kFZZVerticalMargin() - 2.0;
+}
+
 CGFloat kFZZGuestListOffset() {return 44;}
 
 CGFloat kFZZInviteListLineHeight() {return 40;}
@@ -129,6 +135,8 @@ CGFloat kFZZBodyLineHeight() {return 24;}
 CGFloat kFZZTopTextTopPadding() {return 24;}
 CGFloat kFZZMessageTopPadding() {return 16;}
 CGFloat kFZZCapsuleTopPadding() {return 12;}
+
+CGFloat kFZZMessagesExtraPeak() {return kFZZTopTextTopPadding() + (2 * kFZZVerticalMargin());}
 
 CGFloat kFZZInviteConfirmButtonDiameter() {return 32;}
 

@@ -25,7 +25,8 @@ static float messageLabelWidth;
         // Initialization code
         static dispatch_once_t once;
         dispatch_once(&once, ^{
-            userCellMessageFont = [[self messageLabel] font];
+            [[self messageLabel] setFont:kFZZHostBodyFont()];
+//            userCellMessageFont = [[self messageLabel] font];
             userCellNameFont = [[self userLabel] font];
             messageLabelWidth = [[self messageLabel] frame].size.width;
         });
@@ -53,17 +54,33 @@ static float messageLabelWidth;
     
     NSString *text = [message text];
     
+    
+//    NSInteger strLength = [myString length];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+//    [attString addAttribute:NSParagraphStyleAttributeName
+//                      value:style
+//                      range:NSMakeRange(0, strLength)];
+    
+    
     CGFloat width = textWidth;
     NSAttributedString *attributedText =
     [[NSAttributedString alloc]
      initWithString:text
      attributes:@
      {
-     NSFontAttributeName: font
+           NSFontAttributeName:font
      }];
     CGRect rect = [attributedText boundingRectWithSize:(CGSize){width, CGFLOAT_MAX}
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
+    
+    rect.size.height += 52;
+    rect.size.height *= 0.51;
+    
+//    if (rect.size.height > 160){
+//    rect.size.height *= MIN(1, MAX(0.5, 1.5 - (rect.size.height/200.0)));
+//    }
+    
     return rect.size;
 }
 

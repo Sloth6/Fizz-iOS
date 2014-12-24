@@ -41,6 +41,7 @@
 - (void)scrollToTopAnimated:(BOOL)isAnimated;
 - (void)setScrollingEnabled:(BOOL)canScroll;
 - (void)sendInvitations;
+- (void)updateVisuals;
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath;
 

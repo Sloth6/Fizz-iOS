@@ -59,7 +59,7 @@
     _event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
     
     if (section == 0){ // Attending Individuals
-        return [[_event guestsWithoutCreator]  count];
+        return [[_event guestsWithoutCreator] count];
     } else { // Not Yet Responded
         return [[_event inviteesNotGuestsWithoutCreator] count];
     }

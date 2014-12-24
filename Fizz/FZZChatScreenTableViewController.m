@@ -50,6 +50,8 @@
         
         //Magic Number 68
         _textLabelWidth = [UIScreen mainScreen].bounds.size.width - 68;
+        
+        [self scrollToBottomAnimated:NO];
     }
     return self;
 }
@@ -57,6 +59,11 @@
 //-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
 //    [super scrollViewDidScroll:scrollView];
 //}
+
+- (void)scrollToBottomAnimated:(BOOL)isAnimated{
+    CGPoint bottomOffset = CGPointMake(0, MAX([self tableView].contentSize.height - [self tableView].bounds.size.height, 0.0));
+    [[self tableView] setContentOffset:bottomOffset animated:isAnimated];
+}
 
 #pragma mark - Table view data source
 
@@ -77,16 +84,24 @@
     return [[event messages] count];
 }
 
+- (void)tableViewReloadData{
+    [[self tableView] reloadData];
+    [self scrollToBottomAnimated:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_RELOADED_CHAT
+                                                        object:nil];
+}
+
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
     
     NSLog(@"ChatScreenTableViewController setEventIndexPath reloadData!!!");
-    [[self tableView] reloadData];
+    [self tableViewReloadData];
 }
 
 -(void)updateMessages{
 //    [[self tableView] reloadData];
     [self addIncomingMessage];
+    [self scrollToBottomAnimated:YES];
 //    NSLog(@"It should be inserting rows!");
     
 //    @synchronized(self){
@@ -220,7 +235,7 @@
         return 24;
     }
     
-    float labelWidth = [self tableView].bounds.size.width - 74;//60(too small)//80(too large)//34//26//120;
+    float labelWidth = [self tableView].bounds.size.width - (162 + (2 * kFZZHorizontalMargin()));//(too small)//80(too large)//34//26//120;//(2 *kFZZHorizontalMargin());
     
     //NSLog(@"\ntext: <%@>\nlabelWidth: %f", text, labelWidth);
     

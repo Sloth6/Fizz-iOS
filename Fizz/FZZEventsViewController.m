@@ -45,6 +45,8 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 
 @property UICollectionView *textCV;
 
+@property float lastAlpha;
+
 @property BOOL firstAppear;
 @property NSArray *events;
 
@@ -61,6 +63,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
         
         _viewMode = kTimeline;
         
+        _lastAlpha = 1.0 - 0.15;
         _lineHeight = -1;
         _firstAppear = YES;
         _currentCell = NULL;
@@ -291,6 +294,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
         }
         
         [cell setNeedsDisplay];
+        [cell updateVisuals];
         
         return cell;
     }
@@ -759,7 +763,6 @@ static NSString *kFZZPlaceholderText = @"let’s...";
     const CGFloat* c2 = CGColorGetComponents(rightTopColor.CGColor);
     float a2 = CGColorGetAlpha(rightTopColor.CGColor);
     
-    
     UIColor *topColor = [UIColor colorWithRed:((c1[0] * (1.0 - progress)) + (c2[0] * progress))
                                         green:((c1[1] * (1.0 - progress)) + (c2[1] * progress))
                                          blue:((c1[2] * (1.0 - progress)) + (c2[2] * progress))
@@ -841,6 +844,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
         FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
         
         [cell updateMessages];
+        [[cell vtvc] tableViewWillAppear];
     } else {
         NSLog(@"UPDATE_EVENT off screen");
         
@@ -1263,16 +1267,59 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 }
 
 - (void)handleBackgroundOnScroll{
-    UIColor *topColor = [self getTopColor];
-    UIColor *bottomColor = [self getBottomColor];
-    
-    [_gradient setGradientWithColor:topColor bottom:bottomColor];
+    if ([_events count] > 0){
+        UIColor *topColor = [self getTopColor];
+        UIColor *bottomColor = [self getBottomColor];
+        
+        [_gradient setGradientWithColor:topColor bottom:bottomColor];
+        
+        NSIndexPath *leftIndex = [self leftIndex];
+        NSIndexPath *rightIndex = [self rightIndex];
+        
+        FZZExpandedEventCell *cell1;
+        FZZExpandedEventCell *cell2;
+        
+        float alpha;
+        
+        if (leftIndex == NULL || leftIndex.section == 0){
+            
+            cell2 = (FZZExpandedEventCell *)[[self collectionView] cellForItemAtIndexPath:rightIndex];
+            alpha = [[cell2 vtvc] getBackgroundAlpha];
+            
+        } else if (rightIndex == NULL || rightIndex.section == 0){
+            
+            cell1 = (FZZExpandedEventCell *)[[self collectionView] cellForItemAtIndexPath:leftIndex];
+            alpha = [[cell1 vtvc] getBackgroundAlpha];
+            
+        } else {
+            cell1 = (FZZExpandedEventCell *)[[self collectionView] cellForItemAtIndexPath:leftIndex];
+            float a1 = [[cell1 vtvc] getBackgroundAlpha];
+            
+            cell2 = (FZZExpandedEventCell *)[[self collectionView] cellForItemAtIndexPath:rightIndex];
+            float a2 = [[cell2 vtvc] getBackgroundAlpha];
+            
+            float progress = [self getPercentageOffset];
+            alpha = ((a1 * (1.0 - progress)) + (a2 * progress));
+        }
+        
+        if (alpha < 0.4){
+            alpha = _lastAlpha;
+        }
+        
+        _lastAlpha = alpha;
+        
+        [_gradient setAlpha:alpha];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self.view endEditing:YES];
     
     [self handleBackgroundOnScroll];
+}
+
+- (void)didScroll{
+    [self scrollViewDidScroll:[self collectionView]];
 }
 
 @end

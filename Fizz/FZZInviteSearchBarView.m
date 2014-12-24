@@ -118,7 +118,6 @@
     
     frame.size.height = fieldHeight;
     
-    
     _textField = [[FZZCustomPlaceholderTextField alloc] initWithFrame:frame];
     
     [_textField setFont:font];

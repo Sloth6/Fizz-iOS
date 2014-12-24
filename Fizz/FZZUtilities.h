@@ -12,6 +12,7 @@ static float kFZZTimerDelay = 1.0;
 static float kFZZMinPageScrollVelocity = 0.5;
 
 extern NSString * const FZZ_CONTACTS_SAVED;
+extern NSString * const FZZ_RELOADED_CHAT;
 
 static NSString *kFZZScrollToMessagesNotification = @"kFZZScrollToMessagesNotification";
 static NSString *kFZZPageUpdateNotification = @"kFZZPageUpdateNotification";
@@ -67,8 +68,11 @@ CGFloat kFZZTopTextTopPadding(); // 24
 CGFloat kFZZMessageTopPadding(); // 16
 CGFloat kFZZCapsuleTopPadding(); // 12
 
+CGFloat kFZZMessagesExtraPeak();
+
 CGFloat kFZZPinPadding(); //16
 
+CGFloat kFZZInviteViewPeak();
 CGFloat kFZZInviteConfirmButtonDiameter(); // 32
 
 CGFloat kFZZTextInputBottomPadding(); // 8

@@ -19,12 +19,17 @@
 #import "FZZUtilities.h"
 #import "FZZScrollDetector.h"
 
+#import "FZZAppDelegate.h"
+
 #import "FZZAttendingButton.h"
 
 static NSMutableArray *instances;
 
 @interface FZZExpandedVerticalTableViewController ()
 @property (strong, nonatomic) NSIndexPath *eventIndexPath;
+
+// DON'T USE DIRECTLY, USE THE GETTER getChatScreenCell
+@property (nonatomic) FZZChatScreenCell *chatScreenCell;
 
 // Join/Leave Event
 @property (strong, nonatomic) FZZAttendingButton *attendingButton;
@@ -41,6 +46,14 @@ static NSMutableArray *instances;
     dispatch_once(&onceToken, ^{
         instances = [[NSMutableArray alloc] init];
     });
+}
+
+- (void)tableViewWillAppear{
+    [self updateVisuals];
+}
+
+- (void)updateVisuals{
+    [self scrollViewDidScroll:self.tableView];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -72,9 +85,23 @@ static NSMutableArray *instances;
         
         [self setupNotificationObservers];
         
+        // load in the _chatScreenCell
+        [self getChatScreenCell];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(tableViewWillAppear)
+                                                     name:FZZ_RELOADED_CHAT
+                                                   object:nil];
+        
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];
     }
     return self;
+}
+
+- (BOOL)hasGuestList{
+    FZZEvent *event = [self getFZZEvent];
+    
+    return [[event guestsWithoutCreator] count] > 0;
 }
 
 - (void)setupScrollToMessagesObserver{
@@ -213,13 +240,15 @@ static NSMutableArray *instances;
             
         case 2: // Invite List Cell
         {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
-            
-            FZZGuestListScreenTableViewCell *cell = (FZZGuestListScreenTableViewCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
-            
-            return [cell scrollView];
+            if ([self hasGuestList]){
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
+                
+                FZZGuestListScreenTableViewCell *cell = (FZZGuestListScreenTableViewCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+                
+                return [cell scrollView];
+                break;
+            }
         }
-            break;
             
         case 3:
         {
@@ -240,22 +269,28 @@ static NSMutableArray *instances;
     return nil;
 }
 
-- (void)handleBackgroundOnScroll:(UIScrollView *)scrollView{
+- (float)getBackgroundAlpha{
     CGFloat maxOffset = [UIScreen mainScreen].bounds.size.height;
     
-    CGFloat offset = abs(scrollView.contentOffset.y - maxOffset);
+    CGFloat offset = abs([self tableView].contentOffset.y - maxOffset);
     
     CGFloat progress = offset/maxOffset;
     
     CGFloat maxAlpha = 0.5;
     
-    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha + .15, maxAlpha)];
+    float alpha = 1 - MIN(1, MAX((progress * maxAlpha) + 0.15, 0));
     
-    CGFloat positiveOffset = scrollView.contentOffset.y;
-    CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
-    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;
+    NSLog(@"alpha: %f", alpha);
     
-    [[self tableView] setBackgroundColor:blackColor];
+    return alpha;
+    
+//    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha + .15, maxAlpha)];
+//    
+//    CGFloat positiveOffset = scrollView.contentOffset.y;
+//    CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
+//    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;
+//    
+//    [[self tableView] setBackgroundColor:blackColor];
 }
 
 - (void)handleAttendingButtonOnScroll:(UIScrollView *)scrollView{
@@ -296,27 +331,38 @@ static NSMutableArray *instances;
     [_optionsButton setAlpha:progress];
 }
 
+- (void)handleMessagesViewOnScroll:(UIScrollView *)scrollView{
+    [_chatScreenCell onVerticalEventScroll:scrollView
+                         andScrollDetector:_scrollDetector];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 //    [self handleScrollSubview];
 //    [_scrollDetector scrollViewDidScroll:scrollView];
     
-    [self handleBackgroundOnScroll:scrollView];
+    // TODO Parallelize these tasks
     [self handleAttendingButtonOnScroll:scrollView];
     [self handleOptionsButtonOnScroll:scrollView];
+    [self handleMessagesViewOnScroll:scrollView];
+    
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [[appDelegate evc] didScroll];
 }
 
 - (FZZChatScreenCell *)getChatScreenCell{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    return (FZZChatScreenCell *)[self tableView:[self tableView] cellForRowAtIndexPath:indexPath];
+    _chatScreenCell = (FZZChatScreenCell *)[self tableView:[self tableView] cellForRowAtIndexPath:indexPath];
+    
+    return _chatScreenCell;
 }
 
 - (void)reloadChat{
-    NSIndexPath *topCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    FZZChatScreenCell *cell = (FZZChatScreenCell *)[[self tableView] cellForRowAtIndexPath:topCellIndexPath];
+    FZZChatScreenCell *cell = [self getChatScreenCell];
     
     [cell updateMessages];
+    [self updateVisuals];
 }
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
@@ -325,6 +371,7 @@ static NSMutableArray *instances;
     
     NSLog(@"ExpandedVerticalTableViewController setEventIndexPath reloadData!!!");
     [[self tableView] reloadData];
+    [self scrollViewDidScroll:[self tableView]];
 }
 
 /*
@@ -411,7 +458,11 @@ static NSMutableArray *instances;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 4;
+    if ([self hasGuestList]){
+        return 4;
+    } else {
+        return 3;
+    }
 }
 
 - (FZZEvent *)getFZZEvent{
@@ -419,6 +470,10 @@ static NSMutableArray *instances;
 }
 
 - (NSIndexPath *)descriptionCellIndexPath{
+    return [FZZExpandedVerticalTableViewController descriptionCellIndexPath];
+}
+
++ (NSIndexPath *)descriptionCellIndexPath{
     return [NSIndexPath indexPathForRow:1 inSection:0];
 }
 
@@ -561,18 +616,20 @@ static NSMutableArray *instances;
             
         case 2: // Invite List Cell
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"guestListCell" forIndexPath:indexPath];
-            [(FZZGuestListScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
-            
-            [cell setBackgroundColor:[UIColor clearColor]];
-            [cell setOpaque:NO];
-            
-            // Place in the cell below the description cell always
-            [[cell contentView] addSubview:_attendingButton];
-            
-            [(FZZGuestListScreenTableViewCell *)cell updateVisuals];
+            if ([self hasGuestList]){
+                cell = [tableView dequeueReusableCellWithIdentifier:@"guestListCell" forIndexPath:indexPath];
+                [(FZZGuestListScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
+                
+                [cell setBackgroundColor:[UIColor clearColor]];
+                [cell setOpaque:NO];
+                
+                // Place in the cell below the description cell always
+                [[cell contentView] addSubview:_attendingButton];
+                
+                [(FZZGuestListScreenTableViewCell *)cell updateVisuals];
+                break;
+            }
         }
-            break;
             
         case 3:
         {
@@ -619,10 +676,6 @@ static NSMutableArray *instances;
     [cell updateMessages];
 }
 
-- (BOOL)doesGuestListCellExist{
-    return [self tableView:[self tableView] numberOfRowsInSection:0] == 4;
-}
-
 - (CGFloat)heightForContactListScreenCell{
 //    NSInteger searchBarHeight = [FZZContactListScreenTableViewCell searchBarHeight];
     NSInteger cellOffset = [FZZContactListScreenTableViewCell cellOffset];
@@ -632,9 +685,13 @@ static NSMutableArray *instances;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 1){
-        return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath] - kFZZGuestListPeak();
+        if (![self hasGuestList]){
+            return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath] - kFZZInviteViewPeak();
+        } else {
+            return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath] - kFZZGuestListPeak();
+        }
     } else if (indexPath.row == 2){
-        if (![self doesGuestListCellExist]){
+        if (![self hasGuestList]){
             return [self heightForContactListScreenCell];
         }
     } else if (indexPath.row == 3){
@@ -648,7 +705,7 @@ static NSMutableArray *instances;
     switch (indexPath.row) {
         case 2: // Guest List OR Invite List if no guests
         {
-            if ([self doesGuestListCellExist]){
+            if ([self hasGuestList]){
                 return [FZZContactListScreenTableViewCell searchBarHeight] - 15 + kFZZVerticalMargin(); //TODOAndrew magic number
             } else {
                 return 0;
@@ -665,6 +722,14 @@ static NSMutableArray *instances;
     return 0;
 }
 
++ (CGFloat)descriptionScreenScrollPosition{
+    return [UIScreen mainScreen].bounds.size.height - [FZZExpandedVerticalTableViewController descriptionScreenOffset];
+}
+
++ (CGFloat)descriptionScreenOffset{
+    return kFZZInputRowHeight() + kFZZVerticalMargin() + 1;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView offsetForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.row) {
         case 0: // Chat
@@ -675,7 +740,7 @@ static NSMutableArray *instances;
             
         case 1: // Description
         {
-            return kFZZInputRowHeight() + kFZZVerticalMargin() + 1;
+            return [FZZExpandedVerticalTableViewController descriptionScreenOffset];
         }
             break;
             

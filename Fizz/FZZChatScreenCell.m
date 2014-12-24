@@ -12,6 +12,10 @@
 #import "FZZEnterMessagePrototypeViewController.h"
 #import "FZZChatScreenTableViewController.h"
 #import "FZZAppDelegate.h"
+#import "FZZExpandedVerticalTableViewController.h"
+#import "FZZPage.h"
+
+#import "FZZScrollDetector.h"
 
 #import "FZZUtilities.h"
 
@@ -53,6 +57,84 @@
     return [_ctvc tableView];
 }
 
+- (void)handleAddACommentOnScroll:(UIScrollView *)scrollView
+                andScrollDetector:(FZZScrollDetector *)scrollDetector{
+    
+    NSIndexPath *indexPath = [FZZExpandedVerticalTableViewController descriptionCellIndexPath];
+    
+    FZZPage *page = [scrollDetector getPageForIndexPath:indexPath];
+    
+    CGFloat buffer = 4;
+    
+    CGFloat maxOffset = -180;
+    
+    CGFloat offset = scrollView.contentOffset.y - (page.pageOffset.y + maxOffset + buffer);
+    
+    CGFloat progress = MIN(1, MAX(offset/maxOffset, 0));
+    
+    if (progress > 0.9){
+        [viewForm setUserInteractionEnabled:YES];
+    } else {
+        [viewForm setUserInteractionEnabled:NO];
+    }
+    
+    [viewForm setAlpha:progress];
+}
+
+- (void)handleMessagesOnScroll:(UIScrollView *)scrollView
+             andScrollDetector:(FZZScrollDetector *)scrollDetector{
+    
+    NSIndexPath *indexPath = [FZZExpandedVerticalTableViewController descriptionCellIndexPath];
+    
+    FZZPage *page = [scrollDetector getPageForIndexPath:indexPath];
+    
+    CGFloat buffer = 4;
+//
+//    CGFloat maxOffset = -180;
+//    
+//    CGFloat offset = scrollView.contentOffset.y - (page.pageOffset.y + maxOffset + buffer);
+    
+//    CGFloat maxOffset = [FZZExpandedVerticalTableViewController offsetForRowAtIndexPath:<#(NSIndexPath *)#>]
+    
+    float offset = scrollView.contentOffset.y;
+    float maxOffset = [FZZExpandedVerticalTableViewController descriptionScreenScrollPosition];
+    
+    CGFloat progress = MIN(1, MAX(offset/maxOffset, 0));
+    
+    float dY = MAX([[_ctvc tableView] bounds].size.height - [[_ctvc tableView] contentSize].height, 0.0);
+    
+    float travelDistance = dY + kFZZMessagesExtraPeak();
+    
+    CGRect updateFrame = [[_ctvc tableView] bounds];
+    
+    float initialY = kFZZVerticalMargin();
+    
+    updateFrame.origin.y = initialY + ((travelDistance - initialY) * progress);
+    
+    NSLog(@"[%f] %f", progress, updateFrame.origin.y);
+    
+    [[_ctvc tableView] setFrame:updateFrame];
+    [[_ctvc tableView] setAlpha:0.5 + (0.5 * (1 - progress))];
+    
+//    [_placeholderView setAlpha:progress];
+}
+
+-(void)onVerticalEventScroll:(UIScrollView *)scrollView
+           andScrollDetector:(FZZScrollDetector *)scrollDetector{
+    
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:_eventIndexPath];
+    
+    if ([[event messages] count] != 0){
+        [self handleAddACommentOnScroll:scrollView
+                      andScrollDetector:scrollDetector];
+        
+        [self handleMessagesOnScroll:scrollView
+                   andScrollDetector:scrollDetector];
+    } else {
+        [viewForm setAlpha:1.0];
+    }
+}
+
 - (void)updateMessages{
     [_ctvc updateMessages];
 }
@@ -84,7 +166,7 @@
     frame.origin.y = yOffset;
     
     frame.size.height = frame.size.height - viewFormHeight;
-    frame.size.width  = frame.size.width - xOffset;
+    frame.size.width  = frame.size.width - kFZZHorizontalMargin(); //xOffset
     
     [self setBackgroundColor:[UIColor clearColor]];
     [self setOpaque:NO];
@@ -92,6 +174,7 @@
     _ctvc = [[FZZChatScreenTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
     [[_ctvc tableView] setFrame:frame];
+    [(FZZFadedEdgeTableViewController *)_ctvc updateMask];
     
     [self addSubview:[_ctvc tableView]];
     [[_ctvc tableView] setUserInteractionEnabled:NO];
@@ -124,7 +207,9 @@
 - (void)messagesUpdated{
     [[_ctvc tableView] reloadData];
     
-    NSLog(@"UPDATE MESSAGES!");
+    [_ctvc scrollToBottomAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_RELOADED_CHAT
+                                                        object:nil];
 }
 
 /*
