@@ -86,6 +86,14 @@ UIColor *kFZZGrayTextColor(){
     return [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
+UIColor *kFZZDefaultTopColor(){
+    return [UIColor colorWithRed:0.0 green:251.0/255.0 blue:250.0/255.0 alpha:0.85];
+}
+
+UIColor *kFZZDefaultBottomColor(){
+    return [UIColor colorWithRed:81.0/255.0 green:26.0/255.0 blue:1.0 alpha:0.85];
+}
+
 UIFont *kFZZRegularFontWithSize(CGFloat size){
     return [UIFont fontWithName:@"Futura-Medium" size:size];
 }

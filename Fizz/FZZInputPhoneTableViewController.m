@@ -16,6 +16,8 @@
 #import "FZZInputVerificationCodeViewController.h"
 #import "FZZUtilities.h"
 
+#import "FZZGradientView.h"
+
 #import "FZZAppDelegate.h"
 
 @interface FZZInputPhoneTableViewController ()
@@ -25,6 +27,8 @@
 @property UITextField *firstNameTextField;
 @property UITextField *lastNameTextField;
 @property UITextField *cellPhoneTextField;
+
+@property FZZGradientView *gradient;
 
 @property NSTimer *timer;
 
@@ -71,8 +75,21 @@
                                                  selector:@selector(keyboardWillShow:)
                                                      name:UIKeyboardWillShowNotification
                                                    object:nil];
+        
+        [self setupGradient];
     }
     return self;
+}
+
+- (void)setupGradient{
+    _gradient = [[FZZGradientView alloc] initWithColor:kFZZDefaultTopColor()
+                                                bottom:kFZZDefaultBottomColor()];
+    
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    
+    [_gradient setFrame:frame];
+    
+    [[self tableView] setBackgroundView:_gradient];
 }
 
 - (void)performKeyboardWillShow:(NSNotification *)note{
@@ -550,6 +567,8 @@
             _ivcvc = [[FZZInputVerificationCodeViewController alloc] initWithNibName:@"FZZInputVerificationCodeViewController" bundle:nil];
             
             [[_ivcvc view] setFrame:cell.bounds];
+            
+            [[_ivcvc view] setBackgroundColor:[UIColor clearColor]];
             
             [cell addSubview:[_ivcvc view]];
             

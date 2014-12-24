@@ -26,6 +26,9 @@ UIImage *crop(UIImage *image, CGRect rect);
 UIColor *kFZZWhiteTextColor();
 UIColor *kFZZGrayTextColor();
 
+UIColor *kFZZDefaultTopColor();
+UIColor *kFZZDefaultBottomColor();
+
 NSString *kFZZConfirmationCodeJustSentPrompt();
 
 UIFont *kFZZBodyFont();
