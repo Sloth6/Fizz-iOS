@@ -20,6 +20,9 @@
 @property (strong, nonatomic) FZZEventsViewController *esvc;
 //@property (strong, nonatomic) UITableView *tableView;
 
+- (void)scrollToBottomAnimated:(BOOL)isAnimated;
+
+- (void)reloadDataForTableView;
 - (void)addIncomingMessage;
 - (void)updateMessages;
 

@@ -910,7 +910,7 @@
 			attributes = {
 				CLASSPREFIX = FZZ;
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = "Off Brand";
+				ORGANIZATIONNAME = "Let's";
 				TargetAttributes = {
 					49D5C99B186042C2002BB1F0 = {
 						DevelopmentTeam = LVXPU6ZL2V;

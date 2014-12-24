@@ -97,6 +97,10 @@
     
 }
 
+- (void)updateVisuals{
+    [_vtvc updateVisuals];
+}
+
 - (void)hideCommitInvites{
     FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.evc.navigationItem setRightBarButtonItem:NULL animated:YES];

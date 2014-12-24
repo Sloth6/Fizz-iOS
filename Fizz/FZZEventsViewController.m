@@ -291,6 +291,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
         }
         
         [cell setNeedsDisplay];
+        [cell updateVisuals];
         
         return cell;
     }
@@ -841,6 +842,7 @@ static NSString *kFZZPlaceholderText = @"let’s...";
         FZZExpandedEventCell *cell = (FZZExpandedEventCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
         
         [cell updateMessages];
+        [[cell vtvc] tableViewWillAppear];
     } else {
         NSLog(@"UPDATE_EVENT off screen");
         
@@ -1263,10 +1265,12 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 }
 
 - (void)handleBackgroundOnScroll{
-    UIColor *topColor = [self getTopColor];
-    UIColor *bottomColor = [self getBottomColor];
-    
-    [_gradient setGradientWithColor:topColor bottom:bottomColor];
+    if ([_events count] > 0){
+        UIColor *topColor = [self getTopColor];
+        UIColor *bottomColor = [self getBottomColor];
+        
+        [_gradient setGradientWithColor:topColor bottom:bottomColor];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
