@@ -12,6 +12,7 @@
 #import "FZZFadedEdgeTableViewController.h"
 
 static CGFloat numPixelsFade = 20;
+static CGFloat numPixelsLeniency = 4;
 
 @interface FZZFadedEdgeTableViewController ()
 
@@ -94,16 +95,18 @@ static CGFloat numPixelsFade = 20;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
+    
     CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
     CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
     NSArray *colors;
     
-    if (scrollView.contentOffset.y + scrollView.contentInset.top <= 0) {
+    if (scrollView.contentOffset.y + scrollView.contentInset.top <= numPixelsLeniency) {
         //Top of scrollView
         colors = @[(__bridge id)innerColor, (__bridge id)innerColor,
                    (__bridge id)innerColor, (__bridge id)outerColor];
     } else if (scrollView.contentOffset.y + scrollView.frame.size.height
-               >= scrollView.contentSize.height) {
+               >= scrollView.contentSize.height - numPixelsLeniency) {
         //Bottom of tableView
         colors = @[(__bridge id)outerColor, (__bridge id)innerColor,
                    (__bridge id)innerColor, (__bridge id)innerColor];
