@@ -166,7 +166,7 @@
     frame.origin.y = yOffset;
     
     frame.size.height = frame.size.height - viewFormHeight;
-    frame.size.width  = frame.size.width - xOffset;
+    frame.size.width  = frame.size.width - kFZZHorizontalMargin(); //xOffset
     
     [self setBackgroundColor:[UIColor clearColor]];
     [self setOpaque:NO];
@@ -174,6 +174,7 @@
     _ctvc = [[FZZChatScreenTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
     [[_ctvc tableView] setFrame:frame];
+    [(FZZFadedEdgeTableViewController *)_ctvc updateMask];
     
     [self addSubview:[_ctvc tableView]];
     [[_ctvc tableView] setUserInteractionEnabled:NO];

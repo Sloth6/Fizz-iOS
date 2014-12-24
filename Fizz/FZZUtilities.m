@@ -49,7 +49,8 @@ UIFont *kFZZSmallFont(){
 
 UIFont *kFZZLabelsFont(){
 //    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:10*2];
-    return [UIFont fontWithName:@"FuturaStd-Book" size:18];
+    return [UIFont fontWithName:@"Futura-Medium" size:15];
+//    return [UIFont fontWithName:@"FuturaStd-Book" size:18];
 }
 
 UIFont *kFZZNameFont(){
