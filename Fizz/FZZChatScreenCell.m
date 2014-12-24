@@ -78,7 +78,6 @@
         [viewForm setUserInteractionEnabled:NO];
     }
     
-    //_placeholderView
     [viewForm setAlpha:progress];
 }
 
@@ -108,11 +107,14 @@
     
     CGRect updateFrame = [[_ctvc tableView] bounds];
     
-    updateFrame.origin.y = (travelDistance * progress);
+    float initialY = kFZZVerticalMargin();
+    
+    updateFrame.origin.y = initialY + ((travelDistance - initialY) * progress);
     
     NSLog(@"[%f] %f", progress, updateFrame.origin.y);
     
     [[_ctvc tableView] setFrame:updateFrame];
+    [[_ctvc tableView] setAlpha:0.5 + (0.5 * (1 - progress))];
     
 //    [_placeholderView setAlpha:progress];
 }
