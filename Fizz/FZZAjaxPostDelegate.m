@@ -45,10 +45,29 @@ static NSURLConnection *connection;
         } else {
             // AJAX failed
             NSLog(@"FAILED LOGIN, FORCE LOGOUT");
+            
+            [FZZAjaxPostDelegate failLogin];
         }
     }
     
     return NO;
+}
+
++ (void)failLogin{
+    FZZAppDelegate *appDelegate = (FZZAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    NSNumber *didLogin = [NSNumber numberWithBool:NO];
+    
+    [pref setObject:didLogin forKey:@"didLogin"];
+    [pref synchronize];
+    
+    [appDelegate setupNavigationController];
+    
+    [appDelegate promptForLogin];
+    
+    [FZZAjaxPostDelegate postRegistration];
 }
 
 + (void)finishVerificationStep{
