@@ -25,7 +25,7 @@ static float messageLabelWidth;
         // Initialization code
         static dispatch_once_t once;
         dispatch_once(&once, ^{
-            [[self messageLabel] setFont:kFZZLabelsFont()];
+            [[self messageLabel] setFont:kFZZHostBodyFont()];
 //            userCellMessageFont = [[self messageLabel] font];
             userCellNameFont = [[self userLabel] font];
             messageLabelWidth = [[self messageLabel] frame].size.width;
@@ -74,9 +74,12 @@ static float messageLabelWidth;
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
     
-    if (rect.size.height > 80){
-        rect.size.height *= 0.5;
-    }
+    rect.size.height += 52;
+    rect.size.height *= 0.51;
+    
+//    if (rect.size.height > 160){
+//    rect.size.height *= MIN(1, MAX(0.5, 1.5 - (rect.size.height/200.0)));
+//    }
     
     return rect.size;
 }
