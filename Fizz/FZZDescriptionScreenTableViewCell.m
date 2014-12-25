@@ -197,6 +197,11 @@
     
     NSString *hostName = [[[event creator] name] uppercaseString];
     
+    NSLog(@"POOP3: %@", event);
+    if (!title){
+        title = @"";
+    }
+    
     [self setDescriptionText:title];
     [_hostLabel setText:hostName];
     
