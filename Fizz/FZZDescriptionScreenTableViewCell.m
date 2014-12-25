@@ -16,6 +16,7 @@
 
 @interface FZZDescriptionScreenTableViewCell ()
 
+@property NSTextStorage *descriptionTextStorage;
 @property NSIndexPath *eventIndexPath;
 @property FZZExpandedVerticalTableViewController *evtvc;
 
@@ -51,7 +52,7 @@
 
 - (void)setupTextview{
     CGFloat leftBorder   = -8 + kFZZHorizontalMargin();
-    CGFloat topBorder    = 0;
+    CGFloat topBorder    = 18;
     CGFloat rightBorder  = 0;
     CGFloat bottomBorder = 0;
     
@@ -62,7 +63,20 @@
     frame.size.width  -= (leftBorder + rightBorder);
     frame.size.height -= (topBorder + bottomBorder);
     
-    _textView = [[UITextView alloc] initWithFrame:frame];
+    _descriptionTextStorage = [NSTextStorage new];
+    
+    NSLayoutManager *layoutManager = [NSLayoutManager new];
+    [_descriptionTextStorage addLayoutManager:layoutManager];
+    
+    NSTextContainer *textContainer = [NSTextContainer new];
+    [layoutManager addTextContainer:textContainer];
+    
+    _textView = [[UITextView alloc] initWithFrame:frame
+                                    textContainer:textContainer];
+    
+    
+    
+//    _textView = [[UITextView alloc] initWithFrame:frame];
     [self addSubview:_textView];
     
     [_textView setBackgroundColor:[UIColor clearColor]];
@@ -74,6 +88,13 @@
     [_textView setFont:font];
     [_textView setTextColor:kFZZWhiteTextColor()];
 }
+
+//- (CGFloat)      layoutManager:(NSLayoutManager *)layoutManager
+//  lineSpacingAfterGlyphAtIndex:(NSUInteger)glyphIndex
+//  withProposedLineFragmentRect:(CGRect)rect
+//{
+//    return 0;
+//}
 
 - (void)setupHostName{
     CGFloat leftBorder   = kFZZHorizontalMargin();
@@ -150,6 +171,25 @@
     // Configure the view for the selected state
 }
 
+- (void)setDescriptionText:(NSString *)text{
+    if (text != nil){
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        //    paragraphStyle.headIndent = 15; // <--- indention if you need it
+        //    paragraphStyle.firstLineHeadIndent = 15;
+        
+        paragraphStyle.lineSpacing = -17; // <--- magic line spacing here!
+        
+        NSDictionary *attrsDictionary =
+        @{ NSFontAttributeName: kFZZHeadingsFont(), // <-- if you need; & there are many more attrs
+           NSParagraphStyleAttributeName: paragraphStyle,
+           NSKernAttributeName: @(-3),
+           NSForegroundColorAttributeName: kFZZWhiteTextColor()};
+        
+        self.textView.attributedText = [[NSAttributedString alloc] initWithString:text
+                                                                       attributes:attrsDictionary];
+    }
+}
+
 -(void)setEventIndexPath:(NSIndexPath *)indexPath{
     _eventIndexPath = indexPath;
     FZZEvent *event = [self event];
@@ -157,7 +197,7 @@
     
     NSString *hostName = [[[event creator] name] uppercaseString];
     
-    [_textView setText:title];
+    [self setDescriptionText:title];
     [_hostLabel setText:hostName];
     
     NSLog(@"event: <%@>", title);

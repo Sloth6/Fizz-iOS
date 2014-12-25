@@ -196,31 +196,44 @@
     NSString *text = [message text];
     FZZUser  *user = [message user];
     
+    NSLog(@"POOP2 %@", user);
+    
     NSString *name = [[user name] uppercaseString];
     
-    [cell.messageLabel setText:text];
-    [cell.userLabel setText:name];
-    
-    FZZUser *me = [FZZUser me];
-    UIFont *userFont;
-    UIFont *messageFont;
-    
-    CGFloat userFontSize = [[cell.userLabel font] pointSize];
-    CGFloat messageFontSize = [[cell.messageLabel font] pointSize];
-    
-    if ([[message user] isEqual:me]){
-        messageFont = kFZZHostBodyFont();
-        userFont = kFZZHostNameFont();
-    } else {
-        messageFont = kFZZBodyFont();
-        userFont = kFZZNameFont();
+    if (!name){
+        name = @"";
     }
     
-    [cell.messageLabel setFont:messageFont];
-    [cell.userLabel setFont:userFont];
+//    [cell.userLabel setText:name];
     
-    [cell.userLabel setTextColor:kFZZWhiteTextColor()];
-    [cell.messageLabel setTextColor:kFZZWhiteTextColor()];
+    FZZUser *me = [FZZUser me];
+    
+//    CGFloat userFontSize = [[cell.userLabel font] pointSize];
+//    CGFloat messageFontSize = [[cell.messageLabel font] pointSize];
+    
+    BOOL isUserMe = [[message user] isEqual:me];
+    
+    [cell setMessageText:text isMe:isUserMe];
+    [cell setUserName:name isMe:isUserMe];
+    
+//    
+//    if ([[message user] isEqual:me]){
+//        
+//        
+//        
+//        
+//        messageFont = kFZZHostBodyFont();
+//        userFont = kFZZHostNameFont();
+//    } else {
+//        messageFont = kFZZBodyFont();
+//        userFont = kFZZNameFont();
+//    }
+//
+//    [cell.messageLabel setFont:messageFont];
+//    [cell.userLabel setFont:userFont];
+//    
+//    [cell.userLabel setTextColor:kFZZWhiteTextColor()];
+//    [cell.messageLabel setTextColor:kFZZWhiteTextColor()];
     
     cell.backgroundColor = [UIColor clearColor];
     

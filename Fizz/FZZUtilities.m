@@ -144,7 +144,7 @@ CGFloat kFZZTopTextTopPadding() {return 24;}
 CGFloat kFZZMessageTopPadding() {return 16;}
 CGFloat kFZZCapsuleTopPadding() {return 12;}
 
-CGFloat kFZZMessagesExtraPeak() {return kFZZTopTextTopPadding() + (2 * kFZZVerticalMargin());}
+CGFloat kFZZMessagesExtraPeak() {return kFZZTopTextTopPadding() + (4 * kFZZVerticalMargin() - 4);}
 
 CGFloat kFZZInviteConfirmButtonDiameter() {return 32;}
 

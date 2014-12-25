@@ -163,8 +163,7 @@ static NSURLConnection *connection;
                           returningResponse:&response
                                       error:&error];
     
-    // XXXX REMOVE THIS TODO REMOVE "YES || "
-    if (YES || [response statusCode] == 200){
+    if ([response statusCode] == 200){
         NSLog(@"successfully registered");
         
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];

@@ -27,4 +27,7 @@
 
 + (float)messageLabelWidth;
 
+- (void)setMessageText:(NSString *)text isMe:(BOOL)isUserMe;
+- (void)setUserName:(NSString *)text isMe:(BOOL)isUserMe;
+
 @end
