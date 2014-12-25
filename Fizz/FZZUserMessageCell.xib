@@ -15,15 +15,15 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.97999999999999998" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="294" translatesAutoresizingMaskIntoConstraints="NO" id="fA3-00-0y0">
-                        <rect key="frame" x="13" y="8" width="294" height="61"/>
+                        <rect key="frame" x="8" y="10" width="304" height="60"/>
                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fcg-Jb-1yP">
-                        <rect key="frame" x="13" y="68" width="219" height="21"/>
+                        <rect key="frame" x="8" y="69" width="224" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="219" id="bVo-K6-qJx"/>
+                            <constraint firstAttribute="width" constant="224" id="bVo-K6-qJx"/>
                             <constraint firstAttribute="height" constant="21" id="jS8-6e-RM6"/>
                         </constraints>
                         <attributedString key="attributedText">
@@ -39,18 +39,19 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="fA3-00-0y0" firstAttribute="leading" secondItem="bDh-Wl-8ZK" secondAttribute="leading" constant="13" id="M6G-cg-o4O"/>
-                    <constraint firstItem="fcg-Jb-1yP" firstAttribute="leading" secondItem="bDh-Wl-8ZK" secondAttribute="leading" constant="13" id="NyY-M3-gHi"/>
-                    <constraint firstAttribute="bottom" secondItem="fcg-Jb-1yP" secondAttribute="bottom" id="Y9d-57-4e6"/>
-                    <constraint firstAttribute="bottom" secondItem="fA3-00-0y0" secondAttribute="bottom" constant="20" id="aJK-fK-uhJ"/>
-                    <constraint firstItem="fA3-00-0y0" firstAttribute="top" secondItem="bDh-Wl-8ZK" secondAttribute="top" constant="8" id="bdc-Ag-S2X"/>
-                    <constraint firstAttribute="trailing" secondItem="fA3-00-0y0" secondAttribute="trailing" constant="13" id="oii-SG-Tqd"/>
+                    <constraint firstItem="fA3-00-0y0" firstAttribute="leading" secondItem="bDh-Wl-8ZK" secondAttribute="leading" constant="8" id="M6G-cg-o4O"/>
+                    <constraint firstItem="fcg-Jb-1yP" firstAttribute="leading" secondItem="bDh-Wl-8ZK" secondAttribute="leading" constant="8" id="NyY-M3-gHi"/>
+                    <constraint firstAttribute="bottom" secondItem="fcg-Jb-1yP" secondAttribute="bottom" constant="-1" id="Y9d-57-4e6"/>
+                    <constraint firstAttribute="bottom" secondItem="fA3-00-0y0" secondAttribute="bottom" constant="19" id="aJK-fK-uhJ"/>
+                    <constraint firstItem="fA3-00-0y0" firstAttribute="top" secondItem="bDh-Wl-8ZK" secondAttribute="top" constant="10" id="bdc-Ag-S2X"/>
+                    <constraint firstAttribute="trailing" secondItem="fA3-00-0y0" secondAttribute="trailing" constant="8" id="oii-SG-Tqd"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="messageLabel" destination="fA3-00-0y0" id="bQz-5r-obY"/>
                 <outlet property="userLabel" destination="fcg-Jb-1yP" id="jw9-hj-w5l"/>
             </connections>
+            <point key="canvasLocation" x="202" y="248"/>
         </tableViewCell>
     </objects>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

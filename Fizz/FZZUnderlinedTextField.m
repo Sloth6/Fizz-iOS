@@ -39,7 +39,12 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    [super drawRect:rect];
+    CGRect boundsSuper = rect;
+    
+    boundsSuper.origin.x = 0;
+    boundsSuper.origin.y = 0;
+    
+    [super drawRect:boundsSuper];
     
     // Drawing code
     

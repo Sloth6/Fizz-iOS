@@ -88,6 +88,63 @@ static float messageLabelWidth;
     return messageLabelWidth;
 }
 
+- (void)setMessageText:(NSString *)text isMe:(BOOL)isUserMe{
+    if (!text) return;
+    
+    UIFont *messageFont;
+    
+    if (isUserMe){
+        messageFont = kFZZHostBodyFont();
+    } else {
+        messageFont = kFZZBodyFont();
+    }
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    //    paragraphStyle.headIndent = 15; // <--- indention if you need it
+    //    paragraphStyle.firstLineHeadIndent = 15;
+    
+    paragraphStyle.lineSpacing = 0; // <--- magic line spacing here!
+    
+    NSDictionary *attrsDictionary =
+    @{ NSFontAttributeName: messageFont, // <-- if you need; & there are many more attrs
+       NSParagraphStyleAttributeName: paragraphStyle,
+       NSKernAttributeName: @(-0.43)};
+    
+    self.messageLabel.attributedText = [[NSAttributedString alloc] initWithString:text
+                                                                       attributes:attrsDictionary];
+    
+    [self.messageLabel setTextColor:kFZZWhiteTextColor()];
+}
+
+- (void)setUserName:(NSString *)text isMe:(BOOL)isUserMe{
+    if (!text) return;
+    
+    UIFont *userFont;
+    
+    if (isUserMe){
+        userFont = kFZZHostNameFont();
+    } else {
+        userFont = kFZZNameFont();
+    }
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    //    paragraphStyle.headIndent = 15; // <--- indention if you need it
+    //    paragraphStyle.firstLineHeadIndent = 15;
+    
+    paragraphStyle.lineSpacing = 0; // <--- magic line spacing here!
+    
+    NSDictionary *attrsDictionary =
+    @{ NSFontAttributeName: userFont, // <-- if you need; & there are many more attrs
+       NSParagraphStyleAttributeName: paragraphStyle};
+//       NSKernAttributeName: @(4),
+//       NSForegroundColorAttributeName: kFZZWhiteTextColor()};
+    
+    self.userLabel.attributedText = [[NSAttributedString alloc] initWithString:text
+                                                                    attributes:attrsDictionary];
+    
+    [self.userLabel setTextColor:kFZZWhiteTextColor()];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

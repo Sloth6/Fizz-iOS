@@ -10,7 +10,7 @@
 
 @class FZZExpandedVerticalTableViewController;
 
-@interface FZZDescriptionScreenTableViewCell : UITableViewCell
+@interface FZZDescriptionScreenTableViewCell : UITableViewCell <NSLayoutManagerDelegate>
 
 @property UITextView *textView;
 

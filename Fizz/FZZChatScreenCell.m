@@ -89,12 +89,6 @@
     FZZPage *page = [scrollDetector getPageForIndexPath:indexPath];
     
     CGFloat buffer = 4;
-//
-//    CGFloat maxOffset = -180;
-//    
-//    CGFloat offset = scrollView.contentOffset.y - (page.pageOffset.y + maxOffset + buffer);
-    
-//    CGFloat maxOffset = [FZZExpandedVerticalTableViewController offsetForRowAtIndexPath:<#(NSIndexPath *)#>]
     
     float offset = scrollView.contentOffset.y;
     float maxOffset = [FZZExpandedVerticalTableViewController descriptionScreenScrollPosition];

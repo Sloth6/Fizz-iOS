@@ -50,6 +50,15 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <textField autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="last name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9YM-dp-d1e" userLabel="Last Name Text Field" customClass="FZZUnderlinedTextField">
+                        <rect key="frame" x="4" y="86" width="312" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="48" id="l0h-0D-YzY"/>
+                        </constraints>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="eWh-C5-XEi" secondAttribute="trailing" constant="4" id="4g1-fJ-5Wj"/>

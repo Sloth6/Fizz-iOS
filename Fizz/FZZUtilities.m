@@ -86,6 +86,14 @@ UIColor *kFZZGrayTextColor(){
     return [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
+UIColor *kFZZDefaultTopColor(){
+    return [UIColor colorWithRed:0.0 green:251.0/255.0 blue:250.0/255.0 alpha:0.85];
+}
+
+UIColor *kFZZDefaultBottomColor(){
+    return [UIColor colorWithRed:81.0/255.0 green:26.0/255.0 blue:1.0 alpha:0.85];
+}
+
 UIFont *kFZZRegularFontWithSize(CGFloat size){
     return [UIFont fontWithName:@"Futura-Medium" size:size];
 }
@@ -136,7 +144,7 @@ CGFloat kFZZTopTextTopPadding() {return 24;}
 CGFloat kFZZMessageTopPadding() {return 16;}
 CGFloat kFZZCapsuleTopPadding() {return 12;}
 
-CGFloat kFZZMessagesExtraPeak() {return kFZZTopTextTopPadding() + (2 * kFZZVerticalMargin());}
+CGFloat kFZZMessagesExtraPeak() {return kFZZTopTextTopPadding() + (4 * kFZZVerticalMargin() - 4);}
 
 CGFloat kFZZInviteConfirmButtonDiameter() {return 32;}
 
@@ -198,11 +206,7 @@ float kFZZButtonBuffer(){
     
     NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
     
-//    NSLog(@"BEFORE <%@>", phoneNumber);
-    
     phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[charSet invertedSet]] componentsJoinedByString:@""];
-    
-//    NSLog(@"AFTER <%@>", phoneNumber);
     
     unichar c = [phoneNumber characterAtIndex:0];
     

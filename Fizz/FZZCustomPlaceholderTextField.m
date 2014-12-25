@@ -101,6 +101,10 @@
                                   NSParagraphStyleAttributeName: textStyle,
                                   NSForegroundColorAttributeName: self.textColor};
     
+    // DELETE
+    [[self text] drawInRect:rect withAttributes:attributes];
+    return;
+    
     CGRect textRect = [FZZCustomPlaceholderTextField getDrawRectForText:[self placeholder]
                                                          withAttributes:attributes
                                                                  inRect:rect];

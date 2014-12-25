@@ -145,7 +145,8 @@ static NSString *kFZZPlaceholderText = @"let’s...";
 }
 
 - (void)setupBackground{
-    _gradient = [[FZZGradientView alloc] initWithColor:[UIColor redColor] bottom:[UIColor yellowColor]];
+    _gradient = [[FZZGradientView alloc] initWithColor:kFZZDefaultTopColor()
+                                                bottom:kFZZDefaultBottomColor()];
     
     CGRect frame = [[UIScreen mainScreen] bounds];
     

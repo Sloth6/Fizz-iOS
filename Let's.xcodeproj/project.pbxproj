@@ -116,7 +116,6 @@
 		49EEEA9718D972FB00BDA605 /* FZZTextViewWithPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EEEA9618D972FB00BDA605 /* FZZTextViewWithPlaceholder.m */; };
 		49F524D218E1C3040019C5DF /* FZZOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D118E1C3040019C5DF /* FZZOverlayView.m */; };
 		49F524D518E212840019C5DF /* FZZNavIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F524D418E212840019C5DF /* FZZNavIcon.m */; };
-		E9F3EDDBFEE744F3845ACCE1 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77ABE3261F854F65A5295960 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -246,7 +245,6 @@
 		496C791D19B2297F0052C3C4 /* FZZPinDotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZPinDotView.m; sourceTree = "<group>"; };
 		497F349318E07F1200B70FD4 /* FZZInviteGuestButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZInviteGuestButton.h; sourceTree = "<group>"; };
 		497F349418E07F1200B70FD4 /* FZZInviteGuestButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZInviteGuestButton.m; sourceTree = "<group>"; };
-		498E5E6D18B42CB300487898 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		4994FCF51929D23900BD2FB8 /* FZZCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZCoordinate.h; sourceTree = "<group>"; };
 		4994FCF61929D23900BD2FB8 /* FZZCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZCoordinate.m; sourceTree = "<group>"; };
 		4994FCFB1929D2C000BD2FB8 /* FZZEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZEvent.h; sourceTree = "<group>"; };
@@ -337,8 +335,6 @@
 		49F524D118E1C3040019C5DF /* FZZOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FZZOverlayView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		49F524D318E212840019C5DF /* FZZNavIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZZNavIcon.h; sourceTree = "<group>"; };
 		49F524D418E212840019C5DF /* FZZNavIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZZNavIcon.m; sourceTree = "<group>"; };
-		5D9F535A370840F8A55F2F95 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		77ABE3261F854F65A5295960 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,7 +357,6 @@
 				49D5C9A4186042C2002BB1F0 /* UIKit.framework in Frameworks */,
 				49D5C9A0186042C2002BB1F0 /* Foundation.framework in Frameworks */,
 				49D5C9A2186042C2002BB1F0 /* CoreGraphics.framework in Frameworks */,
-				E9F3EDDBFEE744F3845ACCE1 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,7 +649,6 @@
 				49D5C9BE186042C2002BB1F0 /* Let'sTests */,
 				49D5C99E186042C2002BB1F0 /* Frameworks */,
 				49D5C99D186042C2002BB1F0 /* Products */,
-				5D9F535A370840F8A55F2F95 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -674,7 +668,6 @@
 				492E5D78192EE6BB00359F11 /* libc++.dylib */,
 				49B1C17A18E4C6F8007C5D44 /* AddressBook.framework */,
 				49B1C17718E4C6F2007C5D44 /* AddressBookUI.framework */,
-				498E5E6D18B42CB300487898 /* FacebookSDK.framework */,
 				49E9843E187268B800D37B2A /* AdSupport.framework */,
 				49E9843C1872687400D37B2A /* AssetsLibrary.framework */,
 				49E9843118723D3300D37B2A /* Social.framework */,
@@ -689,7 +682,6 @@
 				49D5C9A1186042C2002BB1F0 /* CoreGraphics.framework */,
 				49D5C9A3186042C2002BB1F0 /* UIKit.framework */,
 				49D5C9B8186042C2002BB1F0 /* XCTest.framework */,
-				77ABE3261F854F65A5295960 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -869,11 +861,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49D5C9C8186042C2002BB1F0 /* Build configuration list for PBXNativeTarget "Let's" */;
 			buildPhases = (
-				4A62913C6E414BD4979181C2 /* Check Pods Manifest.lock */,
 				49D5C998186042C2002BB1F0 /* Sources */,
 				49D5C999186042C2002BB1F0 /* Frameworks */,
 				49D5C99A186042C2002BB1F0 /* Resources */,
-				EA88E24BCB304E37BEA5B93E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -992,39 +982,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4A62913C6E414BD4979181C2 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		EA88E24BCB304E37BEA5B93E /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		49D5C998186042C2002BB1F0 /* Sources */ = {
@@ -1222,7 +1179,6 @@
 		};
 		49D5C9C9186042C2002BB1F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5D9F535A370840F8A55F2F95 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1249,7 +1205,6 @@
 		};
 		49D5C9CA186042C2002BB1F0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5D9F535A370840F8A55F2F95 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

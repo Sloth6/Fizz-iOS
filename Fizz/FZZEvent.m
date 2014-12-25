@@ -769,7 +769,7 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     
     NSArray *messages = [eventJSON objectForKey:@"messages"];
     
-    NSArray *inviteJSONs = [eventJSON objectForKey:@"invites"];
+    NSArray *inviteJSONs = [eventJSON objectForKey:@"inviteList"];
     NSArray *invites = [FZZUser parseUserJSONList:inviteJSONs];
     
     NSArray *guestIDs = [eventJSON objectForKey:@"guests"];
