@@ -306,36 +306,6 @@ static float SWIPE_DRAG_HORIZ_MIN = 6;
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
     return [self hitTestForScroll:point withEvent:event];
-//    NSArray *visibleCells = [[_vtvc tableView] visibleCells];
-//    
-//    for (UITableViewCell *cell in visibleCells){
-//        for (UIView *view in cell.contentView.subviews) {
-//            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
-//                
-//                return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
-//            }
-//        }
-//    }
-//    
-//    for (UITableViewCell *cell in visibleCells){
-//        for (UIView *view in cell.subviews) {
-//            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
-//                
-//                if ([view isKindOfClass:[UITextView class]]){
-//                    UITextView *textView = (UITextView *)view;
-//                    
-//                    if ([textView isFirstResponder]){
-//                        return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
-//                    }
-////                    else if ([self isTap:event]){
-////                        return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
-////                    }
-//                }
-//            }
-//        }
-//    }
-//    
-//    return [super hitTest:point withEvent:event];
 }
 
 - (UIView *)tapTest:(CGPoint)point withEvent:(UIEvent *)event{

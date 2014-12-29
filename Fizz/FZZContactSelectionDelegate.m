@@ -123,6 +123,13 @@ NSMutableArray *instances;
 -(void)sendInvitations{
     NSLog(@"SENDING INVITATIONS");
     
+    if (_eventIndexPath != nil){
+        NSString *notificationName = [NSString stringWithFormat:@"SendInvitations%@", _eventIndexPath];
+    
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
+                                                            object:nil];
+    }
+    
 //    [_textField setText:[_textField placeholder]];
     [_textField setText:@""];
     [_textField resignFirstResponder];

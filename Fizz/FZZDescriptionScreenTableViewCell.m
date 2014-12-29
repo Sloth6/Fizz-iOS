@@ -80,7 +80,7 @@
     [_textView setBackgroundColor:[UIColor clearColor]];
     [_textView setOpaque:NO];
     [_textView setUserInteractionEnabled:YES];
-    [_textView setReturnKeyType:UIReturnKeyDone];
+    [_textView setReturnKeyType:UIReturnKeySend];
     [_textView setDelegate:self];
     [_textView setExclusiveTouch:NO];
     [_textView setScrollEnabled:NO];

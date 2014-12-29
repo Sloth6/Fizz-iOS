@@ -355,9 +355,28 @@ static NSMutableArray *instances;
     [self updateVisuals];
 }
 
+- (void)invitationsSent{
+    
+}
+
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
+    NSString *notificationName = [NSString stringWithFormat:@"SendInvitations%@", _eventIndexPath];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:notificationName
+                                                  object:nil];
+    
     _eventIndexPath = indexPath;
     [_attendingButton setEventIndexPath:indexPath];
+    
+    if (_eventIndexPath != nil){
+        notificationName = [NSString stringWithFormat:@"SendInvitations%@", _eventIndexPath];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(invitationsSent)
+                                                     name:notificationName
+                                                   object:nil];
+    }
     
     NSLog(@"ExpandedVerticalTableViewController setEventIndexPath reloadData!!!");
     [[self tableView] reloadData];
