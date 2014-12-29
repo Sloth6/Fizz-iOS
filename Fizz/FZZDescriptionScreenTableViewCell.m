@@ -11,6 +11,7 @@
 #import "FZZUser.h"
 #import "FZZAppDelegate.h"
 #import "FZZUtilities.h"
+#import "FZZSocketIODelegate.h"
 
 #import "FZZExpandedVerticalTableViewController.h"
 
@@ -74,19 +75,35 @@
     _textView = [[UITextView alloc] initWithFrame:frame
                                     textContainer:textContainer];
     
-    
-    
-//    _textView = [[UITextView alloc] initWithFrame:frame];
     [self addSubview:_textView];
     
-    [_textView setBackgroundColor:[UIColor clearColor]];
+    [_textView setBackgroundColor:[UIColor redColor]];
     [_textView setOpaque:NO];
-    [_textView setUserInteractionEnabled:NO];
+    [_textView setUserInteractionEnabled:YES];
+    [_textView setReturnKeyType:UIReturnKeyDone];
+    [_textView setDelegate:self];
+    [_textView setExclusiveTouch:NO];
+    [_textView setScrollEnabled:NO];
     
     UIFont *font = kFZZHeadingsFont();
     
     [_textView setFont:font];
     [_textView setTextColor:kFZZWhiteTextColor()];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    
+    if ([text isEqual:@"\n"]){
+        FZZEvent *event = [self event];
+        
+        [event updateEventDescription:[textView text]];
+        [event socketIOUpdateEventWithAcknowledge:nil];
+        
+        return NO;
+    }
+    
+    // strip all newlines, ensure text fits in textView
+    return YES;
 }
 
 //- (CGFloat)      layoutManager:(NSLayoutManager *)layoutManager
@@ -205,7 +222,7 @@
     [self setDescriptionText:title];
     [_hostLabel setText:hostName];
     
-    NSLog(@"event: <%@>", title);
+    NSLog(@"event: <%@> by %@", title, [event creator]);
     [_textView setNeedsDisplay];
 }
 

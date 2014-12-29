@@ -39,8 +39,6 @@
     
     CGFloat rectHeight = rect.size.height;
     
-    NSLog(@"rectHeight = %f textHeight = %f", rectHeight, textHeight);
-    
     CGFloat y = (rectHeight/2.0) - (textHeight/2.0);
     CGFloat x = rect.origin.x;
     CGFloat width = size.width;

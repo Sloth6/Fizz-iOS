@@ -714,8 +714,6 @@ static NSString *kFZZPlaceholderText = @"let’s...";
         result = leftIndex;
     }
     
-    NSLog(@"RIGHT INDEX: (%ld,%ld)", (long)result.section, (long)result.item);
-    
     return result;
 }
 
@@ -734,8 +732,6 @@ static NSString *kFZZPlaceholderText = @"let’s...";
     if (progress < 0){
         progress += 1;
     }
-    
-    NSLog(@"PROGRESS: %f", progress);
     
     return progress;
 }

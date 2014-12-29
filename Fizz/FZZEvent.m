@@ -788,12 +788,12 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     /* Allocate Memory and Assign Values */
     FZZEvent *event = [FZZEvent eventWithEID:eid];
     
-    [event setCreator:creator];
-    [event setCreationTime:creationTime];
+    if (creator != nil) [event setCreator:creator];
+    if (creationTime != nil) [event setCreationTime:creationTime];
     
-    [event setEventDescription:eventDescription];
-    [event setInvitees:invites];
-    [event setGuests:guests];
+    if (eventDescription != nil)[event setEventDescription:eventDescription];
+    if (invites != nil) [event setInvitees:invites];
+    if (guests != nil) [event setGuests:guests];
     
     // load messages if they are contained in the event object
     if ((NSObject *)messages != [NSNull null]){

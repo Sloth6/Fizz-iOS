@@ -325,13 +325,13 @@ static NSDate *loginTimestamp;
     NSDictionary *json  = [args objectAtIndex:0];
     
     // User (me)
-    NSDictionary *userJSON   = [json objectForKey:@"me"];
+    NSDictionary *userJSON = [json objectForKey:@"me"];
     
     FZZUser *me = [FZZUser parseJSON:userJSON];
     
     [FZZUser setMeAs:me];
     
-    //
+    // Event List
     NSArray *eventChangesList = [json objectForKey:@"eventList"];
     
     NSSet *unusableEventIDs = [FZZEvent confirmEventsAndNumberOfMessages:eventChangesList];
@@ -344,6 +344,11 @@ static NSDate *loginTimestamp;
         NSNumber *eventID = [dict objectForKey:@"eid"];
         
         [eventIDList addObject:eventID];
+        
+        NSString *description = [dict objectForKey:@"description"];
+        
+        FZZEvent *event = [FZZEvent eventWithEID:eventID];
+        [event updateEventDescription:description];
         
         NSNumber *shouldComplete = [dict objectForKey:@"completed"];
         

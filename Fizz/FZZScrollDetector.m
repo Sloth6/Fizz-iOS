@@ -17,6 +17,8 @@
 
 static CGFloat kFZZInputScrollBuffer;
 
+static float SWIPE_DRAG_HORIZ_MIN = 6;
+
 @interface FZZScrollDetector ()
 
 @property BOOL touch;
@@ -40,6 +42,12 @@ static CGFloat kFZZInputScrollBuffer;
 
 @property CGPoint lastInputOffset;
 @property CGPoint lastTVCOffset;
+
+@property UIView *initialView;
+
+@property CGPoint startTouchPosition;
+
+@property NSTimeInterval startTouchTime;
 
 @end
 
@@ -86,14 +94,20 @@ static CGFloat kFZZInputScrollBuffer;
 {
     CGPoint touchPoint = [gesture locationInView:self];
     
-    UIView *tappedView = [self tapTest:touchPoint withEvent:UIEventSubtypeNone];
+    UIView *tappedView = [self hitTestForTap:touchPoint withEvent:UIEventSubtypeNone];
     
     NSLog(@"Tapped: %@", tappedView);
     
-    if ([NSStringFromClass([tappedView class]) isEqualToString:@"UITableViewCellContentView"]){
+    NSString *className = NSStringFromClass([tappedView class]);
+    
+    if ([className isEqualToString:@"UITableViewCellContentView"]){
         FZZContactTableViewCell *cell = (FZZContactTableViewCell *)[tappedView superview];
         
         [cell hitCell];
+    } else if ([className isEqualToString:@"UITextView"]) {
+        UITextView *textView = (UITextView *)tappedView;
+        
+        [textView becomeFirstResponder];
     }
 }
 
@@ -232,7 +246,7 @@ static CGFloat kFZZInputScrollBuffer;
     return [super pointInside:point withEvent:event];
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+- (UIView *)hitTestForScroll:(CGPoint)point withEvent:(UIEvent *)event{
     NSArray *visibleCells = [[_vtvc tableView] visibleCells];
     
     for (UITableViewCell *cell in visibleCells){
@@ -244,7 +258,84 @@ static CGFloat kFZZInputScrollBuffer;
         }
     }
     
+    for (UITableViewCell *cell in visibleCells){
+        for (UIView *view in cell.subviews) {
+            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
+                
+                if ([view isKindOfClass:[UITextView class]]){
+                    UITextView *textView = (UITextView *)view;
+                    
+                    if ([textView isFirstResponder]){
+                        return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+                    }
+                }
+            }
+        }
+    }
+    
     return [super hitTest:point withEvent:event];
+}
+
+- (UIView *)hitTestForTap:(CGPoint)point withEvent:(UIEvent *)event{
+    NSArray *visibleCells = [[_vtvc tableView] visibleCells];
+    
+    for (UITableViewCell *cell in visibleCells){
+        for (UIView *view in cell.contentView.subviews) {
+            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
+                
+                return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+            }
+        }
+    }
+    
+    for (UITableViewCell *cell in visibleCells){
+        for (UIView *view in cell.subviews) {
+            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
+                
+                if ([view isKindOfClass:[UITextView class]]){
+                    UITextView *textView = (UITextView *)view;
+                    
+                    return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+                }
+            }
+        }
+    }
+    
+    return [super hitTest:point withEvent:event];
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    return [self hitTestForScroll:point withEvent:event];
+//    NSArray *visibleCells = [[_vtvc tableView] visibleCells];
+//    
+//    for (UITableViewCell *cell in visibleCells){
+//        for (UIView *view in cell.contentView.subviews) {
+//            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
+//                
+//                return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+//            }
+//        }
+//    }
+//    
+//    for (UITableViewCell *cell in visibleCells){
+//        for (UIView *view in cell.subviews) {
+//            if (!view.hidden && view.alpha > 0 && view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event] && ![view isKindOfClass:[UITableView class]]){
+//                
+//                if ([view isKindOfClass:[UITextView class]]){
+//                    UITextView *textView = (UITextView *)view;
+//                    
+//                    if ([textView isFirstResponder]){
+//                        return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+//                    }
+////                    else if ([self isTap:event]){
+////                        return [view hitTest:[self convertPoint:point toView:view] withEvent:event];
+////                    }
+//                }
+//            }
+//        }
+//    }
+//    
+//    return [super hitTest:point withEvent:event];
 }
 
 - (UIView *)tapTest:(CGPoint)point withEvent:(UIEvent *)event{

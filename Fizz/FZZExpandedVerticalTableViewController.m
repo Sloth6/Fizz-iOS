@@ -280,17 +280,7 @@ static NSMutableArray *instances;
     
     float alpha = 1 - MIN(1, MAX((progress * maxAlpha) + 0.15, 0));
     
-    NSLog(@"alpha: %f", alpha);
-    
     return alpha;
-    
-//    UIColor *blackColor = [UIColor colorWithWhite:0.0 alpha:MIN(progress * maxAlpha + .15, maxAlpha)];
-//    
-//    CGFloat positiveOffset = scrollView.contentOffset.y;
-//    CGFloat positiveMaxOffset = scrollView.contentSize.height - self.tableView.bounds.size.height;
-//    CGFloat positiveProgress = positiveOffset/positiveMaxOffset;
-//    
-//    [[self tableView] setBackgroundColor:blackColor];
 }
 
 - (void)handleAttendingButtonOnScroll:(UIScrollView *)scrollView{
