@@ -77,7 +77,7 @@
     
     [self addSubview:_textView];
     
-    [_textView setBackgroundColor:[UIColor redColor]];
+    [_textView setBackgroundColor:[UIColor clearColor]];
     [_textView setOpaque:NO];
     [_textView setUserInteractionEnabled:YES];
     [_textView setReturnKeyType:UIReturnKeyDone];
