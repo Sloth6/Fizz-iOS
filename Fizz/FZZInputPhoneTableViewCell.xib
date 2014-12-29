@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="NO">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -23,7 +23,7 @@
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
-                    <textField autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="last name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9YM-dp-d1e" userLabel="Last Name Text Field" customClass="FZZUnderlinedTextField">
+                    <textField autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="last name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9YM-dp-d1f" userLabel="Last Name Text Field" customClass="FZZUnderlinedTextField">
                         <rect key="frame" x="4" y="86" width="312" height="48"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="48" id="l0h-0D-YzY"/>
@@ -50,15 +50,6 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textField autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="last name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9YM-dp-d1e" userLabel="Last Name Text Field" customClass="FZZUnderlinedTextField">
-                        <rect key="frame" x="4" y="86" width="312" height="48"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="48" id="l0h-0D-YzY"/>
-                        </constraints>
-                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="eWh-C5-XEi" secondAttribute="trailing" constant="4" id="4g1-fJ-5Wj"/>
@@ -68,10 +59,10 @@
                     <constraint firstAttribute="trailing" secondItem="6UX-EE-f9g" secondAttribute="trailing" constant="4" id="Px9-1p-EBr"/>
                     <constraint firstAttribute="bottom" secondItem="eWh-C5-XEi" secondAttribute="bottom" constant="8" id="Qi8-pg-g1T"/>
                     <constraint firstItem="buu-yl-07C" firstAttribute="leading" secondItem="Sqz-nG-dY8" secondAttribute="leading" constant="4" id="ZQb-8r-gRN"/>
-                    <constraint firstItem="9YM-dp-d1e" firstAttribute="top" secondItem="buu-yl-07C" secondAttribute="bottom" id="lc8-ZN-6bZ"/>
-                    <constraint firstItem="9YM-dp-d1e" firstAttribute="leading" secondItem="Sqz-nG-dY8" secondAttribute="leading" constant="4" id="n6H-KR-9Rg"/>
-                    <constraint firstAttribute="trailing" secondItem="9YM-dp-d1e" secondAttribute="trailing" constant="4" id="tGa-tZ-CRe"/>
-                    <constraint firstItem="eWh-C5-XEi" firstAttribute="top" secondItem="9YM-dp-d1e" secondAttribute="bottom" id="vdj-Cu-gLw"/>
+                    <constraint firstItem="9YM-dp-d1f" firstAttribute="top" secondItem="buu-yl-07C" secondAttribute="bottom" id="lc8-ZN-6bZ"/>
+                    <constraint firstItem="9YM-dp-d1f" firstAttribute="leading" secondItem="Sqz-nG-dY8" secondAttribute="leading" constant="4" id="n6H-KR-9Rg"/>
+                    <constraint firstAttribute="trailing" secondItem="9YM-dp-d1f" secondAttribute="trailing" constant="4" id="tGa-tZ-CRe"/>
+                    <constraint firstItem="eWh-C5-XEi" firstAttribute="top" secondItem="9YM-dp-d1f" secondAttribute="bottom" id="vdj-Cu-gLw"/>
                     <constraint firstAttribute="trailing" secondItem="buu-yl-07C" secondAttribute="trailing" constant="4" id="wzR-uI-BY8"/>
                 </constraints>
             </tableViewCellContentView>
@@ -79,7 +70,7 @@
                 <outlet property="cellPhoneTextField" destination="eWh-C5-XEi" id="4ho-z1-pPy"/>
                 <outlet property="firstNameTextField" destination="buu-yl-07C" id="CpU-9p-1JF"/>
                 <outlet property="infoLabel" destination="6UX-EE-f9g" id="Dct-dq-3Hp"/>
-                <outlet property="lastNameTextField" destination="9YM-dp-d1e" id="Jnc-sL-gd4"/>
+                <outlet property="lastNameTextField" destination="9YM-dp-d1f" id="Jnc-sL-gd4"/>
             </connections>
         </tableViewCell>
     </objects>
