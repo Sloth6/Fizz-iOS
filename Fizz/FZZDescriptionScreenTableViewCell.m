@@ -96,8 +96,13 @@
     if ([text isEqual:@"\n"]){
         FZZEvent *event = [self event];
         
-        [event updateEventDescription:[textView text]];
-        [event socketIOUpdateEventWithAcknowledge:nil];
+        NSString *newText = [textView text];
+        NSString *oldText = [event description];
+        
+        if (![newText isEqualToString:oldText]){
+            [event updateEventDescription:[textView text]];
+            [event socketIOUpdateEventWithAcknowledge:nil];
+        }
         
         return NO;
     }
