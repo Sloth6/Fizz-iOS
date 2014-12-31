@@ -29,6 +29,9 @@
 
 - (void)sendInvitations;
 
+- (void)deselectUser:(FZZUser *)user;
+- (void)selectUser:(FZZUser *)user;
+
 + (void)invalidateInvitables;
 
 - (void)searchChange;

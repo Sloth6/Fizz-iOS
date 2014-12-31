@@ -80,7 +80,7 @@
     [_textView setBackgroundColor:[UIColor clearColor]];
     [_textView setOpaque:NO];
     [_textView setUserInteractionEnabled:YES];
-    [_textView setReturnKeyType:UIReturnKeySend];
+    [_textView setReturnKeyType:UIReturnKeyDone];
     [_textView setDelegate:self];
     [_textView setExclusiveTouch:NO];
     [_textView setScrollEnabled:NO];
@@ -97,11 +97,13 @@
         FZZEvent *event = [self event];
         
         NSString *newText = [textView text];
-        NSString *oldText = [event description];
+        NSString *oldText = [event eventDescription];
         
         if (![newText isEqualToString:oldText]){
             [event updateEventDescription:[textView text]];
             [event socketIOUpdateEventWithAcknowledge:nil];
+        } else {
+            [_textView resignFirstResponder];
         }
         
         return NO;

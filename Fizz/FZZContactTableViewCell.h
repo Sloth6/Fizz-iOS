@@ -10,6 +10,9 @@
 
 @interface FZZContactTableViewCell : UITableViewCell
 
+@property NSNumber *userID;
+@property NSString *phoneNumber;
+
 - (void)hitCell;
 
 - (void)toggleSelected;

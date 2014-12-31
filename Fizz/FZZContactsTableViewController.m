@@ -138,15 +138,23 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
     if (user){
         [[cell textLabel] setText:name];
         
+        [cell setUserID:[user userID]];
+        [cell setPhoneNumber:nil];
+        
         selected = [_invitationDelegate isUserSelected:user];
     } else {
         NSDictionary *contact = [dict objectForKey:@"contact"];
         
+        NSString *phoneNumber = [contact objectForKey:@"pn"];
+        
         if ([name isEqualToString:@""]){
-            [cell.textLabel setText:[contact objectForKey:@"pn"]];
+            [cell.textLabel setText:phoneNumber];
         } else {
             [cell.textLabel setText:name];
         }
+        
+        [cell setUserID:nil];
+        [cell setPhoneNumber:phoneNumber];
         
         selected = [_invitationDelegate isContactSelected:contact];
     }
@@ -165,20 +173,48 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 {
     FZZContactTableViewCell *cell = (FZZContactTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    NSDictionary *userOrContact = [_invitationDelegate userOrContactAtIndexPath:indexPath];
+    NSNumber *userID = [cell userID];
     
-    NSLog(@"GOT: %@", userOrContact);
+    FZZUser *user;
     
-    if ([_invitationDelegate userOrContactIsSelected:userOrContact]){
-        [_invitationDelegate deselectUserOrContact:userOrContact];
-        [cell setSelectionState:NO];
-        
-        NSLog(@"DESELECT %@", userOrContact);
+    if (userID){
+        user = [FZZUser userWithUID:userID];
     } else {
-        [_invitationDelegate selectUserOrContact:userOrContact];
-        [cell setSelectionState:YES];
+        NSString *phoneNumber = [cell phoneNumber];
         
-        NSLog(@"SELECT %@", userOrContact);
+        user = [FZZUser userFromPhoneNumber:phoneNumber];
+    }
+    
+    if (user){
+        if ([_invitationDelegate isUserSelected:user]){
+            [_invitationDelegate deselectUser:user];
+            [cell setSelectionState:NO];
+            
+            NSLog(@"DESELECT %@", user);
+            NSLog(@"PHONE: %@", [user phoneNumber]);
+        } else {
+            [_invitationDelegate selectUser:user];
+            [cell setSelectionState:YES];
+            
+            NSLog(@"SELECT %@", user);
+            NSLog(@"PHONE: %@", [user phoneNumber]);
+        }
+    } else {
+        NSDictionary *userOrContact = [_invitationDelegate userOrContactAtIndexPath:indexPath];
+        
+        NSLog(@"GOT: %@", userOrContact);
+        
+        if ([_invitationDelegate userOrContactIsSelected:userOrContact]){
+            [_invitationDelegate deselectUserOrContact:userOrContact];
+            [cell setSelectionState:NO];
+            
+            NSLog(@"DESELECT %@", userOrContact);
+        } else {
+            [_invitationDelegate selectUserOrContact:userOrContact];
+            [cell setSelectionState:YES];
+            
+            NSLog(@"SELECT %@", userOrContact);
+        }
     }
     
     [cell setNeedsDisplay];

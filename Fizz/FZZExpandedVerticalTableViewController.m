@@ -98,10 +98,12 @@ static NSMutableArray *instances;
     return self;
 }
 
-- (BOOL)hasGuestList{
+- (BOOL)hasGuestOrInviteeList{
     FZZEvent *event = [self getFZZEvent];
     
-    return [[event guestsWithoutCreator] count] > 0;
+    NSLog(@"ALL INVITEES[%@]: %@", [event eventDescription], [event invitees]);
+    
+    return [[event invitees] count] > 1;
 }
 
 - (void)setupScrollToMessagesObserver{
@@ -240,7 +242,7 @@ static NSMutableArray *instances;
             
         case 2: // Invite List Cell
         {
-            if ([self hasGuestList]){
+            if ([self hasGuestOrInviteeList]){
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:page.pageNumber inSection:0];
                 
                 FZZGuestListScreenTableViewCell *cell = (FZZGuestListScreenTableViewCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
@@ -356,7 +358,11 @@ static NSMutableArray *instances;
 }
 
 - (void)invitationsSent{
+    [[self tableView] reloadData];
     
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+    
+    [_scrollDetector scrollToPageAtIndexPath:indexPath isAnimated:NO];
 }
 
 - (void)setEventIndexPath:(NSIndexPath *)indexPath{
@@ -381,6 +387,8 @@ static NSMutableArray *instances;
     NSLog(@"ExpandedVerticalTableViewController setEventIndexPath reloadData!!!");
     [[self tableView] reloadData];
     [self scrollViewDidScroll:[self tableView]];
+    
+    [_scrollDetector setupPageOffsets];
 }
 
 /*
@@ -467,7 +475,7 @@ static NSMutableArray *instances;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if ([self hasGuestList]){
+    if ([self hasGuestOrInviteeList]){
         return 4;
     } else {
         return 3;
@@ -625,7 +633,7 @@ static NSMutableArray *instances;
             
         case 2: // Invite List Cell
         {
-            if ([self hasGuestList]){
+            if ([self hasGuestOrInviteeList]){
                 cell = [tableView dequeueReusableCellWithIdentifier:@"guestListCell" forIndexPath:indexPath];
                 [(FZZGuestListScreenTableViewCell *)cell setEventIndexPath:_eventIndexPath];
                 
@@ -694,13 +702,13 @@ static NSMutableArray *instances;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 1){
-        if (![self hasGuestList]){
+        if (![self hasGuestOrInviteeList]){
             return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath] - kFZZInviteViewPeak();
         } else {
             return [UIScreen mainScreen].bounds.size.height - [self tableView:tableView offsetForRowAtIndexPath:indexPath] - kFZZGuestListPeak();
         }
     } else if (indexPath.row == 2){
-        if (![self hasGuestList]){
+        if (![self hasGuestOrInviteeList]){
             return [self heightForContactListScreenCell];
         }
     } else if (indexPath.row == 3){
@@ -714,7 +722,7 @@ static NSMutableArray *instances;
     switch (indexPath.row) {
         case 2: // Guest List OR Invite List if no guests
         {
-            if ([self hasGuestList]){
+            if ([self hasGuestOrInviteeList]){
                 return [FZZContactListScreenTableViewCell searchBarHeight] - 15 + kFZZVerticalMargin(); //TODOAndrew magic number
             } else {
                 return 0;
@@ -755,9 +763,11 @@ static NSMutableArray *instances;
             
         case 2: // Guest List OR Invite List if no guests
         {
-            return -20 + kFZZGuestListOffset();
+            if ([self hasGuestOrInviteeList]){
+                return -20 + kFZZGuestListOffset();
+                break;
+            }
         }
-            break;
             
         case 3: // Invite
         {

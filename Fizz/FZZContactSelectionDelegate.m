@@ -211,11 +211,19 @@ NSMutableArray *instances;
     }
 }
 
+- (void)deselectUser:(FZZUser *)user{
+    [_selectedUsers removeObject:user];
+}
+
+- (void)selectUser:(FZZUser *)user{
+    [_selectedUsers addObject:user];
+}
+
 - (void)deselectUserOrContact:(NSDictionary *)userOrContact{
     if ([FZZContactSelectionDelegate isUserElseContactUser:userOrContact]){
         FZZUser *user = [userOrContact objectForKey:@"user"];
         
-        [_selectedUsers removeObject:user];
+        [self deselectUser:user];
     } else {
         NSDictionary *contact = [userOrContact objectForKey:@"contact"];
         
@@ -229,7 +237,7 @@ NSMutableArray *instances;
         
         NSLog(@"ADDING USER: %@", user);
         if (user){
-            [_selectedUsers addObject:user];
+            [self selectUser:user];
         }
     } else {
         NSDictionary *contact = [userOrContact objectForKey:@"contact"];

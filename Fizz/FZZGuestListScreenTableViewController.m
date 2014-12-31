@@ -87,7 +87,11 @@
         userName = [invitee name];
     }
     
-    [[cell label] setText:userName];
+    if (userName == nil){
+        [[cell label] setText:@""];
+    } else {
+        [[cell label] setText:userName];
+    }
     
     return cell;
 }

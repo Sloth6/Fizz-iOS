@@ -246,8 +246,16 @@ static FZZUser *currentUser = nil;
     return (!_hasFetchedPhoto || image == NULL);
 }
 
+-(void)getNameFromContacts{
+    
+}
+
 -(NSString *)name{
     [self updateLastUsed];
+    
+    if (_name == nil){
+        [self getNameFromContacts];
+    }
     
     return _name;
 }

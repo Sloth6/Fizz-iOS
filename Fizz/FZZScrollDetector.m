@@ -95,10 +95,13 @@ static float SWIPE_DRAG_HORIZ_MIN = 6;
     CGPoint touchPoint = [gesture locationInView:self];
     
     UIView *tappedView = [self hitTestForTap:touchPoint withEvent:UIEventSubtypeNone];
+    UIView *tappedView2 = [self tapTest:touchPoint withEvent:UIEventSubtypeNone];
     
     NSLog(@"Tapped: %@", tappedView);
+    NSLog(@"Tapped2: %@", tappedView2);
     
     NSString *className = NSStringFromClass([tappedView class]);
+    NSString *className2 = NSStringFromClass([tappedView2 class]);
     
     if ([className isEqualToString:@"UITableViewCellContentView"]){
         FZZContactTableViewCell *cell = (FZZContactTableViewCell *)[tappedView superview];
@@ -108,6 +111,10 @@ static float SWIPE_DRAG_HORIZ_MIN = 6;
         UITextView *textView = (UITextView *)tappedView;
         
         [textView becomeFirstResponder];
+    } else if ([className2 isEqualToString:@"UITableViewCellContentView"]){
+        FZZContactTableViewCell *cell = (FZZContactTableViewCell *)[tappedView2 superview];
+        
+        [cell hitCell];
     }
 }
 

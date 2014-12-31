@@ -31,6 +31,6 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
 
-
+- (void)setupPageOffsets;
 
 @end

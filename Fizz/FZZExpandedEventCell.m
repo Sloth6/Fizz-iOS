@@ -125,6 +125,7 @@
     
     [_scrollDetector setVtvc:_vtvc];
     [_scrollDetector setEventIndexPath:_eventIndexPath];
+    [_scrollDetector setupPageOffsets];
     [_vtvc setScrollDetector:_scrollDetector];
     [self.contentView addSubview:_vtvc.tableView];
     
