@@ -18,19 +18,9 @@
 - (void)setEventIndexPath:(NSIndexPath *)eventIndexPath;
 - (void)setTextField:(UITextField *)textField;
 
-- (BOOL)isContactSelected:(NSDictionary *)contact;
-- (BOOL)isUserSelected:(FZZUser *)user;
-
-- (BOOL)userOrContactIsSelected:(NSDictionary *)userOrContact;
-- (void)deselectUserOrContact:(NSDictionary *)userOrContact;
-- (void)selectUserOrContact:(NSDictionary *)userOrContact;
-
 - (void)setCurrentTableView:(UITableView *)tableView;
 
 - (void)sendInvitations;
-
-- (void)deselectUser:(FZZUser *)user;
-- (void)selectUser:(FZZUser *)user;
 
 + (void)invalidateInvitables;
 

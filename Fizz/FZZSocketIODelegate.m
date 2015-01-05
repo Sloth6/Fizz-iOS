@@ -32,7 +32,6 @@ _Pragma("clang diagnostic pop") \
 NSString * const FZZ_INCOMING_ON_LOGIN = @"onLogin";
 NSString * const FZZ_INCOMING_NEW_EVENT = @"newEvent";
 NSString * const FZZ_INCOMING_COMPLETE_EVENT = @"completeEvent";
-NSString * const FZZ_INCOMING_UPDATE_GUESTS = @"updateGuests";
 NSString * const FZZ_INCOMING_NEW_INVITEES = @"newInvitees";
 NSString * const FZZ_INCOMING_NEW_MESSAGE = @"newMessage";
 NSString * const FZZ_INCOMING_UPDATE_EVENT = @"updateEvent";
@@ -81,9 +80,6 @@ static NSDate *loginTimestamp;
         
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingCompleteEvent:))
                                   forKey:FZZ_INCOMING_COMPLETE_EVENT];
-        
-        [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingUpdateGuests:))
-                                  forKey:FZZ_INCOMING_UPDATE_GUESTS];
         
         [incomingEventResponses setValue:NSStringFromSelector(@selector(incomingNewInvitees:))
                                   forKey:FZZ_INCOMING_NEW_INVITEES];
@@ -449,32 +445,32 @@ static NSDate *loginTimestamp;
                                                       userInfo:dict];
 }
 
-- (void)incomingUpdateGuests:(NSArray *)args{
-    NSDictionary *json = [args objectAtIndex:0];
-    
-    NSNumber *eID = [json objectForKey:@"eid"];
-    FZZEvent *event = [FZZEvent eventWithEID:eID];
-    
-    NSArray *guestIDs = [json objectForKey:@"guests"];
-    
-    NSArray *guests = [FZZUser getUsersFromUIDs:guestIDs];
-    
-    NSLog(@"INCOMING GUEST IDS: %@", guestIDs);
-    NSLog(@"INCOMING GUESTS: %@", guests);
-    
-    [event updateGuests:guests];
-    
-    // TODOAndrew don't invalidate all guest invitation lists, just the updated events
-    [FZZContactSelectionDelegate invalidateInvitables];
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:guests forKey:@"guests"];
-    [dict setObject:event forKey:@"event"];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_UPDATE_GUESTS
-                                                        object:self
-                                                      userInfo:dict];
-}
+//- (void)incomingUpdateGuests:(NSArray *)args{
+//    NSDictionary *json = [args objectAtIndex:0];
+//    
+//    NSNumber *eID = [json objectForKey:@"eid"];
+//    FZZEvent *event = [FZZEvent eventWithEID:eID];
+//    
+//    NSArray *guestIDs = [json objectForKey:@"guests"];
+//    
+//    NSArray *guests = [FZZUser getUsersFromUIDs:guestIDs];
+//    
+//    NSLog(@"INCOMING GUEST IDS: %@", guestIDs);
+//    NSLog(@"INCOMING GUESTS: %@", guests);
+//    
+//    [event updateGuests:guests];
+//    
+//    // TODOAndrew don't invalidate all guest invitation lists, just the updated events
+//    [FZZContactSelectionDelegate invalidateInvitables];
+//    
+//    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+//    [dict setObject:guests forKey:@"guests"];
+//    [dict setObject:event forKey:@"event"];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_NEW_INVITEES
+//                                                        object:self
+//                                                      userInfo:nil];
+//}
 
 - (void)incomingNewInvitees:(NSArray *)args{
     NSDictionary *json = [args objectAtIndex:0];
@@ -500,7 +496,7 @@ static NSDate *loginTimestamp;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:FZZ_INCOMING_NEW_INVITEES
                                                         object:self
-                                                      userInfo:dict];
+                                                      userInfo:nil];
 }
 
 - (void)incomingNewMessage:(NSArray *)args{

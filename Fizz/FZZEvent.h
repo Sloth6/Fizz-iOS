@@ -27,6 +27,11 @@
 @property (nonatomic, strong) UIColor *topColor;
 @property (nonatomic, strong) UIColor *bottomColor;
 
+@property (nonatomic, strong) NSMutableSet *selectedUsers; // FZZUsers
+@property (nonatomic, strong) NSMutableSet *selectedContacts; // pn + name
+
+@property (nonatomic, strong) NSMutableSet *invitedContacts;
+
 +(NSArray *)getEventIDs;
 +(BOOL)saveEventsToFile:(NSString *)eventsURL;
 +(void)parseEventsJSONForCache:(NSDictionary *)eventsJSON;
@@ -74,7 +79,6 @@
 -(BOOL)isUserInvited:(FZZUser *)user;
 -(BOOL)isUserGuest:(FZZUser *)user;
 
--(BOOL)haveExpressedInterest;
 -(BOOL)joinEvent;
 -(BOOL)leaveEvent;
 
@@ -103,5 +107,20 @@
 +(void)killEvents:(NSArray *)deadEvents;
 
 +(FZZEvent *)getEventAtIndexPath:(NSIndexPath *)indexPath;
+
+
+- (BOOL)isContactSelected:(NSDictionary *)contact;
+- (BOOL)isUserSelected:(FZZUser *)user;
+
++ (BOOL)isUserElseContactUser:(NSDictionary *)userOrContact;
+
+- (BOOL)userOrContactIsSelected:(NSDictionary *)userOrContact;
+- (void)deselectUser:(FZZUser *)user;
+- (void)selectUser:(FZZUser *)user;
+
+- (void)deselectUserOrContact:(NSDictionary *)userOrContact;
+- (void)selectUserOrContact:(NSDictionary *)userOrContact;
+
+- (void)clearSelectedUsersAndContacts;
 
 @end

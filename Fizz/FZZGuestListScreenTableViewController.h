@@ -11,6 +11,7 @@
 
 @interface FZZGuestListScreenTableViewController : FZZFadedEdgeTableViewController
 
--(void)setEventIndexPath:(NSIndexPath *)indexPath;
+- (void)setEventIndexPath:(NSIndexPath *)indexPath;
+- (void)updateGuests;
 
 @end

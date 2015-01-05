@@ -21,7 +21,6 @@
 extern NSString * const FZZ_INCOMING_ON_LOGIN;
 extern NSString * const FZZ_INCOMING_NEW_EVENT;
 extern NSString * const FZZ_INCOMING_COMPLETE_EVENT;
-extern NSString * const FZZ_INCOMING_UPDATE_GUESTS;
 extern NSString * const FZZ_INCOMING_NEW_INVITEES;
 extern NSString * const FZZ_INCOMING_NEW_MESSAGE;
 extern NSString * const FZZ_INCOMING_UPDATE_EVENT;

@@ -11,6 +11,7 @@
 #import "FZZContactTableViewCell.h"
 
 #import "FZZUser.h"
+#import "FZZEvent.h"
 
 #import "FZZUtilities.h"
 
@@ -121,6 +122,8 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
 {
     FZZContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kFZZContactCellIdentifer];
     
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:[self eventIndexPath]];
+    
     if (cell == nil) {
         cell = [[FZZContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kFZZContactCellIdentifer];
     }
@@ -141,7 +144,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
         [cell setUserID:[user userID]];
         [cell setPhoneNumber:nil];
         
-        selected = [_invitationDelegate isUserSelected:user];
+        selected = [event isUserSelected:user];
     } else {
         NSDictionary *contact = [dict objectForKey:@"contact"];
         
@@ -156,7 +159,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
         [cell setUserID:nil];
         [cell setPhoneNumber:phoneNumber];
         
-        selected = [_invitationDelegate isContactSelected:contact];
+        selected = [event isContactSelected:contact];
     }
     
     [cell setTvc:(UITableViewController *)self];
@@ -176,6 +179,7 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
     NSNumber *userID = [cell userID];
     
     FZZUser *user;
+    FZZEvent *event = [FZZEvent getEventAtIndexPath:[self eventIndexPath]];
     
     if (userID){
         user = [FZZUser userWithUID:userID];
@@ -186,14 +190,14 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
     }
     
     if (user){
-        if ([_invitationDelegate isUserSelected:user]){
-            [_invitationDelegate deselectUser:user];
+        if ([event isUserSelected:user]){
+            [event deselectUser:user];
             [cell setSelectionState:NO];
             
             NSLog(@"DESELECT %@", user);
             NSLog(@"PHONE: %@", [user phoneNumber]);
         } else {
-            [_invitationDelegate selectUser:user];
+            [event selectUser:user];
             [cell setSelectionState:YES];
             
             NSLog(@"SELECT %@", user);
@@ -204,13 +208,13 @@ NSString *kFZZContactCellIdentifer = @"contactCell";
         
         NSLog(@"GOT: %@", userOrContact);
         
-        if ([_invitationDelegate userOrContactIsSelected:userOrContact]){
-            [_invitationDelegate deselectUserOrContact:userOrContact];
+        if ([event userOrContactIsSelected:userOrContact]){
+            [event deselectUserOrContact:userOrContact];
             [cell setSelectionState:NO];
             
             NSLog(@"DESELECT %@", userOrContact);
         } else {
-            [_invitationDelegate selectUserOrContact:userOrContact];
+            [event selectUserOrContact:userOrContact];
             [cell setSelectionState:YES];
             
             NSLog(@"SELECT %@", userOrContact);

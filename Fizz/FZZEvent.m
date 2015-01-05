@@ -34,15 +34,11 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
 
 @interface FZZEvent ()
 
-@property (nonatomic) BOOL haveExpressedInterest;
-
 @property (strong, nonatomic) NSDate *lastUpdate;
 
 @end
 
 @implementation FZZEvent
-
-@synthesize haveExpressedInterest = _haveExpressedInterest;
 
 +(FZZEvent *)getEventAtIndexPath:(NSIndexPath *)indexPath{
     @synchronized(self){
@@ -60,6 +56,99 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
         
         return event;
     }
+}
+
+//- (void)toggleSelectedContact:(NSDictionary *)contact{
+//    
+//}
+//
+//- (void)toggleSelectedUser:(FZZUser *)user{
+//    
+//}
+//
+//- (void)toggleSelectedContactOrUser:(NSDictionary *)contactOrUser{
+//    
+//}
+//
+//- (BOOL)isUserSelected:(FZZUser *)user{
+//    
+//}
+//
+//- (BOOL)isContactSelected:(NSDictionary *)contact{
+//    
+//}
+//
+//- (BOOL)isUserOrContactSelected:(NSDictionary *)userOrContact{
+//    
+//}
+
+- (BOOL)isContactSelected:(NSDictionary *)contact{
+    return [_selectedContacts containsObject:contact];
+}
+
+- (BOOL)isUserSelected:(FZZUser *)user{
+    return [_selectedUsers containsObject:user];
+}
+
++ (BOOL)isUserElseContactUser:(NSDictionary *)userOrContact{
+    return [userOrContact objectForKey:@"user"] != nil;
+}
+
+- (BOOL)userOrContactIsSelected:(NSDictionary *)userOrContact{
+    if ([FZZEvent isUserElseContactUser:userOrContact]){
+        FZZUser *user = [userOrContact objectForKey:@"user"];
+        
+        return [self isUserSelected:user];
+    } else {
+        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
+        
+        return [self isContactSelected:contact];
+    }
+}
+
+- (void)deselectUser:(FZZUser *)user{
+    [_selectedUsers removeObject:user];
+}
+
+- (void)selectUser:(FZZUser *)user{
+    [_selectedUsers addObject:user];
+}
+
+- (void)deselectUserOrContact:(NSDictionary *)userOrContact{
+    if ([FZZEvent isUserElseContactUser:userOrContact]){
+        FZZUser *user = [userOrContact objectForKey:@"user"];
+        
+        [self deselectUser:user];
+    } else {
+        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
+        
+        [_selectedContacts removeObject:contact];
+    }
+}
+
+- (void)selectUserOrContact:(NSDictionary *)userOrContact{
+    if ([FZZEvent isUserElseContactUser:userOrContact]){
+        FZZUser *user = [userOrContact objectForKey:@"user"];
+        
+        NSLog(@"ADDING USER: %@", user);
+        if (user){
+            [self selectUser:user];
+        }
+    } else {
+        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
+        
+        NSLog(@"ADDING CONTACT: %@", contact);
+        if (contact){
+            [_selectedContacts addObject:contact];
+        }
+    }
+    
+    NSLog(@"contacts: %@", _selectedContacts);
+}
+
+- (void)clearSelectedUsersAndContacts{
+    [_selectedContacts removeAllObjects];
+    [_selectedUsers removeAllObjects];
 }
 
 -(NSIndexPath *)getEventIndexPath{
@@ -372,6 +461,9 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
             
             [self setRandomColors];
             
+            _selectedContacts = [[NSMutableSet alloc] init];
+            _selectedUsers = [[NSMutableSet alloc] init];
+            
 //            self.topColor = [UIColor blueColor];
 //            self.bottomColor = [UIColor greenColor];
             
@@ -580,10 +672,6 @@ static NSString *FZZ_REQUEST_EVENTS = @"postRequestEvents";
     @synchronized(self){
         [self setEventDescription:eventDescription];
     }
-}
-
--(BOOL)haveExpressedInterest{
-    return self.haveExpressedInterest;
 }
 
 -(BOOL)joinEvent{

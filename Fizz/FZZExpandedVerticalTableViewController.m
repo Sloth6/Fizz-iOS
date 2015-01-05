@@ -52,6 +52,16 @@ static NSMutableArray *instances;
     [self updateVisuals];
 }
 
+- (void)scrollToContacts{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+    [[self scrollDetector] scrollToPageAtIndexPath:indexPath isAnimated:YES];
+}
+
+- (void)updateGuests{
+    [self updateVisuals];
+    [self performSelector:@selector(scrollToContacts) withObject:nil afterDelay:0.3];
+}
+
 - (void)updateVisuals{
     [self scrollViewDidScroll:self.tableView];
 }
@@ -91,6 +101,11 @@ static NSMutableArray *instances;
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(tableViewWillAppear)
                                                      name:FZZ_RELOADED_CHAT
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateGuests)
+                                                     name:FZZ_INCOMING_NEW_INVITEES
                                                    object:nil];
         
 //        [self.tableView registerClass:[FZZDescriptionScreenTableViewCell class] forCellReuseIdentifier:@"descriptionCell"];

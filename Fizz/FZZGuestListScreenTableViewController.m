@@ -10,6 +10,7 @@
 #import "FZZGuestListTableViewCell.h"
 #import "FZZEvent.h"
 #import "FZZUser.h"
+#import "FZZSocketIODelegate.h"
 
 #import "FZZUtilities.h"
 
@@ -34,12 +35,23 @@
         [[self tableView] setBackgroundColor:[UIColor clearColor]];
         [[self tableView] setOpaque:NO];
         [[self tableView] setScrollEnabled:NO];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateGuests)
+                                                     name:FZZ_INCOMING_NEW_INVITEES
+                                                   object:nil];
     }
     return self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     // Override to avoid auto scrolling
+}
+
+-(void)updateGuests{
+    [[self tableView] reloadData];
+    
+    NSLog(@"numRows[%@] %d::%d", [[self event] eventDescription], [[self tableView] numberOfRowsInSection:0], [[self tableView] numberOfRowsInSection:1]);
 }
 
 -(void)setEventIndexPath:(NSIndexPath *)indexPath{

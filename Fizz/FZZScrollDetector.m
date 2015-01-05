@@ -81,8 +81,18 @@ static float SWIPE_DRAG_HORIZ_MIN = 6;
         [self addSubview:_inputScrollView];
         [self updateCurrentScrollView];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateGuests)
+                                                     name:FZZ_INCOMING_NEW_INVITEES
+                                                   object:nil];
+        
     }
     return self;
+}
+
+- (void)updateGuests{
+    [[_vtvc tableView] reloadData];
+    [self setupPageOffsets];
 }
 
 - (void)setFrame:(CGRect)frame{
@@ -546,6 +556,8 @@ static float SWIPE_DRAG_HORIZ_MIN = 6;
     CGFloat height = [_vtvc tableView:[_vtvc tableView] heightForRowAtIndexPath:indexPath];
     
     int pageNum = -1;
+    
+    NSLog(@"%d rows in tableviewcontroller", numberOfRows);
     
     for (int i = 0; i < numberOfRows; ++i){
         indexPath = [NSIndexPath indexPathForRow:i inSection:0];

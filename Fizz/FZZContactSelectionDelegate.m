@@ -24,10 +24,6 @@ NSMutableArray *instances;
 
 @property NSArray *filteredRecents;
 @property NSArray *filteredUsersAndContacts; // Fizz Users and Contacts
-@property NSMutableSet *invitedContacts;
-
-@property NSMutableSet *selectedUsers; // FZZUsers
-@property NSMutableSet *selectedContacts; // pn + name
 
 @property (strong, nonatomic) UITextField *textField;
 
@@ -53,10 +49,6 @@ NSMutableArray *instances;
     if (self){
         [instances addObject:self];
         _validInvitables = NO;
-        
-        _selectedContacts = [[NSMutableSet alloc] init];
-        _selectedUsers = [[NSMutableSet alloc] init];
-//        _invitedContacts = [[NSMutableSet alloc] init];
         
         NSString *eventName = FZZ_INCOMING_NEW_INVITEES;
         
@@ -123,12 +115,16 @@ NSMutableArray *instances;
 -(void)sendInvitations{
     NSLog(@"SENDING INVITATIONS");
     
-    if (_eventIndexPath != nil){
-        NSString *notificationName = [NSString stringWithFormat:@"SendInvitations%@", _eventIndexPath];
-    
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
-                                                            object:nil];
+    if (_eventIndexPath == nil){
+        return;
     }
+    
+    FZZEvent *event = [self event];
+    
+    NSString *notificationName = [NSString stringWithFormat:@"SendInvitations%@", _eventIndexPath];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
+                                                        object:nil];
     
 //    [_textField setText:[_textField placeholder]];
     [_textField setText:@""];
@@ -137,11 +133,10 @@ NSMutableArray *instances;
     
     NSMutableArray *phoneInvites = [[NSMutableArray alloc] init];
     
-    NSArray *invitedUsers  = [_selectedUsers allObjects];
-    NSArray *invitedContacts = [_selectedContacts allObjects];
+    NSArray *invitedUsers  = [[event selectedUsers] allObjects];
+    NSArray *invitedContacts = [[event selectedContacts] allObjects];
     
-    [_selectedContacts removeAllObjects];
-    [_selectedUsers removeAllObjects];
+    [event clearSelectedUsersAndContacts];
     
 //    [_invitedContacts addObjectsFromArray:invitedContacts];
     
@@ -175,9 +170,6 @@ NSMutableArray *instances;
     NSLog(@"\n\nPhone Invites: %@\n\n", phoneInvites);
     
     if ([phoneInvites count] > 0){
-        
-        FZZEvent *event = [self event];
-        
         [event socketIOInviteWithInviteList:phoneInvites
                              AndAcknowledge:nil];
     }
@@ -187,76 +179,13 @@ NSMutableArray *instances;
     return [FZZEvent getEventAtIndexPath:_eventIndexPath];
 }
 
-- (BOOL)isContactSelected:(NSDictionary *)contact{
-    return [_selectedContacts containsObject:contact];
-}
-
-- (BOOL)isUserSelected:(FZZUser *)user{
-    return [_selectedUsers containsObject:user];
-}
-
-+ (BOOL)isUserElseContactUser:(NSDictionary *)userOrContact{
-    return [userOrContact objectForKey:@"user"] != nil;
-}
-
-- (BOOL)userOrContactIsSelected:(NSDictionary *)userOrContact{
-    if ([FZZContactSelectionDelegate isUserElseContactUser:userOrContact]){
-        FZZUser *user = [userOrContact objectForKey:@"user"];
-        
-        return [self isUserSelected:user];
-    } else {
-        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
-        
-        return [self isContactSelected:contact];
-    }
-}
-
-- (void)deselectUser:(FZZUser *)user{
-    [_selectedUsers removeObject:user];
-}
-
-- (void)selectUser:(FZZUser *)user{
-    [_selectedUsers addObject:user];
-}
-
-- (void)deselectUserOrContact:(NSDictionary *)userOrContact{
-    if ([FZZContactSelectionDelegate isUserElseContactUser:userOrContact]){
-        FZZUser *user = [userOrContact objectForKey:@"user"];
-        
-        [self deselectUser:user];
-    } else {
-        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
-        
-        [_selectedContacts removeObject:contact];
-    }
-}
-
-- (void)selectUserOrContact:(NSDictionary *)userOrContact{
-    if ([FZZContactSelectionDelegate isUserElseContactUser:userOrContact]){
-        FZZUser *user = [userOrContact objectForKey:@"user"];
-        
-        NSLog(@"ADDING USER: %@", user);
-        if (user){
-            [self selectUser:user];
-        }
-    } else {
-        NSDictionary *contact = [userOrContact objectForKey:@"contact"];
-        
-        NSLog(@"ADDING CONTACT: %@", contact);
-        if (contact){
-            [_selectedContacts addObject:contact];
-        }
-    }
-    
-    NSLog(@"contacts: %@", _selectedContacts);
-}
-
 - (int)numberOfInvitableOptions{
     return [_filteredUsersAndContacts count];
 }
 
 - (void)setEventIndexPath:(NSIndexPath *)eventIndexPath{
     _eventIndexPath = eventIndexPath;
+    [self searchChange];
 }
 
 - (void)setTextField:(UITextField *)textField{
